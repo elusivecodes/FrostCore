@@ -1141,6 +1141,30 @@
             return this.addEvent(nodes, events, delegate, callback, true);
         },
 
+        // trigger a blur event on the first element
+        blur(nodes)
+        {
+            const node = Core.nodeFirst(nodes);
+
+            if ( ! node) {
+                return;
+            }
+
+            node.blur();
+        },
+
+        // trigger a click event on the first element
+        click(nodes)
+        {
+            const node = Core.nodeFirst(nodes);
+
+            if ( ! node) {
+                return;
+            }
+
+            node.click();
+        },
+
         // clone all events from each element to other elements
         cloneEvents(nodes, others)
         {
@@ -1154,6 +1178,18 @@
                         this.addEvent(others, eventData.event, eventData.delegate, eventData.callback);
                     });
                 });
+        },
+
+        // trigger a focus event on the first element
+        focus(nodes)
+        {
+            const node = Core.nodeFirst(nodes);
+
+            if ( ! node) {
+                return;
+            }
+
+            node.focus();
         },
 
         // remove an event from each element
@@ -2132,6 +2168,43 @@
             return this.children(this.parent(node)).indexOf(node);
         },
 
+        // create a selection on the first node
+        select(nodes)
+        {
+            const selection = window.getSelection();
+
+            if (selection.rangeCount > 0) {
+                selection.removeAllRanges();
+            }
+
+            const node = Core.nodeFirst(nodes, false);
+
+            if ( ! node) {
+                return;
+            }
+
+            const range = this.context.createRange();
+            range.selectNode(node);
+            selection.addRange(range);
+        },
+
+        // create a selection on all nodes
+        selectAll(nodes)
+        {
+            const selection = window.getSelection();
+
+            if (selection.rangeCount > 0) {
+                selection.removeAllRanges();
+            }
+
+            Core.nodeArray(nodes, false)
+                .forEach(node => {
+                    const range = this.context.createRange();
+                    range.selectNode(node);
+                    selection.addRange(range);
+                });
+        },
+
         // returns a serialized string containing names and values of all form elements
         serialize(nodes)
         {
@@ -2307,28 +2380,32 @@
         // returns a URI-encoded attribute string from an array or object
         parseParams(data)
         {
-            const values = [];
+            let values = [];
 
             if (Array.isArray(data)) {
-                data.forEach(value => this.parseParam(value.name, value.value, values));
+                values = data.map(value => this.parseParam(value.name, value.value));
             } else if (frost.isObject(data)) {
-                Object.keys(data).forEach(key => this.parseParam(key, data[key], values));
+                values = Object.keys(data).map(key => this.parseParam(key, data[key]));
             }
 
-            return values.map(encodeURI).join('&');
+            return frost.flattenArray(values).map(encodeURI).join('&');
         },
 
-        parseParam(key, value, values)
+        // returns an array or string of key value pairs from an array, object or string
+        parseParam(key, value)
         {
             if (Array.isArray(value)) {
-                value.forEach(val => this.parseParam(key, val, values));
-            } else if (frost.isObject(value)) {
-                Object.keys(value).forEach(subKey => this.parseParam(key + '[' + subKey + ']', value[subKey], values));
-            } else {
-                values.push(key + '=' + value);
+                return value.map(val => this.parseParam(key, val));
             }
+
+            if (frost.isObject(value)) {
+                return Object.keys(value).map(subKey => this.parseParam(key + '[' + subKey + ']', value[subKey]));
+            }
+
+            return key + '=' + value;
         },
 
+        // returns a type and selector from a string (optionally only fast)
         parseSelector(selector, fast = true)
         {
             const fastMatch = selector.match(this.fastRegex);
@@ -2346,6 +2423,7 @@
             return [false, selector];
         },
 
+        // returns an array of types and selectors from an array or string
         parseSelectors(selectors)
         {
             if ( ! Array.isArray(selectors)) {
@@ -2356,6 +2434,7 @@
             return selectors.map(selector => this.parseSelector(selector.trim(), false));
         },
 
+        // returns the subquery selector from a string
         parseSubQuery(selector)
         {
             return selector.match(this.subRegex).slice(1);
@@ -2412,7 +2491,7 @@
 
     Object.assign(Core.prototype, {
 
-        // performs an XHR request
+        // perform an XHR request
         ajax(url, data = null, method = 'GET')
         {
             if (frost.isObject(url)) {
@@ -2496,21 +2575,21 @@
             });
         },
 
-        // Loads and executes a JavaScript file
+        // load and executes a JavaScript file
         loadScript(script)
         {
             return this.xhr(script)
                 .then(response => eval.apply(window, response));
         },
 
-        // Load and execute multiple JavaScript files (in order)
+        // load and execute multiple JavaScript files (in order)
         loadScripts(scripts)
         {
             return Promise.all(scripts.map(script => this.xhr(script)))
                 .then(responses => responses.forEach(response => eval.apply(window, response)));
         },
 
-        // Import A CSS Stylesheet file
+        // import A CSS Stylesheet file
         loadStyle(stylesheet)
         {
             const head = this.findOne('head');
@@ -2521,12 +2600,13 @@
             this.append(head, link);
         },
 
-        // Import multiple CSS Stylesheet files
+        // import multiple CSS Stylesheet files
         loadStyles(stylesheets)
         {
             stylesheets.forEach(stylesheet => this.loadStyle(stylesheet));
         },
 
+        // perform an XHR request for a file upload
         upload(url, data, method = 'POST')
         {
             if (frost.isObject(url)) {
@@ -2658,6 +2738,7 @@
             };
         },
 
+        // returns a function for matching a delegate target to a complex selector
         getDelegateContainsFactory(node, selector)
         {
             return target => {
@@ -2674,6 +2755,7 @@
             };
         },
 
+        // returns a function for matching a delegate target to a simple selector
         getDelegateMatchFactory(node, selector)
         {
             return target => {
@@ -2748,10 +2830,11 @@
             return this.find(this.context, query || '*');
         },
 
+        // returns a DOM object from an XML string
         parseXML(string)
         {
             const parser = new DOMParser();
-            return parser.parseFromString(string, 'text/xml');
+            return parser.parseFromString(string, 'application/xml');
         }
 
     });
@@ -3481,10 +3564,31 @@
             return this;
         },
 
+        // trigger a blur event on the first element
+        blur()
+        {
+            core.blur(this.nodes);
+            return this;
+        },
+
+        // trigger a click event on the first element
+        click()
+        {
+            core.click(this.nodes);
+            return this;
+        },
+
         // clone all events from each element to other elements
         cloneEvents(clones)
         {
             core.cloneEvents(this.nodes, clones);
+            return this;
+        },
+
+        // trigger a focus event on the first element
+        focus()
+        {
+            core.focus(this.nodes);
             return this;
         },
 
@@ -3873,6 +3977,20 @@
             return core.indexOf(this.nodes);
         },
 
+        // create a selection on the first node
+        select()
+        {
+            core.select(this.nodes);
+            return this;
+        },
+
+        // create a selection on all nodes
+        selectAll()
+        {
+            core.selectAll(this.nodes);
+            return this;
+        },
+
         // returns a serialized string containing names and values of all form elements
         serialize()
         {
@@ -3893,15 +4011,15 @@
 
     });
 
+    frost.core = new Core;
+    frost.Core = Core;
     frost.QuerySet = QuerySet;
     frost.QuerySetImmutable = QuerySetImmutable;
-
-    const core = new Core;
 
     return {
         frost,
         Core,
-        core,
+        core: frost.core,
         $: core.query
     };
 
