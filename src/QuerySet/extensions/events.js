@@ -14,10 +14,31 @@ Object.assign(QuerySet.prototype, {
         return this;
     },
 
+    // trigger a blur event on the first element
+    blur()
+    {
+        core.blur(this.nodes);
+        return this;
+    },
+
+    // trigger a click event on the first element
+    click()
+    {
+        core.click(this.nodes);
+        return this;
+    },
+
     // clone all events from each element to other elements
     cloneEvents(clones)
     {
         core.cloneEvents(this.nodes, clones);
+        return this;
+    },
+
+    // trigger a focus event on the first element
+    focus()
+    {
+        core.focus(this.nodes);
         return this;
     },
 

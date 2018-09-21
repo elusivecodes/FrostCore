@@ -12,16 +12,15 @@
 
 // {{code}}
 
+    frost.core = new Core;
     frost.Core = Core;
     frost.QuerySet = QuerySet;
     frost.QuerySetImmutable = QuerySetImmutable;
 
-    const core = new Core;
-
     return {
         frost,
         Core,
-        core,
+        core: frost.core,
         $: core.query
     };
 

@@ -57,6 +57,43 @@ Object.assign(Core.prototype, {
         return this.children(this.parent(node)).indexOf(node);
     },
 
+    // create a selection on the first node
+    select(nodes)
+    {
+        const selection = window.getSelection();
+
+        if (selection.rangeCount > 0) {
+            selection.removeAllRanges();
+        }
+
+        const node = Core.nodeFirst(nodes, false);
+
+        if ( ! node) {
+            return;
+        }
+
+        const range = this.context.createRange();
+        range.selectNode(node);
+        selection.addRange(range);
+    },
+
+    // create a selection on all nodes
+    selectAll(nodes)
+    {
+        const selection = window.getSelection();
+
+        if (selection.rangeCount > 0) {
+            selection.removeAllRanges();
+        }
+
+        Core.nodeArray(nodes, false)
+            .forEach(node => {
+                const range = this.context.createRange();
+                range.selectNode(node);
+                selection.addRange(range);
+            });
+    },
+
     // returns a serialized string containing names and values of all form elements
     serialize(nodes)
     {

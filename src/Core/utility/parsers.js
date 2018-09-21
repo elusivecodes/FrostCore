@@ -22,10 +22,11 @@ Object.assign(Core.prototype, {
         return this.find(this.context, query || '*');
     },
 
+    // returns a DOM object from an XML string
     parseXML(string)
     {
         const parser = new DOMParser();
-        return parser.parseFromString(string, 'text/xml');
+        return parser.parseFromString(string, 'application/xml');
     }
 
 });

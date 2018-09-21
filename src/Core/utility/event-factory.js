@@ -37,6 +37,7 @@ Object.assign(Core.prototype, {
         };
     },
 
+    // returns a function for matching a delegate target to a complex selector
     getDelegateContainsFactory(node, selector)
     {
         return target => {
@@ -53,6 +54,7 @@ Object.assign(Core.prototype, {
         };
     },
 
+    // returns a function for matching a delegate target to a simple selector
     getDelegateMatchFactory(node, selector)
     {
         return target => {

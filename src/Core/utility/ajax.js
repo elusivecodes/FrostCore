@@ -1,6 +1,6 @@
 Object.assign(Core.prototype, {
 
-    // performs an XHR request
+    // perform an XHR request
     ajax(url, data = null, method = 'GET')
     {
         if (frost.isObject(url)) {
@@ -84,21 +84,21 @@ Object.assign(Core.prototype, {
         });
     },
 
-    // Loads and executes a JavaScript file
+    // load and executes a JavaScript file
     loadScript(script)
     {
         return this.xhr(script)
             .then(response => eval.apply(window, response));
     },
 
-    // Load and execute multiple JavaScript files (in order)
+    // load and execute multiple JavaScript files (in order)
     loadScripts(scripts)
     {
         return Promise.all(scripts.map(script => this.xhr(script)))
             .then(responses => responses.forEach(response => eval.apply(window, response)));
     },
 
-    // Import A CSS Stylesheet file
+    // import A CSS Stylesheet file
     loadStyle(stylesheet)
     {
         const head = this.findOne('head');
@@ -109,12 +109,13 @@ Object.assign(Core.prototype, {
         this.append(head, link);
     },
 
-    // Import multiple CSS Stylesheet files
+    // import multiple CSS Stylesheet files
     loadStyles(stylesheets)
     {
         stylesheets.forEach(stylesheet => this.loadStyle(stylesheet));
     },
 
+    // perform an XHR request for a file upload
     upload(url, data, method = 'POST')
     {
         if (frost.isObject(url)) {

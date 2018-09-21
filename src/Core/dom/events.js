@@ -59,6 +59,30 @@ Object.assign(Core.prototype, {
         return this.addEvent(nodes, events, delegate, callback, true);
     },
 
+    // trigger a blur event on the first element
+    blur(nodes)
+    {
+        const node = Core.nodeFirst(nodes);
+
+        if ( ! node) {
+            return;
+        }
+
+        node.blur();
+    },
+
+    // trigger a click event on the first element
+    click(nodes)
+    {
+        const node = Core.nodeFirst(nodes);
+
+        if ( ! node) {
+            return;
+        }
+
+        node.click();
+    },
+
     // clone all events from each element to other elements
     cloneEvents(nodes, others)
     {
@@ -72,6 +96,18 @@ Object.assign(Core.prototype, {
                     this.addEvent(others, eventData.event, eventData.delegate, eventData.callback);
                 });
             });
+    },
+
+    // trigger a focus event on the first element
+    focus(nodes)
+    {
+        const node = Core.nodeFirst(nodes);
+
+        if ( ! node) {
+            return;
+        }
+
+        node.focus();
     },
 
     // remove an event from each element

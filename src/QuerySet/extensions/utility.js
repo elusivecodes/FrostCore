@@ -18,6 +18,20 @@ Object.assign(QuerySet.prototype, {
         return core.indexOf(this.nodes);
     },
 
+    // create a selection on the first node
+    select()
+    {
+        core.select(this.nodes);
+        return this;
+    },
+
+    // create a selection on all nodes
+    selectAll()
+    {
+        core.selectAll(this.nodes);
+        return this;
+    },
+
     // returns a serialized string containing names and values of all form elements
     serialize()
     {
