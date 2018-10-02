@@ -1,6 +1,6 @@
 Object.assign(Core.prototype, {
 
-    // get data for the first node
+    // get custom data for the first node
     getData(nodes, key)
     {
         const node = Core.nodeFirst(nodes, false, true, true);
@@ -22,6 +22,19 @@ Object.assign(Core.prototype, {
         return nodeData[key];
     },
 
+    // set custom data for each node
+    setData(nodes, key, value)
+    {
+        Core.nodeArray(nodes, false, true, true)
+            .forEach(node => {
+                if ( ! this.nodeData.has(node)) {
+                    this.nodeData.set(node, {});
+                }
+
+                this.getData(node)[key] = value;
+            });
+    },
+
     // remove custom data for each node
     removeData(nodes, key)
     {
@@ -40,19 +53,6 @@ Object.assign(Core.prototype, {
                 }
 
                 this.nodeData.delete(node);
-            });
-    },
-
-    // set custom data for each node
-    setData(nodes, key, value)
-    {
-        Core.nodeArray(nodes, false, true, true)
-            .forEach(node => {
-                if ( ! this.nodeData.has(node)) {
-                    this.nodeData.set(node, {});
-                }
-
-                this.getData(node)[key] = value;
             });
     }
 

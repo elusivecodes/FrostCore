@@ -1,7 +1,7 @@
 Object.assign(Core.prototype, {
 
     // add an animation to each element
-    animate(nodes, callback, duration)
+    animate(nodes, callback, duration = 1000)
     {
         const start = Date.now();
         const promises = [];

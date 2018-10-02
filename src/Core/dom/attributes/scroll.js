@@ -1,6 +1,6 @@
 Object.assign(Core.prototype, {
 
-    // scroll each element to an X, Y position
+    // scroll each element to an X,Y position
     scrollTo(nodes, x, y)
     {
         Core.nodeArray(nodes, true, true, true)

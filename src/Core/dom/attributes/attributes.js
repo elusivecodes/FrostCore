@@ -1,5 +1,7 @@
 Object.assign(Core.prototype, {
 
+    /* ATTRIBUTES */
+
     // get an attribute value for the first element
     getAttribute(nodes, attribute)
     {
@@ -11,6 +13,30 @@ Object.assign(Core.prototype, {
 
         return node.getAttribute(attribute);
     },
+
+    // set attributes for each element
+    setAttribute(nodes, attribute, value)
+    {
+        Core.nodeArray(nodes)
+            .forEach(node => {
+                if (frost.isObject(attribute)) {
+                    Object.keys(attribute)
+                        .forEach(key => node.setAttribute(key, attribute[key]));
+                    return;
+                }
+
+                node.setAttribute(attribute, value);
+            });
+    },
+
+    // remove an attribute from each element
+    removeAttribute(nodes, attribute)
+    {
+        Core.nodeArray(nodes)
+            .forEach(node => node.removeAttribute(attribute));
+    },
+
+    /* DATASET */
 
     // get a dataset value for the first element
     getDataset(nodes, key)
@@ -28,11 +54,31 @@ Object.assign(Core.prototype, {
         return node.dataset[key];
     },
 
+    // set dataset values for each element
+    setDataset(nodes, key, value)
+    {
+        Core.nodeArray(nodes)
+            .forEach(node => {
+                node.dataset[key] = value;
+            });
+    },
+
+    /* HTML */
+
     // get the HTML contents of the first element
     getHTML(nodes)
     {
         return this.getProperty(nodes, 'innerHTML');
     },
+
+    // set the HTML contents for each element
+    setHTML(nodes, html)
+    {
+        this.empty(nodes);
+        this.setProperty(nodes, 'innerHTML', html);
+    },
+
+    /* PROPERTIES */
 
     // get a property value for the first element
     getProperty(nodes, property)
@@ -44,64 +90,6 @@ Object.assign(Core.prototype, {
         }
 
         return node[property];
-    },
-
-    // get the text contents of the first element
-    getText(nodes)
-    {
-        return this.getProperty(nodes, 'innerText');
-    },
-
-    // get the value property of the first element
-    getValue(nodes)
-    {
-        return this.getProperty(nodes, 'value');
-    },
-
-    // remove an attribute from each element
-    removeAttribute(nodes, attribute)
-    {
-        Core.nodeArray(nodes)
-            .forEach(node => node.removeAttribute(attribute));
-    },
-
-    // remove a property from each element
-    removeProperty(nodes, property)
-    {
-        Core.nodeArray(nodes)
-            .forEach(node => {
-                delete node[property];
-            });
-    },
-
-    // set attributes for each element
-    setAttribute(nodes, attribute, value)
-    {
-        Core.nodeArray(nodes)
-            .forEach(node => {
-                if (frost.isObject(attribute)) {
-                    Object.keys(attribute).forEach(key => node[key] = attribute[key]);
-                    return;
-                }
-
-                node.setAttribute(attribute, value);
-            });
-    },
-
-    // set dataset values for each element
-    setDataset(nodes, key, value)
-    {
-        Core.nodeArray(nodes)
-            .forEach(node => {
-                node.dataset[key] = value;
-            });
-    },
-
-    // set the HTML contents for each element
-    setHTML(nodes, html)
-    {
-        this.empty(nodes);
-        this.setProperty(nodes, 'innerHTML', html);
     },
 
     // set property values for each element
@@ -118,11 +106,36 @@ Object.assign(Core.prototype, {
             });
     },
 
+    // remove a property from each element
+    removeProperty(nodes, property)
+    {
+        Core.nodeArray(nodes)
+            .forEach(node => {
+                delete node[property];
+            });
+    },
+
+    /* TEXT */
+
+    // get the text contents of the first element
+    getText(nodes)
+    {
+        return this.getProperty(nodes, 'innerText');
+    },
+
     // set the text contents for each element
     setText(nodes, text)
     {
         this.empty(nodes);
         this.setProperty(nodes, 'innerText', text);
+    },
+
+    /* VALUE */
+
+    // get the value property of the first element
+    getValue(nodes)
+    {
+        return this.getProperty(nodes, 'value');
     },
 
     // set the value property for each element

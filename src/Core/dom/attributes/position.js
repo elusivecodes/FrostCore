@@ -54,10 +54,10 @@ Object.assign(Core.prototype, {
             });
     },
 
-    // get the distance of an element to an X, Y position in the window
-    distTo(nodes, x, y)
+    // get the distance of an element to an X,Y position in the window (optionally offset)
+    distTo(nodes, x, y, offset)
     {
-        const nodeCenter = this.center(nodes);
+        const nodeCenter = this.center(nodes, offset);
 
         if ( ! nodeCenter) {
             return;
@@ -75,19 +75,18 @@ Object.assign(Core.prototype, {
             return;
         }
 
-        return this.distTo(nodes, otherCenter.x, otherCenter.
-            y);
+        return this.distTo(nodes, otherCenter.x, otherCenter.y);
     },
 
-    // get the nearest element to an X, Y position in the window
-    nearestTo(nodes, x, y)
+    // get the nearest element to an X,Y position in the window (optionally offset)
+    nearestTo(nodes, x, y, offset)
     {
         let closest = null;
         let closestDistance = Number.MAX_VALUE;
 
         Core.nodeArray(nodes)
             .forEach(node => {
-                const dist = this.distTo(node, x, y);
+                const dist = this.distTo(node, x, y, offset);
                 if (dist && dist < closestDistance) {
                     closestDistance = dist;
                     closest = node;

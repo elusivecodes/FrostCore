@@ -1,5 +1,7 @@
 Object.assign(Core.prototype, {
 
+    /* CLASSES */
+
     // add a class or classes to each element
     addClass(nodes, ...classes)
     {
@@ -11,6 +13,32 @@ Object.assign(Core.prototype, {
 
         Core.nodeArray(nodes)
             .forEach(node => node.classList.add(...classes));
+    },
+
+    // remove a class or classes from each element
+    removeClass(nodes, ...classes)
+    {
+        classes = Core.parseClasses(classes);
+
+        if ( ! classes.length) {
+            return;
+        }
+
+        Core.nodeArray(nodes)
+            .forEach(node => node.classList.remove(...classes));
+    },
+
+    // toggle a class or classes for each element
+    toggleClass(nodes, ...classes)
+    {
+        classes = Core.parseClasses(classes);
+
+        if ( ! classes.length) {
+            return;
+        }
+
+        Core.nodeArray(nodes)
+            .forEach(node => classes.forEach(className => node.classList.toggle(className)));
     },
 
     // get the computed style for the first element
@@ -25,6 +53,8 @@ Object.assign(Core.prototype, {
         return window.getComputedStyle(node)[style];
     },
 
+    /* STYLES */
+
     // get a style property for the first element
     getStyle(nodes, style)
     {
@@ -38,25 +68,6 @@ Object.assign(Core.prototype, {
         style = frost.snakeCase(style);
 
         return node.style.getPropertyValue(style);
-    },
-
-    // hide each element from display
-    hide(nodes)
-    {
-        this.setStyle(nodes, 'display', 'none');
-    },
-
-    // remove a class or classes from each element
-    removeClass(nodes, ...classes)
-    {
-        classes = Core.parseClasses(classes);
-
-        if ( ! classes.length) {
-            return;
-        }
-
-        Core.nodeArray(nodes)
-            .forEach(node => node.classList.remove(...classes));
     },
 
     // set style properties for each element
@@ -85,6 +96,12 @@ Object.assign(Core.prototype, {
             );
     },
 
+    // hide each element from display
+    hide(nodes)
+    {
+        this.setStyle(nodes, 'display', 'none');
+    },
+
     // display each hidden element
     show(nodes)
     {
@@ -100,19 +117,6 @@ Object.assign(Core.prototype, {
                     this.show(node) :
                     this.hide(node)
             );
-    },
-
-    // toggle a class or classes for each element
-    toggleClass(nodes, ...classes)
-    {
-        classes = Core.parseClasses(classes);
-
-        if ( ! classes.length) {
-            return;
-        }
-
-        Core.nodeArray(nodes)
-            .forEach(node => classes.forEach(className => node.classList.toggle(className)));
     }
 
 });
