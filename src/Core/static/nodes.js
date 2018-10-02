@@ -36,7 +36,7 @@ Object.assign(Core, {
             ( ! elementsOnly && this.isNode(node)) ||
             (elementsOnly && this.isElement(node)) ||
             (allowDocument && this.isDocument(node)) ||
-            (allowWindow && this.isWindow(node));
+            (allowWindow && frost.isWindow(node));
     },
 
     // get the first node or element (and optionally document or window)

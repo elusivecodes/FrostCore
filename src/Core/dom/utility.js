@@ -27,7 +27,7 @@ Object.assign(Core.prototype, {
                 styles.push(this.getStyle(parent, 'display'));
             });
 
-        this.setStyle(elements, 'display', 'initial !important');
+        this.setStyle(elements, 'display', 'initial', true);
 
         const result = callback(node);
 
@@ -60,13 +60,17 @@ Object.assign(Core.prototype, {
     // create a selection on the first node
     select(nodes)
     {
+        const node = Core.nodeFirst(nodes, false);
+
+        if (node && node.select) {
+            return node.select();
+        }
+
         const selection = window.getSelection();
 
         if (selection.rangeCount > 0) {
             selection.removeAllRanges();
         }
-
-        const node = Core.nodeFirst(nodes, false);
 
         if ( ! node) {
             return;

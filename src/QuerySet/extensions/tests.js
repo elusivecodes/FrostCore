@@ -1,5 +1,11 @@
 Object.assign(QuerySet.prototype, {
 
+    // returns true if any of the elements contains a descendent matching a filter
+    contains(filter)
+    {
+        return core.contains(this.nodes, filter);
+    },
+
     // returns true if any of the elements has a specified attribute
     hasAttribute(attribute)
     {

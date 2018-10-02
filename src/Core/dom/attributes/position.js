@@ -149,7 +149,7 @@ Object.assign(Core.prototype, {
             };
 
             if (offset) {
-                const parentPosition = this.position(parent, true);
+                const parentPosition = this.position(this.offsetParent(node), true);
                 if (parentPosition) {
                     result.x += parentPosition.x;
                     result.y += parentPosition.y;

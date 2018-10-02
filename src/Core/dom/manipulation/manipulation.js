@@ -9,6 +9,10 @@ Object.assign(Core.prototype, {
             return;
         }
 
+        if ( ! node.parentNode) {
+            return;
+        }
+
         this.parseQuery(others)
             .reverse()
             .forEach(other => node.parentNode.insertBefore(other, node.nextSibling));
@@ -17,7 +21,7 @@ Object.assign(Core.prototype, {
     // append each other nodes to the first node
     append(nodes, others)
     {
-        const node = Core.nodeFirst(nodes, false);
+        const node = Core.nodeFirst(nodes);
 
         if ( ! node) {
             return;
@@ -39,6 +43,10 @@ Object.assign(Core.prototype, {
         const node = Core.nodeFirst(nodes, false);
 
         if ( ! node) {
+            return;
+        }
+
+        if ( ! node.parentNode) {
             return;
         }
 
@@ -97,7 +105,7 @@ Object.assign(Core.prototype, {
     empty(nodes)
     {
         this.remove(this.find(nodes, '*'), false);
-        this.setProp(nodes, 'innerHTML', '');
+        this.setProperty(nodes, 'innerHTML', '');
     },
 
     // insert each node after the first other node
@@ -115,7 +123,7 @@ Object.assign(Core.prototype, {
     // prepend each other node to the first node
     prepend(nodes, others)
     {
-        const node = Core.nodeFirst(nodes, false);
+        const node = Core.nodeFirst(nodes);
 
         if ( ! node) {
             return;

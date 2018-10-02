@@ -19,9 +19,9 @@ Object.assign(QuerySet.prototype, {
     },
 
     // get a property value for the first element
-    getProp(property)
+    getProperty(property)
     {
-        return core.getAttribute(this.nodes, property);
+        return core.getProperty(this.nodes, property);
     },
 
     // get the text contents of the first element
@@ -44,9 +44,9 @@ Object.assign(QuerySet.prototype, {
     },
 
     // remove a property from each element
-    removeProp(property)
+    removeProperty(property)
     {
-        core.removeProp(this.nodes, property);
+        core.removeProperty(this.nodes, property);
         return this;
     },
 
@@ -72,7 +72,7 @@ Object.assign(QuerySet.prototype, {
     },
 
     // set property values for each element
-    setProp(property, value)
+    setProperty(property, value)
     {
         core.setProperty(this.nodes, property, value);
         return this;

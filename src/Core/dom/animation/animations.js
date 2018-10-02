@@ -133,39 +133,49 @@ Object.assign(Core.prototype, {
         const wrapper = this.create('div');
         this.setStyle(wrapper, 'overflow', 'hidden');
         this.setStyle(wrapper, 'position', 'relative');
-        this.wrap(nodes, wrapper);
 
-        return this.animate(nodes, (node, progress) => {
-            const parent = this.parent(node);
+        const animations = [];
 
-            if (progress === 1) {
-                return this.unwrap(node);
-            }
+        Core.nodeArray(nodes)
+            .forEach(node => {
+                this.wrap(node, wrapper);
+                const parent = this.parent(node);
 
-            const dir = frost.isFunction(direction) ?
-                direction() : direction;
+                animations.push(this.animate(node, (node, progress) => {
+                    if (progress === 1) {
+                        this.before(parent, this.contents(parent));
+                        this.remove(parent);
+                        return;
+                    }
 
-            const height = Math.round(this.height(node, true, true, true));
-            const width = Math.round(this.width(node, true, true, true));
-            if (dir === 'top' || dir === 'bottom') {
-                this.setStyle(parent, 'width', width);
+                    const dir = frost.isFunction(direction) ?
+                        direction() : direction;
 
-                const amount = Math.round(height * progress);
-                this.setStyle(parent, 'height', amount);
-                if (dir === 'top') {
-                    this.setStyle(parent, 'transform', 'translateY(' + (height - amount) + 'px)');
-                }
-            } else {
-                this.setStyle(parent, 'height', height);
+                    if (dir === 'top' || dir === 'bottom') {
+                        const height = Math.round(this.height(node, true));
+                        const width = Math.round(this.width(node, true, true, true));
+                        this.setStyle(parent, 'width', width);
 
-                const amount = Math.round(width * progress);
-                this.setStyle(parent, 'width', amount);
-                if (dir === 'left') {
-                    this.setStyle(parent, 'transform', 'translateX(' + (width - amount) + 'px)');
-                }
-            }
+                        const amount = Math.round(height * progress);
+                        this.setStyle(parent, 'height', amount);
+                        if (dir === 'top') {
+                            this.setStyle(parent, 'transform', 'translateY(' + (height - amount) + 'px)');
+                        }
+                    } else {
+                        const height = Math.round(this.height(node, true, true, true));
+                        const width = Math.round(this.width(node, true));
+                        this.setStyle(parent, 'height', height);
 
-        }, duration);
+                        const amount = Math.round(width * progress);
+                        this.setStyle(parent, 'width', amount);
+                        if (dir === 'left') {
+                            this.setStyle(parent, 'transform', 'translateX(' + (width - amount) + 'px)');
+                        }
+                    }
+                }, duration));
+            });
+
+        return Promise.all(animations);
     },
 
     // squeeze each element out of place to a direction over a duration
@@ -174,38 +184,49 @@ Object.assign(Core.prototype, {
         const wrapper = this.create('div');
         this.setStyle(wrapper, 'overflow', 'hidden');
         this.setStyle(wrapper, 'position', 'relative');
-        this.wrap(nodes, wrapper);
 
-        return this.animate(nodes, (node, progress) => {
-            const parent = this.parent(node);
+        const animations = [];
 
-            if (progress === 1) {
-                return this.unwrap(node);
-            }
+        Core.nodeArray(nodes)
+            .forEach(node => {
+                this.wrap(node, wrapper);
+                const parent = this.parent(node);
 
-            const dir = frost.isFunction(direction) ?
-                direction() : direction;
+                animations.push(this.animate(node, (node, progress) => {
+                    if (progress === 1) {
+                        this.before(parent, this.contents(parent));
+                        this.remove(parent);
+                        return;
+                    }
 
-            const height = Math.round(this.height(node, true, true, true));
-            const width = Math.round(this.width(node, true, true, true));
-            if (dir === 'top' || dir === 'bottom') {
-                this.setStyle(parent, 'width', width);
+                    const dir = frost.isFunction(direction) ?
+                        direction() : direction;
 
-                const amount = Math.round(height - (height * progress));
-                this.setStyle(parent, 'height', amount);
-                if (dir === 'top') {
-                    this.setStyle(parent, 'transform', 'translateY(' + (height - amount) + 'px)');
-                }
-            } else {
-                this.setStyle(parent, 'height', height);
+                    if (dir === 'top' || dir === 'bottom') {
+                        const height = Math.round(this.height(node, true));
+                        const width = Math.round(this.width(node, true, true, true));
+                        this.setStyle(parent, 'width', width);
 
-                const amount = Math.round(width - (width * progress));
-                this.setStyle(parent, 'width', amount);
-                if (dir === 'left') {
-                    this.setStyle(parent, 'transform', 'translateX(' + (width - amount) + 'px)');
-                }
-            }
+                        const amount = Math.round(height - (height * progress));
+                        this.setStyle(parent, 'height', amount);
+                        if (dir === 'top') {
+                            this.setStyle(parent, 'transform', 'translateY(' + (height - amount) + 'px)');
+                        }
+                    } else {
+                        const height = Math.round(this.height(node, true, true, true));
+                        const width = Math.round(this.width(node, true));
+                        this.setStyle(parent, 'height', height);
 
-        }, duration);
+                        const amount = Math.round(width - (width * progress));
+                        this.setStyle(parent, 'width', amount);
+                        if (dir === 'left') {
+                            this.setStyle(parent, 'transform', 'translateX(' + (width - amount) + 'px)');
+                        }
+                    }
+                }, duration));
+            });
+
+        return Promise.all(animations);
     }
+
 });

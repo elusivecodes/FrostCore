@@ -21,7 +21,7 @@
         frost,
         Core,
         core: frost.core,
-        $: core.query
+        $: frost.core.query
     };
 
 });

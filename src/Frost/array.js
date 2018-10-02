@@ -6,7 +6,7 @@ Object.assign(frost, {
         return array.reduce((acc, val) =>
             Array.isArray(val) ?
                 acc.concat(...this.flattenArray(val)) :
-                arr.concat(val)
+                acc.concat(val)
             , []);
     },
 

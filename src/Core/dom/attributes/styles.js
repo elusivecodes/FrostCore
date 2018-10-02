@@ -34,7 +34,10 @@ Object.assign(Core.prototype, {
             return;
         }
 
-        return node.style[style];
+        // camelize style property
+        style = frost.snakeCase(style);
+
+        return node.style.getPropertyValue(style);
     },
 
     // hide each element from display
@@ -57,7 +60,7 @@ Object.assign(Core.prototype, {
     },
 
     // set style properties for each element
-    setStyle(nodes, style, value)
+    setStyle(nodes, style, value, important)
     {
         // if style value is an object, loop through and set all values
         if (frost.isObject(style)) {
@@ -66,7 +69,7 @@ Object.assign(Core.prototype, {
         }
 
         // camelize style property
-        style = frost.camelCase(style);
+        style = frost.snakeCase(style);
 
         // convert value to string
         value = '' + value;
@@ -77,9 +80,9 @@ Object.assign(Core.prototype, {
         }
 
         Core.nodeArray(nodes)
-            .forEach(node => {
-                node.style[style] = value;
-            });
+            .forEach(node =>
+                node.style.setProperty(style, value, important ? 'important' : '')
+            );
     },
 
     // display each hidden element

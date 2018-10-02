@@ -1,5 +1,8 @@
-class QuerySet {
-    constructor(nodes) {
+class QuerySet
+{
+
+    constructor(nodes)
+    {
         this.nodes = core.parseQuery(nodes, true, true, true);
         this.stack = [];
     }

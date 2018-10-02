@@ -14,7 +14,7 @@ Object.assign(Core.prototype, {
 
                 const promise = new Promise((resolve, reject) => {
                     const animation = (stop = false, finish = false) => {
-                        if (stop && ! finish) {
+                        if ( ! core.contains(this.context, node) || (stop && ! finish)) {
                             reject(node);
                             return false;
                         }
@@ -92,4 +92,5 @@ Object.assign(Core.prototype, {
                 this.animations.delete(node);
             });
     }
+
 });

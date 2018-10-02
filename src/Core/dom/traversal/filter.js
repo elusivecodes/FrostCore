@@ -18,11 +18,13 @@ Object.assign(Core.prototype, {
             .find((node, index) => ! filter || filter(node, index)) || null;
     },
 
-    // return all elements with a descendent matching the selector
-    has(nodes, selector)
+    // return all elements with a descendent matching a filter
+    has(nodes, filter)
     {
-        return Core.nodeArray(nodes)
-            .filter(node => this.findOne(node, selector));
+        filter = Core.parseFilterContains(filter);
+
+        return !! Core.nodeArray(nodes, true, true)
+            .filter(node => ! filter || filter(node));
     },
 
     // return all hidden elements
@@ -38,7 +40,7 @@ Object.assign(Core.prototype, {
         filter = Core.parseFilter(filter);
 
         return Core.nodeArray(nodes)
-            .filter((node, index) => ! filter || ! filter(node, index));
+            .filter((node, index) => filter && ! filter(node, index));
     },
 
     // return all visible elements

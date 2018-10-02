@@ -1,10 +1,14 @@
-class QuerySetImmutable extends QuerySet {
-    constructor() {
-        super(...arguments);
+class QuerySetImmutable extends QuerySet
+{
+
+    constructor(...args)
+    {
+        super(...args);
     }
 
     pushStack(nodes)
     {
         return new QuerySetImmutable(nodes);
     }
+
 }

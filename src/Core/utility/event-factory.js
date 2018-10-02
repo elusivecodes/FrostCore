@@ -1,13 +1,20 @@
 Object.assign(Core.prototype, {
 
     // create a self regenerating event that will execute once per animation frame
-    animationEventFactory(node, event, callback)
+    animationEventFactory(callback)
     {
-        callback = this.selfDestructFactory(node, event, callback);
+        let updating = false;
 
         const realCallback = e => {
-            callback(e);
-            window.requestAnimationFrame(() => this.addEventOnce(node, event, realCallback));
+            if (updating) {
+                return;
+            }
+
+            updating = true;
+            window.requestAnimationFrame(() => {
+                callback(e);
+                updating = false;
+            });
         };
 
         return realCallback;
@@ -68,7 +75,7 @@ Object.assign(Core.prototype, {
     mouseDragFactory(down, move, up, animated = true)
     {
         if (move && animated) {
-            move = this.animationEventFactory(window, 'mousemove', move);
+            move = this.animationEventFactory(move);
         }
 
         return e => {

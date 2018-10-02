@@ -48,6 +48,33 @@ Object.assign(Core, {
         return false;
     },
 
+    // returns an element contains filter function from a function, string, node, node list, element list or array
+    parseFilterContains(filter)
+    {
+        if ( ! filter) {
+            return false;
+        }
+
+        if (frost.isFunction(filter)) {
+            return filter;
+        }
+
+        if (frost.isString(filter)) {
+            return node => node.findOne(filter);
+        }
+
+        if (this.isNode(filter)) {
+            return node => node.contains(filter);
+        }
+
+        filter = Core.nodeArray(filter);
+        if (filter.length) {
+            return node => filter.find(other => node.contains(other));
+        }
+
+        return false;
+    },
+
     // returns a URI-encoded attribute string from an array or object
     parseParams(data)
     {

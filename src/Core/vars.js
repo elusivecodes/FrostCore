@@ -14,7 +14,7 @@ Core.splitRegex = /\s*((?:[\w\#\.\:\-]|\[(?:[^\[\]]*|\[[^\[\]]*\])*\]|[\s\>\~\+]
 Core.htmlRegex = /^\s*\</;
 
 // css properties that have number-only values
-Core.cssNumberProperties = ['fontWeight', 'lineHeight', 'opacity', 'orphans', 'widows', 'zIndex'];
+Core.cssNumberProperties = ['font-weight', 'line-height', 'opacity', 'orphans', 'widows', 'z-index'];
 
 // default ajax settings
 Core.ajaxDefaults = {

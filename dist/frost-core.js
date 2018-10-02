@@ -10,17 +10,20 @@
 
     const frost = {};
 
-    class Core {
-        constructor(context) {
+    class Core
+    {
+
+        constructor(context)
+        {
             this.context = context || window.document;
 
             this.animating = false;
-            this.animations = new Map();
-            this.queues = new WeakMap();
+            this.animations = new Map;
+            this.queues = new WeakMap;
 
-            this.nodeData = new WeakMap();
-            this.nodeEvents = new WeakMap();
-            this.nodeStyles = new WeakMap();
+            this.nodeData = new WeakMap;
+            this.nodeEvents = new WeakMap;
+            this.nodeStyles = new WeakMap;
         }
 
         // jQuery-like query method,
@@ -45,6 +48,7 @@
                 this.addEvent(window, 'DOMContentLoaded', callback);
             }
         }
+
     }
 
     Object.assign(Core.prototype, {
@@ -63,7 +67,7 @@
 
                     const promise = new Promise((resolve, reject) => {
                         const animation = (stop = false, finish = false) => {
-                            if (stop && ! finish) {
+                            if ( ! core.contains(this.context, node) || (stop && ! finish)) {
                                 reject(node);
                                 return false;
                             }
@@ -141,6 +145,7 @@
                     this.animations.delete(node);
                 });
         }
+
     });
 
     Object.assign(Core.prototype, {
@@ -278,39 +283,49 @@
             const wrapper = this.create('div');
             this.setStyle(wrapper, 'overflow', 'hidden');
             this.setStyle(wrapper, 'position', 'relative');
-            this.wrap(nodes, wrapper);
 
-            return this.animate(nodes, (node, progress) => {
-                const parent = this.parent(node);
+            const animations = [];
 
-                if (progress === 1) {
-                    return this.unwrap(node);
-                }
+            Core.nodeArray(nodes)
+                .forEach(node => {
+                    this.wrap(node, wrapper);
+                    const parent = this.parent(node);
 
-                const dir = frost.isFunction(direction) ?
-                    direction() : direction;
+                    animations.push(this.animate(node, (node, progress) => {
+                        if (progress === 1) {
+                            this.before(parent, this.contents(parent));
+                            this.remove(parent);
+                            return;
+                        }
 
-                const height = Math.round(this.height(node, true, true, true));
-                const width = Math.round(this.width(node, true, true, true));
-                if (dir === 'top' || dir === 'bottom') {
-                    this.setStyle(parent, 'width', width);
+                        const dir = frost.isFunction(direction) ?
+                            direction() : direction;
 
-                    const amount = Math.round(height * progress);
-                    this.setStyle(parent, 'height', amount);
-                    if (dir === 'top') {
-                        this.setStyle(parent, 'transform', 'translateY(' + (height - amount) + 'px)');
-                    }
-                } else {
-                    this.setStyle(parent, 'height', height);
+                        if (dir === 'top' || dir === 'bottom') {
+                            const height = Math.round(this.height(node, true));
+                            const width = Math.round(this.width(node, true, true, true));
+                            this.setStyle(parent, 'width', width);
 
-                    const amount = Math.round(width * progress);
-                    this.setStyle(parent, 'width', amount);
-                    if (dir === 'left') {
-                        this.setStyle(parent, 'transform', 'translateX(' + (width - amount) + 'px)');
-                    }
-                }
+                            const amount = Math.round(height * progress);
+                            this.setStyle(parent, 'height', amount);
+                            if (dir === 'top') {
+                                this.setStyle(parent, 'transform', 'translateY(' + (height - amount) + 'px)');
+                            }
+                        } else {
+                            const height = Math.round(this.height(node, true, true, true));
+                            const width = Math.round(this.width(node, true));
+                            this.setStyle(parent, 'height', height);
 
-            }, duration);
+                            const amount = Math.round(width * progress);
+                            this.setStyle(parent, 'width', amount);
+                            if (dir === 'left') {
+                                this.setStyle(parent, 'transform', 'translateX(' + (width - amount) + 'px)');
+                            }
+                        }
+                    }, duration));
+                });
+
+            return Promise.all(animations);
         },
 
         // squeeze each element out of place to a direction over a duration
@@ -319,40 +334,51 @@
             const wrapper = this.create('div');
             this.setStyle(wrapper, 'overflow', 'hidden');
             this.setStyle(wrapper, 'position', 'relative');
-            this.wrap(nodes, wrapper);
 
-            return this.animate(nodes, (node, progress) => {
-                const parent = this.parent(node);
+            const animations = [];
 
-                if (progress === 1) {
-                    return this.unwrap(node);
-                }
+            Core.nodeArray(nodes)
+                .forEach(node => {
+                    this.wrap(node, wrapper);
+                    const parent = this.parent(node);
 
-                const dir = frost.isFunction(direction) ?
-                    direction() : direction;
+                    animations.push(this.animate(node, (node, progress) => {
+                        if (progress === 1) {
+                            this.before(parent, this.contents(parent));
+                            this.remove(parent);
+                            return;
+                        }
 
-                const height = Math.round(this.height(node, true, true, true));
-                const width = Math.round(this.width(node, true, true, true));
-                if (dir === 'top' || dir === 'bottom') {
-                    this.setStyle(parent, 'width', width);
+                        const dir = frost.isFunction(direction) ?
+                            direction() : direction;
 
-                    const amount = Math.round(height - (height * progress));
-                    this.setStyle(parent, 'height', amount);
-                    if (dir === 'top') {
-                        this.setStyle(parent, 'transform', 'translateY(' + (height - amount) + 'px)');
-                    }
-                } else {
-                    this.setStyle(parent, 'height', height);
+                        if (dir === 'top' || dir === 'bottom') {
+                            const height = Math.round(this.height(node, true));
+                            const width = Math.round(this.width(node, true, true, true));
+                            this.setStyle(parent, 'width', width);
 
-                    const amount = Math.round(width - (width * progress));
-                    this.setStyle(parent, 'width', amount);
-                    if (dir === 'left') {
-                        this.setStyle(parent, 'transform', 'translateX(' + (width - amount) + 'px)');
-                    }
-                }
+                            const amount = Math.round(height - (height * progress));
+                            this.setStyle(parent, 'height', amount);
+                            if (dir === 'top') {
+                                this.setStyle(parent, 'transform', 'translateY(' + (height - amount) + 'px)');
+                            }
+                        } else {
+                            const height = Math.round(this.height(node, true, true, true));
+                            const width = Math.round(this.width(node, true));
+                            this.setStyle(parent, 'height', height);
 
-            }, duration);
+                            const amount = Math.round(width - (width * progress));
+                            this.setStyle(parent, 'width', amount);
+                            if (dir === 'left') {
+                                this.setStyle(parent, 'transform', 'translateX(' + (width - amount) + 'px)');
+                            }
+                        }
+                    }, duration));
+                });
+
+            return Promise.all(animations);
         }
+
     });
 
     Object.assign(Core.prototype, {
@@ -444,11 +470,11 @@
         // get the HTML contents of the first element
         getHTML(nodes)
         {
-            return this.getProp(nodes, 'innerHTML');
+            return this.getProperty(nodes, 'innerHTML');
         },
 
         // get a property value for the first element
-        getProp(nodes, prop)
+        getProperty(nodes, property)
         {
             const node = Core.nodeFirst(nodes);
 
@@ -456,19 +482,19 @@
                 return;
             }
 
-            return node[prop];
+            return node[property];
         },
 
         // get the text contents of the first element
         getText(nodes)
         {
-            return this.getProp(nodes, 'innerText');
+            return this.getProperty(nodes, 'innerText');
         },
 
         // get the value property of the first element
         getValue(nodes)
         {
-            return this.getProp(nodes, 'value');
+            return this.getProperty(nodes, 'value');
         },
 
         // remove an attribute from each element
@@ -479,11 +505,11 @@
         },
 
         // remove a property from each element
-        removeProp(nodes, prop)
+        removeProperty(nodes, property)
         {
             Core.nodeArray(nodes)
                 .forEach(node => {
-                    delete node[prop];
+                    delete node[property];
                 });
         },
 
@@ -514,11 +540,11 @@
         setHTML(nodes, html)
         {
             this.empty(nodes);
-            this.setProp(nodes, 'innerHTML', html);
+            this.setProperty(nodes, 'innerHTML', html);
         },
 
         // set property values for each element
-        setProp(nodes, property, value)
+        setProperty(nodes, property, value)
         {
             Core.nodeArray(nodes)
                 .forEach(node => {
@@ -535,13 +561,13 @@
         setText(nodes, text)
         {
             this.empty(nodes);
-            this.setProp(nodes, 'innerText', text);
+            this.setProperty(nodes, 'innerText', text);
         },
 
         // set the value property for each element
         setValue(nodes, value)
         { 
-            this.setProp(nodes, 'value', value);
+            this.setProperty(nodes, 'value', value);
         }
 
     });
@@ -757,7 +783,7 @@
                 };
 
                 if (offset) {
-                    const parentPosition = this.position(parent, true);
+                    const parentPosition = this.position(this.offsetParent(node), true);
                     if (parentPosition) {
                         result.x += parentPosition.x;
                         result.y += parentPosition.y;
@@ -1000,7 +1026,10 @@
                 return;
             }
 
-            return node.style[style];
+            // camelize style property
+            style = frost.snakeCase(style);
+
+            return node.style.getPropertyValue(style);
         },
 
         // hide each element from display
@@ -1023,7 +1052,7 @@
         },
 
         // set style properties for each element
-        setStyle(nodes, style, value)
+        setStyle(nodes, style, value, important)
         {
             // if style value is an object, loop through and set all values
             if (frost.isObject(style)) {
@@ -1032,7 +1061,7 @@
             }
 
             // camelize style property
-            style = frost.camelCase(style);
+            style = frost.snakeCase(style);
 
             // convert value to string
             value = '' + value;
@@ -1043,9 +1072,9 @@
             }
 
             Core.nodeArray(nodes)
-                .forEach(node => {
-                    node.style[style] = value;
-                });
+                .forEach(node =>
+                    node.style.setProperty(style, value, important ? 'important' : '')
+                );
         },
 
         // display each hidden element
@@ -1286,6 +1315,10 @@
                 return;
             }
 
+            if ( ! node.parentNode) {
+                return;
+            }
+
             this.parseQuery(others)
                 .reverse()
                 .forEach(other => node.parentNode.insertBefore(other, node.nextSibling));
@@ -1294,7 +1327,7 @@
         // append each other nodes to the first node
         append(nodes, others)
         {
-            const node = Core.nodeFirst(nodes, false);
+            const node = Core.nodeFirst(nodes);
 
             if ( ! node) {
                 return;
@@ -1316,6 +1349,10 @@
             const node = Core.nodeFirst(nodes, false);
 
             if ( ! node) {
+                return;
+            }
+
+            if ( ! node.parentNode) {
                 return;
             }
 
@@ -1374,7 +1411,7 @@
         empty(nodes)
         {
             this.remove(this.find(nodes, '*'), false);
-            this.setProp(nodes, 'innerHTML', '');
+            this.setProperty(nodes, 'innerHTML', '');
         },
 
         // insert each node after the first other node
@@ -1392,7 +1429,7 @@
         // prepend each other node to the first node
         prepend(nodes, others)
         {
-            const node = Core.nodeFirst(nodes, false);
+            const node = Core.nodeFirst(nodes);
 
             if ( ! node) {
                 return;
@@ -1497,6 +1534,15 @@
 
     Object.assign(Core.prototype, {
 
+        // returns true if any of the elements contains a descendent matching a filter
+        contains(nodes, filter)
+        {
+            filter = Core.parseFilterContains(filter);
+
+            return !! Core.nodeArray(nodes, true, true)
+                .find(node => ! filter || filter(node));
+        },
+
         // returns true if any of the elements has a specified attribute
         hasAttribute(nodes, attribute)
         {
@@ -1525,6 +1571,15 @@
         {
             return !! Core.nodeArray(nodes)
                 .find(node => node.hasOwnProperty(prop));
+        },
+
+        // returns true if any of the elements matches a filter
+        is(filter)
+        {
+            filter = Core.parseFilter(filter);
+
+            return !! Core.nodeArray(nodes)
+                .find(node => ! filter || filter(node));
         },
 
         // returns true if any of the elements or a parent of the elements is "fixed"
@@ -1570,11 +1625,13 @@
                 .find((node, index) => ! filter || filter(node, index)) || null;
         },
 
-        // return all elements with a descendent matching the selector
-        has(nodes, selector)
+        // return all elements with a descendent matching a filter
+        has(nodes, filter)
         {
-            return Core.nodeArray(nodes)
-                .filter(node => this.findOne(node, selector));
+            filter = Core.parseFilterContains(filter);
+
+            return !! Core.nodeArray(nodes, true, true)
+                .filter(node => ! filter || filter(node));
         },
 
         // return all hidden elements
@@ -1590,7 +1647,7 @@
             filter = Core.parseFilter(filter);
 
             return Core.nodeArray(nodes)
-                .filter((node, index) => ! filter || ! filter(node, index));
+                .filter((node, index) => filter && ! filter(node, index));
         },
 
         // return all visible elements
@@ -2138,7 +2195,7 @@
                     styles.push(this.getStyle(parent, 'display'));
                 });
 
-            this.setStyle(elements, 'display', 'initial !important');
+            this.setStyle(elements, 'display', 'initial', true);
 
             const result = callback(node);
 
@@ -2171,13 +2228,17 @@
         // create a selection on the first node
         select(nodes)
         {
+            const node = Core.nodeFirst(nodes, false);
+
+            if (node && node.select) {
+                return node.select();
+            }
+
             const selection = window.getSelection();
 
             if (selection.rangeCount > 0) {
                 selection.removeAllRanges();
             }
-
-            const node = Core.nodeFirst(nodes, false);
 
             if ( ! node) {
                 return;
@@ -2293,7 +2354,7 @@
                 ( ! elementsOnly && this.isNode(node)) ||
                 (elementsOnly && this.isElement(node)) ||
                 (allowDocument && this.isDocument(node)) ||
-                (allowWindow && this.isWindow(node));
+                (allowWindow && frost.isWindow(node));
         },
 
         // get the first node or element (and optionally document or window)
@@ -2372,6 +2433,33 @@
             filter = this.nodeArray(filter);
             if (filter.length) {
                 return node => filter.includes(node);
+            }
+
+            return false;
+        },
+
+        // returns an element contains filter function from a function, string, node, node list, element list or array
+        parseFilterContains(filter)
+        {
+            if ( ! filter) {
+                return false;
+            }
+
+            if (frost.isFunction(filter)) {
+                return filter;
+            }
+
+            if (frost.isString(filter)) {
+                return node => node.findOne(filter);
+            }
+
+            if (this.isNode(filter)) {
+                return node => node.contains(filter);
+            }
+
+            filter = Core.nodeArray(filter);
+            if (filter.length) {
+                return node => filter.find(other => node.contains(other));
             }
 
             return false;
@@ -2702,13 +2790,20 @@
     Object.assign(Core.prototype, {
 
         // create a self regenerating event that will execute once per animation frame
-        animationEventFactory(node, event, callback)
+        animationEventFactory(callback)
         {
-            callback = this.selfDestructFactory(node, event, callback);
+            let updating = false;
 
             const realCallback = e => {
-                callback(e);
-                window.requestAnimationFrame(() => this.addEventOnce(node, event, realCallback));
+                if (updating) {
+                    return;
+                }
+
+                updating = true;
+                window.requestAnimationFrame(() => {
+                    callback(e);
+                    updating = false;
+                });
             };
 
             return realCallback;
@@ -2769,7 +2864,7 @@
         mouseDragFactory(down, move, up, animated = true)
         {
             if (move && animated) {
-                move = this.animationEventFactory(window, 'mousemove', move);
+                move = this.animationEventFactory(move);
             }
 
             return e => {
@@ -2855,7 +2950,7 @@
     Core.htmlRegex = /^\s*\</;
 
     // css properties that have number-only values
-    Core.cssNumberProperties = ['fontWeight', 'lineHeight', 'opacity', 'orphans', 'widows', 'zIndex'];
+    Core.cssNumberProperties = ['font-weight', 'line-height', 'opacity', 'orphans', 'widows', 'z-index'];
 
     // default ajax settings
     Core.ajaxDefaults = {
@@ -2877,7 +2972,7 @@
             return array.reduce((acc, val) =>
                 Array.isArray(val) ?
                     acc.concat(...this.flattenArray(val)) :
-                    arr.concat(val)
+                    acc.concat(val)
                 , []);
         },
 
@@ -3048,8 +3143,11 @@
 
     });
 
-    class QuerySet {
-        constructor(nodes) {
+    class QuerySet
+    {
+
+        constructor(nodes)
+        {
             this.nodes = core.parseQuery(nodes, true, true, true);
             this.stack = [];
         }
@@ -3123,15 +3221,19 @@
 
     }
 
-    class QuerySetImmutable extends QuerySet {
-        constructor() {
-            super(...arguments);
+    class QuerySetImmutable extends QuerySet
+    {
+
+        constructor(...args)
+        {
+            super(...args);
         }
 
         pushStack(nodes)
         {
             return new QuerySetImmutable(nodes);
         }
+
     }
 
     Object.assign(QuerySet.prototype, {
@@ -3254,9 +3356,9 @@
         },
 
         // get a property value for the first element
-        getProp(property)
+        getProperty(property)
         {
-            return core.getAttribute(this.nodes, property);
+            return core.getProperty(this.nodes, property);
         },
 
         // get the text contents of the first element
@@ -3279,9 +3381,9 @@
         },
 
         // remove a property from each element
-        removeProp(property)
+        removeProperty(property)
         {
-            core.removeProp(this.nodes, property);
+            core.removeProperty(this.nodes, property);
             return this;
         },
 
@@ -3307,7 +3409,7 @@
         },
 
         // set property values for each element
-        setProp(property, value)
+        setProperty(property, value)
         {
             core.setProperty(this.nodes, property, value);
             return this;
@@ -3739,6 +3841,12 @@
 
     Object.assign(QuerySet.prototype, {
 
+        // returns true if any of the elements contains a descendent matching a filter
+        contains(filter)
+        {
+            return core.contains(this.nodes, filter);
+        },
+
         // returns true if any of the elements has a specified attribute
         hasAttribute(attribute)
         {
@@ -4020,7 +4128,7 @@
         frost,
         Core,
         core: frost.core,
-        $: core.query
+        $: frost.core.query
     };
 
 });

@@ -1,5 +1,14 @@
 Object.assign(Core.prototype, {
 
+    // returns true if any of the elements contains a descendent matching a filter
+    contains(nodes, filter)
+    {
+        filter = Core.parseFilterContains(filter);
+
+        return !! Core.nodeArray(nodes, true, true)
+            .find(node => ! filter || filter(node));
+    },
+
     // returns true if any of the elements has a specified attribute
     hasAttribute(nodes, attribute)
     {
@@ -28,6 +37,15 @@ Object.assign(Core.prototype, {
     {
         return !! Core.nodeArray(nodes)
             .find(node => node.hasOwnProperty(prop));
+    },
+
+    // returns true if any of the elements matches a filter
+    is(filter)
+    {
+        filter = Core.parseFilter(filter);
+
+        return !! Core.nodeArray(nodes)
+            .find(node => ! filter || filter(node));
     },
 
     // returns true if any of the elements or a parent of the elements is "fixed"

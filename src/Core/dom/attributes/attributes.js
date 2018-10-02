@@ -31,11 +31,11 @@ Object.assign(Core.prototype, {
     // get the HTML contents of the first element
     getHTML(nodes)
     {
-        return this.getProp(nodes, 'innerHTML');
+        return this.getProperty(nodes, 'innerHTML');
     },
 
     // get a property value for the first element
-    getProp(nodes, prop)
+    getProperty(nodes, property)
     {
         const node = Core.nodeFirst(nodes);
 
@@ -43,19 +43,19 @@ Object.assign(Core.prototype, {
             return;
         }
 
-        return node[prop];
+        return node[property];
     },
 
     // get the text contents of the first element
     getText(nodes)
     {
-        return this.getProp(nodes, 'innerText');
+        return this.getProperty(nodes, 'innerText');
     },
 
     // get the value property of the first element
     getValue(nodes)
     {
-        return this.getProp(nodes, 'value');
+        return this.getProperty(nodes, 'value');
     },
 
     // remove an attribute from each element
@@ -66,11 +66,11 @@ Object.assign(Core.prototype, {
     },
 
     // remove a property from each element
-    removeProp(nodes, prop)
+    removeProperty(nodes, property)
     {
         Core.nodeArray(nodes)
             .forEach(node => {
-                delete node[prop];
+                delete node[property];
             });
     },
 
@@ -101,11 +101,11 @@ Object.assign(Core.prototype, {
     setHTML(nodes, html)
     {
         this.empty(nodes);
-        this.setProp(nodes, 'innerHTML', html);
+        this.setProperty(nodes, 'innerHTML', html);
     },
 
     // set property values for each element
-    setProp(nodes, property, value)
+    setProperty(nodes, property, value)
     {
         Core.nodeArray(nodes)
             .forEach(node => {
@@ -122,13 +122,13 @@ Object.assign(Core.prototype, {
     setText(nodes, text)
     {
         this.empty(nodes);
-        this.setProp(nodes, 'innerText', text);
+        this.setProperty(nodes, 'innerText', text);
     },
 
     // set the value property for each element
     setValue(nodes, value)
     { 
-        this.setProp(nodes, 'value', value);
+        this.setProperty(nodes, 'value', value);
     }
 
 });

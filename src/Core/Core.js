@@ -1,14 +1,17 @@
-class Core {
-    constructor(context) {
+class Core
+{
+
+    constructor(context)
+    {
         this.context = context || window.document;
 
         this.animating = false;
-        this.animations = new Map();
-        this.queues = new WeakMap();
+        this.animations = new Map;
+        this.queues = new WeakMap;
 
-        this.nodeData = new WeakMap();
-        this.nodeEvents = new WeakMap();
-        this.nodeStyles = new WeakMap();
+        this.nodeData = new WeakMap;
+        this.nodeEvents = new WeakMap;
+        this.nodeStyles = new WeakMap;
     }
 
     // jQuery-like query method,
@@ -33,4 +36,5 @@ class Core {
             this.addEvent(window, 'DOMContentLoaded', callback);
         }
     }
+
 }
