@@ -74,7 +74,7 @@ Object.assign(Core.prototype, {
                 return this.setStyle(node, 'transform', '');
             }
 
-            const dir = frost.isFunction(direction) ?
+            const dir = Core.isFunction(direction) ?
                 direction() : direction;
 
             if (dir === 'top' || dir === 'bottom') {
@@ -105,7 +105,7 @@ Object.assign(Core.prototype, {
                 return this.setStyle(node, 'transform', '');
             }
 
-            const dir = frost.isFunction(direction) ?
+            const dir = Core.isFunction(direction) ?
                 direction() : direction;
 
             if (dir === 'top' || dir === 'bottom') {
@@ -148,7 +148,7 @@ Object.assign(Core.prototype, {
                         return;
                     }
 
-                    const dir = frost.isFunction(direction) ?
+                    const dir = Core.isFunction(direction) ?
                         direction() : direction;
 
                     if (dir === 'top' || dir === 'bottom') {
@@ -199,7 +199,7 @@ Object.assign(Core.prototype, {
                         return;
                     }
 
-                    const dir = frost.isFunction(direction) ?
+                    const dir = Core.isFunction(direction) ?
                         direction() : direction;
 
                     if (dir === 'top' || dir === 'bottom') {

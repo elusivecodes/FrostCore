@@ -65,7 +65,7 @@ Object.assign(Core.prototype, {
         }
 
         // camelize style property
-        style = frost.snakeCase(style);
+        style = Core.snakeCase(style);
 
         return node.style.getPropertyValue(style);
     },
@@ -74,19 +74,19 @@ Object.assign(Core.prototype, {
     setStyle(nodes, style, value, important)
     {
         // if style value is an object, loop through and set all values
-        if (frost.isObject(style)) {
+        if (Core.isObject(style)) {
             Object.keys(style).forEach(key => this.setStyle(nodes, key, style[key]));
             return;
         }
 
         // camelize style property
-        style = frost.snakeCase(style);
+        style = Core.snakeCase(style);
 
         // convert value to string
         value = '' + value;
 
         // if value is numeric and not a number property, add px
-        if (value && frost.isNumeric(value) && ! Core.cssNumberProperties.includes(style)) {
+        if (value && Core.isNumeric(value) && ! Core.cssNumberProperties.includes(style)) {
             value = value + 'px';
         }
 

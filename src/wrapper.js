@@ -8,20 +8,16 @@
 
 })(window, function(window) {
 
-    const frost = {};
-
 // {{code}}
 
-    frost.core = new Core;
-    frost.Core = Core;
-    frost.QuerySet = QuerySet;
-    frost.QuerySetImmutable = QuerySetImmutable;
+    const core = new Core;
+    Core.QuerySet = QuerySet;
+    Core.QuerySetImmutable = QuerySetImmutable;
 
     return {
-        frost,
         Core,
-        core: frost.core,
-        $: frost.core.query
+        core,
+        $: core.query
     };
 
 });

@@ -3,7 +3,7 @@ Object.assign(Core.prototype, {
     // perform an XHR request
     ajax(url, data = null, method = 'GET')
     {
-        if (frost.isObject(url)) {
+        if (Core.isObject(url)) {
             method = data || method;
             data = url;
         } else {
@@ -118,7 +118,7 @@ Object.assign(Core.prototype, {
     // perform an XHR request for a file upload
     upload(url, data, method = 'POST')
     {
-        if (frost.isObject(url)) {
+        if (Core.isObject(url)) {
             data = url;
         } else {
             data.url = url;

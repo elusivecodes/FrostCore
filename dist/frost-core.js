@@ -8,8 +8,6 @@
 
 })(window, function(window) {
 
-    const frost = {};
-
     class Core
     {
 
@@ -30,7 +28,7 @@
         // add a function to the ready queue or return a QuerySet (optionally mutable)
         query(query, mutable = true)
         {
-            if (frost.isFunction(query)) {
+            if (Core.isFunction(query)) {
                 return this.ready(query);
             }
 
@@ -72,7 +70,7 @@
                                 return false;
                             }
 
-                            const progress = finish ? 1 : frost.clamp((Date.now() - start) / duration);
+                            const progress = finish ? 1 : Core.clamp((Date.now() - start) / duration);
                             callback(node, progress);
 
                             if (progress === 1) {
@@ -224,7 +222,7 @@
                     return this.setStyle(node, 'transform', '');
                 }
 
-                const dir = frost.isFunction(direction) ?
+                const dir = Core.isFunction(direction) ?
                     direction() : direction;
 
                 if (dir === 'top' || dir === 'bottom') {
@@ -255,7 +253,7 @@
                     return this.setStyle(node, 'transform', '');
                 }
 
-                const dir = frost.isFunction(direction) ?
+                const dir = Core.isFunction(direction) ?
                     direction() : direction;
 
                 if (dir === 'top' || dir === 'bottom') {
@@ -298,7 +296,7 @@
                             return;
                         }
 
-                        const dir = frost.isFunction(direction) ?
+                        const dir = Core.isFunction(direction) ?
                             direction() : direction;
 
                         if (dir === 'top' || dir === 'bottom') {
@@ -349,7 +347,7 @@
                             return;
                         }
 
-                        const dir = frost.isFunction(direction) ?
+                        const dir = Core.isFunction(direction) ?
                             direction() : direction;
 
                         if (dir === 'top' || dir === 'bottom') {
@@ -458,7 +456,7 @@
         {
             Core.nodeArray(nodes)
                 .forEach(node => {
-                    if (frost.isObject(attribute)) {
+                    if (Core.isObject(attribute)) {
                         Object.keys(attribute)
                             .forEach(key => node.setAttribute(key, attribute[key]));
                         return;
@@ -536,7 +534,7 @@
         {
             Core.nodeArray(nodes)
                 .forEach(node => {
-                    if (frost.isObject(property)) {
+                    if (Core.isObject(property)) {
                         Object.keys(property).forEach(key => node[key] = property[key]);
                         return;
                     }
@@ -710,7 +708,7 @@
                 return;
             }
 
-            return frost.dist(nodeCenter.x, nodeCenter.y, x, y);
+            return Core.dist(nodeCenter.x, nodeCenter.y, x, y);
         },
 
         // get the distance between two elements
@@ -764,7 +762,7 @@
                 return;
             }
 
-            return frost.clampPercent((x - nodeBox.left) / nodeBox.width * 100);
+            return Core.clampPercent((x - nodeBox.left) / nodeBox.width * 100);
         },
 
         // get the percentage of a Y co-ordinate relative to an element
@@ -776,7 +774,7 @@
                 return;
             }
 
-            return frost.clampPercent((y - nodeBox.top) / nodeBox.height * 100);
+            return Core.clampPercent((y - nodeBox.top) / nodeBox.height * 100);
         },
 
         // get the position of the first element relative to the window (optionally offset)
@@ -836,7 +834,7 @@
         {
             Core.nodeArray(nodes, true, true, true)
                 .forEach(node => {
-                    if (frost.isWindow(node)) {
+                    if (Core.isWindow(node)) {
                         node.scroll(x, y);
                     } else if (Core.isDocument(node)) {
                         node.scrollingElement.scrollLeft = x;
@@ -853,7 +851,7 @@
         {
             Core.nodeArray(nodes, true, true, true)
                 .forEach(node => {
-                    if (frost.isWindow(node)) {
+                    if (Core.isWindow(node)) {
                         node.scroll(x, node.scrollY)
                     } else if (Core.isDocument(node)) {
                         node.scrollingElement.scrollLeft = x;
@@ -868,7 +866,7 @@
         {
             Core.nodeArray(nodes, true, true, true)
                 .forEach(node => {
-                    if (frost.isWindow(node)) {
+                    if (Core.isWindow(node)) {
                         node.scroll(node.scrollX, y)
                     } else if (Core.isDocument(node)) {
                         node.scrollingElement.scrollTop = y;
@@ -887,7 +885,7 @@
                 return;
             }
 
-            if (frost.isWindow(node)) {
+            if (Core.isWindow(node)) {
                 return node.scrollX;
             }
 
@@ -907,7 +905,7 @@
                 return;
             }
 
-            if (frost.isWindow(node)) {
+            if (Core.isWindow(node)) {
                 return node.scrollY;
             }
 
@@ -932,7 +930,7 @@
                 return;
             }
 
-            if (frost.isWindow(node)) {
+            if (Core.isWindow(node)) {
                 return padding ?
                     node.outerHeight :
                     node.innerHeight;
@@ -971,7 +969,7 @@
                 return;
             }
 
-            if (frost.isWindow(node)) {
+            if (Core.isWindow(node)) {
                 return padding ?
                     node.outerWidth :
                     node.innerWidth;
@@ -1069,7 +1067,7 @@
             }
 
             // camelize style property
-            style = frost.snakeCase(style);
+            style = Core.snakeCase(style);
 
             return node.style.getPropertyValue(style);
         },
@@ -1078,19 +1076,19 @@
         setStyle(nodes, style, value, important)
         {
             // if style value is an object, loop through and set all values
-            if (frost.isObject(style)) {
+            if (Core.isObject(style)) {
                 Object.keys(style).forEach(key => this.setStyle(nodes, key, style[key]));
                 return;
             }
 
             // camelize style property
-            style = frost.snakeCase(style);
+            style = Core.snakeCase(style);
 
             // convert value to string
             value = '' + value;
 
             // if value is numeric and not a number property, add px
-            if (value && frost.isNumeric(value) && ! Core.cssNumberProperties.includes(style)) {
+            if (value && Core.isNumeric(value) && ! Core.cssNumberProperties.includes(style)) {
                 value = value + 'px';
             }
 
@@ -1130,8 +1128,8 @@
         // add an event to each element
         addEvent(nodes, events, delegate, callback, selfDestruct = false)
         {
-            if (frost.isFunction(delegate)) {
-                if (frost.isBoolean(callback)) {
+            if (Core.isFunction(delegate)) {
+                if (Core.isBoolean(callback)) {
                     selfDestruct = callback;
                 }
                 callback = delegate;
@@ -1240,7 +1238,7 @@
         // remove an event from each element
         removeEvent(nodes, events, delegate, callback)
         {
-            if (delegate && frost.isFunction(delegate)) {
+            if (delegate && Core.isFunction(delegate)) {
                 callback = delegate;
                 delegate = false;
             }
@@ -1616,7 +1614,7 @@
         isVisible(nodes)
         {
             return !! Core.nodeArray(nodes, false, true, true)
-                .find(node => frost.isWindow(node) || Core.isDocument(node) || (Core.isNode(node) && node.offsetParent));
+                .find(node => Core.isWindow(node) || Core.isDocument(node) || (Core.isNode(node) && node.offsetParent));
         }
 
     });
@@ -2334,6 +2332,122 @@
 
     Object.assign(Core, {
 
+        // create a single-dimensional Array from a multiple-dimensional Array
+        flattenArray(array)
+        {
+            return array.reduce((acc, val) =>
+                Array.isArray(val) ?
+                    acc.concat(...this.flattenArray(val)) :
+                    acc.concat(val)
+                , []);
+        },
+
+        // remove duplicate elements in an array
+        uniqueArray(array)
+        {
+            return [...new Set(array)];
+        }
+
+    });
+
+    Object.assign(Core, {
+
+        // clamp a value between a min and max
+        clamp(val, min = 0, max = 1)
+        {
+            return Math.max(min, Math.min(max, val));
+        },
+
+        // clamp a value between 0 and 100
+        clampPercent(val)
+        {
+            return this.clamp(val, 0, 100);
+        },
+
+        // get the distance between two vectors
+        dist(x1, y1, x2, y2)
+        {
+            return this.len(x1 - x2, y1 - y2);
+        },
+
+        // get the length of an X,Y vector
+        len(x, y)
+        {
+            return Math.hypot(x, y);
+        },
+
+        // linear interpolation from one value to another
+        lerp(a, b, amount)
+        {
+            return a * (1 - amount) + b * amount;
+        },
+
+        // get the linear percent of a value in a specified range
+        linearPercent(a, b, value)
+        {
+            if (a === b) {
+                return 0;
+            }
+
+            return this.clampPercent(100 * (value - a) / (b - a));
+        },
+
+        // get the linear value of a percent in a specified range
+        linearValue(a, b, percent)
+        {
+            return this.clamp(
+                a + (percent / 100 * (b - a)),
+                a,
+                b
+            );
+        },
+
+        // get the logarithmic percent of a value in a specified range
+        logPercent(a, b, value)
+        {
+            if (a === b) {
+                return 0;
+            }
+
+            const min = a ?
+                Math.log(a) :
+                0;
+
+            return this.clampPercent(
+                100 * ((value ? Math.log(value) : 0) - min) / (Math.log(b) - min)
+            );
+        },
+
+        // get the logarithmic value of a percent in a specified range
+        logValue(a, b, percent)
+        {
+            const min = a ?
+                Math.log(a) :
+                0;
+
+            return this.clamp(
+                Math.exp(min + (Math.log(b) - min) * percent / 100),
+                a,
+                b
+            );
+        },
+
+        // map a value from one range to another
+        map(value, fromMin, fromMax, toMin, toMax)
+        {
+            return (value - fromMin) * (toMax - toMin) / (fromMax - fromMin) + toMin;
+        },
+
+        // round a number to a specified precision
+        toStep(value, step)
+        {
+            return Math.round(value / step) * step;
+        }
+
+    });
+
+    Object.assign(Core, {
+
         // returns an array from an array, node list, element list, query list or arbitrary value
         makeArray(value)
         {
@@ -2370,7 +2484,7 @@
                 ( ! elementsOnly && this.isNode(node)) ||
                 (elementsOnly && this.isElement(node)) ||
                 (allowDocument && this.isDocument(node)) ||
-                (allowWindow && frost.isWindow(node));
+                (allowWindow && Core.isWindow(node));
         },
 
         // get the first node or element (and optionally document or window)
@@ -2409,8 +2523,8 @@
         // returns a single dimensional array of classes (from a multi-dimensional array or space-separated strings)
         parseClasses(classList)
         {
-            return frost.uniqueArray(
-                frost.flattenArray(classList)
+            return this.uniqueArray(
+                this.flattenArray(classList)
                     .reduce((acc, val) => acc.concat(...val.split(' ')), [])
                     .filter(val => val)
             );
@@ -2434,11 +2548,11 @@
                 return false;
             }
 
-            if (frost.isFunction(filter)) {
+            if (this.isFunction(filter)) {
                 return filter;
             }
 
-            if (frost.isString(filter)) {
+            if (this.isString(filter)) {
                 return node => node.matches(filter);
             }
 
@@ -2461,11 +2575,11 @@
                 return false;
             }
 
-            if (frost.isFunction(filter)) {
+            if (this.isFunction(filter)) {
                 return filter;
             }
 
-            if (frost.isString(filter)) {
+            if (this.isString(filter)) {
                 return node => node.findOne(filter);
             }
 
@@ -2488,11 +2602,11 @@
 
             if (Array.isArray(data)) {
                 values = data.map(value => this.parseParam(value.name, value.value));
-            } else if (frost.isObject(data)) {
+            } else if (this.isObject(data)) {
                 values = Object.keys(data).map(key => this.parseParam(key, data[key]));
             }
 
-            return frost.flattenArray(values).map(encodeURI).join('&');
+            return this.flattenArray(values).map(encodeURI).join('&');
         },
 
         // returns an array or string of key value pairs from an array, object or string
@@ -2502,7 +2616,7 @@
                 return value.map(val => this.parseParam(key, val));
             }
 
-            if (frost.isObject(value)) {
+            if (this.isObject(value)) {
                 return Object.keys(value).map(subKey => this.parseParam(key + '[' + subKey + ']', value[subKey]));
             }
 
@@ -2548,6 +2662,35 @@
 
     Object.assign(Core, {
 
+        // convert a string to Camel Case
+        camelCase(string)
+        {
+            return '' + string.replace(/(\-[a-z])/g, match => match.toUpperCase())
+                .replace('-', '');
+        },
+
+        // convert a string to Snake Case
+        snakeCase(string)
+        {
+            return '' + string.replace(/([A-Z])/g, match => '-' + match.toLowerCase());
+        }
+
+    });
+
+    Object.assign(Core, {
+
+        // returns true if the value is an Array
+        isArray(value)
+        {
+            return Array.isArray(value);
+        },
+
+        // returns true if the value is a Boolean
+        isBoolean(value)
+        {
+            return value === !!value;
+        },
+
         // returns true if the value if a Document
         isDocument(value)
         {
@@ -2566,6 +2709,12 @@
             return value instanceof HTMLCollection;
         },
 
+        // returns true if the value is a Function
+        isFunction(value)
+        {
+            return typeof value === 'function';
+        },
+
         // returns true if the value is a Node
         isNode(value)
         {
@@ -2576,6 +2725,18 @@
         isNodeList(value)
         {
             return value instanceof NodeList;
+        },
+
+        // returns true if the value is numeric
+        isNumeric(value)
+        {
+            return ! isNaN(parseFloat(value)) && isFinite(value);
+        },
+
+        // returns true if the value is an Object
+        isObject(value)
+        {
+            return value instanceof Object;
         },
 
         // returns true if the value is a Query List
@@ -2589,6 +2750,18 @@
         {
             return !! this.parseSelectors(selectors)
                 .find(selector => ['>', '+', '~'].includes(selector[0]));
+        },
+
+        // returns true if the value is a String
+        isString(value)
+        {
+            return value === '' + value;
+        },
+
+        // returns true if the value is a Window
+        isWindow(value)
+        {
+            return value instanceof Window;
         }
 
     });
@@ -2598,7 +2771,7 @@
         // perform an XHR request
         ajax(url, data = null, method = 'GET')
         {
-            if (frost.isObject(url)) {
+            if (Core.isObject(url)) {
                 method = data || method;
                 data = url;
             } else {
@@ -2713,7 +2886,7 @@
         // perform an XHR request for a file upload
         upload(url, data, method = 'POST')
         {
-            if (frost.isObject(url)) {
+            if (Core.isObject(url)) {
                 data = url;
             } else {
                 data.url = url;
@@ -2930,7 +3103,7 @@
         // returns an array of nodes from a HTML string, query selector string, node, node list, element list or array
         parseQuery(query, elementsOnly = true, allowDocument = false, allowWindow = false)
         {
-            if (query && ! frost.isString(query)) {
+            if (query && ! Core.isString(query)) {
                 return Core.nodeArray(query, elementsOnly, allowDocument, allowWindow);
             }
 
@@ -2979,185 +3152,6 @@
         method: false,
         processData: true
     };
-
-    Object.assign(frost, {
-
-        // create a single-dimensional Array from a multiple-dimensional Array
-        flattenArray(array)
-        {
-            return array.reduce((acc, val) =>
-                Array.isArray(val) ?
-                    acc.concat(...this.flattenArray(val)) :
-                    acc.concat(val)
-                , []);
-        },
-
-        // remove duplicate elements in an array
-        uniqueArray(array)
-        {
-            return [...new Set(array)];
-        }
-
-    });
-
-    Object.assign(frost, {
-
-        // clamp a value between a min and max
-        clamp(val, min = 0, max = 1)
-        {
-            return Math.max(min, Math.min(max, val));
-        },
-
-        // clamp a value between 0 and 100
-        clampPercent(val)
-        {
-            return this.clamp(val, 0, 100);
-        },
-
-        // get the distance between two vectors
-        dist(x1, y1, x2, y2)
-        {
-            return this.len(x1 - x2, y1 - y2);
-        },
-
-        // get the length of an X,Y vector
-        len(x, y)
-        {
-            return Math.hypot(x, y);
-        },
-
-        // linear interpolation from one value to another
-        lerp(a, b, amount)
-        {
-            return a * (1 - amount) + b * amount;
-        },
-
-        // get the linear percent of a value in a specified range
-        linearPercent(a, b, value)
-        {
-            if (a === b) {
-                return 0;
-            }
-
-            return this.clampPercent(100 * (value - a) / (b - a));
-        },
-
-        // get the linear value of a percent in a specified range
-        linearValue(a, b, percent)
-        {
-            return this.clamp(
-                a + (percent / 100 * (b - a)),
-                a,
-                b
-            );
-        },
-
-        // get the logarithmic percent of a value in a specified range
-        logPercent(a, b, value)
-        {
-            if (a === b) {
-                return 0;
-            }
-
-            const min = a ?
-                Math.log(a) :
-                0;
-
-            return this.clampPercent(
-                100 * ((value ? Math.log(value) : 0) - min) / (Math.log(b) - min)
-            );
-        },
-
-        // get the logarithmic value of a percent in a specified range
-        logValue(a, b, percent)
-        {
-            const min = a ?
-                Math.log(a) :
-                0;
-
-            return this.clamp(
-                Math.exp(min + (Math.log(b) - min) * percent / 100),
-                a,
-                b
-            );
-        },
-
-        // map a value from one range to another
-        map(value, fromMin, fromMax, toMin, toMax)
-        {
-            return (value - fromMin) * (toMax - toMin) / (fromMax - fromMin) + toMin;
-        },
-
-        // round a number to a specified precision
-        toStep(value, step)
-        {
-            return Math.round(value / step) * step;
-        }
-
-    });
-
-    Object.assign(frost, {
-
-        // convert a string to Camel Case
-        camelCase(string)
-        {
-            return '' + string.replace(/(\-[a-z])/g, match => match.toUpperCase())
-                .replace('-', '');
-        },
-
-        // convert a string to Snake Case
-        snakeCase(string)
-        {
-            return '' + string.replace(/([A-Z])/g, match => '-' + match.toLowerCase());
-        }
-
-    });
-
-    Object.assign(frost, {
-
-        // returns true if the value is an Array
-        isArray(value)
-        {
-            return Array.isArray(value);
-        },
-
-        // returns true if the value is a Boolean
-        isBoolean(value)
-        {
-            return value === !!value;
-        },
-
-        // returns true if the value is a Function
-        isFunction(value)
-        {
-            return typeof value === 'function';
-        },
-
-        // returns true if the value is numeric
-        isNumeric(value)
-        {
-            return ! isNaN(parseFloat(value)) && isFinite(value);
-        },
-
-        // returns true if the value is an Object
-        isObject(value)
-        {
-            return value instanceof Object;
-        },
-
-        // returns true if the value is a String
-        isString(value)
-        {
-            return value === '' + value;
-        },
-
-        // returns true if the value is a Window
-        isWindow(value)
-        {
-            return value instanceof Window;
-        }
-
-    });
 
     class QuerySet
     {
@@ -4135,16 +4129,14 @@
 
     });
 
-    frost.core = new Core;
-    frost.Core = Core;
-    frost.QuerySet = QuerySet;
-    frost.QuerySetImmutable = QuerySetImmutable;
+    const core = new Core;
+    Core.QuerySet = QuerySet;
+    Core.QuerySetImmutable = QuerySetImmutable;
 
     return {
-        frost,
         Core,
-        core: frost.core,
-        $: frost.core.query
+        core,
+        $: core.query
     };
 
 });

@@ -18,7 +18,7 @@ It is heavily inspired by jQuery, but supports both functional and OOP style pro
     - [Cookie](#cookie)
     - [Event Factory](#event-factory)
     - [Parsers](#parsers)
-- [Frost](#frost)
+- [Static](#static)
     - [Array](#array)
     - [Math](#math)
     - [String](#string)
@@ -919,20 +919,20 @@ const xml = core.parseXML(string);
 ```
 
 
-## Frost
+## Static
 
 ### Array
 
 Create a single-dimensional Array from a multiple-dimensional Array.
 
 ```
-Frost.flattenArray(array);
+Core.flattenArray(array);
 ```
 
 Remove duplicate elements in an array.
 
 ```
-Frost.uniqueArray(array);
+Core.uniqueArray(array);
 ```
 
 
@@ -941,67 +941,67 @@ Frost.uniqueArray(array);
 Clamp a value between a min and max.
 
 ```
-Frost.clamp(val, min = 0, max = 1);
+Core.clamp(val, min = 0, max = 1);
 ```
 
 Clamp a value between 0 and 100.
 
 ```
-Frost.clampPercent(val);
+Core.clampPercent(val);
 ```
 
 Get the distance between two vectors.
 
 ```
-Frost.dist(x1, y1, x2, y2);
+Core.dist(x1, y1, x2, y2);
 ```
 
 Get the length of an X,Y vector.
 
 ```
-Frost.len(x, y);
+Core.len(x, y);
 ```
 
 Linear interpolation from one value to another.
 
 ```
-Frost.lerp(a, b, amount);
+Core.lerp(a, b, amount);
 ```
 
 Map a value from one range to another.
 
 ```
-Frost.map(value, fromMin, fromMax, toMin, toMax);
+Core.map(value, fromMin, fromMax, toMin, toMax);
 ```
 
 Round a number to a specified precision.
 
 ```
-Frost.toStep(value, step);
+Core.toStep(value, step);
 ```
 
 Get the linear percent of a value in a specified range.
 
 ```
-Frost.linearPercent(a, b, value);
+Core.linearPercent(a, b, value);
 ```
 
 Get the linear value of a percent in a specified range.
 
 ```
-Frost.linearValue(a, b, percent);
+Core.linearValue(a, b, percent);
 ```
 
 Get the logarithmic percent of a value in a specified range.
 
 ```
-Frost.logPercent(a, b, value);
+Core.logPercent(a, b, value);
 ```
 
 Get the logarithmic value of a percent in a specified range.
 
 ```
-Frost.logValue(a, b, percent);
+Core.logValue(a, b, percent);
 ```
 
 
@@ -1010,13 +1010,13 @@ Frost.logValue(a, b, percent);
 Convert a string to Camel Case.
 
 ```
-Frost.camelCase(string);
+Core.camelCase(string);
 ```
 
 Convert a string to Snake Case.
 
 ```
-Frost.snakeCase(string);
+Core.snakeCase(string);
 ```
 
 
@@ -1025,43 +1025,43 @@ Frost.snakeCase(string);
 Returns true if the value is an Array.
 
 ```
-Frost.isArray(value);
+Core.isArray(value);
 ```
 
 Returns true if the value is a Boolean.
 
 ```
-Frost.isBoolean(value);
+Core.isBoolean(value);
 ```
 
 Returns true if the value is a Function.
 
 ```
-Frost.isFunction(value);
+Core.isFunction(value);
 ```
 
 Returns true if the value is numeric.
 
 ```
-Frost.isNumeric(value);
+Core.isNumeric(value);
 ```
 
 Returns true if the value is an Object.
 
 ```
-Frost.isObject(value);
+Core.isObject(value);
 ```
 
 Returns true if the value is a String.
 
 ```
-Frost.isString(value);
+Core.isString(value);
 ```
 
 Returns true if the value is a Window.
 
 ```
-Frost.isWindow(value);
+Core.isWindow(value);
 ```
 
 

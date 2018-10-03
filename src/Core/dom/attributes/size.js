@@ -10,7 +10,7 @@ Object.assign(Core.prototype, {
             return;
         }
 
-        if (frost.isWindow(node)) {
+        if (Core.isWindow(node)) {
             return padding ?
                 node.outerHeight :
                 node.innerHeight;
@@ -49,7 +49,7 @@ Object.assign(Core.prototype, {
             return;
         }
 
-        if (frost.isWindow(node)) {
+        if (Core.isWindow(node)) {
             return padding ?
                 node.outerWidth :
                 node.innerWidth;

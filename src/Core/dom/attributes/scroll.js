@@ -5,7 +5,7 @@ Object.assign(Core.prototype, {
     {
         Core.nodeArray(nodes, true, true, true)
             .forEach(node => {
-                if (frost.isWindow(node)) {
+                if (Core.isWindow(node)) {
                     node.scroll(x, y);
                 } else if (Core.isDocument(node)) {
                     node.scrollingElement.scrollLeft = x;
@@ -22,7 +22,7 @@ Object.assign(Core.prototype, {
     {
         Core.nodeArray(nodes, true, true, true)
             .forEach(node => {
-                if (frost.isWindow(node)) {
+                if (Core.isWindow(node)) {
                     node.scroll(x, node.scrollY)
                 } else if (Core.isDocument(node)) {
                     node.scrollingElement.scrollLeft = x;
@@ -37,7 +37,7 @@ Object.assign(Core.prototype, {
     {
         Core.nodeArray(nodes, true, true, true)
             .forEach(node => {
-                if (frost.isWindow(node)) {
+                if (Core.isWindow(node)) {
                     node.scroll(node.scrollX, y)
                 } else if (Core.isDocument(node)) {
                     node.scrollingElement.scrollTop = y;
@@ -56,7 +56,7 @@ Object.assign(Core.prototype, {
             return;
         }
 
-        if (frost.isWindow(node)) {
+        if (Core.isWindow(node)) {
             return node.scrollX;
         }
 
@@ -76,7 +76,7 @@ Object.assign(Core.prototype, {
             return;
         }
 
-        if (frost.isWindow(node)) {
+        if (Core.isWindow(node)) {
             return node.scrollY;
         }
 

@@ -18,7 +18,7 @@ class Core
     // add a function to the ready queue or return a QuerySet (optionally mutable)
     query(query, mutable = true)
     {
-        if (frost.isFunction(query)) {
+        if (Core.isFunction(query)) {
             return this.ready(query);
         }
 

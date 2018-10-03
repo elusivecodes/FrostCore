@@ -1,4 +1,4 @@
-Object.assign(frost, {
+Object.assign(Core, {
 
     // create a single-dimensional Array from a multiple-dimensional Array
     flattenArray(array)

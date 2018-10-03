@@ -1,4 +1,4 @@
-Object.assign(frost, {
+Object.assign(Core, {
 
     // clamp a value between a min and max
     clamp(val, min = 0, max = 1)

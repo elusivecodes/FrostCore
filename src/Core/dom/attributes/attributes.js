@@ -19,7 +19,7 @@ Object.assign(Core.prototype, {
     {
         Core.nodeArray(nodes)
             .forEach(node => {
-                if (frost.isObject(attribute)) {
+                if (Core.isObject(attribute)) {
                     Object.keys(attribute)
                         .forEach(key => node.setAttribute(key, attribute[key]));
                     return;
@@ -97,7 +97,7 @@ Object.assign(Core.prototype, {
     {
         Core.nodeArray(nodes)
             .forEach(node => {
-                if (frost.isObject(property)) {
+                if (Core.isObject(property)) {
                     Object.keys(property).forEach(key => node[key] = property[key]);
                     return;
                 }

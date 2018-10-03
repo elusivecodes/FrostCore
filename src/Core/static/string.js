@@ -1,4 +1,4 @@
-Object.assign(frost, {
+Object.assign(Core, {
 
     // convert a string to Camel Case
     camelCase(string)

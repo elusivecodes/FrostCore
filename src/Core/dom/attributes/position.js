@@ -63,7 +63,7 @@ Object.assign(Core.prototype, {
             return;
         }
 
-        return frost.dist(nodeCenter.x, nodeCenter.y, x, y);
+        return Core.dist(nodeCenter.x, nodeCenter.y, x, y);
     },
 
     // get the distance between two elements
@@ -117,7 +117,7 @@ Object.assign(Core.prototype, {
             return;
         }
 
-        return frost.clampPercent((x - nodeBox.left) / nodeBox.width * 100);
+        return Core.clampPercent((x - nodeBox.left) / nodeBox.width * 100);
     },
 
     // get the percentage of a Y co-ordinate relative to an element
@@ -129,7 +129,7 @@ Object.assign(Core.prototype, {
             return;
         }
 
-        return frost.clampPercent((y - nodeBox.top) / nodeBox.height * 100);
+        return Core.clampPercent((y - nodeBox.top) / nodeBox.height * 100);
     },
 
     // get the position of the first element relative to the window (optionally offset)

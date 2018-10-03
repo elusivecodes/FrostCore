@@ -3,8 +3,8 @@ Object.assign(Core, {
     // returns a single dimensional array of classes (from a multi-dimensional array or space-separated strings)
     parseClasses(classList)
     {
-        return frost.uniqueArray(
-            frost.flattenArray(classList)
+        return this.uniqueArray(
+            this.flattenArray(classList)
                 .reduce((acc, val) => acc.concat(...val.split(' ')), [])
                 .filter(val => val)
         );
@@ -28,11 +28,11 @@ Object.assign(Core, {
             return false;
         }
 
-        if (frost.isFunction(filter)) {
+        if (this.isFunction(filter)) {
             return filter;
         }
 
-        if (frost.isString(filter)) {
+        if (this.isString(filter)) {
             return node => node.matches(filter);
         }
 
@@ -55,11 +55,11 @@ Object.assign(Core, {
             return false;
         }
 
-        if (frost.isFunction(filter)) {
+        if (this.isFunction(filter)) {
             return filter;
         }
 
-        if (frost.isString(filter)) {
+        if (this.isString(filter)) {
             return node => node.findOne(filter);
         }
 
@@ -82,11 +82,11 @@ Object.assign(Core, {
 
         if (Array.isArray(data)) {
             values = data.map(value => this.parseParam(value.name, value.value));
-        } else if (frost.isObject(data)) {
+        } else if (this.isObject(data)) {
             values = Object.keys(data).map(key => this.parseParam(key, data[key]));
         }
 
-        return frost.flattenArray(values).map(encodeURI).join('&');
+        return this.flattenArray(values).map(encodeURI).join('&');
     },
 
     // returns an array or string of key value pairs from an array, object or string
@@ -96,7 +96,7 @@ Object.assign(Core, {
             return value.map(val => this.parseParam(key, val));
         }
 
-        if (frost.isObject(value)) {
+        if (this.isObject(value)) {
             return Object.keys(value).map(subKey => this.parseParam(key + '[' + subKey + ']', value[subKey]));
         }
 

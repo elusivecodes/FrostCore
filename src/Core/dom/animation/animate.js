@@ -19,7 +19,7 @@ Object.assign(Core.prototype, {
                             return false;
                         }
 
-                        const progress = finish ? 1 : frost.clamp((Date.now() - start) / duration);
+                        const progress = finish ? 1 : Core.clamp((Date.now() - start) / duration);
                         callback(node, progress);
 
                         if (progress === 1) {

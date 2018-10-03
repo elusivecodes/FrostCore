@@ -66,7 +66,7 @@ Object.assign(Core.prototype, {
     isVisible(nodes)
     {
         return !! Core.nodeArray(nodes, false, true, true)
-            .find(node => frost.isWindow(node) || Core.isDocument(node) || (Core.isNode(node) && node.offsetParent));
+            .find(node => Core.isWindow(node) || Core.isDocument(node) || (Core.isNode(node) && node.offsetParent));
     }
 
 });

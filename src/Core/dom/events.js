@@ -3,8 +3,8 @@ Object.assign(Core.prototype, {
     // add an event to each element
     addEvent(nodes, events, delegate, callback, selfDestruct = false)
     {
-        if (frost.isFunction(delegate)) {
-            if (frost.isBoolean(callback)) {
+        if (Core.isFunction(delegate)) {
+            if (Core.isBoolean(callback)) {
                 selfDestruct = callback;
             }
             callback = delegate;
@@ -113,7 +113,7 @@ Object.assign(Core.prototype, {
     // remove an event from each element
     removeEvent(nodes, events, delegate, callback)
     {
-        if (delegate && frost.isFunction(delegate)) {
+        if (delegate && Core.isFunction(delegate)) {
             callback = delegate;
             delegate = false;
         }
