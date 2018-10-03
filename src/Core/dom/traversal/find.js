@@ -32,7 +32,7 @@ Object.assign(Core.prototype, {
     // find all elements with a specific class
     findByClass(nodes, className)
     {
-        const results = new Set();
+        const results = new Set;
 
         Core.nodeArray(nodes, true, true)
             .forEach(node =>
@@ -46,18 +46,13 @@ Object.assign(Core.prototype, {
     // find all elements with a specific ID
     findById(nodes, id)
     {
-        const results = new Set();
-
-        Core.nodeArray(nodes, true, true)
-            .forEach(node => results.add(node.getElementById(id)));
-
-        return Core.sortNodes([...results].filter(node => !! node));
+        return this.findSelector(nodes, '#' + id);
     },
 
     // find all elements with a specific tag
     findByTag(nodes, tagName)
     {
-        const results = new Set();
+        const results = new Set;
 
         Core.nodeArray(nodes, true, true)
             .forEach(node =>
@@ -71,7 +66,7 @@ Object.assign(Core.prototype, {
     // find all elements matching a standard CSS selector
     findSelector(nodes, selector)
     {
-        const results = new Set();
+        const results = new Set;
 
         Core.nodeArray(nodes, true, true)
             .forEach(node =>
@@ -120,7 +115,12 @@ Object.assign(Core.prototype, {
     // find the first element with a specific ID
     findOneById(nodes, id)
     {
-        return this.findById(nodes, id).shift() || null;
+        const results = new Set;
+
+        Core.nodeArray(nodes, true, true)
+            .forEach(node => results.add(node.getElementById(id)));
+
+        return Core.sortNodes([...results].filter(node => !! node)).shift() || null;
     },
 
     // find the first element with a specific tag
@@ -132,7 +132,7 @@ Object.assign(Core.prototype, {
     // find the first element matching a standard CSS selector
     findOneSelector(nodes, selector)
     {
-        const results = new Set();
+        const results = new Set;
 
         Core.nodeArray(nodes, true, true)
             .forEach(node => results.add(node.querySelector(selector)));
@@ -143,7 +143,7 @@ Object.assign(Core.prototype, {
     // find all elements matching a custom CSS selector
     _findByCustom(nodes, selectors)
     {
-        const results = new Set();
+        const results = new Set;
 
         Core.parseSelectors(selectors)
             .forEach(selector => {
@@ -190,7 +190,7 @@ Object.assign(Core.prototype, {
     // find the first element matching a custom CSS selector
     _findOneByCustom(nodes, selectors)
     {
-        const results = new Set();
+        const results = new Set;
 
         Core.parseSelectors(selectors)
             .forEach(selector => {

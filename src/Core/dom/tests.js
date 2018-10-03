@@ -25,7 +25,7 @@ Object.assign(Core.prototype, {
             .find(node => classes.find(className => node.classList.contains(className)));
     },
 
-    // returns true if any of the nodes has data
+    // returns true if any of the nodes has custom data
     hasData(nodes, key)
     {
         return !! Core.nodeArray(nodes, false)
@@ -48,21 +48,21 @@ Object.assign(Core.prototype, {
             .find(node => ! filter || filter(node));
     },
 
-    // returns true if any of the elements or a parent of the elements is "fixed"
+    // returns true if any of the elements or a parent of any of the elements is "fixed"
     isFixed(nodes)
     {
         return !! Core.nodeArray(nodes)
             .find(node => this.css(node, 'position') === 'fixed' || this.closest(node, parent => this.css(parent, 'position') === 'fixed'));
     },
 
-    // returns true if any of the elements in the set is hidden
+    // returns true if any of the elements is hidden
     isHidden(nodes)
     {
         return !! Core.nodeArray(nodes, false, true)
             .find(node => ! Core.isDocument(node) && (Core.isNode(node) && ! node.offsetParent));
     },
 
-    // returns true if any of the elements in the set is visible
+    // returns true if any of the elements is visible
     isVisible(nodes)
     {
         return !! Core.nodeArray(nodes, false, true, true)

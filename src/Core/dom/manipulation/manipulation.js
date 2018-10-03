@@ -18,7 +18,7 @@ Object.assign(Core.prototype, {
             .forEach(other => node.parentNode.insertBefore(other, node.nextSibling));
     },
 
-    // append each other nodes to the first node
+    // append each other node to the first node
     append(nodes, others)
     {
         const node = Core.nodeFirst(nodes);

@@ -19,7 +19,7 @@ Object.assign(Core.prototype, {
     {
         filter = Core.parseFilter(filter);
 
-        const results = new Set();
+        const results = new Set;
 
         Core.nodeArray(nodes)
             .forEach(node =>
@@ -53,7 +53,7 @@ Object.assign(Core.prototype, {
     {
         filter = Core.parseFilter(filter);
 
-        const results = new Set();
+        const results = new Set;
 
         Core.nodeArray(nodes, false)
             .forEach(node => {
@@ -82,7 +82,7 @@ Object.assign(Core.prototype, {
         filter = Core.parseFilter(filter);
         until = Core.parseFilter(until);
 
-        const results = new Set();
+        const results = new Set;
 
         Core.nodeArray(nodes, false)
             .forEach(node => {
@@ -117,7 +117,7 @@ Object.assign(Core.prototype, {
     {
         filter = Core.parseFilter(filter);
 
-        const results = new Set();
+        const results = new Set;
 
         Core.nodeArray(nodes, false)
             .forEach(node => {
@@ -146,7 +146,7 @@ Object.assign(Core.prototype, {
         filter = Core.parseFilter(filter);
         until = Core.parseFilter(until);
 
-        const results = new Set();
+        const results = new Set;
 
         Core.nodeArray(nodes, false)
             .forEach(node => {
@@ -180,7 +180,7 @@ Object.assign(Core.prototype, {
     {
         filter = Core.parseFilter(filter);
 
-        const results = new Set();
+        const results = new Set;
 
         Core.nodeArray(nodes, false)
             .forEach(node => {
@@ -209,7 +209,7 @@ Object.assign(Core.prototype, {
         filter = Core.parseFilter(filter);
         until = Core.parseFilter(until);
 
-        const results = new Set();
+        const results = new Set;
 
         Core.nodeArray(nodes, false)
             .forEach(node => {
@@ -238,7 +238,7 @@ Object.assign(Core.prototype, {
     {
         filter = Core.parseFilter(filter);
 
-        const results = new Set();
+        const results = new Set;
 
         Core.nodeArray(nodes, false)
             .forEach(node => {

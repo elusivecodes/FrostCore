@@ -36,7 +36,7 @@ Object.assign(frost, {
         return value === '' + value;
     },
 
-    // returns true if the value is a window
+    // returns true if the value is a Window
     isWindow(value)
     {
         return value instanceof Window;

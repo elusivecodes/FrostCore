@@ -54,7 +54,7 @@
     Object.assign(Core.prototype, {
 
         // add an animation to each element
-        animate(nodes, callback, duration)
+        animate(nodes, callback, duration = 1000)
         {
             const start = Date.now();
             const promises = [];
@@ -439,6 +439,8 @@
 
     Object.assign(Core.prototype, {
 
+        /* ATTRIBUTES */
+
         // get an attribute value for the first element
         getAttribute(nodes, attribute)
         {
@@ -450,6 +452,30 @@
 
             return node.getAttribute(attribute);
         },
+
+        // set attributes for each element
+        setAttribute(nodes, attribute, value)
+        {
+            Core.nodeArray(nodes)
+                .forEach(node => {
+                    if (frost.isObject(attribute)) {
+                        Object.keys(attribute)
+                            .forEach(key => node.setAttribute(key, attribute[key]));
+                        return;
+                    }
+
+                    node.setAttribute(attribute, value);
+                });
+        },
+
+        // remove an attribute from each element
+        removeAttribute(nodes, attribute)
+        {
+            Core.nodeArray(nodes)
+                .forEach(node => node.removeAttribute(attribute));
+        },
+
+        /* DATASET */
 
         // get a dataset value for the first element
         getDataset(nodes, key)
@@ -467,11 +493,31 @@
             return node.dataset[key];
         },
 
+        // set dataset values for each element
+        setDataset(nodes, key, value)
+        {
+            Core.nodeArray(nodes)
+                .forEach(node => {
+                    node.dataset[key] = value;
+                });
+        },
+
+        /* HTML */
+
         // get the HTML contents of the first element
         getHTML(nodes)
         {
             return this.getProperty(nodes, 'innerHTML');
         },
+
+        // set the HTML contents for each element
+        setHTML(nodes, html)
+        {
+            this.empty(nodes);
+            this.setProperty(nodes, 'innerHTML', html);
+        },
+
+        /* PROPERTIES */
 
         // get a property value for the first element
         getProperty(nodes, property)
@@ -483,64 +529,6 @@
             }
 
             return node[property];
-        },
-
-        // get the text contents of the first element
-        getText(nodes)
-        {
-            return this.getProperty(nodes, 'innerText');
-        },
-
-        // get the value property of the first element
-        getValue(nodes)
-        {
-            return this.getProperty(nodes, 'value');
-        },
-
-        // remove an attribute from each element
-        removeAttribute(nodes, attribute)
-        {
-            Core.nodeArray(nodes)
-                .forEach(node => node.removeAttribute(attribute));
-        },
-
-        // remove a property from each element
-        removeProperty(nodes, property)
-        {
-            Core.nodeArray(nodes)
-                .forEach(node => {
-                    delete node[property];
-                });
-        },
-
-        // set attributes for each element
-        setAttribute(nodes, attribute, value)
-        {
-            Core.nodeArray(nodes)
-                .forEach(node => {
-                    if (frost.isObject(attribute)) {
-                        Object.keys(attribute).forEach(key => node[key] = attribute[key]);
-                        return;
-                    }
-
-                    node.setAttribute(attribute, value);
-                });
-        },
-
-        // set dataset values for each element
-        setDataset(nodes, key, value)
-        {
-            Core.nodeArray(nodes)
-                .forEach(node => {
-                    node.dataset[key] = value;
-                });
-        },
-
-        // set the HTML contents for each element
-        setHTML(nodes, html)
-        {
-            this.empty(nodes);
-            this.setProperty(nodes, 'innerHTML', html);
         },
 
         // set property values for each element
@@ -557,11 +545,36 @@
                 });
         },
 
+        // remove a property from each element
+        removeProperty(nodes, property)
+        {
+            Core.nodeArray(nodes)
+                .forEach(node => {
+                    delete node[property];
+                });
+        },
+
+        /* TEXT */
+
+        // get the text contents of the first element
+        getText(nodes)
+        {
+            return this.getProperty(nodes, 'innerText');
+        },
+
         // set the text contents for each element
         setText(nodes, text)
         {
             this.empty(nodes);
             this.setProperty(nodes, 'innerText', text);
+        },
+
+        /* VALUE */
+
+        // get the value property of the first element
+        getValue(nodes)
+        {
+            return this.getProperty(nodes, 'value');
         },
 
         // set the value property for each element
@@ -574,7 +587,7 @@
 
     Object.assign(Core.prototype, {
 
-        // get data for the first node
+        // get custom data for the first node
         getData(nodes, key)
         {
             const node = Core.nodeFirst(nodes, false, true, true);
@@ -596,6 +609,19 @@
             return nodeData[key];
         },
 
+        // set custom data for each node
+        setData(nodes, key, value)
+        {
+            Core.nodeArray(nodes, false, true, true)
+                .forEach(node => {
+                    if ( ! this.nodeData.has(node)) {
+                        this.nodeData.set(node, {});
+                    }
+
+                    this.getData(node)[key] = value;
+                });
+        },
+
         // remove custom data for each node
         removeData(nodes, key)
         {
@@ -614,19 +640,6 @@
                     }
 
                     this.nodeData.delete(node);
-                });
-        },
-
-        // set custom data for each node
-        setData(nodes, key, value)
-        {
-            Core.nodeArray(nodes, false, true, true)
-                .forEach(node => {
-                    if ( ! this.nodeData.has(node)) {
-                        this.nodeData.set(node, {});
-                    }
-
-                    this.getData(node)[key] = value;
                 });
         }
 
@@ -688,10 +701,10 @@
                 });
         },
 
-        // get the distance of an element to an X, Y position in the window
-        distTo(nodes, x, y)
+        // get the distance of an element to an X,Y position in the window (optionally offset)
+        distTo(nodes, x, y, offset)
         {
-            const nodeCenter = this.center(nodes);
+            const nodeCenter = this.center(nodes, offset);
 
             if ( ! nodeCenter) {
                 return;
@@ -709,19 +722,18 @@
                 return;
             }
 
-            return this.distTo(nodes, otherCenter.x, otherCenter.
-                y);
+            return this.distTo(nodes, otherCenter.x, otherCenter.y);
         },
 
-        // get the nearest element to an X, Y position in the window
-        nearestTo(nodes, x, y)
+        // get the nearest element to an X,Y position in the window (optionally offset)
+        nearestTo(nodes, x, y, offset)
         {
             let closest = null;
             let closestDistance = Number.MAX_VALUE;
 
             Core.nodeArray(nodes)
                 .forEach(node => {
-                    const dist = this.distTo(node, x, y);
+                    const dist = this.distTo(node, x, y, offset);
                     if (dist && dist < closestDistance) {
                         closestDistance = dist;
                         closest = node;
@@ -819,7 +831,7 @@
 
     Object.assign(Core.prototype, {
 
-        // scroll each element to an X, Y position
+        // scroll each element to an X,Y position
         scrollTo(nodes, x, y)
         {
             Core.nodeArray(nodes, true, true, true)
@@ -992,6 +1004,8 @@
 
     Object.assign(Core.prototype, {
 
+        /* CLASSES */
+
         // add a class or classes to each element
         addClass(nodes, ...classes)
         {
@@ -1003,6 +1017,32 @@
 
             Core.nodeArray(nodes)
                 .forEach(node => node.classList.add(...classes));
+        },
+
+        // remove a class or classes from each element
+        removeClass(nodes, ...classes)
+        {
+            classes = Core.parseClasses(classes);
+
+            if ( ! classes.length) {
+                return;
+            }
+
+            Core.nodeArray(nodes)
+                .forEach(node => node.classList.remove(...classes));
+        },
+
+        // toggle a class or classes for each element
+        toggleClass(nodes, ...classes)
+        {
+            classes = Core.parseClasses(classes);
+
+            if ( ! classes.length) {
+                return;
+            }
+
+            Core.nodeArray(nodes)
+                .forEach(node => classes.forEach(className => node.classList.toggle(className)));
         },
 
         // get the computed style for the first element
@@ -1017,6 +1057,8 @@
             return window.getComputedStyle(node)[style];
         },
 
+        /* STYLES */
+
         // get a style property for the first element
         getStyle(nodes, style)
         {
@@ -1030,25 +1072,6 @@
             style = frost.snakeCase(style);
 
             return node.style.getPropertyValue(style);
-        },
-
-        // hide each element from display
-        hide(nodes)
-        {
-            this.setStyle(nodes, 'display', 'none');
-        },
-
-        // remove a class or classes from each element
-        removeClass(nodes, ...classes)
-        {
-            classes = Core.parseClasses(classes);
-
-            if ( ! classes.length) {
-                return;
-            }
-
-            Core.nodeArray(nodes)
-                .forEach(node => node.classList.remove(...classes));
         },
 
         // set style properties for each element
@@ -1077,6 +1100,12 @@
                 );
         },
 
+        // hide each element from display
+        hide(nodes)
+        {
+            this.setStyle(nodes, 'display', 'none');
+        },
+
         // display each hidden element
         show(nodes)
         {
@@ -1092,19 +1121,6 @@
                         this.show(node) :
                         this.hide(node)
                 );
-        },
-
-        // toggle a class or classes for each element
-        toggleClass(nodes, ...classes)
-        {
-            classes = Core.parseClasses(classes);
-
-            if ( ! classes.length) {
-                return;
-            }
-
-            Core.nodeArray(nodes)
-                .forEach(node => classes.forEach(className => node.classList.toggle(className)));
         }
 
     });
@@ -1324,7 +1340,7 @@
                 .forEach(other => node.parentNode.insertBefore(other, node.nextSibling));
         },
 
-        // append each other nodes to the first node
+        // append each other node to the first node
         append(nodes, others)
         {
             const node = Core.nodeFirst(nodes);
@@ -1559,7 +1575,7 @@
                 .find(node => classes.find(className => node.classList.contains(className)));
         },
 
-        // returns true if any of the nodes has data
+        // returns true if any of the nodes has custom data
         hasData(nodes, key)
         {
             return !! Core.nodeArray(nodes, false)
@@ -1582,21 +1598,21 @@
                 .find(node => ! filter || filter(node));
         },
 
-        // returns true if any of the elements or a parent of the elements is "fixed"
+        // returns true if any of the elements or a parent of any of the elements is "fixed"
         isFixed(nodes)
         {
             return !! Core.nodeArray(nodes)
                 .find(node => this.css(node, 'position') === 'fixed' || this.closest(node, parent => this.css(parent, 'position') === 'fixed'));
         },
 
-        // returns true if any of the elements in the set is hidden
+        // returns true if any of the elements is hidden
         isHidden(nodes)
         {
             return !! Core.nodeArray(nodes, false, true)
                 .find(node => ! Core.isDocument(node) && (Core.isNode(node) && ! node.offsetParent));
         },
 
-        // returns true if any of the elements in the set is visible
+        // returns true if any of the elements is visible
         isVisible(nodes)
         {
             return !! Core.nodeArray(nodes, false, true, true)
@@ -1693,7 +1709,7 @@
         // find all elements with a specific class
         findByClass(nodes, className)
         {
-            const results = new Set();
+            const results = new Set;
 
             Core.nodeArray(nodes, true, true)
                 .forEach(node =>
@@ -1707,18 +1723,13 @@
         // find all elements with a specific ID
         findById(nodes, id)
         {
-            const results = new Set();
-
-            Core.nodeArray(nodes, true, true)
-                .forEach(node => results.add(node.getElementById(id)));
-
-            return Core.sortNodes([...results].filter(node => !! node));
+            return this.findSelector(nodes, '#' + id);
         },
 
         // find all elements with a specific tag
         findByTag(nodes, tagName)
         {
-            const results = new Set();
+            const results = new Set;
 
             Core.nodeArray(nodes, true, true)
                 .forEach(node =>
@@ -1732,7 +1743,7 @@
         // find all elements matching a standard CSS selector
         findSelector(nodes, selector)
         {
-            const results = new Set();
+            const results = new Set;
 
             Core.nodeArray(nodes, true, true)
                 .forEach(node =>
@@ -1781,7 +1792,12 @@
         // find the first element with a specific ID
         findOneById(nodes, id)
         {
-            return this.findById(nodes, id).shift() || null;
+            const results = new Set;
+
+            Core.nodeArray(nodes, true, true)
+                .forEach(node => results.add(node.getElementById(id)));
+
+            return Core.sortNodes([...results].filter(node => !! node)).shift() || null;
         },
 
         // find the first element with a specific tag
@@ -1793,7 +1809,7 @@
         // find the first element matching a standard CSS selector
         findOneSelector(nodes, selector)
         {
-            const results = new Set();
+            const results = new Set;
 
             Core.nodeArray(nodes, true, true)
                 .forEach(node => results.add(node.querySelector(selector)));
@@ -1804,7 +1820,7 @@
         // find all elements matching a custom CSS selector
         _findByCustom(nodes, selectors)
         {
-            const results = new Set();
+            const results = new Set;
 
             Core.parseSelectors(selectors)
                 .forEach(selector => {
@@ -1851,7 +1867,7 @@
         // find the first element matching a custom CSS selector
         _findOneByCustom(nodes, selectors)
         {
-            const results = new Set();
+            const results = new Set;
 
             Core.parseSelectors(selectors)
                 .forEach(selector => {
@@ -1920,7 +1936,7 @@
         {
             filter = Core.parseFilter(filter);
 
-            const results = new Set();
+            const results = new Set;
 
             Core.nodeArray(nodes)
                 .forEach(node =>
@@ -1954,7 +1970,7 @@
         {
             filter = Core.parseFilter(filter);
 
-            const results = new Set();
+            const results = new Set;
 
             Core.nodeArray(nodes, false)
                 .forEach(node => {
@@ -1983,7 +1999,7 @@
             filter = Core.parseFilter(filter);
             until = Core.parseFilter(until);
 
-            const results = new Set();
+            const results = new Set;
 
             Core.nodeArray(nodes, false)
                 .forEach(node => {
@@ -2018,7 +2034,7 @@
         {
             filter = Core.parseFilter(filter);
 
-            const results = new Set();
+            const results = new Set;
 
             Core.nodeArray(nodes, false)
                 .forEach(node => {
@@ -2047,7 +2063,7 @@
             filter = Core.parseFilter(filter);
             until = Core.parseFilter(until);
 
-            const results = new Set();
+            const results = new Set;
 
             Core.nodeArray(nodes, false)
                 .forEach(node => {
@@ -2081,7 +2097,7 @@
         {
             filter = Core.parseFilter(filter);
 
-            const results = new Set();
+            const results = new Set;
 
             Core.nodeArray(nodes, false)
                 .forEach(node => {
@@ -2110,7 +2126,7 @@
             filter = Core.parseFilter(filter);
             until = Core.parseFilter(until);
 
-            const results = new Set();
+            const results = new Set;
 
             Core.nodeArray(nodes, false)
                 .forEach(node => {
@@ -2139,7 +2155,7 @@
         {
             filter = Core.parseFilter(filter);
 
-            const results = new Set();
+            const results = new Set;
 
             Core.nodeArray(nodes, false)
                 .forEach(node => {
@@ -3004,7 +3020,7 @@
             return this.len(x1 - x2, y1 - y2);
         },
 
-        // get the length of an x, y vector
+        // get the length of an X,Y vector
         len(x, y)
         {
             return Math.hypot(x, y);
@@ -3135,7 +3151,7 @@
             return value === '' + value;
         },
 
-        // returns true if the value is a window
+        // returns true if the value is a Window
         isWindow(value)
         {
             return value instanceof Window;

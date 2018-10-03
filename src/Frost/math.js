@@ -18,7 +18,7 @@ Object.assign(frost, {
         return this.len(x1 - x2, y1 - y2);
     },
 
-    // get the length of an x, y vector
+    // get the length of an X,Y vector
     len(x, y)
     {
         return Math.hypot(x, y);
