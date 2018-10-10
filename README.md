@@ -38,8 +38,8 @@ It is heavily inspired by jQuery, but supports both functional and OOP style pro
 Add an animation to each element.
 
 - `nodes` is a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object.
-- `callback` is a function that accepts `node` and `progress` as arguments, where progress is a value between 0 and 1.
-- `duration` is the number of milliseconds that the animation should last, and will default to 1000.
+- `callback` is a function that accepts `node` and `progress` as arguments, where progress is a value between *0* and *1*.
+- `duration` is the number of milliseconds that the animation should last, and will default to *1000*.
 
 This function returns a Promise, that will resolve after the animation has completed.
 
@@ -50,18 +50,20 @@ core.animate(nodes, callback, duration);
 Stop all animations for each element.
 
 - `nodes` is a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object.
-- `finish` is a boolean indicating whether to immediately finish the animation, and will default to true.
+- `finish` is a boolean indicating whether to immediately finish the animation, and will default to *true*.
 
 ```
 core.stop(nodes, finish);
 ```
+
+---
 
 ##### Animations
 
 Slide each element in or out from the top over a duration.
 
 - `nodes` is a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object.
-- `duration` is the number of milliseconds that the animation should last, and will default to 1000.
+- `duration` is the number of milliseconds that the animation should last, and will default to *1000*.
 
 This function returns a Promise, that will resolve after the animation has completed.
 
@@ -73,7 +75,7 @@ core.dropOut(nodes, duration);
 Fade the opacity of each element in or out over a duration.
 
 - `nodes` is a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object.
-- `duration` is the number of milliseconds that the animation should last, and will default to 1000.
+- `duration` is the number of milliseconds that the animation should last, and will default to *1000*.
 
 This function returns a Promise, that will resolve after the animation has completed.
 
@@ -85,10 +87,10 @@ core.fadeOut(nodes, duration);
 Rotate each element in or out on an x y over a duration.
 
 - `nodes` is a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object.
-- `x` is the amount of rotation to apply to the X axis, and will default to 0.
-- `y` is the amount of rotation to apply to the Y axis, and will default to 1.
-- `inverse` is a boolean indicating whether to rotate in the opposite direction, and will default to false.
-- `duration` is the number of milliseconds that the animation should last, and will default to 1000.
+- `x` is the amount of rotation to apply to the X axis, and will default to *0*.
+- `y` is the amount of rotation to apply to the Y axis, and will default to *1*.
+- `inverse` is a boolean indicating whether to rotate in the opposite direction, and will default to *false*.
+- `duration` is the number of milliseconds that the animation should last, and will default to *1000*.
 
 This function returns a Promise, that will resolve after the animation has completed.
 
@@ -100,8 +102,8 @@ core.rotateOut(nodes, x, y, inverse, duration);
 Slide each element into or out of place to a direction over a duration.
 
 - `nodes` is a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object.
-- `direction` is one of: 'top', 'right', 'bottom' or 'left' indicating the direction to slide to, and will default to bottom.
-- `duration` is the number of milliseconds that the animation should last, and will default to 1000.
+- `direction` is one of: 'top', 'right', 'bottom' or 'left' indicating the direction to slide to, and will default to *bottom*.
+- `duration` is the number of milliseconds that the animation should last, and will default to *1000*.
 
 This function returns a Promise, that will resolve after the animation has completed.
 
@@ -113,8 +115,8 @@ core.slideOut(nodes, direction, duration);
 Squeeze each element into or out of place to a direction over a duration.
 
 - `nodes` is a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object.
-- `direction` is one of: 'top', 'right', 'bottom' or 'left' indicating the direction to squeeze to, and will default to bottom.
-- `duration` is the number of milliseconds that the animation should last, and will default to 1000.
+- `direction` is one of: 'top', 'right', 'bottom' or 'left' indicating the direction to squeeze to, and will default to *bottom*.
+- `duration` is the number of milliseconds that the animation should last, and will default to *1000*.
 
 This function returns a Promise, that will resolve after the animation has completed.
 
@@ -122,6 +124,8 @@ This function returns a Promise, that will resolve after the animation has compl
 core.squeezeIn(nodes, direction, duration);
 core.squeezeOut(nodes, direction, duration);
 ```
+
+---
 
 ##### Queue
 
@@ -142,6 +146,7 @@ Clear the queue for each element.
 core.clearQueue(nodes);
 ```
 
+---
 
 #### Attributes
 
@@ -294,6 +299,8 @@ Set the value property for each element.
 core.setValue(nodes, value);
 ```
 
+---
+
 ##### Data
 
 Get custom data for the first node.
@@ -327,12 +334,14 @@ Remove custom data for each node.
 core.removeData(nodes, key);
 ```
 
+---
+
 ##### Position
 
 Get the X,Y co-ordinates for the center of the first element.
 
 - `nodes` is a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object.
-- `offset` is a boolean indicating whether the co-ordinates should be offset from the top left of the document, and will default to false.
+- `offset` is a boolean indicating whether the co-ordinates should be offset from the top left of the document, and will default to *false*.
 
 ```
 const center = core.center(nodes, offset);
@@ -341,7 +350,7 @@ const center = core.center(nodes, offset);
 Get the X,Y position of the first element.
 
 - `nodes` is a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object.
-- `offset` is a boolean indicating whether the co-ordinates should be offset from the top left of the document, and will default to false.
+- `offset` is a boolean indicating whether the co-ordinates should be offset from the top left of the document, and will default to *false*.
 
 ```
 const pos = core.position(nodes, offset);
@@ -350,7 +359,7 @@ const pos = core.position(nodes, offset);
 Get the computed bounding rectangle of the first element.
 
 - `nodes` is a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object.
-- `offset` is a boolean indicating whether the rectangle should be offset from the top left of the document, and will default to false.
+- `offset` is a boolean indicating whether the rectangle should be offset from the top left of the document, and will default to *false*.
 
 ```
 const rect = core.rect(nodes, offset);
@@ -370,7 +379,7 @@ Get the distance of the first element to an X,Y position.
 - `nodes` is a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object.
 - `x` is a distance (in pixels) along the X axis.
 - `y` is a distance (in pixels) along the Y axis.
-- `offset` is a boolean indicating whether the co-ordinates should be offset from the top left of the document, and will default to false.
+- `offset` is a boolean indicating whether the co-ordinates should be offset from the top left of the document, and will default to *false*.
 
 ```
 const dist = core.distTo(nodes, x, y, offset);
@@ -390,7 +399,7 @@ Get the nearest element to an X,Y position.
 - `nodes` is a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object.
 - `x` is a distance (in pixels) along the X axis.
 - `y` is a distance (in pixels) along the Y axis.
-- `offset` is a boolean indicating whether the co-ordinates should be offset from the top left of the document, and will default to false.
+- `offset` is a boolean indicating whether the co-ordinates should be offset from the top left of the document, and will default to *false*.
 
 ```
 const nearest = core.nearestTo(nodes, x, y, offset);
@@ -409,7 +418,7 @@ Get the percentage of an X co-ordinate relative to the first element.
 
 - `nodes` is a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object.
 - `x` is a distance (in pixels) along the X axis.
-- `offset` is a boolean indicating whether the co-ordinates should be offset from the top left of the document, and will default to false.
+- `offset` is a boolean indicating whether the co-ordinates should be offset from the top left of the document, and will default to *false*.
 
 ```
 const pX = core.percentX(nodes, x, offset);
@@ -419,15 +428,21 @@ Get the percentage of a Y co-ordinate relative to the first element.
 
 - `nodes` is a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object.
 - `y` is a distance (in pixels) along the Y axis.
-- `offset` is a boolean indicating whether the co-ordinates should be offset from the top left of the document, and will default to false.
+- `offset` is a boolean indicating whether the co-ordinates should be offset from the top left of the document, and will default to *false*.
 
 ```
 const pY = core.percentY(nodes, y, offset);
 ```
 
+---
+
 ##### Scroll
 
 Scroll each element to an X,Y position.
+
+- `nodes` is a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object.
+- `x` is a distance (in pixels) along the X axis to scroll to.
+- `y` is a distance (in pixels) along the Y axis to scroll to.
 
 ```
 core.setScroll(nodes, x, y);
@@ -435,11 +450,17 @@ core.setScroll(nodes, x, y);
 
 Scroll each element to an X position.
 
+- `nodes` is a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object.
+- `x` is a distance (in pixels) along the X axis to scroll to.
+
 ```
 core.setScrollX(nodes, x);
 ```
 
 Scroll each element to a Y position.
+
+- `nodes` is a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object.
+- `y` is a distance (in pixels) along the Y axis to scroll to.
 
 ```
 core.setScrollY(nodes, y);
@@ -447,25 +468,41 @@ core.setScrollY(nodes, y);
 
 Get the scroll X position of the first element.
 
+- `nodes` is a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object.
+
 ```
 const scrollX = core.getScrollX(nodes);
 ```
 
 Get the scroll Y position of the first element.
 
+- `nodes` is a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object.
+
 ```
 const scrollY = core.getScrollY(nodes);
 ```
 
+---
+
 ##### Size
 
 Get the computed height of the first element (and optionally padding, border or margin).
+
+- `nodes` is a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object.
+- `padding` is a boolean indicating whether to include padding in the calculation, and the default is *false*.
+- `border` is a boolean indicating whether to include border width in the calculation, and the default is *false*.
+- `margin` is a boolean indicating whether to include the margin in the calculation, and the default is *false*.
 
 ```
 const height = core.height(nodes, padding, border, margin);
 ```
 
 Get the computed width of the first element (and optionally padding, border or margin).
+
+- `nodes` is a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object.
+- `padding` is a boolean indicating whether to include padding in the calculation, and the default is *false*.
+- `border` is a boolean indicating whether to include border width in the calculation, and the default is *false*.
+- `margin` is a boolean indicating whether to include the margin in the calculation, and the default is *false*.
 
 ```
 const width = core.width(nodes, padding, border, margin);
@@ -477,17 +514,26 @@ const width = core.width(nodes, padding, border, margin);
 
 Add a class or classes to each element.
 
+- `nodes` is a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object.
+- `classes` is an Array of classes, or a space seperated string of class names.
+
 ```
 core.addClass(nodes, ...classes);
 ```
 
 Remove a class or classes from each element.
 
+- `nodes` is a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object.
+- `classes` is an Array of classes, or a space seperated string of class names.
+
 ```
 core.removeClass(nodes, ...classes);
 ```
 
 Toggle a class or classes for each element.
+
+- `nodes` is a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object.
+- `classes` is an Array of classes, or a space seperated string of class names.
 
 ```
 core.toggleClass(nodes, ...classes);
@@ -497,11 +543,19 @@ core.toggleClass(nodes, ...classes);
 
 Get a style property for the first element.
 
+- `nodes` is a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object.
+- `style` is a string indicating the style property value to return.
+
 ```
 const style = core.getStyle(nodes, style);
 ```
 
 Set style properties for each element.
+
+- `nodes` is a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object.
+- `style` is a string indicating the style property value to set.
+- `value` is the value you wish to set the style property to.
+- `important` is a boolean indicating the style should be set as important, and will default to *false*.
 
 ```
 core.setStyle(nodes, styles);
@@ -512,6 +566,9 @@ core.setStyle(nodes, style, value, important);
 
 Get the computed style for the first element.
 
+- `nodes` is a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object.
+- `style` is a string indicating the computed style property value to return.
+
 ```
 const css = core.css(nodes, style);
 ```
@@ -520,11 +577,15 @@ const css = core.css(nodes, style);
 
 Hide each element from display.
 
+- `nodes` is a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object.
+
 ```
 core.hide(nodes);
 ```
 
 Display each hidden element.
+
+- `nodes` is a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object.
 
 ```
 core.show(nodes);
@@ -532,10 +593,13 @@ core.show(nodes);
 
 Toggle the visibility of each element.
 
+- `nodes` is a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object.
+
 ```
 core.toggle(nodes);
 ```
 
+---
 
 #### Events
 
