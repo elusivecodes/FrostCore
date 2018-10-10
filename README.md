@@ -605,12 +605,24 @@ core.toggle(nodes);
 
 Add an event to each element.
 
+- `nodes` is a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object.
+- `events` is a space-separated string of events to attach to the elements.
+- `callback` is a function that accepts an event argument, which will be called when the event is triggered.
+
+Additionally, you can also specify a `delegate` argument which will only trigger the event if it is propagated by an element matching the selector.
+
 ```
 core.addEvent(nodes, events, callback);
 core.addEvent(nodes, events, delegate, callback);
 ```
 
 Add a self-destructing event to each element.
+
+- `nodes` is a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object.
+- `events` is a space-separated string of events to attach to the elements.
+- `callback` is a function that accepts an event argument, which will be called when the event is triggered.
+
+Additionally, you can also specify a `delegate` argument which will only trigger the event if it is propagated by an element matching the selector.
 
 ```
 core.addEventOnce(nodes, events, callback);
@@ -619,12 +631,23 @@ core.addEventOnce(nodes, events, delegate, callback);
 
 Remove an event from each element.
 
+- `nodes` is a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object.
+- `events` is a space-separated string of events to remove from the elements.
+- `callback` is a function that accepts an event argument, which will be called when the event is triggered.
+
+Additionally, you can also specify a `delegate` argument which will only trigger the event if it is propagated by an element matching the selector.
+
 ```
+core.removeEvent(nodes);
+core.removeEvent(nodes, events);
 core.removeEvent(nodes, events, callback);
 core.removeEvent(nodes, events, delegate, callback);
 ```
 
 Trigger an event on each element.
+
+- `nodes` is a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object.
+- `events` is a space-separated string of events to trigger on the elements.
 
 ```
 core.triggerEvent(nodes, events, data);
@@ -632,11 +655,16 @@ core.triggerEvent(nodes, events, data);
 
 Clone all events from each element to other elements.
 
+- `nodes` is a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object.
+- `others` is a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object.
+
 ```
 core.cloneEvents(nodes, others);
 ```
 
 Trigger a blur event on the first element.
+
+- `nodes` is a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object.
 
 ```
 core.blur(nodes);
@@ -644,16 +672,21 @@ core.blur(nodes);
 
 Trigger a click event on the first element.
 
+- `nodes` is a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object.
+
 ```
 core.click(nodes);
 ```
 
 Trigger a focus event on the first element.
 
+- `nodes` is a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object.
+
 ```
 core.focus(nodes);
 ```
 
+---
 
 #### Manipulation
 
@@ -661,11 +694,17 @@ core.focus(nodes);
 
 Create a new DOM element.
 
+- `tagName` is a string indicating the type of element you wish to create.
+
 ```
 const element = core.create(tagName);
 ```
 
 Clone each node (optionally deep, and with events and data).
+
+- `nodes` is a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object.
+- `deep` is a boolean indicating whether you wish to clone all descendent elements, and will default to *true*.
+- `eventsDate` is a boolean indicating whether you wish to clone all events and data to the new nodes, and will default to *false*.
 
 ```
 const clones = core.clone(nodes, deep = true, eventsData = false);
@@ -673,11 +712,15 @@ const clones = core.clone(nodes, deep = true, eventsData = false);
 
 Detach an element from the DOM.
 
+- `nodes` is a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object.
+
 ```
 core.detach(nodes);
 ```
 
 Remove all children of each node from the DOM.
+
+- `nodes` is a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object.
 
 ```
 core.empty(nodes);
@@ -685,11 +728,17 @@ core.empty(nodes);
 
 Remove each node from the DOM.
 
+- `nodes` is a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object.
+- `deep` is a boolean indicating whether to also remove all descendent elements, and will default to *true*.
+
 ```
 core.remove(nodes, deep = true);
 ```
 
 Replace each other node with nodes.
+
+- `nodes` is a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object.
+- `others` is a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object.
 
 ```
 core.replaceAll(nodes, others);
@@ -697,13 +746,21 @@ core.replaceAll(nodes, others);
 
 Replace each node with other nodes.
 
+- `nodes` is a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object.
+- `others` is a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object.
+
 ```
 core.replaceWith(nodes, others);
 ```
 
+---
+
 ##### Move
 
 Insert each other node after the first node.
+
+- `nodes` is a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object.
+- `others` is a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object.
 
 ```
 core.after(nodes, others);
@@ -711,11 +768,17 @@ core.after(nodes, others);
 
 Insert each node after the first other node.
 
+- `nodes` is a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object.
+- `others` is a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object.
+
 ```
 core.insertAfter(nodes, others);
 ```
 
 Insert each other node before the first node.
+
+- `nodes` is a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object.
+- `others` is a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object.
 
 ```
 core.before(nodes, others);
@@ -723,11 +786,17 @@ core.before(nodes, others);
 
 Insert each node before the first other node.
 
+- `nodes` is a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object.
+- `others` is a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object.
+
 ```
 core.insertBefore(nodes, others);
 ```
 
 Append each other node to the first node.
+
+- `nodes` is a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object.
+- `others` is a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object.
 
 ```
 core.append(nodes, others);
@@ -735,11 +804,17 @@ core.append(nodes, others);
 
 Append each node to the first other node.
 
+- `nodes` is a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object.
+- `others` is a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object.
+
 ```
 core.appendTo(nodes, others);
 ```
 
 Prepend each other node to the first node.
+
+- `nodes` is a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object.
+- `others` is a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object.
 
 ```
 core.prepend(nodes, others);
@@ -747,13 +822,21 @@ core.prepend(nodes, others);
 
 Prepend each node to the first other node.
 
+- `nodes` is a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object.
+- `others` is a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object.
+
 ```
 core.prependTo(nodes, others);
 ```
 
+---
+
 ##### Wrap
 
-Unwrap each node (optionally matching a filter).
+Unwrap each node.
+
+- `nodes` is a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object.
+- `filter` is either a function that accepts a node argument, a standard CSS selector, a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object that must match the parent of each node for it to be unwrapped.
 
 ```
 core.unwrap(nodes, filter);
@@ -761,11 +844,17 @@ core.unwrap(nodes, filter);
 
 Wrap each nodes with other nodes.
 
+- `nodes` is a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object.
+- `others` is a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object.
+
 ```
 core.wrap(nodes, others);
 ```
 
 Wrap all nodes with other nodes.
+
+- `nodes` is a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object.
+- `others` is a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object.
 
 ```
 core.wrapAll(nodes, others);
@@ -773,10 +862,14 @@ core.wrapAll(nodes, others);
 
 Wrap the contents of each node with other nodes.
 
+- `nodes` is a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object.
+- `others` is a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object.
+
 ```
 core.wrapInner(nodes, others);
 ```
 
+---
 
 #### Traversal
 
@@ -784,11 +877,17 @@ core.wrapInner(nodes, others);
 
 Return all elements matching a filter.
 
+- `nodes` is a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object.
+- `filter` is either a function that accepts a node argument, a standard CSS selector, a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object that the nodes will be filtered by.
+
 ```
 const filtered = core.filter(nodes, filter);
 ```
 
 Return the first element matching a filter.
+
+- `nodes` is a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object.
+- `filter` is either a function that accepts a node argument, a standard CSS selector, a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object that the nodes will be filtered by.
 
 ```
 const filtered = core.filterOne(nodes, filter);
@@ -796,11 +895,17 @@ const filtered = core.filterOne(nodes, filter);
 
 Return all elements not matching a filter.
 
+- `nodes` is a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object.
+- `filter` is either a function that accepts a node argument, a standard CSS selector, a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object that the nodes will be filtered by.
+
 ```
 const filtered = core.not(nodes, filter);
 ```
 
 Return all elements with a descendent matching a filter.
+
+- `nodes` is a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object.
+- `filter` is either a function that accepts a node argument, a standard CSS selector, a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object that the nodes will be filtered by.
 
 ```
 const filtered = core.has(nodes, filter);
@@ -808,20 +913,28 @@ const filtered = core.has(nodes, filter);
 
 Return all hidden elements.
 
+- `nodes` is a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object.
+
 ```
 const filtered = core.hidden(nodes);
 ```
 
 Return all visible elements.
 
+- `nodes` is a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object.
+
 ```
 const filtered = core.visible(nodes);
 ```
 
+---
 
 ##### Find
 
 Find all elements matching a selector.
+
+- `nodes` is a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object, and will default to the current context (document).
+- `selectors` is an Array or comma-seperated list of standard CSS selectors to search for.
 
 ```
 const elements = core.find(selectors);
@@ -830,12 +943,18 @@ const descendents = core.find(nodes, selectors);
 
 Find a single element matching a selector.
 
+- `nodes` is a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object, and will default to the current context (document).
+- `selectors` is an Array or comma-seperated list of standard CSS selectors to search for.
+
 ```
 const element = core.findOne(selectors);
 const descendent = core.findOne(nodes, selectors);
 ```
 
 Find all elements with a specific class.
+
+- `nodes` is a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object, and will default to the current context (document).
+- `className` is a string indicating the class name to search for.
 
 ```
 const elements = core.findByClass(className);
@@ -844,12 +963,18 @@ const descendents = core.findByClass(nodes, className);
 
 Find the first element with a specific class.
 
+- `nodes` is a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object, and will default to the current context (document).
+- `className` is a string indicating the class name to search for.
+
 ```
 const element = core.findOneByClass(className);
 const descendent = core.findOneByClass(nodes, className);
 ```
 
 Find all elements with a specific ID.
+
+- `nodes` is a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object, and will default to the current context (document).
+- `id` is a string indicating the id to search for.
 
 ```
 const elements = core.findById(id);
@@ -858,6 +983,9 @@ const descendents = core.findById(nodes, id);
 
 Find the first element with a specific ID.
 
+- `nodes` is a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object, and will default to the current context (document).
+- `id` is a string indicating the id to search for.
+
 ```
 const element = core.findOneById(id);
 const descendent = core.findOneById(nodes, id);
@@ -865,12 +993,18 @@ const descendent = core.findOneById(nodes, id);
 
 Find all elements with a specific tag.
 
+- `nodes` is a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object, and will default to the current context (document).
+- `tagName` is a string indicating the tag name to search for.
+
 ```
 const elements = core.findByTag(tagName);
 const descendents = core.findByTag(nodes, tagName);
 ```
 
 Find the first element with a specific tag.
+
+- `nodes` is a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object, and will default to the current context (document).
+- `tagName` is a string indicating the tag name to search for.
 
 ```
 const element = core.findOneByTag(tagName);
@@ -882,11 +1016,19 @@ const descendent = core.findOneByTag(nodes, tagName);
 
 Find the first child of each element matching a filter.
 
+- `nodes` is a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object.
+- `filter` is either a function that accepts a node argument, a standard CSS selector, a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object that the nodes will be filtered by.
+
 ```
 const child = core.child(nodes, filter);
 ```
 
 Find all children of each element, and optionally matching a filter.
+
+- `nodes` is a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object.
+- `filter` is either a function that accepts a node argument, a standard CSS selector, a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object that the nodes will be filtered by.
+- `first` is a boolean indicating whether to only return the first child matching a filter, and will default to *false*.
+- `elementsOnly` is a boolean indicating whether to ignore text and comment nodes, and will default to *true*.
 
 ```
 const children = core.children(nodes, filter, first = false, elementsOnly = true);
@@ -894,11 +1036,17 @@ const children = core.children(nodes, filter, first = false, elementsOnly = true
 
 Find all child nodes for each element, (including text and comment nodes).
 
+- `nodes` is a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object.
+
 ```
 const contents = core.contents(nodes);
 ```
 
 Find the closest ancestor to each element matching a filter, and optionally before hitting a limit.
+
+- `nodes` is a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object.
+- `filter` is either a function that accepts a node argument, a standard CSS selector, a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object that the nodes will be filtered by.
+- `until` is either a function that accepts a node argument, a standard CSS selector, a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object that when matched will stop the search.
 
 ```
 const closest = core.closest(nodes, filter, until);
@@ -906,11 +1054,19 @@ const closest = core.closest(nodes, filter, until);
 
 Find the parent of each element matching a filter.
 
+- `nodes` is a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object.
+- `filter` is either a function that accepts a node argument, a standard CSS selector, a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object that the nodes will be filtered by.
+
 ```
 const parent = core.parent(nodes, filter);
 ```
 
 Find all parents of each element matching a filter, and optionally before hitting a limit.
+
+- `nodes` is a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object.
+- `filter` is either a function that accepts a node argument, a standard CSS selector, a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object that the nodes will be filtered by.
+- `until` is either a function that accepts a node argument, a standard CSS selector, a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object that when matched will stop the search.
+- `closest` is a boolean indicating whether to only return the closest parent matching a filter, and will default to *false*.
 
 ```
 const parents = core.parents(nodes, filter, until, closest = false);
@@ -918,11 +1074,16 @@ const parents = core.parents(nodes, filter, until, closest = false);
 
 Find the offset parent (relatively positioned) of the first element.
 
+- `nodes` is a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object.
+
 ```
 const offsetParent = core.offsetParent(nodes);
 ```
 
 Find the next sibling for each element matching a filter.
+
+- `nodes` is a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object.
+- `filter` is either a function that accepts a node argument, a standard CSS selector, a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object that the nodes will be filtered by.
 
 ```
 const next = core.next(nodes, filter);
@@ -930,11 +1091,19 @@ const next = core.next(nodes, filter);
 
 Find all next siblings for each element matching a filter, and optionally before hitting a limit.
 
+- `nodes` is a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object.
+- `filter` is either a function that accepts a node argument, a standard CSS selector, a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object that the nodes will be filtered by.
+- `until` is either a function that accepts a node argument, a standard CSS selector, a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object that when matched will stop the search.
+- `first` is a boolean indicating whether to only return the first node matching a filter, and will default to *false*.
+
 ```
 const nextAll = core.nextAll(nodes, filter, until = false, first = false);
 ```
 
 Find the previous sibling for each element matching a filter, and optionally before hitting a limit.
+
+- `nodes` is a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object.
+- `filter` is either a function that accepts a node argument, a standard CSS selector, a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object that the nodes will be filtered by.
 
 ```
 const prev = core.prev(nodes, filter);
@@ -942,16 +1111,26 @@ const prev = core.prev(nodes, filter);
 
 Find all previous siblings for each element matching a filter, and optionally before hitting a limit.
 
+- `nodes` is a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object.
+- `filter` is either a function that accepts a node argument, a standard CSS selector, a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object that the nodes will be filtered by.
+- `until` is either a function that accepts a node argument, a standard CSS selector, a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object that when matched will stop the search.
+- `first` is a boolean indicating whether to only return the first node matching a filter, and will default to *false*.
+
 ```
 const prevAll = core.prevAll(nodes, filter, until = false, first = false);
 ```
 
 Find all siblings for each element matching a filter.
 
+- `nodes` is a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object.
+- `filter` is either a function that accepts a node argument, a standard CSS selector, a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object that the nodes will be filtered by.
+- `elementsOnly` is a boolean indicating whether to ignore text and comment nodes, and will default to *true*.
+
 ```
 const siblings = core.siblings(nodes, filter, elementsOnly = true);
 ```
 
+---
 
 #### Utility
 
