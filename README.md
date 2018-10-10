@@ -37,9 +37,9 @@ It is heavily inspired by jQuery, but supports both functional and OOP style pro
 
 Add an animation to each element.
 
-`nodes` is a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object.
-`callback` is a function that accepts `node` and `progress` as arguments, where progress is a value between 0 and 1.
-`duration` is the number of milliseconds that the animation should last, and will default to 1000.
+- `nodes` is a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object.
+- `callback` is a function that accepts `node` and `progress` as arguments, where progress is a value between 0 and 1.
+- `duration` is the number of milliseconds that the animation should last, and will default to 1000.
 
 This function returns a Promise, that will resolve after the animation has completed.
 
@@ -49,8 +49,8 @@ core.animate(nodes, callback, duration);
 
 Stop all animations for each element.
 
-`nodes` is a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object.
-`finish` is a boolean indicating whether to immediately finish the animation, and will default to true.
+- `nodes` is a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object.
+- `finish` is a boolean indicating whether to immediately finish the animation, and will default to true.
 
 ```
 core.stop(nodes, finish);
@@ -60,8 +60,8 @@ core.stop(nodes, finish);
 
 Slide each element in or out from the top over a duration.
 
-`nodes` is a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object.
-`duration` is the number of milliseconds that the animation should last, and will default to 1000.
+- `nodes` is a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object.
+- `duration` is the number of milliseconds that the animation should last, and will default to 1000.
 
 This function returns a Promise, that will resolve after the animation has completed.
 
@@ -72,8 +72,8 @@ core.dropOut(nodes, duration);
 
 Fade the opacity of each element in or out over a duration.
 
-`nodes` is a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object.
-`duration` is the number of milliseconds that the animation should last, and will default to 1000.
+- `nodes` is a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object.
+- `duration` is the number of milliseconds that the animation should last, and will default to 1000.
 
 This function returns a Promise, that will resolve after the animation has completed.
 
@@ -84,11 +84,11 @@ core.fadeOut(nodes, duration);
 
 Rotate each element in or out on an x y over a duration.
 
-`nodes` is a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object.
-`x` is the amount of rotation to apply to the X axis, and will default to 0.
-`y` is the amount of rotation to apply to the Y axis, and will default to 1.
-`inverse` is a boolean indicating whether to rotate in the opposite direction, and will default to false.
-`duration` is the number of milliseconds that the animation should last, and will default to 1000.
+- `nodes` is a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object.
+- `x` is the amount of rotation to apply to the X axis, and will default to 0.
+- `y` is the amount of rotation to apply to the Y axis, and will default to 1.
+- `inverse` is a boolean indicating whether to rotate in the opposite direction, and will default to false.
+- `duration` is the number of milliseconds that the animation should last, and will default to 1000.
 
 This function returns a Promise, that will resolve after the animation has completed.
 
@@ -99,9 +99,9 @@ core.rotateOut(nodes, x, y, inverse, duration);
 
 Slide each element into or out of place to a direction over a duration.
 
-`nodes` is a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object.
-`direction` is one of: 'top', 'right', 'bottom' or 'left' indicating the direction to slide to, and will default to bottom.
-`duration` is the number of milliseconds that the animation should last, and will default to 1000.
+- `nodes` is a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object.
+- `direction` is one of: 'top', 'right', 'bottom' or 'left' indicating the direction to slide to, and will default to bottom.
+- `duration` is the number of milliseconds that the animation should last, and will default to 1000.
 
 This function returns a Promise, that will resolve after the animation has completed.
 
@@ -112,9 +112,9 @@ core.slideOut(nodes, direction, duration);
 
 Squeeze each element into or out of place to a direction over a duration.
 
-`nodes` is a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object.
-`direction` is one of: 'top', 'right', 'bottom' or 'left' indicating the direction to squeeze to, and will default to bottom.
-`duration` is the number of milliseconds that the animation should last, and will default to 1000.
+- `nodes` is a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object.
+- `direction` is one of: 'top', 'right', 'bottom' or 'left' indicating the direction to squeeze to, and will default to bottom.
+- `duration` is the number of milliseconds that the animation should last, and will default to 1000.
 
 This function returns a Promise, that will resolve after the animation has completed.
 
@@ -127,8 +127,8 @@ core.squeezeOut(nodes, direction, duration);
 
 Queue a callback on each element.
 
-`nodes` is a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object.
-`callback` is a function that accepts `node` as an argument.
+- `nodes` is a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object.
+- `callback` is a function that accepts `node` as an argument.
 
 ```
 core.queue(nodes, callback);
@@ -136,7 +136,7 @@ core.queue(nodes, callback);
 
 Clear the queue for each element.
 
-`nodes` is a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object.
+- `nodes` is a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object.
 
 ```
 core.clearQueue(nodes);
@@ -151,8 +151,8 @@ core.clearQueue(nodes);
 
 Get an attribute value for the first element.
 
-`nodes` is a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object.
-`attribute` is a string indicating the attribute value to return.
+- `nodes` is a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object.
+- `attribute` is a string indicating the attribute value to return.
 
 ```
 const attr = core.getAttribute(nodes, attribute);
@@ -160,9 +160,9 @@ const attr = core.getAttribute(nodes, attribute);
 
 Set attributes for each element.
 
-`nodes` is a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object.
-`attribute` is a string indicating the attribute value to set.
-`value` is the value you which to set the attribute to.
+- `nodes` is a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object.
+- `attribute` is a string indicating the attribute value to set.
+- `value` is the value you which to set the attribute to.
 
 Alternatively, you can set multiple attributes by passing a single `attributes` argument with Key/Value pairs of the attributes to set.
 
@@ -173,8 +173,8 @@ core.setAttribute(nodes, attribute, value);
 
 Remove an attribute from each element.
 
-`nodes` is a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object.
-`attribute` is a string indicating the attribute value to remove.
+- `nodes` is a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object.
+- `attribute` is a string indicating the attribute value to remove.
 
 ```
 core.removeAttribute(nodes, attribute);
