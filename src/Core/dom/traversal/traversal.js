@@ -1,12 +1,5 @@
 Object.assign(Core.prototype, {
 
-    // find the closest ancestor to each element matching a filter,
-    // and optionally before hitting a limit
-    closest(nodes, filter, until)
-    {
-        return this.parents(nodes, filter, until, true);
-    },
-
     // find the first child of each element matching a filter
     child(nodes, filter)
     {
@@ -48,68 +41,11 @@ Object.assign(Core.prototype, {
         return this.children(nodes, false, false, false);
     },
 
-    // find the next sibling for each element matching a filter
-    next(nodes, filter)
-    {
-        filter = Core.parseFilter(filter);
-
-        const results = new Set;
-
-        Core.nodeArray(nodes, false)
-            .forEach(node => {
-                if ( ! node.nextSibling) {
-                    return;
-                }
-
-                if (filter && ! filter(node.nextSibling)) {
-                    return;
-                }
-
-                results.add(node.nextSibling);
-            });
-
-        const nodeArray = Core.sortNodes([...results]);
-
-        return Core.isNode(nodes) ?
-            nodeArray.shift() || null :
-            nodeArray;
-    },
-
-    // find all next siblings for each element matching a filter,
+    // find the closest ancestor to each element matching a filter,
     // and optionally before hitting a limit
-    nextAll(nodes, filter, until = false, first = false)
+    closest(nodes, filter, until)
     {
-        filter = Core.parseFilter(filter);
-        until = Core.parseFilter(until);
-
-        const results = new Set;
-
-        Core.nodeArray(nodes, false)
-            .forEach(node => {
-                while (node = node.nextSibling) {
-                    if (until && until(node)) {
-                        break;
-                    }
-
-                    if (filter && ! filter(node)) {
-                        continue;
-                    }
-
-                    results.add(node);
-
-                    if (first) {
-                        break;
-                    }
-                }
-            });
-
-        return Core.sortNodes([...results]);
-    },
-
-    // find the offset parent (relatively positioned) of the first element
-    offsetParent(nodes)
-    {
-        return this.forceShow(nodes, node => node.offsetParent);
+        return this.parents(nodes, filter, until, true);
     },
 
     // find the parent of each element matching a filter
@@ -172,6 +108,70 @@ Object.assign(Core.prototype, {
         return closest && Core.isNode(nodes) ?
             nodeArray.shift() || null :
             nodeArray;
+    },
+
+    // find the offset parent (relatively positioned) of the first element
+    offsetParent(nodes)
+    {
+        return this.forceShow(nodes, node => node.offsetParent);
+    },
+
+    // find the next sibling for each element matching a filter
+    next(nodes, filter)
+    {
+        filter = Core.parseFilter(filter);
+
+        const results = new Set;
+
+        Core.nodeArray(nodes, false)
+            .forEach(node => {
+                if ( ! node.nextSibling) {
+                    return;
+                }
+
+                if (filter && ! filter(node.nextSibling)) {
+                    return;
+                }
+
+                results.add(node.nextSibling);
+            });
+
+        const nodeArray = Core.sortNodes([...results]);
+
+        return Core.isNode(nodes) ?
+            nodeArray.shift() || null :
+            nodeArray;
+    },
+
+    // find all next siblings for each element matching a filter,
+    // and optionally before hitting a limit
+    nextAll(nodes, filter, until = false, first = false)
+    {
+        filter = Core.parseFilter(filter);
+        until = Core.parseFilter(until);
+
+        const results = new Set;
+
+        Core.nodeArray(nodes, false)
+            .forEach(node => {
+                while (node = node.nextSibling) {
+                    if (until && until(node)) {
+                        break;
+                    }
+
+                    if (filter && ! filter(node)) {
+                        continue;
+                    }
+
+                    results.add(node);
+
+                    if (first) {
+                        break;
+                    }
+                }
+            });
+
+        return Core.sortNodes([...results]);
     },
 
     // find the previous sibling for each element matching a filter,

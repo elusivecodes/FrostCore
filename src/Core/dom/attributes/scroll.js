@@ -1,7 +1,7 @@
 Object.assign(Core.prototype, {
 
     // scroll each element to an X,Y position
-    scrollTo(nodes, x, y)
+    setScroll(nodes, x, y)
     {
         Core.nodeArray(nodes, true, true, true)
             .forEach(node => {
@@ -18,7 +18,7 @@ Object.assign(Core.prototype, {
     },
 
     // scroll each element to an X position
-    scrollToX(nodes, x)
+    setScrollX(nodes, x)
     {
         Core.nodeArray(nodes, true, true, true)
             .forEach(node => {
@@ -33,7 +33,7 @@ Object.assign(Core.prototype, {
     },
 
     // scroll each element to a Y position
-    scrollToY(nodes, y)
+    setScrollY(nodes, y)
     {
         Core.nodeArray(nodes, true, true, true)
             .forEach(node => {
@@ -48,7 +48,7 @@ Object.assign(Core.prototype, {
     },
 
     // get the scroll X position of the first element
-    scrollX(nodes)
+    getScrollX(nodes)
     {
         let node = Core.nodeFirst(nodes, true, true, true);
 
@@ -68,7 +68,7 @@ Object.assign(Core.prototype, {
     },
 
     // get the scroll Y position of the first element
-    scrollY(nodes)
+    getScrollY(nodes)
     {
         let node = Core.nodeFirst(nodes, true, true, true);
 

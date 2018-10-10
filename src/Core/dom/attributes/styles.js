@@ -41,18 +41,6 @@ Object.assign(Core.prototype, {
             .forEach(node => classes.forEach(className => node.classList.toggle(className)));
     },
 
-    // get the computed style for the first element
-    css(nodes, style)
-    {
-        const node = Core.nodeFirst(nodes);
-
-        if ( ! node) {
-            return;
-        }
-
-        return window.getComputedStyle(node)[style];
-    },
-
     /* STYLES */
 
     // get a style property for the first element
@@ -95,6 +83,22 @@ Object.assign(Core.prototype, {
                 node.style.setProperty(style, value, important ? 'important' : '')
             );
     },
+
+    /* COMPUTED STYLE */
+
+    // get the computed style for the first element
+    css(nodes, style)
+    {
+        const node = Core.nodeFirst(nodes);
+
+        if ( ! node) {
+            return;
+        }
+
+        return window.getComputedStyle(node)[style];
+    },
+
+    /* VISIBILITY */
 
     // hide each element from display
     hide(nodes)

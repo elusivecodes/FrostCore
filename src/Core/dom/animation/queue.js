@@ -1,5 +1,23 @@
 Object.assign(Core.prototype, {
 
+    // queue a callback on each element
+    queue(nodes, callback)
+    {
+        Core.nodeArray(nodes)
+            .forEach(node => {
+                const newQueue = ! this.queues.has(node);
+                if (newQueue) {
+                    this.queues.set(node, []);
+                }
+
+                this.queues.get(node).push(callback);
+
+                if (newQueue) {
+                    this._dequeue(node);
+                }
+            });
+    },
+
     // clear the queue of each element
     clearQueue(nodes)
     {
@@ -14,7 +32,7 @@ Object.assign(Core.prototype, {
     },
 
     // run the next queued callback for each element
-    dequeue(nodes)
+    _dequeue(nodes)
     {
         Core.nodeArray(nodes)
             .forEach(node => {
@@ -30,25 +48,7 @@ Object.assign(Core.prototype, {
                 }
 
                 Promise.resolve(next.bind(node)(node))
-                    .finally(() => this.dequeue(node));
-            });
-    },
-
-    // queue a callback on each element
-    queue(nodes, callback)
-    {
-        Core.nodeArray(nodes)
-            .forEach(node => {
-                const newQueue = ! this.queues.has(node);
-                if (newQueue) {
-                    this.queues.set(node, []);
-                }
-
-                this.queues.get(node).push(callback);
-
-                if (newQueue) {
-                    this.dequeue(node);
-                }
+                    .finally(() => this._dequeue(node));
             });
     }
 

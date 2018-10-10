@@ -29,54 +29,6 @@ Object.assign(Core.prototype, {
         return this.findSelector(nodes, selectors);
     },
 
-    // find all elements with a specific class
-    findByClass(nodes, className)
-    {
-        const results = new Set;
-
-        Core.nodeArray(nodes, true, true)
-            .forEach(node =>
-                Array.from(node.getElementsByClassName(className))
-                    .forEach(result => results.add(result))
-            );
-
-        return Core.sortNodes([...results]);
-    },
-
-    // find all elements with a specific ID
-    findById(nodes, id)
-    {
-        return this.findSelector(nodes, '#' + id);
-    },
-
-    // find all elements with a specific tag
-    findByTag(nodes, tagName)
-    {
-        const results = new Set;
-
-        Core.nodeArray(nodes, true, true)
-            .forEach(node =>
-                Array.from(node.getElementsByTagName(tagName))
-                    .forEach(result => results.add(result))
-            );
-
-        return Core.sortNodes([...results]);
-    },
-
-    // find all elements matching a standard CSS selector
-    findSelector(nodes, selector)
-    {
-        const results = new Set;
-
-        Core.nodeArray(nodes, true, true)
-            .forEach(node =>
-                Array.from(node.querySelectorAll(selector))
-                    .forEach(result => results.add(result))
-            );
-
-        return Core.sortNodes([...results]);
-    },
-
     // find a single element matching a selector
     findOne(nodes, selectors)
     {
@@ -106,15 +58,45 @@ Object.assign(Core.prototype, {
         return this.findOneSelector(nodes, selectors);
     },
 
+    // find all elements with a specific class
+    findByClass(nodes, className)
+    {
+        if ( ! className) {
+            className = nodes;
+            nodes = this.context;
+        }
+
+        const results = new Set;
+
+        Core.nodeArray(nodes, true, true)
+            .forEach(node =>
+                Array.from(node.getElementsByClassName(className))
+                    .forEach(result => results.add(result))
+            );
+
+        return Core.sortNodes([...results]);
+    },
+
     // find the first element with a specific class
     findOneByClass(nodes, className)
     {
         return this.findByClass(nodes, className).shift() || null;
     },
 
+    // find all elements with a specific ID
+    findById(nodes, id)
+    {
+        return this.findSelector(nodes, '#' + id);
+    },
+
     // find the first element with a specific ID
     findOneById(nodes, id)
     {
+        if ( ! id) {
+            id = nodes;
+            nodes = this.context;
+        }
+
         const results = new Set;
 
         Core.nodeArray(nodes, true, true)
@@ -123,10 +105,43 @@ Object.assign(Core.prototype, {
         return Core.sortNodes([...results].filter(node => !! node)).shift() || null;
     },
 
+    // find all elements with a specific tag
+    findByTag(nodes, tagName)
+    {
+        if ( ! tagName) {
+            tagName = nodes;
+            nodes = this.context;
+        }
+
+        const results = new Set;
+
+        Core.nodeArray(nodes, true, true)
+            .forEach(node =>
+                Array.from(node.getElementsByTagName(tagName))
+                    .forEach(result => results.add(result))
+            );
+
+        return Core.sortNodes([...results]);
+    },
+
     // find the first element with a specific tag
     findOneByTag(nodes, tagName)
     {
         return this.findByTag(nodes, tagName).shift() || null;
+    },
+
+    // find all elements matching a standard CSS selector
+    findSelector(nodes, selector)
+    {
+        const results = new Set;
+
+        Core.nodeArray(nodes, true, true)
+            .forEach(node =>
+                Array.from(node.querySelectorAll(selector))
+                    .forEach(result => results.add(result))
+            );
+
+        return Core.sortNodes([...results]);
     },
 
     // find the first element matching a standard CSS selector

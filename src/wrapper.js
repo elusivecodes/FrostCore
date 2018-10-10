@@ -10,14 +10,11 @@
 
 // {{code}}
 
-    const core = new Core;
-    Core.QuerySet = QuerySet;
-    Core.QuerySetImmutable = QuerySetImmutable;
-
     return {
         Core,
-        core,
-        $: core.query
+        core: new Core,
+        QuerySet,
+        QuerySetImmutable
     };
 
 });

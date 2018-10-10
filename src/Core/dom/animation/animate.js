@@ -38,14 +38,29 @@ Object.assign(Core.prototype, {
 
         if (promises.length && ! this.animating) {
             this.animating = true;
-            this.animationFrame();
+            this._animationFrame();
         }
 
         return Promise.all(promises);
     },
 
+    // stop all animations for each element
+    stop(nodes, finish = true)
+    {
+        Core.nodeArray(nodes)
+            .forEach(node => {
+                if ( ! this.animations.has(node)) {
+                    return;
+                }
+
+                const animations = this.animations.get(node);
+                animations.forEach(animation => animation(true, finish));
+                this.animations.delete(node);
+            });
+    },
+
     // run a single frame of all animations, and then queue up the next frame
-    animationFrame()
+    _animationFrame()
     {
         const completeNodes = [];
 
@@ -72,25 +87,10 @@ Object.assign(Core.prototype, {
         completeNodes.forEach(node => this.animations.delete(node));
 
         if (this.animations.size) {
-            window.requestAnimationFrame(() => this.animationFrame());
+            window.requestAnimationFrame(() => this._animationFrame());
         } else {
             this.animating = false;
         }
-    },
-
-    // stop all animations for each element
-    stop(nodes, finish = true)
-    {
-        Core.nodeArray(nodes)
-            .forEach(node => {
-                if ( ! this.animations.has(node)) {
-                    return;
-                }
-
-                const animations = this.animations.get(node);
-                animations.forEach(animation => animation(true, finish));
-                this.animations.delete(node);
-            });
     }
 
 });

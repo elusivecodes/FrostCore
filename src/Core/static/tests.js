@@ -60,7 +60,7 @@ Object.assign(Core, {
         return value instanceof Object;
     },
 
-    // returns true if the value is a Query List
+    // returns true if the value is a Query Set
     isQuerySet(value)
     {
         return value instanceof QuerySet;

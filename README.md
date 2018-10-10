@@ -37,66 +37,106 @@ It is heavily inspired by jQuery, but supports both functional and OOP style pro
 
 Add an animation to each element.
 
-```
-const callback = (node, progress) => core.setStyle(node, 'opacity', progress);
+`nodes` is a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object.
+`callback` is a function that accepts `node` and `progress` as arguments, where progress is a value between 0 and 1.
+`duration` is the number of milliseconds that the animation should last, and will default to 1000.
 
-core.animate(nodes, callback, duration = 1000);
+This function returns a Promise, that will resolve after the animation has completed.
+
+```
+core.animate(nodes, callback, duration);
 ```
 
 Stop all animations for each element.
 
+`nodes` is a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object.
+`finish` is a boolean indicating whether to immediately finish the animation, and will default to true.
+
 ```
-core.stop(nodes, finish = true);
+core.stop(nodes, finish);
 ```
 
 ##### Animations
 
 Slide each element in or out from the top over a duration.
 
+`nodes` is a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object.
+`duration` is the number of milliseconds that the animation should last, and will default to 1000.
+
+This function returns a Promise, that will resolve after the animation has completed.
+
 ```
-core.dropIn(nodes, duration = 1000);
-core.dropOut(nodes, duration = 1000);
+core.dropIn(nodes, duration);
+core.dropOut(nodes, duration);
 ```
 
 Fade the opacity of each element in or out over a duration.
 
+`nodes` is a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object.
+`duration` is the number of milliseconds that the animation should last, and will default to 1000.
+
+This function returns a Promise, that will resolve after the animation has completed.
+
 ```
-core.fadeIn(nodes, duration = 1000);
-core.fadeOut(nodes, duration = 1000);
+core.fadeIn(nodes, duration);
+core.fadeOut(nodes, duration);
 ```
 
 Rotate each element in or out on an x y over a duration.
 
-```
-core.rotateIn(nodes, x = 0, y = 1, inverse = false, duration = 1000);
-core.rotateOut(nodes, x = 0, y = 1, inverse = false, duration = 1000);
-```
+`nodes` is a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object.
+`x` is the amount of rotation to apply to the X axis, and will default to 0.
+`y` is the amount of rotation to apply to the Y axis, and will default to 1.
+`inverse` is a boolean indicating whether to rotate in the opposite direction, and will default to false.
+`duration` is the number of milliseconds that the animation should last, and will default to 1000.
 
-Slide each element into or out of place from a direction over a duration.
-
-```
-core.slideIn(nodes, direction = 'bottom', duration = 1000);
-core.slideOut(nodes, direction = 'bottom', duration = 1000);
-```
-
-Squeeze each element into or out of palce from a direction over a duration.
+This function returns a Promise, that will resolve after the animation has completed.
 
 ```
-core.squeezeIn(nodes, direction = 'bottom', duration = 1000);
-core.squeezeOut(nodes, direction = 'bottom', duration = 1000);
+core.rotateIn(nodes, x, y, inverse, duration);
+core.rotateOut(nodes, x, y, inverse, duration);
+```
+
+Slide each element into or out of place to a direction over a duration.
+
+`nodes` is a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object.
+`direction` is one of: 'top', 'right', 'bottom' or 'left' indicating the direction to slide to, and will default to bottom.
+`duration` is the number of milliseconds that the animation should last, and will default to 1000.
+
+This function returns a Promise, that will resolve after the animation has completed.
+
+```
+core.slideIn(nodes, direction, duration);
+core.slideOut(nodes, direction, duration);
+```
+
+Squeeze each element into or out of place to a direction over a duration.
+
+`nodes` is a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object.
+`direction` is one of: 'top', 'right', 'bottom' or 'left' indicating the direction to squeeze to, and will default to bottom.
+`duration` is the number of milliseconds that the animation should last, and will default to 1000.
+
+This function returns a Promise, that will resolve after the animation has completed.
+
+```
+core.squeezeIn(nodes, direction, duration);
+core.squeezeOut(nodes, direction, duration);
 ```
 
 ##### Queue
 
 Queue a callback on each element.
 
-```
-const callback = node => new Promise(resolve => setTimeout(resolve, 1000));
+`nodes` is a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object.
+`callback` is a function that accepts `node` as an argument.
 
+```
 core.queue(nodes, callback);
 ```
 
 Clear the queue for each element.
+
+`nodes` is a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object.
 
 ```
 core.clearQueue(nodes);
@@ -105,13 +145,26 @@ core.clearQueue(nodes);
 
 #### Attributes
 
+##### Attributes
+
+###### Attributes
+
 Get an attribute value for the first element.
+
+`nodes` is a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object.
+`attribute` is a string indicating the attribute value to return.
 
 ```
 const attr = core.getAttribute(nodes, attribute);
 ```
 
 Set attributes for each element.
+
+`nodes` is a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object.
+`attribute` is a string indicating the attribute value to set.
+`value` is the value you which to set the attribute to.
+
+Alternatively, you can set multiple attributes by passing a single `attributes` argument with Key/Value pairs of the attributes to set.
 
 ```
 core.setAttribute(nodes, attributes);
@@ -120,9 +173,14 @@ core.setAttribute(nodes, attribute, value);
 
 Remove an attribute from each element.
 
+`nodes` is a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object.
+`attribute` is a string indicating the attribute value to remove.
+
 ```
 core.removeAttribute(nodes, attribute);
 ```
+
+###### DataSet
 
 Get a dataset value for the first element.
 
@@ -137,6 +195,8 @@ Set dataset values for each element.
 core.setDataset(nodes, key, value);
 ```
 
+###### HTML
+
 Get the HTML contents of the first element.
 
 ```
@@ -148,6 +208,8 @@ Set the HTML contents for each element.
 ```
 core.setHTML(nodes, html);
 ```
+
+###### Properties
 
 Get a property value for the first element.
 
@@ -167,6 +229,8 @@ Remove a property from each element.
 core.removeProperty(nodes, property);
 ```
 
+###### Text
+
 Get the text contents of the first element.
 
 ```
@@ -178,6 +242,8 @@ Set the text contents for each element.
 ```
 core.setText(nodes, text);
 ```
+
+###### Value
 
 Get the value property of the first element.
 
@@ -279,31 +345,31 @@ const pY = core.percentY(nodes, y, offset);
 Scroll each element to an X,Y position.
 
 ```
-core.scrollTo(nodes, x, y);
+core.setScroll(nodes, x, y);
 ```
 
 Scroll each element to an X position.
 
 ```
-core.scrollToX(nodes, x);
+core.setScrollX(nodes, x);
 ```
 
 Scroll each element to a Y position.
 
 ```
-core.scrollToY(nodes, y);
+core.setScrollY(nodes, y);
 ```
 
 Get the scroll X position of the first element.
 
 ```
-const scrollX = core.scrollX(nodes);
+const scrollX = core.getScrollX(nodes);
 ```
 
 Get the scroll Y position of the first element.
 
 ```
-const scrollY = core.scrollY(nodes);
+const scrollY = core.getScrollY(nodes);
 ```
 
 ##### Size
@@ -321,6 +387,8 @@ const width = core.width(nodes, padding, border, margin);
 ```
 
 ##### Styles
+
+###### Classes
 
 Add a class or classes to each element.
 
@@ -340,11 +408,7 @@ Toggle a class or classes for each element.
 core.toggleClass(nodes, ...classes);
 ```
 
-Get the computed style for the first element.
-
-```
-const css = core.css(nodes, style);
-```
+###### Styles
 
 Get a style property for the first element.
 
@@ -358,6 +422,16 @@ Set style properties for each element.
 core.setStyle(nodes, styles);
 core.setStyle(nodes, style, value, important);
 ```
+
+###### CSS
+
+Get the computed style for the first element.
+
+```
+const css = core.css(nodes, style);
+```
+
+###### Visibility
 
 Hide each element from display.
 
@@ -434,22 +508,68 @@ core.focus(nodes);
 
 #### Manipulation
 
+##### Manipulation
+
+Create a new DOM element.
+
+```
+const element = core.create(tagName);
+```
+
+Clone each node (optionally deep, and with events and data).
+
+```
+const clones = core.clone(nodes, deep = true, eventsData = false);
+```
+
+Detach an element from the DOM.
+
+```
+core.detach(nodes);
+```
+
+Remove all children of each node from the DOM.
+
+```
+core.empty(nodes);
+```
+
+Remove each node from the DOM.
+
+```
+core.remove(nodes, deep = true);
+```
+
+Replace each other node with nodes.
+
+```
+core.replaceAll(nodes, others);
+```
+
+Replace each node with other nodes.
+
+```
+core.replaceWith(nodes, others);
+```
+
+##### Move
+
 Insert each other node after the first node.
 
 ```
 core.after(nodes, others);
 ```
 
-Insert each other node before the first node.
-
-```
-core.before(nodes, others);
-```
-
 Insert each node after the first other node.
 
 ```
 core.insertAfter(nodes, others);
+```
+
+Insert each other node before the first node.
+
+```
+core.before(nodes, others);
 ```
 
 Insert each node before the first other node.
@@ -482,47 +602,7 @@ Prepend each node to the first other node.
 core.prependTo(nodes, others);
 ```
 
-Detach an element from the DOM.
-
-```
-core.detach(nodes);
-```
-
-Remove all children of each node from the DOM.
-
-```
-core.empty(nodes);
-```
-
-Remove each node from the DOM.
-
-```
-core.remove(nodes, deep = true);
-```
-
-Create a new DOM element.
-
-```
-const element = core.create(tagName);
-```
-
-Clone each node (optionally deep, and with events and data).
-
-```
-const clones = core.clone(nodes, deep = true, eventsData = false);
-```
-
-Replace each other node with nodes.
-
-```
-core.replaceAll(nodes, others);
-```
-
-Replace each node with other nodes.
-
-```
-core.replaceWith(nodes, others);
-```
+##### Wrap
 
 Unwrap each node (optionally matching a filter).
 
@@ -609,37 +689,43 @@ const descendent = core.findOne(nodes, selectors);
 Find all elements with a specific class.
 
 ```
-const elements = core.findByClass(nodes, className);
+const elements = core.findByClass(className);
+const descendents = core.findByClass(nodes, className);
 ```
 
 Find the first element with a specific class.
 
 ```
-const element = core.findOneByClass(nodes, className);
+const element = core.findOneByClass(className);
+const descendent = core.findOneByClass(nodes, className);
 ```
 
 Find all elements with a specific ID.
 
 ```
-const elements = core.findById(nodes, id);
+const elements = core.findById(id);
+const descendents = core.findById(nodes, id);
 ```
 
 Find the first element with a specific ID.
 
 ```
-const element = core.findOneById(nodes, id);
+const element = core.findOneById(id);
+const descendent = core.findOneById(nodes, id);
 ```
 
 Find all elements with a specific tag.
 
 ```
-const elements = core.findByTag(nodes, tagName);
+const elements = core.findByTag(tagName);
+const descendents = core.findByTag(nodes, tagName);
 ```
 
 Find the first element with a specific tag.
 
 ```
-const element = core.findOneByTag(nodes, tagName);
+const element = core.findOneByTag(tagName);
+const descendent = core.findOneByTag(nodes, tagName);
 ```
 
 
@@ -648,73 +734,73 @@ const element = core.findOneByTag(nodes, tagName);
 Find the first child of each element matching a filter.
 
 ```
-core.child(nodes, filter);
+const child = core.child(nodes, filter);
 ```
 
 Find all children of each element, and optionally matching a filter.
 
 ```
-core.children(nodes, filter, first = false, elementsOnly = true);
+const children = core.children(nodes, filter, first = false, elementsOnly = true);
 ```
 
 Find all child nodes for each element, (including text and comment nodes).
 
 ```
-core.contents(nodes);
+const contents = core.contents(nodes);
 ```
 
 Find the closest ancestor to each element matching a filter, and optionally before hitting a limit.
 
 ```
-core.closest(nodes, filter, until);
+const closest = core.closest(nodes, filter, until);
 ```
 
 Find the parent of each element matching a filter.
 
 ```
-core.parent(nodes, filter);
+const parent = core.parent(nodes, filter);
 ```
 
 Find all parents of each element matching a filter, and optionally before hitting a limit.
 
 ```
-core.parents(nodes, filter, until, closest = false);
+const parents = core.parents(nodes, filter, until, closest = false);
 ```
 
 Find the offset parent (relatively positioned) of the first element.
 
 ```
-core.offsetParent(nodes);
+const offsetParent = core.offsetParent(nodes);
 ```
 
 Find the next sibling for each element matching a filter.
 
 ```
-core.next(nodes, filter);
+const next = core.next(nodes, filter);
 ```
 
 Find all next siblings for each element matching a filter, and optionally before hitting a limit.
 
 ```
-core.nextAll(nodes, filter, until = false, first = false);
+const nextAll = core.nextAll(nodes, filter, until = false, first = false);
 ```
 
 Find the previous sibling for each element matching a filter, and optionally before hitting a limit.
 
 ```
-core.prev(nodes, filter);
+const prev = core.prev(nodes, filter);
 ```
 
 Find all previous siblings for each element matching a filter, and optionally before hitting a limit.
 
 ```
-core.prevAll(nodes, filter, until = false, first = false);
+const prevAll = core.prevAll(nodes, filter, until = false, first = false);
 ```
 
 Find all siblings for each element matching a filter.
 
 ```
-core.siblings(nodes, filter, elementsOnly = true);
+const siblings = core.siblings(nodes, filter, elementsOnly = true);
 ```
 
 
@@ -789,13 +875,13 @@ core.forceShow(nodes, callback);
 Get the index of the first element matching a filter.
 
 ```
-core.index(nodes, filter);
+const index = core.index(nodes, filter);
 ```
 
 Get the index of the first element relative to it's parent element.
 
 ```
-core.indexOf(nodes);
+const indexOf = core.indexOf(nodes);
 ```
 
 Create a selection on the first node.
@@ -813,19 +899,19 @@ core.selectAll(nodes);
 Returns a serialized string containing names and values of all form elements.
 
 ```
-core.serialize(nodes);
+const serialize = core.serialize(nodes);
 ```
 
 Returns a serialized array containing names and values of all form elements.
 
 ```
-core.serializeArray(nodes);
+const serialArray = core.serializeArray(nodes);
 ```
 
 Returns an object containing keys and values of all form elements.
 
 ```
-core.serializeObject(nodes);
+const serialObject = core.serializeObject(nodes);
 ```
 
 
@@ -926,13 +1012,13 @@ const xml = core.parseXML(string);
 Create a single-dimensional Array from a multiple-dimensional Array.
 
 ```
-Core.flattenArray(array);
+const flatArray = Core.flattenArray(array);
 ```
 
 Remove duplicate elements in an array.
 
 ```
-Core.uniqueArray(array);
+const uniqueArray = Core.uniqueArray(array);
 ```
 
 
@@ -941,67 +1027,67 @@ Core.uniqueArray(array);
 Clamp a value between a min and max.
 
 ```
-Core.clamp(val, min = 0, max = 1);
+const clamp = Core.clamp(val, min = 0, max = 1);
 ```
 
 Clamp a value between 0 and 100.
 
 ```
-Core.clampPercent(val);
+const clampPercent = Core.clampPercent(val);
 ```
 
 Get the distance between two vectors.
 
 ```
-Core.dist(x1, y1, x2, y2);
+const dist = Core.dist(x1, y1, x2, y2);
 ```
 
 Get the length of an X,Y vector.
 
 ```
-Core.len(x, y);
+const len = Core.len(x, y);
 ```
 
 Linear interpolation from one value to another.
 
 ```
-Core.lerp(a, b, amount);
+const lerp = Core.lerp(a, b, amount);
 ```
 
 Map a value from one range to another.
 
 ```
-Core.map(value, fromMin, fromMax, toMin, toMax);
+const map = Core.map(value, fromMin, fromMax, toMin, toMax);
 ```
 
 Round a number to a specified precision.
 
 ```
-Core.toStep(value, step);
+const toStep = Core.toStep(value, step);
 ```
 
 Get the linear percent of a value in a specified range.
 
 ```
-Core.linearPercent(a, b, value);
+const linearPercent = Core.linearPercent(a, b, value);
 ```
 
 Get the linear value of a percent in a specified range.
 
 ```
-Core.linearValue(a, b, percent);
+const linearValue = Core.linearValue(a, b, percent);
 ```
 
 Get the logarithmic percent of a value in a specified range.
 
 ```
-Core.logPercent(a, b, value);
+const logPrecent = Core.logPercent(a, b, value);
 ```
 
 Get the logarithmic value of a percent in a specified range.
 
 ```
-Core.logValue(a, b, percent);
+const logValue = Core.logValue(a, b, percent);
 ```
 
 
@@ -1010,13 +1096,13 @@ Core.logValue(a, b, percent);
 Convert a string to Camel Case.
 
 ```
-Core.camelCase(string);
+const camelCase = Core.camelCase(string);
 ```
 
 Convert a string to Snake Case.
 
 ```
-Core.snakeCase(string);
+const snakeCase = Core.snakeCase(string);
 ```
 
 
@@ -1025,43 +1111,79 @@ Core.snakeCase(string);
 Returns true if the value is an Array.
 
 ```
-Core.isArray(value);
+const isArray = Core.isArray(value);
 ```
 
 Returns true if the value is a Boolean.
 
 ```
-Core.isBoolean(value);
+const isBoolean = Core.isBoolean(value);
+```
+
+Returns true if the value if a Document.
+
+```
+const isDocument = Core.isDocument(value);
+```
+
+Returns true if the value is a HTML Element.
+
+```
+const isElement = Core.isElement(value);
+```
+
+Returns true if the value is a HTML Collection.
+
+```
+const isElementList = Core.isElementList(value);
 ```
 
 Returns true if the value is a Function.
 
 ```
-Core.isFunction(value);
+const isFunction = Core.isFunction(value);
+```
+
+Returns true if the value is a Node.
+
+```
+const isNode = Core.isNode(value);
+```
+
+Returns true if the value is a Node List.
+
+```
+const isNodeList = Core.isNodeList(value);
 ```
 
 Returns true if the value is numeric.
 
 ```
-Core.isNumeric(value);
+const isNumeric = Core.isNumeric(value);
 ```
 
 Returns true if the value is an Object.
 
 ```
-Core.isObject(value);
+const isObject = Core.isObject(value);
+```
+
+Returns true if the value is a Query Set.
+
+```
+const isQuerySet = Core.isQuerySet(value);
 ```
 
 Returns true if the value is a String.
 
 ```
-Core.isString(value);
+const isString = Core.isString(value);
 ```
 
 Returns true if the value is a Window.
 
 ```
-Core.isWindow(value);
+const isWindow = Core.isWindow(value);
 ```
 
 

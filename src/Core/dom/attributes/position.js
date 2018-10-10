@@ -15,6 +15,54 @@ Object.assign(Core.prototype, {
         };
     },
 
+    // get the position of the first element relative to the window (optionally offset)
+    position(nodes, offset)
+    {
+        const node = Core.nodeFirst(nodes);
+
+        if ( ! node) {
+            return;
+        }
+
+        return this.forceShow(node, node => {
+            const result = {
+                x: node.offsetLeft,
+                y: node.offsetTop
+            };
+
+            if (offset) {
+                const parentPosition = this.position(this.offsetParent(node), true);
+                if (parentPosition) {
+                    result.x += parentPosition.x;
+                    result.y += parentPosition.y;
+                }
+            }
+
+            return result;
+        });
+    },
+
+    // get the computed bounding rectangle of the first element
+    rect(nodes, offset)
+    {
+        const node = Core.nodeFirst(nodes);
+
+        if ( ! node) {
+            return;
+        }
+
+        return this.forceShow(node, node => {
+            const result = node.getBoundingClientRect();
+
+            if (offset) {
+                result.x += this.scrollX(window);
+                result.y += this.scrollY(window);
+            }
+
+            return result;
+        });
+    },
+
     // constrain each element to a container element
     constrain(nodes, container)
     {
@@ -130,54 +178,6 @@ Object.assign(Core.prototype, {
         }
 
         return Core.clampPercent((y - nodeBox.top) / nodeBox.height * 100);
-    },
-
-    // get the position of the first element relative to the window (optionally offset)
-    position(nodes, offset)
-    {
-        const node = Core.nodeFirst(nodes);
-
-        if ( ! node) {
-            return;
-        }
-
-        return this.forceShow(node, node => {
-            const result = {
-                x: node.offsetLeft,
-                y: node.offsetTop
-            };
-
-            if (offset) {
-                const parentPosition = this.position(this.offsetParent(node), true);
-                if (parentPosition) {
-                    result.x += parentPosition.x;
-                    result.y += parentPosition.y;
-                }
-            }
-
-            return result;
-        });
-    },
-
-    // get the computed bounding rectangle of the first element
-    rect(nodes, offset)
-    {
-        const node = Core.nodeFirst(nodes);
-
-        if ( ! node) {
-            return;
-        }
-
-        return this.forceShow(node, node => {
-            const result = node.getBoundingClientRect();
-
-            if (offset) {
-                result.x += this.scrollX(window);
-                result.y += this.scrollY(window);
-            }
-
-            return result;
-        });
     }
 
 });

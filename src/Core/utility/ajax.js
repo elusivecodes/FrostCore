@@ -84,6 +84,30 @@ Object.assign(Core.prototype, {
         });
     },
 
+    // perform an XHR request for a file upload
+    upload(url, data, method = 'POST')
+    {
+        if (Core.isObject(url)) {
+            data = url;
+        } else {
+            data.url = url;
+        }
+
+        const formData = new FormData();
+        Object.keys(data.data).forEach(key => formData.append(key, data.data[key]));
+        data.data = formData;
+
+        if ( ! data.contentType) {
+            data.contentType = 'multipart/form-data';
+        }
+
+        if ( ! data.processData) {
+            data.processData = false;
+        }
+
+        this.xhr(data, null, method);
+    },
+
     // load and executes a JavaScript file
     loadScript(script)
     {
@@ -113,30 +137,6 @@ Object.assign(Core.prototype, {
     loadStyles(stylesheets)
     {
         stylesheets.forEach(stylesheet => this.loadStyle(stylesheet));
-    },
-
-    // perform an XHR request for a file upload
-    upload(url, data, method = 'POST')
-    {
-        if (Core.isObject(url)) {
-            data = url;
-        } else {
-            data.url = url;
-        }
-
-        const formData = new FormData();
-        Object.keys(data.data).forEach(key => formData.append(key, data.data[key]));
-        data.data = formData;
-
-        if ( ! data.contentType) {
-            data.contentType = 'multipart/form-data';
-        }
-
-        if ( ! data.processData) {
-            data.processData = false;
-        }
-
-        this.xhr(data, null, method);
     }
 
 });
