@@ -162,7 +162,7 @@ Set attributes for each element.
 
 - `nodes` is a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object.
 - `attribute` is a string indicating the attribute value to set.
-- `value` is the value you which to set the attribute to.
+- `value` is the value you want to set the attribute to.
 
 Alternatively, you can set multiple attributes by passing a single `attributes` argument with Key/Value pairs of the attributes to set.
 
@@ -184,12 +184,21 @@ core.removeAttribute(nodes, attribute);
 
 Get a dataset value for the first element.
 
+- `nodes` is a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object.
+- `key` is a string indicating the dataset value to return.
+
+If the `key` argument is omitted, an object containing all dataset values will be returned instead.
+
 ```
 const dataset = core.getDataset(nodes);
 const keyDataset = core.getDataset(nodes, key);
 ```
 
 Set dataset values for each element.
+
+- `nodes` is a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object.
+- `key` is a string indicating the dataset value to set.
+- `value` is the value you want to set the dataset to.
 
 ```
 core.setDataset(nodes, key, value);
@@ -199,11 +208,16 @@ core.setDataset(nodes, key, value);
 
 Get the HTML contents of the first element.
 
+- `nodes` is a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object.
+
 ```
 const html = core.getHTML(nodes);
 ```
 
 Set the HTML contents for each element.
+
+- `nodes` is a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object.
+- `html` is a string that will become the HTML contents of the element.
 
 ```
 core.setHTML(nodes, html);
@@ -213,17 +227,30 @@ core.setHTML(nodes, html);
 
 Get a property value for the first element.
 
+- `nodes` is a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object.
+- `property` is a string indicating the property value to return.
+
 ```
 const prop = core.getProperty(nodes, property);
 ```
 
 Set property values for each element.
 
+- `nodes` is a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object.
+- `property` is a string indicating the property value to set.
+- `value` is the value you want to set the property to.
+
+Alternatively, you can set multiple properties by passing a single `properties` argument with Key/Value pairs of the properties to set.
+
 ```
+core.setProperty(nodes, properties);
 core.setProperty(nodes, property, value);
 ```
 
 Remove a property from each element.
+
+- `nodes` is a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object.
+- `property` is a string indicating the property value to remove.
 
 ```
 core.removeProperty(nodes, property);
@@ -233,11 +260,16 @@ core.removeProperty(nodes, property);
 
 Get the text contents of the first element.
 
+- `nodes` is a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object.
+
 ```
 const text = core.getText(nodes);
 ```
 
 Set the text contents for each element.
+
+- `nodes` is a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object.
+- `text` is a string that will become the text contents of the element.
 
 ```
 core.setText(nodes, text);
@@ -247,11 +279,16 @@ core.setText(nodes, text);
 
 Get the value property of the first element.
 
+- `nodes` is a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object.
+
 ```
 const val = core.getValue(nodes);
 ```
 
 Set the value property for each element.
+
+- `nodes` is a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object.
+- `value` is a string that will become the value of the element.
 
 ```
 core.setValue(nodes, value);
@@ -261,6 +298,11 @@ core.setValue(nodes, value);
 
 Get custom data for the first node.
 
+- `nodes` is a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object.
+- `key` is a string indicating the custom data value to return.
+
+If the `key` argument is omitted, an object containing all custom data values will be returned instead.
+
 ```
 const data = core.getData(nodes);
 const keyData = core.getData(nodes, key);
@@ -268,11 +310,18 @@ const keyData = core.getData(nodes, key);
 
 Set custom data for each node.
 
+- `nodes` is a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object.
+- `key` is a string indicating the custom data value to set.
+- `value` is the value you want to set the attribute to.
+
 ```
 core.setData(nodes, key, value);
 ```
 
 Remove custom data for each node.
+
+- `nodes` is a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object.
+- `key` is a string indicating the custom data value to remove.
 
 ```
 core.removeData(nodes, key);
@@ -280,19 +329,28 @@ core.removeData(nodes, key);
 
 ##### Position
 
-Get the X,Y co-ordinates for the center of the first element (optionally offset).
+Get the X,Y co-ordinates for the center of the first element.
+
+- `nodes` is a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object.
+- `offset` is a boolean indicating whether the co-ordinates should be offset from the top left of the document, and will default to false.
 
 ```
 const center = core.center(nodes, offset);
 ```
 
-Get the position of the first element relative to the window (optionally offset).
+Get the X,Y position of the first element.
+
+- `nodes` is a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object.
+- `offset` is a boolean indicating whether the co-ordinates should be offset from the top left of the document, and will default to false.
 
 ```
 const pos = core.position(nodes, offset);
 ```
 
-Get the computed bounding rectangle of the first element (optionally offset).
+Get the computed bounding rectangle of the first element.
+
+- `nodes` is a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object.
+- `offset` is a boolean indicating whether the rectangle should be offset from the top left of the document, and will default to false.
 
 ```
 const rect = core.rect(nodes, offset);
@@ -300,11 +358,19 @@ const rect = core.rect(nodes, offset);
 
 Constrain each element to a container element.
 
+- `nodes` is a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object.
+- `container` is a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object.
+
 ```
 core.constrain(nodes, container);
 ```
 
-Get the distance of an element to an X,Y position in the window (optionally offset).
+Get the distance of the first element to an X,Y position.
+
+- `nodes` is a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object.
+- `x` is a distance (in pixels) along the X axis.
+- `y` is a distance (in pixels) along the Y axis.
+- `offset` is a boolean indicating whether the co-ordinates should be offset from the top left of the document, and will default to false.
 
 ```
 const dist = core.distTo(nodes, x, y, offset);
@@ -312,11 +378,19 @@ const dist = core.distTo(nodes, x, y, offset);
 
 Get the distance between two elements.
 
+- `nodes` is a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object.
+- `others` is a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object.
+
 ```
 const dist = core.distToNode(nodes, others);
 ```
 
-Get the nearest element to an X,Y position in the window (optionally offset).
+Get the nearest element to an X,Y position.
+
+- `nodes` is a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object.
+- `x` is a distance (in pixels) along the X axis.
+- `y` is a distance (in pixels) along the Y axis.
+- `offset` is a boolean indicating whether the co-ordinates should be offset from the top left of the document, and will default to false.
 
 ```
 const nearest = core.nearestTo(nodes, x, y, offset);
@@ -324,17 +398,28 @@ const nearest = core.nearestTo(nodes, x, y, offset);
 
 Get the nearest element to another element.
 
+- `nodes` is a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object.
+- `others` is a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object.
+
 ```
 const nearest = core.nearestToNode(nodes, others);
 ```
 
-Get the percentage of an X co-ordinate relative to an element.
+Get the percentage of an X co-ordinate relative to the first element.
+
+- `nodes` is a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object.
+- `x` is a distance (in pixels) along the X axis.
+- `offset` is a boolean indicating whether the co-ordinates should be offset from the top left of the document, and will default to false.
 
 ```
 const pX = core.percentX(nodes, x, offset);
 ```
 
-Get the percentage of a Y co-ordinate relative to an element.
+Get the percentage of a Y co-ordinate relative to the first element.
+
+- `nodes` is a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object.
+- `y` is a distance (in pixels) along the Y axis.
+- `offset` is a boolean indicating whether the co-ordinates should be offset from the top left of the document, and will default to false.
 
 ```
 const pY = core.percentY(nodes, y, offset);
