@@ -11,15 +11,11 @@ Object.assign(Core.prototype, {
     // returns an array of nodes from a HTML string, query selector string, node, node list, element list or array
     parseQuery(query, elementsOnly = true, allowDocument = false, allowWindow = false)
     {
-        if (query && ! Core.isString(query)) {
-            return Core.nodeArray(query, elementsOnly, allowDocument, allowWindow);
-        }
-
-        if (query && query.match(Core.htmlRegex)) {
+        if (query && Core.isString(query) && query.match(Core.htmlRegex)) {
             return this.parseHTML(query);
         }
 
-        return this.find(this.context, query || '*');
+        return this.nodeArray(query || '*', elementsOnly, allowDocument, allowWindow);
     },
 
     // returns a DOM object from an XML string

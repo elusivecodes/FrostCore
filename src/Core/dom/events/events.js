@@ -13,7 +13,7 @@ Object.assign(Core.prototype, {
 
         const eventArray = Core.parseEvents(events);
 
-        Core.nodeArray(nodes, true, true, true)
+        this.nodeArray(nodes, true, true, true)
             .forEach(node => {
                 let realCallback = callback;
 
@@ -69,7 +69,7 @@ Object.assign(Core.prototype, {
 
         let eventArray = events ? Core.parseEvents(events) : false;
 
-        Core.nodeArray(nodes, true, true, true)
+        this.nodeArray(nodes, true, true, true)
             .forEach(node => {
                 if ( ! this.nodeEvents.has(node)) {
                     return;
@@ -125,7 +125,7 @@ Object.assign(Core.prototype, {
     // trigger an event on each element
     triggerEvent(nodes, events, data)
     {
-        Core.nodeArray(nodes, true, true, true)
+        this.nodeArray(nodes, true, true, true)
             .forEach(node =>
                 Core.parseEvents(events).forEach(event => {
                     const realEvent = Core.parseEvent(event);
@@ -143,7 +143,7 @@ Object.assign(Core.prototype, {
     // clone all events from each element to other elements
     cloneEvents(nodes, others)
     {
-        Core.nodeArray(nodes, true, true, true)
+        this.nodeArray(nodes, true, true, true)
             .forEach(node => {
                 if ( ! this.nodeEvents.has(node)) {
                     return;
@@ -158,7 +158,7 @@ Object.assign(Core.prototype, {
     // trigger a blur event on the first element
     blur(nodes)
     {
-        const node = Core.nodeFirst(nodes);
+        const node = this.nodeFirst(nodes);
 
         if ( ! node) {
             return;
@@ -170,7 +170,7 @@ Object.assign(Core.prototype, {
     // trigger a click event on the first element
     click(nodes)
     {
-        const node = Core.nodeFirst(nodes);
+        const node = this.nodeFirst(nodes);
 
         if ( ! node) {
             return;
@@ -182,7 +182,7 @@ Object.assign(Core.prototype, {
     // trigger a focus event on the first element
     focus(nodes)
     {
-        const node = Core.nodeFirst(nodes);
+        const node = this.nodeFirst(nodes);
 
         if ( ! node) {
             return;

@@ -5,7 +5,7 @@ Object.assign(Core.prototype, {
     // get an attribute value for the first element
     getAttribute(nodes, attribute)
     {
-        const node = Core.nodeFirst(nodes);
+        const node = this.nodeFirst(nodes);
 
         if ( ! node) {
             return;
@@ -17,7 +17,7 @@ Object.assign(Core.prototype, {
     // set attributes for each element
     setAttribute(nodes, attribute, value)
     {
-        Core.nodeArray(nodes)
+        this.nodeArray(nodes)
             .forEach(node => {
                 if (Core.isObject(attribute)) {
                     Object.keys(attribute)
@@ -32,7 +32,7 @@ Object.assign(Core.prototype, {
     // remove an attribute from each element
     removeAttribute(nodes, attribute)
     {
-        Core.nodeArray(nodes)
+        this.nodeArray(nodes)
             .forEach(node => node.removeAttribute(attribute));
     },
 
@@ -41,7 +41,7 @@ Object.assign(Core.prototype, {
     // get a dataset value for the first element
     getDataset(nodes, key)
     {
-        const node = Core.nodeFirst(nodes);
+        const node = this.nodeFirst(nodes);
 
         if ( ! node) {
             return;
@@ -57,7 +57,7 @@ Object.assign(Core.prototype, {
     // set dataset values for each element
     setDataset(nodes, key, value)
     {
-        Core.nodeArray(nodes)
+        this.nodeArray(nodes)
             .forEach(node => {
                 node.dataset[key] = value;
             });
@@ -83,7 +83,7 @@ Object.assign(Core.prototype, {
     // get a property value for the first element
     getProperty(nodes, property)
     {
-        const node = Core.nodeFirst(nodes);
+        const node = Cothisre.nodeFirst(nodes);
 
         if ( ! node) {
             return;
@@ -95,7 +95,7 @@ Object.assign(Core.prototype, {
     // set property values for each element
     setProperty(nodes, property, value)
     {
-        Core.nodeArray(nodes)
+        this.nodeArray(nodes)
             .forEach(node => {
                 if (Core.isObject(property)) {
                     Object.keys(property).forEach(key => node[key] = property[key]);
@@ -109,7 +109,7 @@ Object.assign(Core.prototype, {
     // remove a property from each element
     removeProperty(nodes, property)
     {
-        Core.nodeArray(nodes)
+        this.nodeArray(nodes)
             .forEach(node => {
                 delete node[property];
             });

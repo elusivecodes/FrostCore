@@ -3,7 +3,7 @@ Object.assign(Core.prototype, {
     // unwrap each node (optionally matching a filter)
     unwrap(nodes, filter)
     {
-        Core.nodeArray(nodes, false)
+        this.nodeArray(nodes, false)
             .forEach(node => {
                 const parent = this.parent(node, filter);
 
@@ -21,7 +21,7 @@ Object.assign(Core.prototype, {
     {
         others = this.parseQuery(others);
 
-        Core.nodeArray(nodes, false)
+        this.nodeArray(nodes, false)
             .forEach(node => {
                 const clone = this.clone(others, true);
                 this.before(node, clone);
@@ -44,7 +44,7 @@ Object.assign(Core.prototype, {
     {
         others = this.parseQuery(others);
 
-        Core.nodeArray(nodes, false)
+        this.nodeArray(nodes, false)
             .forEach(node => {
                 const clone = this.clone(others, true);
                 this.append(node, clone);

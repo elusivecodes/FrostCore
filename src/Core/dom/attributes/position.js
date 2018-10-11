@@ -18,7 +18,7 @@ Object.assign(Core.prototype, {
     // get the position of the first element relative to the window (optionally offset)
     position(nodes, offset)
     {
-        const node = Core.nodeFirst(nodes);
+        const node = this.nodeFirst(nodes);
 
         if ( ! node) {
             return;
@@ -45,7 +45,7 @@ Object.assign(Core.prototype, {
     // get the computed bounding rectangle of the first element
     rect(nodes, offset)
     {
-        const node = Core.nodeFirst(nodes);
+        const node = this.nodeFirst(nodes);
 
         if ( ! node) {
             return;
@@ -72,7 +72,7 @@ Object.assign(Core.prototype, {
             return;
         }
 
-        Core.nodeArray(nodes)
+        this.nodeArray(nodes)
             .forEach(node => {
                 const nodeBox = this.rect(node);
 
@@ -132,7 +132,7 @@ Object.assign(Core.prototype, {
         let closest = null;
         let closestDistance = Number.MAX_VALUE;
 
-        Core.nodeArray(nodes)
+        this.nodeArray(nodes)
             .forEach(node => {
                 const dist = this.distTo(node, x, y, offset);
                 if (dist && dist < closestDistance) {

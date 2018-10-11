@@ -57,7 +57,7 @@
             const start = Date.now();
             const promises = [];
 
-            Core.nodeArray(nodes)
+            this.nodeArray(nodes)
                 .forEach(node => {
                     if ( ! this.animations.has(node)) {
                         this.animations.set(node, []);
@@ -98,7 +98,7 @@
         // stop all animations for each element
         stop(nodes, finish = true)
         {
-            Core.nodeArray(nodes)
+            this.nodeArray(nodes)
                 .forEach(node => {
                     if ( ! this.animations.has(node)) {
                         return;
@@ -284,7 +284,7 @@
 
             const animations = [];
 
-            Core.nodeArray(nodes)
+            this.nodeArray(nodes)
                 .forEach(node => {
                     this.wrap(node, wrapper);
                     const parent = this.parent(node);
@@ -335,7 +335,7 @@
 
             const animations = [];
 
-            Core.nodeArray(nodes)
+            this.nodeArray(nodes)
                 .forEach(node => {
                     this.wrap(node, wrapper);
                     const parent = this.parent(node);
@@ -384,7 +384,7 @@
         // queue a callback on each element
         queue(nodes, callback)
         {
-            Core.nodeArray(nodes)
+            this.nodeArray(nodes)
                 .forEach(node => {
                     const newQueue = ! this.queues.has(node);
                     if (newQueue) {
@@ -402,7 +402,7 @@
         // clear the queue of each element
         clearQueue(nodes)
         {
-            Core.nodeArray(nodes)
+            this.nodeArray(nodes)
                 .forEach(node => {
                     if ( ! this.queues.has(node)) {
                         return;
@@ -415,7 +415,7 @@
         // run the next queued callback for each element
         _dequeue(nodes)
         {
-            Core.nodeArray(nodes)
+            this.nodeArray(nodes)
                 .forEach(node => {
                     if ( ! this.queues.has(node)) {
                         return;
@@ -442,7 +442,7 @@
         // get an attribute value for the first element
         getAttribute(nodes, attribute)
         {
-            const node = Core.nodeFirst(nodes);
+            const node = this.nodeFirst(nodes);
 
             if ( ! node) {
                 return;
@@ -454,7 +454,7 @@
         // set attributes for each element
         setAttribute(nodes, attribute, value)
         {
-            Core.nodeArray(nodes)
+            this.nodeArray(nodes)
                 .forEach(node => {
                     if (Core.isObject(attribute)) {
                         Object.keys(attribute)
@@ -469,7 +469,7 @@
         // remove an attribute from each element
         removeAttribute(nodes, attribute)
         {
-            Core.nodeArray(nodes)
+            this.nodeArray(nodes)
                 .forEach(node => node.removeAttribute(attribute));
         },
 
@@ -478,7 +478,7 @@
         // get a dataset value for the first element
         getDataset(nodes, key)
         {
-            const node = Core.nodeFirst(nodes);
+            const node = this.nodeFirst(nodes);
 
             if ( ! node) {
                 return;
@@ -494,7 +494,7 @@
         // set dataset values for each element
         setDataset(nodes, key, value)
         {
-            Core.nodeArray(nodes)
+            this.nodeArray(nodes)
                 .forEach(node => {
                     node.dataset[key] = value;
                 });
@@ -520,7 +520,7 @@
         // get a property value for the first element
         getProperty(nodes, property)
         {
-            const node = Core.nodeFirst(nodes);
+            const node = Cothisre.nodeFirst(nodes);
 
             if ( ! node) {
                 return;
@@ -532,7 +532,7 @@
         // set property values for each element
         setProperty(nodes, property, value)
         {
-            Core.nodeArray(nodes)
+            this.nodeArray(nodes)
                 .forEach(node => {
                     if (Core.isObject(property)) {
                         Object.keys(property).forEach(key => node[key] = property[key]);
@@ -546,7 +546,7 @@
         // remove a property from each element
         removeProperty(nodes, property)
         {
-            Core.nodeArray(nodes)
+            this.nodeArray(nodes)
                 .forEach(node => {
                     delete node[property];
                 });
@@ -588,7 +588,7 @@
         // get custom data for the first node
         getData(nodes, key)
         {
-            const node = Core.nodeFirst(nodes, false, true, true);
+            const node = this.nodeFirst(nodes, false, true, true);
 
             if ( ! node) {
                 return;
@@ -610,7 +610,7 @@
         // set custom data for each node
         setData(nodes, key, value)
         {
-            Core.nodeArray(nodes, false, true, true)
+            this.nodeArray(nodes, false, true, true)
                 .forEach(node => {
                     if ( ! this.nodeData.has(node)) {
                         this.nodeData.set(node, {});
@@ -623,7 +623,7 @@
         // remove custom data for each node
         removeData(nodes, key)
         {
-            Core.nodeArray(nodes, false, true, true)
+            this.nodeArray(nodes, false, true, true)
                 .forEach(node => {
                     if ( ! this.nodeData.has(node)) {
                         return;
@@ -663,7 +663,7 @@
         // get the position of the first element relative to the window (optionally offset)
         position(nodes, offset)
         {
-            const node = Core.nodeFirst(nodes);
+            const node = this.nodeFirst(nodes);
 
             if ( ! node) {
                 return;
@@ -690,7 +690,7 @@
         // get the computed bounding rectangle of the first element
         rect(nodes, offset)
         {
-            const node = Core.nodeFirst(nodes);
+            const node = this.nodeFirst(nodes);
 
             if ( ! node) {
                 return;
@@ -717,7 +717,7 @@
                 return;
             }
 
-            Core.nodeArray(nodes)
+            this.nodeArray(nodes)
                 .forEach(node => {
                     const nodeBox = this.rect(node);
 
@@ -777,7 +777,7 @@
             let closest = null;
             let closestDistance = Number.MAX_VALUE;
 
-            Core.nodeArray(nodes)
+            this.nodeArray(nodes)
                 .forEach(node => {
                     const dist = this.distTo(node, x, y, offset);
                     if (dist && dist < closestDistance) {
@@ -832,7 +832,7 @@
         // scroll each element to an X,Y position
         setScroll(nodes, x, y)
         {
-            Core.nodeArray(nodes, true, true, true)
+            this.nodeArray(nodes, true, true, true)
                 .forEach(node => {
                     if (Core.isWindow(node)) {
                         node.scroll(x, y);
@@ -849,7 +849,7 @@
         // scroll each element to an X position
         setScrollX(nodes, x)
         {
-            Core.nodeArray(nodes, true, true, true)
+            this.nodeArray(nodes, true, true, true)
                 .forEach(node => {
                     if (Core.isWindow(node)) {
                         node.scroll(x, node.scrollY)
@@ -864,7 +864,7 @@
         // scroll each element to a Y position
         setScrollY(nodes, y)
         {
-            Core.nodeArray(nodes, true, true, true)
+            this.nodeArray(nodes, true, true, true)
                 .forEach(node => {
                     if (Core.isWindow(node)) {
                         node.scroll(node.scrollX, y)
@@ -879,7 +879,7 @@
         // get the scroll X position of the first element
         getScrollX(nodes)
         {
-            let node = Core.nodeFirst(nodes, true, true, true);
+            let node = this.nodeFirst(nodes, true, true, true);
 
             if ( ! node) {
                 return;
@@ -899,7 +899,7 @@
         // get the scroll Y position of the first element
         getScrollY(nodes)
         {
-            let node = Core.nodeFirst(nodes, true, true, true);
+            let node = this.nodeFirst(nodes, true, true, true);
 
             if ( ! node) {
                 return;
@@ -924,7 +924,7 @@
         // (and optionally padding, border or margin)
         height(nodes, padding, border, margin)
         {
-            let node = Core.nodeFirst(nodes, true, true, true);
+            let node = this.nodeFirst(nodes, true, true, true);
 
             if ( ! node) {
                 return;
@@ -963,7 +963,7 @@
         // (and optionally padding, border or margin)
         width(nodes, padding, border, margin)
         {
-            let node = Core.nodeFirst(nodes, true, true, true);
+            let node = this.nodeFirst(nodes, true, true, true);
 
             if ( ! node) {
                 return;
@@ -1013,7 +1013,7 @@
                 return;
             }
 
-            Core.nodeArray(nodes)
+            this.nodeArray(nodes)
                 .forEach(node => node.classList.add(...classes));
         },
 
@@ -1026,7 +1026,7 @@
                 return;
             }
 
-            Core.nodeArray(nodes)
+            this.nodeArray(nodes)
                 .forEach(node => node.classList.remove(...classes));
         },
 
@@ -1039,7 +1039,7 @@
                 return;
             }
 
-            Core.nodeArray(nodes)
+            this.nodeArray(nodes)
                 .forEach(node => classes.forEach(className => node.classList.toggle(className)));
         },
 
@@ -1048,7 +1048,7 @@
         // get a style property for the first element
         getStyle(nodes, style)
         {
-            const node = Core.nodeFirst(nodes);
+            const node = this.nodeFirst(nodes);
 
             if ( ! node) {
                 return;
@@ -1080,7 +1080,7 @@
                 value = value + 'px';
             }
 
-            Core.nodeArray(nodes)
+            this.nodeArray(nodes)
                 .forEach(node =>
                     node.style.setProperty(style, value, important ? 'important' : '')
                 );
@@ -1091,7 +1091,7 @@
         // get the computed style for the first element
         css(nodes, style)
         {
-            const node = Core.nodeFirst(nodes);
+            const node = this.nodeFirst(nodes);
 
             if ( ! node) {
                 return;
@@ -1117,7 +1117,7 @@
         // toggle the visibility of each element
         toggle(nodes)
         {
-            Core.nodeArray(nodes)
+            this.nodeArray(nodes)
                 .forEach(node =>
                     this.getStyle(node, 'display') === 'none' ?
                         this.show(node) :
@@ -1142,7 +1142,7 @@
 
             const eventArray = Core.parseEvents(events);
 
-            Core.nodeArray(nodes, true, true, true)
+            this.nodeArray(nodes, true, true, true)
                 .forEach(node => {
                     let realCallback = callback;
 
@@ -1198,7 +1198,7 @@
 
             let eventArray = events ? Core.parseEvents(events) : false;
 
-            Core.nodeArray(nodes, true, true, true)
+            this.nodeArray(nodes, true, true, true)
                 .forEach(node => {
                     if ( ! this.nodeEvents.has(node)) {
                         return;
@@ -1254,7 +1254,7 @@
         // trigger an event on each element
         triggerEvent(nodes, events, data)
         {
-            Core.nodeArray(nodes, true, true, true)
+            this.nodeArray(nodes, true, true, true)
                 .forEach(node =>
                     Core.parseEvents(events).forEach(event => {
                         const realEvent = Core.parseEvent(event);
@@ -1272,7 +1272,7 @@
         // clone all events from each element to other elements
         cloneEvents(nodes, others)
         {
-            Core.nodeArray(nodes, true, true, true)
+            this.nodeArray(nodes, true, true, true)
                 .forEach(node => {
                     if ( ! this.nodeEvents.has(node)) {
                         return;
@@ -1287,7 +1287,7 @@
         // trigger a blur event on the first element
         blur(nodes)
         {
-            const node = Core.nodeFirst(nodes);
+            const node = this.nodeFirst(nodes);
 
             if ( ! node) {
                 return;
@@ -1299,7 +1299,7 @@
         // trigger a click event on the first element
         click(nodes)
         {
-            const node = Core.nodeFirst(nodes);
+            const node = this.nodeFirst(nodes);
 
             if ( ! node) {
                 return;
@@ -1311,7 +1311,7 @@
         // trigger a focus event on the first element
         focus(nodes)
         {
-            const node = Core.nodeFirst(nodes);
+            const node = this.nodeFirst(nodes);
 
             if ( ! node) {
                 return;
@@ -1335,7 +1335,7 @@
         {
             const results = [];
 
-            Core.nodeArray(nodes, false)
+            this.nodeArray(nodes, false)
                 .forEach(node => {
                     const clone = node.cloneNode(deep);
 
@@ -1361,7 +1361,7 @@
         // detach an element from the DOM
         detach(nodes)
         {
-            Core.nodeArray(nodes, false)
+            this.nodeArray(nodes, false)
                 .forEach(node => {
                     if ( ! node.parentNode) {
                         return;
@@ -1403,7 +1403,7 @@
         {
             others = this.parseQuery(others, false);
 
-            Core.nodeArray(nodes, false)
+            this.nodeArray(nodes, false)
                 .forEach(node => {
                     this.before(node, this.clone(others, true));
                     this.remove(node);
@@ -1417,7 +1417,7 @@
         // insert each other node after the first node
         after(nodes, others)
         {
-            const node = Core.nodeFirst(nodes, false);
+            const node = this.nodeFirst(nodes, false);
 
             if ( ! node) {
                 return;
@@ -1441,7 +1441,7 @@
         // insert each other node before the first node
         before(nodes, others)
         {
-            const node = Core.nodeFirst(nodes, false);
+            const node = this.nodeFirst(nodes, false);
 
             if ( ! node) {
                 return;
@@ -1464,7 +1464,7 @@
         // append each other node to the first node
         append(nodes, others)
         {
-            const node = Core.nodeFirst(nodes);
+            const node = this.nodeFirst(nodes);
 
             if ( ! node) {
                 return;
@@ -1483,7 +1483,7 @@
         // prepend each other node to the first node
         prepend(nodes, others)
         {
-            const node = Core.nodeFirst(nodes);
+            const node = this.nodeFirst(nodes);
 
             if ( ! node) {
                 return;
@@ -1507,7 +1507,7 @@
         // unwrap each node (optionally matching a filter)
         unwrap(nodes, filter)
         {
-            Core.nodeArray(nodes, false)
+            this.nodeArray(nodes, false)
                 .forEach(node => {
                     const parent = this.parent(node, filter);
 
@@ -1525,7 +1525,7 @@
         {
             others = this.parseQuery(others);
 
-            Core.nodeArray(nodes, false)
+            this.nodeArray(nodes, false)
                 .forEach(node => {
                     const clone = this.clone(others, true);
                     this.before(node, clone);
@@ -1548,7 +1548,7 @@
         {
             others = this.parseQuery(others);
 
-            Core.nodeArray(nodes, false)
+            this.nodeArray(nodes, false)
                 .forEach(node => {
                     const clone = this.clone(others, true);
                     this.append(node, clone);
@@ -1563,50 +1563,50 @@
         // return all elements matching a filter
         filter(nodes, filter)
         {
-            filter = Core.parseFilter(filter);
+            filter = this.parseFilter(filter);
 
-            return Core.nodeArray(nodes)
+            return this.nodeArray(nodes)
                 .filter((node, index) => ! filter || filter(node, index));
         },
 
         // return the first element matching a filter
         filterOne(nodes, filter)
         {
-            filter = Core.parseFilter(filter);
+            filter = this.parseFilter(filter);
 
-            return Core.nodeArray(nodes)
+            return this.nodeArray(nodes)
                 .find((node, index) => ! filter || filter(node, index)) || null;
         },
 
         // return all elements not matching a filter
         not(nodes, filter)
         {
-            filter = Core.parseFilter(filter);
+            filter = this.parseFilter(filter);
 
-            return Core.nodeArray(nodes)
+            return this.nodeArray(nodes)
                 .filter((node, index) => filter && ! filter(node, index));
         },
 
         // return all elements with a descendent matching a filter
         has(nodes, filter)
         {
-            filter = Core.parseFilterContains(filter);
+            filter = this.parseFilterContains(filter);
 
-            return !! Core.nodeArray(nodes, true, true)
+            return !! this.nodeArray(nodes, true, true)
                 .filter(node => ! filter || filter(node));
         },
 
         // return all hidden elements
         hidden(nodes)
         {
-            return Core.nodeArray(nodes)
+            return this.nodeArray(nodes)
                 .filter(node => this.isHidden(node));
         },
 
         // return all visible elements
         visible(nodes)
         {
-            return Core.nodeArray(nodes)
+            return this.nodeArray(nodes)
                 .filter(node => this.isVisible(node));
         }
 
@@ -1682,7 +1682,7 @@
 
             const results = new Set;
 
-            Core.nodeArray(nodes, true, true)
+            this.nodeArray(nodes, true, true)
                 .forEach(node =>
                     Array.from(node.getElementsByClassName(className))
                         .forEach(result => results.add(result))
@@ -1713,7 +1713,7 @@
 
             const results = new Set;
 
-            Core.nodeArray(nodes, true, true)
+            this.nodeArray(nodes, true, true)
                 .forEach(node => results.add(node.getElementById(id)));
 
             return Core.sortNodes([...results].filter(node => !! node)).shift() || null;
@@ -1729,7 +1729,7 @@
 
             const results = new Set;
 
-            Core.nodeArray(nodes, true, true)
+            this.nodeArray(nodes, true, true)
                 .forEach(node =>
                     Array.from(node.getElementsByTagName(tagName))
                         .forEach(result => results.add(result))
@@ -1749,7 +1749,7 @@
         {
             const results = new Set;
 
-            Core.nodeArray(nodes, true, true)
+            this.nodeArray(nodes, true, true)
                 .forEach(node =>
                     Array.from(node.querySelectorAll(selector))
                         .forEach(result => results.add(result))
@@ -1763,7 +1763,7 @@
         {
             const results = new Set;
 
-            Core.nodeArray(nodes, true, true)
+            this.nodeArray(nodes, true, true)
                 .forEach(node => results.add(node.querySelector(selector)));
 
             return Core.sortNodes([...results].filter(node => !! node)).shift() || null;
@@ -1854,7 +1854,7 @@
                             selectorNode = this.findOne(selectorNode, query);
                         }
 
-                        selectorNode = Core.nodeArray(selectorNode).shift();
+                        selectorNode = this.nodeArray(selectorNode).shift();
                     }
 
                     if (selectorNode) {
@@ -1879,13 +1879,13 @@
         // and optionally matching a filter
         children(nodes, filter, first = false, elementsOnly = true)
         {
-            filter = Core.parseFilter(filter);
+            filter = this.parseFilter(filter);
 
             const results = new Set;
 
-            Core.nodeArray(nodes)
+            this.nodeArray(nodes)
                 .forEach(node =>
-                    Core.nodeArray(node.childNodes, elementsOnly)
+                    this.nodeArray(node.childNodes, elementsOnly)
                         .forEach(child => {
                             if (filter && ! filter(child)) {
                                 return;
@@ -1920,11 +1920,11 @@
         // find the parent of each element matching a filter
         parent(nodes, filter)
         {
-            filter = Core.parseFilter(filter);
+            filter = this.parseFilter(filter);
 
             const results = new Set;
 
-            Core.nodeArray(nodes, false)
+            this.nodeArray(nodes, false)
                 .forEach(node => {
                     if ( ! node.parentNode) {
                         return;
@@ -1948,12 +1948,12 @@
         // and optionally before hitting a limit
         parents(nodes, filter, until, closest = false)
         {
-            filter = Core.parseFilter(filter);
-            until = Core.parseFilter(until);
+            filter = this.parseFilter(filter);
+            until = this.parseFilter(until);
 
             const results = new Set;
 
-            Core.nodeArray(nodes, false)
+            this.nodeArray(nodes, false)
                 .forEach(node => {
                     while (node = node.parentNode) {
                         if (until && until(node)) {
@@ -1988,11 +1988,11 @@
         // find the next sibling for each element matching a filter
         next(nodes, filter)
         {
-            filter = Core.parseFilter(filter);
+            filter = this.parseFilter(filter);
 
             const results = new Set;
 
-            Core.nodeArray(nodes, false)
+            this.nodeArray(nodes, false)
                 .forEach(node => {
                     if ( ! node.nextSibling) {
                         return;
@@ -2016,12 +2016,12 @@
         // and optionally before hitting a limit
         nextAll(nodes, filter, until = false, first = false)
         {
-            filter = Core.parseFilter(filter);
-            until = Core.parseFilter(until);
+            filter = this.parseFilter(filter);
+            until = this.parseFilter(until);
 
             const results = new Set;
 
-            Core.nodeArray(nodes, false)
+            this.nodeArray(nodes, false)
                 .forEach(node => {
                     while (node = node.nextSibling) {
                         if (until && until(node)) {
@@ -2047,11 +2047,11 @@
         // and optionally before hitting a limit
         prev(nodes, filter)
         {
-            filter = Core.parseFilter(filter);
+            filter = this.parseFilter(filter);
 
             const results = new Set;
 
-            Core.nodeArray(nodes, false)
+            this.nodeArray(nodes, false)
                 .forEach(node => {
                     if ( ! node.previousSibling) {
                         return;
@@ -2075,12 +2075,12 @@
         // and optionally before hitting a limit
         prevAll(nodes, filter, until = false, first = false)
         {
-            filter = Core.parseFilter(filter);
-            until = Core.parseFilter(until);
+            filter = this.parseFilter(filter);
+            until = this.parseFilter(until);
 
             const results = new Set;
 
-            Core.nodeArray(nodes, false)
+            this.nodeArray(nodes, false)
                 .forEach(node => {
                     while (node = node.previousSibling) {
                         if (until && until(node)) {
@@ -2105,17 +2105,17 @@
         // find all siblings for each element matching a filter
         siblings(nodes, filter, elementsOnly = true)
         {
-            filter = Core.parseFilter(filter);
+            filter = this.parseFilter(filter);
 
             const results = new Set;
 
-            Core.nodeArray(nodes, false)
+            this.nodeArray(nodes, false)
                 .forEach(node => {
                     if ( ! node.parentNode) {
                         return;
                     }
 
-                    Core.nodeArray(node.parentNode.childNodes, elementsOnly)
+                    this.nodeArray(node.parentNode.childNodes, elementsOnly)
                         .forEach(child => {
                             if (child.isSameNode(node)) {
                                 return;
@@ -2139,7 +2139,7 @@
         // returns true if any of the elements has a specified attribute
         hasAttribute(nodes, attribute)
         {
-            return !! Core.nodeArray(nodes)
+            return !! this.nodeArray(nodes)
                 .find(node => node.hasAttribute(attribute));
         },
 
@@ -2148,60 +2148,60 @@
         {
             classes = Core.parseClasses(classes);
 
-            return !! Core.nodeArray(nodes)
+            return !! this.nodeArray(nodes)
                 .find(node => classes.find(className => node.classList.contains(className)));
         },
 
         // returns true if any of the nodes has custom data
         hasData(nodes, key)
         {
-            return !! Core.nodeArray(nodes, false, true, true)
+            return !! this.nodeArray(nodes, false, true, true)
                 .find(node => this.nodeData.has(node) && ( ! key || this.nodeData.get(node).hasOwnProperty(key)));
         },
 
         // returns true if any of the elements has a specified property
         hasProperty(nodes, property)
         {
-            return !! Core.nodeArray(nodes)
+            return !! this.nodeArray(nodes)
                 .find(node => node.hasOwnProperty(property));
         },
 
         // returns true if any of the elements contains a descendent matching a filter
         contains(nodes, filter)
         {
-            filter = Core.parseFilterContains(filter);
+            filter = this.parseFilterContains(filter);
 
-            return !! Core.nodeArray(nodes, true, true)
+            return !! this.nodeArray(nodes, true, true)
                 .find(node => ! filter || filter(node));
         },
 
         // returns true if any of the elements matches a filter
         is(nodes, filter)
         {
-            filter = Core.parseFilter(filter);
+            filter = this.parseFilter(filter);
 
-            return !! Core.nodeArray(nodes)
+            return !! this.nodeArray(nodes)
                 .find(node => ! filter || filter(node));
         },
 
         // returns true if any of the elements or a parent of any of the elements is "fixed"
         isFixed(nodes)
         {
-            return !! Core.nodeArray(nodes)
+            return !! this.nodeArray(nodes)
                 .find(node => this.css(node, 'position') === 'fixed' || this.closest(node, parent => this.css(parent, 'position') === 'fixed'));
         },
 
         // returns true if any of the elements is hidden
         isHidden(nodes)
         {
-            return !! Core.nodeArray(nodes, false, true)
+            return !! this.nodeArray(nodes, false, true)
                 .find(node => ! Core.isDocument(node) && (Core.isNode(node) && ! node.offsetParent));
         },
 
         // returns true if any of the elements is visible
         isVisible(nodes)
         {
-            return !! Core.nodeArray(nodes, false, true, true)
+            return !! this.nodeArray(nodes, false, true, true)
                 .find(node => Core.isWindow(node) || Core.isDocument(node) || (Core.isNode(node) && node.offsetParent));
         }
 
@@ -2212,7 +2212,7 @@
         // force an element to be shown, and then execute a callback
         forceShow(nodes, callback)
         {
-            const node = Core.nodeFirst(nodes, true, true, true);
+            const node = this.nodeFirst(nodes, true, true, true);
 
             if ( ! node) {
                 return;
@@ -2248,16 +2248,16 @@
         // get the index of the first element matching a filter
         index(nodes, filter)
         {
-            filter = Core.parseFilter(filter);
+            filter = this.parseFilter(filter);
 
-            return Core.nodeArray(nodes)
+            return this.nodeArray(nodes)
                 .findIndex(node => ! filter || filter(node));
         },
 
         // get the index of the first element relative to it's parent element
         indexOf(nodes)
         {
-            const node = Core.nodeFirst(nodes);
+            const node = this.nodeFirst(nodes);
 
             if ( ! node) {
                 return;
@@ -2269,7 +2269,7 @@
         // create a selection on the first node
         select(nodes)
         {
-            const node = Core.nodeFirst(nodes, false);
+            const node = this.nodeFirst(nodes, false);
 
             if (node && node.select) {
                 return node.select();
@@ -2299,7 +2299,7 @@
                 selection.removeAllRanges();
             }
 
-            Core.nodeArray(nodes, false)
+            this.nodeArray(nodes, false)
                 .forEach(node => {
                     const range = this.context.createRange();
                     range.selectNode(node);
@@ -2329,7 +2329,7 @@
         // returns an object containing keys and values of all form elements
         serializeObject(nodes)
         {
-            return Core.nodeArray(nodes)
+            return this.nodeArray(nodes)
                 .reduce((values, node) => {
                     if (node.matches('form')) {
                         Object.assign(values, this.serializeObject(core.find(node, 'input, select, textarea')));
@@ -2482,7 +2482,7 @@
                 return [];
             }
 
-            if (Array.isArray(value)) {
+            if (this.isArray(value)) {
                 return value;
             }
 
@@ -2497,13 +2497,6 @@
             return [value];
         },
 
-        // returns an array of nodes or elements (and optionally document or window)
-        nodeArray(value, elementsOnly = true, allowDocument = false, allowWindow = false)
-        {
-            return this.makeArray(value)
-                .filter(this.nodeFilterFactory(elementsOnly, allowDocument, allowWindow));
-        },
-
         // returns a function for filtering nodes (by element, document or window)
         nodeFilterFactory(elementsOnly = true, allowDocument = false, allowWindow = false)
         {
@@ -2511,14 +2504,7 @@
                 ( ! elementsOnly && this.isNode(node)) ||
                 (elementsOnly && this.isElement(node)) ||
                 (allowDocument && this.isDocument(node)) ||
-                (allowWindow && Core.isWindow(node));
-        },
-
-        // get the first node or element (and optionally document or window)
-        nodeFirst(value, elementsOnly = true, allowDocument = false, allowWindow = false)
-        {
-            return this.makeArray(value)
-                .find(this.nodeFilterFactory(elementsOnly, allowDocument, allowWindow));
+                (allowWindow && this.isWindow(node));
         },
 
         // sorts nodes by their position in the document
@@ -2569,82 +2555,33 @@
             return events.split(' ');
         },
 
-        // returns an element filter function from a function, string, node, node list, element list or array
-        parseFilter(filter) {
-            if ( ! filter) {
-                return false;
-            }
-
-            if (this.isFunction(filter)) {
-                return filter;
-            }
-
-            if (this.isString(filter)) {
-                return node => node.matches(filter);
-            }
-
-            if (this.isNode(filter)) {
-                return node => node.isSameNode(filter);
-            }
-
-            filter = this.nodeArray(filter);
-            if (filter.length) {
-                return node => filter.includes(node);
-            }
-
-            return false;
-        },
-
-        // returns an element contains filter function from a function, string, node, node list, element list or array
-        parseFilterContains(filter)
-        {
-            if ( ! filter) {
-                return false;
-            }
-
-            if (this.isFunction(filter)) {
-                return filter;
-            }
-
-            if (this.isString(filter)) {
-                return node => node.findOne(filter);
-            }
-
-            if (this.isNode(filter)) {
-                return node => node.contains(filter);
-            }
-
-            filter = Core.nodeArray(filter);
-            if (filter.length) {
-                return node => filter.find(other => node.contains(other));
-            }
-
-            return false;
-        },
-
         // returns a URI-encoded attribute string from an array or object
         parseParams(data)
         {
             let values = [];
 
-            if (Array.isArray(data)) {
+            if (this.isArray(data)) {
                 values = data.map(value => this.parseParam(value.name, value.value));
             } else if (this.isObject(data)) {
-                values = Object.keys(data).map(key => this.parseParam(key, data[key]));
+                values = Object.keys(data)
+                    .map(key => this.parseParam(key, data[key]));
             }
 
-            return this.flattenArray(values).map(encodeURI).join('&');
+            return this.flattenArray(values)
+                .map(encodeURI)
+                .join('&');
         },
 
         // returns an array or string of key value pairs from an array, object or string
         parseParam(key, value)
         {
-            if (Array.isArray(value)) {
+            if (this.isArray(value)) {
                 return value.map(val => this.parseParam(key, val));
             }
 
             if (this.isObject(value)) {
-                return Object.keys(value).map(subKey => this.parseParam(key + '[' + subKey + ']', value[subKey]));
+                return Object.keys(value)
+                    .map(subKey => this.parseParam(key + '[' + subKey + ']', value[subKey]));
             }
 
             return key + '=' + value;
@@ -2671,7 +2608,7 @@
         // returns an array of types and selectors from an array or string
         parseSelectors(selectors)
         {
-            if ( ! Array.isArray(selectors)) {
+            if ( ! this.isArray(selectors)) {
                 selectors = selectors.split(this.splitRegex)
                     .filter(selector => selector);
             }
@@ -2682,7 +2619,8 @@
         // returns the subquery selector from a string
         parseSubQuery(selector)
         {
-            return selector.match(this.subRegex).slice(1);
+            return selector.match(this.subRegex)
+                .slice(1);
         }
 
     });
@@ -3117,6 +3055,83 @@
 
     Object.assign(Core.prototype, {
 
+        // returns an element filter function from a function, string, node, node list, element list or array
+        parseFilter(filter) {
+            if ( ! filter) {
+                return false;
+            }
+
+            if (Core.isFunction(filter)) {
+                return filter;
+            }
+
+            if (Core.isString(filter)) {
+                return node => node.matches(filter);
+            }
+
+            if (Core.isNode(filter)) {
+                return node => node.isSameNode(filter);
+            }
+
+            filter = this.nodeArray(filter);
+            if (filter.length) {
+                return node => filter.includes(node);
+            }
+
+            return false;
+        },
+
+        // returns an element contains filter function from a function, string, node, node list, element list or array
+        parseFilterContains(filter)
+        {
+            if ( ! filter) {
+                return false;
+            }
+
+            if (Core.isFunction(filter)) {
+                return filter;
+            }
+
+            if (Core.isString(filter)) {
+                return node => !! this.findOne(node, filter);
+            }
+
+            if (Core.isNode(filter)) {
+                return node => node.contains(filter);
+            }
+
+            filter = this.nodeArray(filter);
+            if (filter.length) {
+                return node => !! filter.find(other => node.contains(other));
+            }
+
+            return false;
+        }
+
+    });
+
+    Object.assign(Core.prototype, {
+
+        nodeArray(value, elementsOnly = true, allowDocument = false, allowWindow = false)
+        {
+            return Core.isString(value) ?
+                this.find(value) :
+                Core.makeArray(value)
+                    .filter(Core.nodeFilterFactory(elementsOnly, allowDocument, allowWindow));
+        },
+
+        nodeFirst(value, elementsOnly = true, allowDocument = false, allowWindow = false)
+        {
+            return Core.isString(value) ?
+                this.findOne(value) :
+                Core.makeArray(value)
+                    .find(Core.nodeFilterFactory(elementsOnly, allowDocument, allowWindow));
+        }
+
+    });
+
+    Object.assign(Core.prototype, {
+
         // returns an array containing nodes parsed from a HTML string
         parseHTML(html)
         {
@@ -3128,15 +3143,11 @@
         // returns an array of nodes from a HTML string, query selector string, node, node list, element list or array
         parseQuery(query, elementsOnly = true, allowDocument = false, allowWindow = false)
         {
-            if (query && ! Core.isString(query)) {
-                return Core.nodeArray(query, elementsOnly, allowDocument, allowWindow);
-            }
-
-            if (query && query.match(Core.htmlRegex)) {
+            if (query && Core.isString(query) && query.match(Core.htmlRegex)) {
                 return this.parseHTML(query);
             }
 
-            return this.find(this.context, query || '*');
+            return this.nodeArray(query || '*', elementsOnly, allowDocument, allowWindow);
         },
 
         // returns a DOM object from an XML string

@@ -7,7 +7,7 @@ Object.assign(Core, {
             return [];
         }
 
-        if (Array.isArray(value)) {
+        if (this.isArray(value)) {
             return value;
         }
 
@@ -22,13 +22,6 @@ Object.assign(Core, {
         return [value];
     },
 
-    // returns an array of nodes or elements (and optionally document or window)
-    nodeArray(value, elementsOnly = true, allowDocument = false, allowWindow = false)
-    {
-        return this.makeArray(value)
-            .filter(this.nodeFilterFactory(elementsOnly, allowDocument, allowWindow));
-    },
-
     // returns a function for filtering nodes (by element, document or window)
     nodeFilterFactory(elementsOnly = true, allowDocument = false, allowWindow = false)
     {
@@ -36,14 +29,7 @@ Object.assign(Core, {
             ( ! elementsOnly && this.isNode(node)) ||
             (elementsOnly && this.isElement(node)) ||
             (allowDocument && this.isDocument(node)) ||
-            (allowWindow && Core.isWindow(node));
-    },
-
-    // get the first node or element (and optionally document or window)
-    nodeFirst(value, elementsOnly = true, allowDocument = false, allowWindow = false)
-    {
-        return this.makeArray(value)
-            .find(this.nodeFilterFactory(elementsOnly, allowDocument, allowWindow));
+            (allowWindow && this.isWindow(node));
     },
 
     // sorts nodes by their position in the document

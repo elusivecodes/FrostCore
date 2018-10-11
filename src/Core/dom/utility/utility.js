@@ -3,7 +3,7 @@ Object.assign(Core.prototype, {
     // force an element to be shown, and then execute a callback
     forceShow(nodes, callback)
     {
-        const node = Core.nodeFirst(nodes, true, true, true);
+        const node = this.nodeFirst(nodes, true, true, true);
 
         if ( ! node) {
             return;
@@ -39,16 +39,16 @@ Object.assign(Core.prototype, {
     // get the index of the first element matching a filter
     index(nodes, filter)
     {
-        filter = Core.parseFilter(filter);
+        filter = this.parseFilter(filter);
 
-        return Core.nodeArray(nodes)
+        return this.nodeArray(nodes)
             .findIndex(node => ! filter || filter(node));
     },
 
     // get the index of the first element relative to it's parent element
     indexOf(nodes)
     {
-        const node = Core.nodeFirst(nodes);
+        const node = this.nodeFirst(nodes);
 
         if ( ! node) {
             return;
@@ -60,7 +60,7 @@ Object.assign(Core.prototype, {
     // create a selection on the first node
     select(nodes)
     {
-        const node = Core.nodeFirst(nodes, false);
+        const node = this.nodeFirst(nodes, false);
 
         if (node && node.select) {
             return node.select();
@@ -90,7 +90,7 @@ Object.assign(Core.prototype, {
             selection.removeAllRanges();
         }
 
-        Core.nodeArray(nodes, false)
+        this.nodeArray(nodes, false)
             .forEach(node => {
                 const range = this.context.createRange();
                 range.selectNode(node);
@@ -120,7 +120,7 @@ Object.assign(Core.prototype, {
     // returns an object containing keys and values of all form elements
     serializeObject(nodes)
     {
-        return Core.nodeArray(nodes)
+        return this.nodeArray(nodes)
             .reduce((values, node) => {
                 if (node.matches('form')) {
                     Object.assign(values, this.serializeObject(core.find(node, 'input, select, textarea')));

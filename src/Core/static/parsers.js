@@ -22,82 +22,33 @@ Object.assign(Core, {
         return events.split(' ');
     },
 
-    // returns an element filter function from a function, string, node, node list, element list or array
-    parseFilter(filter) {
-        if ( ! filter) {
-            return false;
-        }
-
-        if (this.isFunction(filter)) {
-            return filter;
-        }
-
-        if (this.isString(filter)) {
-            return node => node.matches(filter);
-        }
-
-        if (this.isNode(filter)) {
-            return node => node.isSameNode(filter);
-        }
-
-        filter = this.nodeArray(filter);
-        if (filter.length) {
-            return node => filter.includes(node);
-        }
-
-        return false;
-    },
-
-    // returns an element contains filter function from a function, string, node, node list, element list or array
-    parseFilterContains(filter)
-    {
-        if ( ! filter) {
-            return false;
-        }
-
-        if (this.isFunction(filter)) {
-            return filter;
-        }
-
-        if (this.isString(filter)) {
-            return node => node.findOne(filter);
-        }
-
-        if (this.isNode(filter)) {
-            return node => node.contains(filter);
-        }
-
-        filter = Core.nodeArray(filter);
-        if (filter.length) {
-            return node => filter.find(other => node.contains(other));
-        }
-
-        return false;
-    },
-
     // returns a URI-encoded attribute string from an array or object
     parseParams(data)
     {
         let values = [];
 
-        if (Array.isArray(data)) {
+        if (this.isArray(data)) {
             values = data.map(value => this.parseParam(value.name, value.value));
         } else if (this.isObject(data)) {
-            values = Object.keys(data).map(key => this.parseParam(key, data[key]));
+            values = Object.keys(data)
+                .map(key => this.parseParam(key, data[key]));
         }
 
-        return this.flattenArray(values).map(encodeURI).join('&');
+        return this.flattenArray(values)
+            .map(encodeURI)
+            .join('&');
     },
 
     // returns an array or string of key value pairs from an array, object or string
     parseParam(key, value)
     {
-        if (Array.isArray(value)) {
+        if (this.isArray(value)) {
             return value.map(val => this.parseParam(key, val));
         }
 
         if (this.isObject(value)) {
-            return Object.keys(value).map(subKey => this.parseParam(key + '[' + subKey + ']', value[subKey]));
+            return Object.keys(value)
+                .map(subKey => this.parseParam(key + '[' + subKey + ']', value[subKey]));
         }
 
         return key + '=' + value;
@@ -124,7 +75,7 @@ Object.assign(Core, {
     // returns an array of types and selectors from an array or string
     parseSelectors(selectors)
     {
-        if ( ! Array.isArray(selectors)) {
+        if ( ! this.isArray(selectors)) {
             selectors = selectors.split(this.splitRegex)
                 .filter(selector => selector);
         }
@@ -135,7 +86,8 @@ Object.assign(Core, {
     // returns the subquery selector from a string
     parseSubQuery(selector)
     {
-        return selector.match(this.subRegex).slice(1);
+        return selector.match(this.subRegex)
+            .slice(1);
     }
 
 });

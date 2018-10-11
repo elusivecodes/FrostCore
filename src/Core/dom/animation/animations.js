@@ -136,7 +136,7 @@ Object.assign(Core.prototype, {
 
         const animations = [];
 
-        Core.nodeArray(nodes)
+        this.nodeArray(nodes)
             .forEach(node => {
                 this.wrap(node, wrapper);
                 const parent = this.parent(node);
@@ -187,7 +187,7 @@ Object.assign(Core.prototype, {
 
         const animations = [];
 
-        Core.nodeArray(nodes)
+        this.nodeArray(nodes)
             .forEach(node => {
                 this.wrap(node, wrapper);
                 const parent = this.parent(node);

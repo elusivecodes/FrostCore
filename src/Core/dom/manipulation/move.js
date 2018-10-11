@@ -3,7 +3,7 @@ Object.assign(Core.prototype, {
     // insert each other node after the first node
     after(nodes, others)
     {
-        const node = Core.nodeFirst(nodes, false);
+        const node = this.nodeFirst(nodes, false);
 
         if ( ! node) {
             return;
@@ -27,7 +27,7 @@ Object.assign(Core.prototype, {
     // insert each other node before the first node
     before(nodes, others)
     {
-        const node = Core.nodeFirst(nodes, false);
+        const node = this.nodeFirst(nodes, false);
 
         if ( ! node) {
             return;
@@ -50,7 +50,7 @@ Object.assign(Core.prototype, {
     // append each other node to the first node
     append(nodes, others)
     {
-        const node = Core.nodeFirst(nodes);
+        const node = this.nodeFirst(nodes);
 
         if ( ! node) {
             return;
@@ -69,7 +69,7 @@ Object.assign(Core.prototype, {
     // prepend each other node to the first node
     prepend(nodes, others)
     {
-        const node = Core.nodeFirst(nodes);
+        const node = this.nodeFirst(nodes);
 
         if ( ! node) {
             return;

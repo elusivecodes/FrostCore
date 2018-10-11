@@ -10,13 +10,13 @@ Object.assign(Core.prototype, {
     // and optionally matching a filter
     children(nodes, filter, first = false, elementsOnly = true)
     {
-        filter = Core.parseFilter(filter);
+        filter = this.parseFilter(filter);
 
         const results = new Set;
 
-        Core.nodeArray(nodes)
+        this.nodeArray(nodes)
             .forEach(node =>
-                Core.nodeArray(node.childNodes, elementsOnly)
+                this.nodeArray(node.childNodes, elementsOnly)
                     .forEach(child => {
                         if (filter && ! filter(child)) {
                             return;
@@ -51,11 +51,11 @@ Object.assign(Core.prototype, {
     // find the parent of each element matching a filter
     parent(nodes, filter)
     {
-        filter = Core.parseFilter(filter);
+        filter = this.parseFilter(filter);
 
         const results = new Set;
 
-        Core.nodeArray(nodes, false)
+        this.nodeArray(nodes, false)
             .forEach(node => {
                 if ( ! node.parentNode) {
                     return;
@@ -79,12 +79,12 @@ Object.assign(Core.prototype, {
     // and optionally before hitting a limit
     parents(nodes, filter, until, closest = false)
     {
-        filter = Core.parseFilter(filter);
-        until = Core.parseFilter(until);
+        filter = this.parseFilter(filter);
+        until = this.parseFilter(until);
 
         const results = new Set;
 
-        Core.nodeArray(nodes, false)
+        this.nodeArray(nodes, false)
             .forEach(node => {
                 while (node = node.parentNode) {
                     if (until && until(node)) {
@@ -119,11 +119,11 @@ Object.assign(Core.prototype, {
     // find the next sibling for each element matching a filter
     next(nodes, filter)
     {
-        filter = Core.parseFilter(filter);
+        filter = this.parseFilter(filter);
 
         const results = new Set;
 
-        Core.nodeArray(nodes, false)
+        this.nodeArray(nodes, false)
             .forEach(node => {
                 if ( ! node.nextSibling) {
                     return;
@@ -147,12 +147,12 @@ Object.assign(Core.prototype, {
     // and optionally before hitting a limit
     nextAll(nodes, filter, until = false, first = false)
     {
-        filter = Core.parseFilter(filter);
-        until = Core.parseFilter(until);
+        filter = this.parseFilter(filter);
+        until = this.parseFilter(until);
 
         const results = new Set;
 
-        Core.nodeArray(nodes, false)
+        this.nodeArray(nodes, false)
             .forEach(node => {
                 while (node = node.nextSibling) {
                     if (until && until(node)) {
@@ -178,11 +178,11 @@ Object.assign(Core.prototype, {
     // and optionally before hitting a limit
     prev(nodes, filter)
     {
-        filter = Core.parseFilter(filter);
+        filter = this.parseFilter(filter);
 
         const results = new Set;
 
-        Core.nodeArray(nodes, false)
+        this.nodeArray(nodes, false)
             .forEach(node => {
                 if ( ! node.previousSibling) {
                     return;
@@ -206,12 +206,12 @@ Object.assign(Core.prototype, {
     // and optionally before hitting a limit
     prevAll(nodes, filter, until = false, first = false)
     {
-        filter = Core.parseFilter(filter);
-        until = Core.parseFilter(until);
+        filter = this.parseFilter(filter);
+        until = this.parseFilter(until);
 
         const results = new Set;
 
-        Core.nodeArray(nodes, false)
+        this.nodeArray(nodes, false)
             .forEach(node => {
                 while (node = node.previousSibling) {
                     if (until && until(node)) {
@@ -236,17 +236,17 @@ Object.assign(Core.prototype, {
     // find all siblings for each element matching a filter
     siblings(nodes, filter, elementsOnly = true)
     {
-        filter = Core.parseFilter(filter);
+        filter = this.parseFilter(filter);
 
         const results = new Set;
 
-        Core.nodeArray(nodes, false)
+        this.nodeArray(nodes, false)
             .forEach(node => {
                 if ( ! node.parentNode) {
                     return;
                 }
 
-                Core.nodeArray(node.parentNode.childNodes, elementsOnly)
+                this.nodeArray(node.parentNode.childNodes, elementsOnly)
                     .forEach(child => {
                         if (child.isSameNode(node)) {
                             return;

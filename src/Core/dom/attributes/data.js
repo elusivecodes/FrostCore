@@ -3,7 +3,7 @@ Object.assign(Core.prototype, {
     // get custom data for the first node
     getData(nodes, key)
     {
-        const node = Core.nodeFirst(nodes, false, true, true);
+        const node = this.nodeFirst(nodes, false, true, true);
 
         if ( ! node) {
             return;
@@ -25,7 +25,7 @@ Object.assign(Core.prototype, {
     // set custom data for each node
     setData(nodes, key, value)
     {
-        Core.nodeArray(nodes, false, true, true)
+        this.nodeArray(nodes, false, true, true)
             .forEach(node => {
                 if ( ! this.nodeData.has(node)) {
                     this.nodeData.set(node, {});
@@ -38,7 +38,7 @@ Object.assign(Core.prototype, {
     // remove custom data for each node
     removeData(nodes, key)
     {
-        Core.nodeArray(nodes, false, true, true)
+        this.nodeArray(nodes, false, true, true)
             .forEach(node => {
                 if ( ! this.nodeData.has(node)) {
                     return;

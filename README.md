@@ -2,7 +2,7 @@
 
 **FrostCore** is a free, open-source DOM manipulation library for *JavaScript*.
 
-It is heavily inspired by jQuery, but supports both functional and OOP style programming, mutable and immutable Query Sets and many unique features.
+It is heavily inspired by jQuery, but utilizes ES6 syntax including Promises, and supports both functional and OOP style programming, with mutable and immutable Query Sets.
 
 
 ## Table of contents
@@ -37,7 +37,7 @@ It is heavily inspired by jQuery, but supports both functional and OOP style pro
 
 Add an animation to each element.
 
-- `nodes` is a HTMLElement, HTMLCollection, an Array of Elements or a QuerySet object.
+- `nodes` is a Query Selector string, a HTMLElement, HTMLCollection, an Array of Elements or a QuerySet object.
 - `callback` is a function that accepts `node` and `progress` as arguments, where progress is a value between *0* and *1*.
 - `duration` is the number of milliseconds that the animation should last, and will default to *1000*.
 
@@ -49,7 +49,7 @@ core.animate(nodes, callback, duration);
 
 Stop all animations for each element.
 
-- `nodes` is a HTMLElement, HTMLCollection, an Array of Elements or a QuerySet object.
+- `nodes` is a Query Selector string, a HTMLElement, HTMLCollection, an Array of Elements or a QuerySet object.
 - `finish` is a boolean indicating whether to immediately finish the animation, and will default to *true*.
 
 ```
@@ -62,7 +62,7 @@ core.stop(nodes, finish);
 
 Slide each element in or out from the top over a duration.
 
-- `nodes` is a HTMLElement, HTMLCollection, an Array of Elements or a QuerySet object.
+- `nodes` is a Query Selector string, a HTMLElement, HTMLCollection, an Array of Elements or a QuerySet object.
 - `duration` is the number of milliseconds that the animation should last, and will default to *1000*.
 
 This function returns a Promise, that will resolve after the animation has completed.
@@ -74,7 +74,7 @@ core.dropOut(nodes, duration);
 
 Fade the opacity of each element in or out over a duration.
 
-- `nodes` is a HTMLElement, HTMLCollection, an Array of Elements or a QuerySet object.
+- `nodes` is a Query Selector string, a HTMLElement, HTMLCollection, an Array of Elements or a QuerySet object.
 - `duration` is the number of milliseconds that the animation should last, and will default to *1000*.
 
 This function returns a Promise, that will resolve after the animation has completed.
@@ -86,7 +86,7 @@ core.fadeOut(nodes, duration);
 
 Rotate each element in or out on an x y over a duration.
 
-- `nodes` is a HTMLElement, HTMLCollection, an Array of Elements or a QuerySet object.
+- `nodes` is a Query Selector string, a HTMLElement, HTMLCollection, an Array of Elements or a QuerySet object.
 - `x` is the amount of rotation to apply to the X axis, and will default to *0*.
 - `y` is the amount of rotation to apply to the Y axis, and will default to *1*.
 - `inverse` is a boolean indicating whether to rotate in the opposite direction, and will default to *false*.
@@ -101,7 +101,7 @@ core.rotateOut(nodes, x, y, inverse, duration);
 
 Slide each element into or out of place to a direction over a duration.
 
-- `nodes` is a HTMLElement, HTMLCollection, an Array of Elements or a QuerySet object.
+- `nodes` is a Query Selector string, a HTMLElement, HTMLCollection, an Array of Elements or a QuerySet object.
 - `direction` is one of: 'top', 'right', 'bottom' or 'left' indicating the direction to slide to, and will default to *bottom*.
 - `duration` is the number of milliseconds that the animation should last, and will default to *1000*.
 
@@ -114,7 +114,7 @@ core.slideOut(nodes, direction, duration);
 
 Squeeze each element into or out of place to a direction over a duration.
 
-- `nodes` is a HTMLElement, HTMLCollection, an Array of Elements or a QuerySet object.
+- `nodes` is a Query Selector string, a HTMLElement, HTMLCollection, an Array of Elements or a QuerySet object.
 - `direction` is one of: 'top', 'right', 'bottom' or 'left' indicating the direction to squeeze to, and will default to *bottom*.
 - `duration` is the number of milliseconds that the animation should last, and will default to *1000*.
 
@@ -131,7 +131,7 @@ core.squeezeOut(nodes, direction, duration);
 
 Queue a callback on each element.
 
-- `nodes` is a HTMLElement, HTMLCollection, an Array of Elements or a QuerySet object.
+- `nodes` is a Query Selector string, a HTMLElement, HTMLCollection, an Array of Elements or a QuerySet object.
 - `callback` is a function that accepts `node` as an argument.
 
 ```
@@ -140,7 +140,7 @@ core.queue(nodes, callback);
 
 Clear the queue for each element.
 
-- `nodes` is a HTMLElement, HTMLCollection, an Array of Elements or a QuerySet object.
+- `nodes` is a Query Selector string, a HTMLElement, HTMLCollection, an Array of Elements or a QuerySet object.
 
 ```
 core.clearQueue(nodes);
@@ -156,7 +156,7 @@ core.clearQueue(nodes);
 
 Get an attribute value for the first element.
 
-- `nodes` is a HTMLElement, HTMLCollection, an Array of Elements or a QuerySet object.
+- `nodes` is a Query Selector string, a HTMLElement, HTMLCollection, an Array of Elements or a QuerySet object.
 - `attribute` is a string indicating the attribute value to return.
 
 ```
@@ -165,7 +165,7 @@ const attr = core.getAttribute(nodes, attribute);
 
 Set attributes for each element.
 
-- `nodes` is a HTMLElement, HTMLCollection, an Array of Elements or a QuerySet object.
+- `nodes` is a Query Selector string, a HTMLElement, HTMLCollection, an Array of Elements or a QuerySet object.
 - `attribute` is a string indicating the attribute value to set.
 - `value` is the value you want to set the attribute to.
 
@@ -178,7 +178,7 @@ core.setAttribute(nodes, attribute, value);
 
 Remove an attribute from each element.
 
-- `nodes` is a HTMLElement, HTMLCollection, an Array of Elements or a QuerySet object.
+- `nodes` is a Query Selector string, a HTMLElement, HTMLCollection, an Array of Elements or a QuerySet object.
 - `attribute` is a string indicating the attribute value to remove.
 
 ```
@@ -189,7 +189,7 @@ core.removeAttribute(nodes, attribute);
 
 Get a dataset value for the first element.
 
-- `nodes` is a HTMLElement, HTMLCollection, an Array of Elements or a QuerySet object.
+- `nodes` is a Query Selector string, a HTMLElement, HTMLCollection, an Array of Elements or a QuerySet object.
 - `key` is a string indicating the dataset value to return.
 
 If the `key` argument is omitted, an object containing all dataset values will be returned instead.
@@ -201,7 +201,7 @@ const keyDataset = core.getDataset(nodes, key);
 
 Set dataset values for each element.
 
-- `nodes` is a HTMLElement, HTMLCollection, an Array of Elements or a QuerySet object.
+- `nodes` is a Query Selector string, a HTMLElement, HTMLCollection, an Array of Elements or a QuerySet object.
 - `key` is a string indicating the dataset value to set.
 - `value` is the value you want to set the dataset to.
 
@@ -213,7 +213,7 @@ core.setDataset(nodes, key, value);
 
 Get the HTML contents of the first element.
 
-- `nodes` is a HTMLElement, HTMLCollection, an Array of Elements or a QuerySet object.
+- `nodes` is a Query Selector string, a HTMLElement, HTMLCollection, an Array of Elements or a QuerySet object.
 
 ```
 const html = core.getHTML(nodes);
@@ -221,7 +221,7 @@ const html = core.getHTML(nodes);
 
 Set the HTML contents for each element.
 
-- `nodes` is a HTMLElement, HTMLCollection, an Array of Elements or a QuerySet object.
+- `nodes` is a Query Selector string, a HTMLElement, HTMLCollection, an Array of Elements or a QuerySet object.
 - `html` is a string that will become the HTML contents of the element.
 
 ```
@@ -232,7 +232,7 @@ core.setHTML(nodes, html);
 
 Get a property value for the first element.
 
-- `nodes` is a HTMLElement, HTMLCollection, an Array of Elements or a QuerySet object.
+- `nodes` is a Query Selector string, a HTMLElement, HTMLCollection, an Array of Elements or a QuerySet object.
 - `property` is a string indicating the property value to return.
 
 ```
@@ -241,7 +241,7 @@ const prop = core.getProperty(nodes, property);
 
 Set property values for each element.
 
-- `nodes` is a HTMLElement, HTMLCollection, an Array of Elements or a QuerySet object.
+- `nodes` is a Query Selector string, a HTMLElement, HTMLCollection, an Array of Elements or a QuerySet object.
 - `property` is a string indicating the property value to set.
 - `value` is the value you want to set the property to.
 
@@ -254,7 +254,7 @@ core.setProperty(nodes, property, value);
 
 Remove a property from each element.
 
-- `nodes` is a HTMLElement, HTMLCollection, an Array of Elements or a QuerySet object.
+- `nodes` is a Query Selector string, a HTMLElement, HTMLCollection, an Array of Elements or a QuerySet object.
 - `property` is a string indicating the property value to remove.
 
 ```
@@ -265,7 +265,7 @@ core.removeProperty(nodes, property);
 
 Get the text contents of the first element.
 
-- `nodes` is a HTMLElement, HTMLCollection, an Array of Elements or a QuerySet object.
+- `nodes` is a Query Selector string, a HTMLElement, HTMLCollection, an Array of Elements or a QuerySet object.
 
 ```
 const text = core.getText(nodes);
@@ -273,7 +273,7 @@ const text = core.getText(nodes);
 
 Set the text contents for each element.
 
-- `nodes` is a HTMLElement, HTMLCollection, an Array of Elements or a QuerySet object.
+- `nodes` is a Query Selector string, a HTMLElement, HTMLCollection, an Array of Elements or a QuerySet object.
 - `text` is a string that will become the text contents of the element.
 
 ```
@@ -284,7 +284,7 @@ core.setText(nodes, text);
 
 Get the value property of the first element.
 
-- `nodes` is a HTMLElement, HTMLCollection, an Array of Elements or a QuerySet object.
+- `nodes` is a Query Selector string, a HTMLElement, HTMLCollection, an Array of Elements or a QuerySet object.
 
 ```
 const val = core.getValue(nodes);
@@ -292,7 +292,7 @@ const val = core.getValue(nodes);
 
 Set the value property for each element.
 
-- `nodes` is a HTMLElement, HTMLCollection, an Array of Elements or a QuerySet object.
+- `nodes` is a Query Selector string, a HTMLElement, HTMLCollection, an Array of Elements or a QuerySet object.
 - `value` is a string that will become the value of the element.
 
 ```
@@ -305,7 +305,7 @@ core.setValue(nodes, value);
 
 Get custom data for the first node.
 
-- `nodes` is a Window, Document, Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object.
+- `nodes` is a Query Selector string, a Window, Document, Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object.
 - `key` is a string indicating the custom data value to return.
 
 If the `key` argument is omitted, an object containing all custom data values will be returned instead.
@@ -317,7 +317,7 @@ const keyData = core.getData(nodes, key);
 
 Set custom data for each node.
 
-- `nodes` is a Window, Document, Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object.
+- `nodes` is a Query Selector string, a Window, Document, Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object.
 - `key` is a string indicating the custom data value to set.
 - `value` is the value you want to set the attribute to.
 
@@ -327,7 +327,7 @@ core.setData(nodes, key, value);
 
 Remove custom data for each node.
 
-- `nodes` is a Window, Document, Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object.
+- `nodes` is a Query Selector string, a Window, Document, Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object.
 - `key` is a string indicating the custom data value to remove.
 
 ```
@@ -340,7 +340,7 @@ core.removeData(nodes, key);
 
 Get the X,Y co-ordinates for the center of the first element.
 
-- `nodes` is a HTMLElement, HTMLCollection, an Array of Elements or a QuerySet object.
+- `nodes` is a Query Selector string, a HTMLElement, HTMLCollection, an Array of Elements or a QuerySet object.
 - `offset` is a boolean indicating whether the co-ordinates should be offset from the top left of the document, and will default to *false*.
 
 ```
@@ -349,7 +349,7 @@ const center = core.center(nodes, offset);
 
 Get the X,Y position of the first element.
 
-- `nodes` is a HTMLElement, HTMLCollection, an Array of Elements or a QuerySet object.
+- `nodes` is a Query Selector string, a HTMLElement, HTMLCollection, an Array of Elements or a QuerySet object.
 - `offset` is a boolean indicating whether the co-ordinates should be offset from the top left of the document, and will default to *false*.
 
 ```
@@ -358,7 +358,7 @@ const pos = core.position(nodes, offset);
 
 Get the computed bounding rectangle of the first element.
 
-- `nodes` is a HTMLElement, HTMLCollection, an Array of Elements or a QuerySet object.
+- `nodes` is a Query Selector string, a HTMLElement, HTMLCollection, an Array of Elements or a QuerySet object.
 - `offset` is a boolean indicating whether the rectangle should be offset from the top left of the document, and will default to *false*.
 
 ```
@@ -367,8 +367,8 @@ const rect = core.rect(nodes, offset);
 
 Constrain each element to a container element.
 
-- `nodes` is a HTMLElement, HTMLCollection, an Array of Elements or a QuerySet object.
-- `container` is a HTMLElement, HTMLCollection, an Array of Elements or a QuerySet object.
+- `nodes` is a Query Selector string, a HTMLElement, HTMLCollection, an Array of Elements or a QuerySet object.
+- `container` is a Query Selector string, a HTMLElement, HTMLCollection, an Array of Elements or a QuerySet object.
 
 ```
 core.constrain(nodes, container);
@@ -376,7 +376,7 @@ core.constrain(nodes, container);
 
 Get the distance of the first element to an X,Y position.
 
-- `nodes` is a HTMLElement, HTMLCollection, an Array of Elements or a QuerySet object.
+- `nodes` is a Query Selector string, a HTMLElement, HTMLCollection, an Array of Elements or a QuerySet object.
 - `x` is a distance (in pixels) along the X axis.
 - `y` is a distance (in pixels) along the Y axis.
 - `offset` is a boolean indicating whether the co-ordinates should be offset from the top left of the document, and will default to *false*.
@@ -387,8 +387,8 @@ const dist = core.distTo(nodes, x, y, offset);
 
 Get the distance between two elements.
 
-- `nodes` is a HTMLElement, HTMLCollection, an Array of Elements or a QuerySet object.
-- `others` is a HTMLElement, HTMLCollection, an Array of Elements or a QuerySet object.
+- `nodes` is a Query Selector string, a HTMLElement, HTMLCollection, an Array of Elements or a QuerySet object.
+- `others` is a Query Selector string, a HTMLElement, HTMLCollection, an Array of Elements or a QuerySet object.
 
 ```
 const dist = core.distToNode(nodes, others);
@@ -396,7 +396,7 @@ const dist = core.distToNode(nodes, others);
 
 Get the nearest element to an X,Y position.
 
-- `nodes` is a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object.
+- `nodes` is a Query Selector string, a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object.
 - `x` is a distance (in pixels) along the X axis.
 - `y` is a distance (in pixels) along the Y axis.
 - `offset` is a boolean indicating whether the co-ordinates should be offset from the top left of the document, and will default to *false*.
@@ -407,8 +407,8 @@ const nearest = core.nearestTo(nodes, x, y, offset);
 
 Get the nearest element to another element.
 
-- `nodes` is a HTMLElement, HTMLCollection, an Array of Elements or a QuerySet object.
-- `others` is a HTMLElement, HTMLCollection, an Array of Elements or a QuerySet object.
+- `nodes` is a Query Selector string, a HTMLElement, HTMLCollection, an Array of Elements or a QuerySet object.
+- `others` is a Query Selector string, a HTMLElement, HTMLCollection, an Array of Elements or a QuerySet object.
 
 ```
 const nearest = core.nearestToNode(nodes, others);
@@ -416,7 +416,7 @@ const nearest = core.nearestToNode(nodes, others);
 
 Get the percentage of an X co-ordinate relative to the first element.
 
-- `nodes` is a HTMLElement, HTMLCollection, an Array of Elements or a QuerySet object.
+- `nodes` is a Query Selector string, a HTMLElement, HTMLCollection, an Array of Elements or a QuerySet object.
 - `x` is a distance (in pixels) along the X axis.
 - `offset` is a boolean indicating whether the co-ordinates should be offset from the top left of the document, and will default to *false*.
 
@@ -426,7 +426,7 @@ const pX = core.percentX(nodes, x, offset);
 
 Get the percentage of a Y co-ordinate relative to the first element.
 
-- `nodes` is a HTMLElement, HTMLCollection, an Array of Elements or a QuerySet object.
+- `nodes` is a Query Selector string, a HTMLElement, HTMLCollection, an Array of Elements or a QuerySet object.
 - `y` is a distance (in pixels) along the Y axis.
 - `offset` is a boolean indicating whether the co-ordinates should be offset from the top left of the document, and will default to *false*.
 
@@ -440,7 +440,7 @@ const pY = core.percentY(nodes, y, offset);
 
 Scroll each element to an X,Y position.
 
-- `nodes` is a Window, Document, HTMLElement, HTMLCollection, an Array of Elements or a QuerySet object.
+- `nodes` is a Query Selector string, a Window, Document, HTMLElement, HTMLCollection, an Array of Elements or a QuerySet object.
 - `x` is a distance (in pixels) along the X axis to scroll to.
 - `y` is a distance (in pixels) along the Y axis to scroll to.
 
@@ -450,7 +450,7 @@ core.setScroll(nodes, x, y);
 
 Scroll each element to an X position.
 
-- `nodes` is a Window, Document, HTMLElement, HTMLCollection, an Array of Elements or a QuerySet object.
+- `nodes` is a Query Selector string, a Window, Document, HTMLElement, HTMLCollection, an Array of Elements or a QuerySet object.
 - `x` is a distance (in pixels) along the X axis to scroll to.
 
 ```
@@ -459,7 +459,7 @@ core.setScrollX(nodes, x);
 
 Scroll each element to a Y position.
 
-- `nodes` is a Window, Document, HTMLElement, HTMLCollection, an Array of Elements or a QuerySet object.
+- `nodes` is a Query Selector string, a Window, Document, HTMLElement, HTMLCollection, an Array of Elements or a QuerySet object.
 - `y` is a distance (in pixels) along the Y axis to scroll to.
 
 ```
@@ -468,7 +468,7 @@ core.setScrollY(nodes, y);
 
 Get the scroll X position of the first element.
 
-- `nodes` is a Window, Document, HTMLElement, HTMLCollection, an Array of Elements or a QuerySet object.
+- `nodes` is a Query Selector string, a Window, Document, HTMLElement, HTMLCollection, an Array of Elements or a QuerySet object.
 
 ```
 const scrollX = core.getScrollX(nodes);
@@ -476,7 +476,7 @@ const scrollX = core.getScrollX(nodes);
 
 Get the scroll Y position of the first element.
 
-- `nodes` is a Window, Document, HTMLElement, HTMLCollection, an Array of Elements or a QuerySet object.
+- `nodes` is a Query Selector string, a Window, Document, HTMLElement, HTMLCollection, an Array of Elements or a QuerySet object.
 
 ```
 const scrollY = core.getScrollY(nodes);
@@ -488,7 +488,7 @@ const scrollY = core.getScrollY(nodes);
 
 Get the computed height of the first element (and optionally padding, border or margin).
 
-- `nodes` is a Window, Document, HTMLElement, HTMLCollection, an Array of Elements or a QuerySet object.
+- `nodes` is a Query Selector string, a Window, Document, HTMLElement, HTMLCollection, an Array of Elements or a QuerySet object.
 - `padding` is a boolean indicating whether to include padding in the calculation, and the default is *false*.
 - `border` is a boolean indicating whether to include border width in the calculation, and the default is *false*.
 - `margin` is a boolean indicating whether to include the margin in the calculation, and the default is *false*.
@@ -499,7 +499,7 @@ const height = core.height(nodes, padding, border, margin);
 
 Get the computed width of the first element (and optionally padding, border or margin).
 
-- `nodes` is a Window, Document, HTMLElement, HTMLCollection, an Array of Elements or a QuerySet object.
+- `nodes` is a Query Selector string, a Window, Document, HTMLElement, HTMLCollection, an Array of Elements or a QuerySet object.
 - `padding` is a boolean indicating whether to include padding in the calculation, and the default is *false*.
 - `border` is a boolean indicating whether to include border width in the calculation, and the default is *false*.
 - `margin` is a boolean indicating whether to include the margin in the calculation, and the default is *false*.
@@ -514,7 +514,7 @@ const width = core.width(nodes, padding, border, margin);
 
 Add a class or classes to each element.
 
-- `nodes` is a HTMLElement, HTMLCollection, an Array of Elements or a QuerySet object.
+- `nodes` is a Query Selector string, a HTMLElement, HTMLCollection, an Array of Elements or a QuerySet object.
 - `classes` is an Array of classes, or a space seperated string of class names.
 
 ```
@@ -523,7 +523,7 @@ core.addClass(nodes, ...classes);
 
 Remove a class or classes from each element.
 
-- `nodes` is a HTMLElement, HTMLCollection, an Array of Elements or a QuerySet object.
+- `nodes` is a Query Selector string, a HTMLElement, HTMLCollection, an Array of Elements or a QuerySet object.
 - `classes` is an Array of classes, or a space seperated string of class names.
 
 ```
@@ -532,7 +532,7 @@ core.removeClass(nodes, ...classes);
 
 Toggle a class or classes for each element.
 
-- `nodes` is a HTMLElement, HTMLCollection, an Array of Elements or a QuerySet object.
+- `nodes` is a Query Selector string, a HTMLElement, HTMLCollection, an Array of Elements or a QuerySet object.
 - `classes` is an Array of classes, or a space seperated string of class names.
 
 ```
@@ -543,7 +543,7 @@ core.toggleClass(nodes, ...classes);
 
 Get a style property for the first element.
 
-- `nodes` is a HTMLElement, HTMLCollection, an Array of Elements or a QuerySet object.
+- `nodes` is a Query Selector string, a HTMLElement, HTMLCollection, an Array of Elements or a QuerySet object.
 - `style` is a string indicating the style property value to return.
 
 ```
@@ -552,7 +552,7 @@ const style = core.getStyle(nodes, style);
 
 Set style properties for each element.
 
-- `nodes` is a HTMLElement, HTMLCollection, an Array of Elements or a QuerySet object.
+- `nodes` is a Query Selector string, a HTMLElement, HTMLCollection, an Array of Elements or a QuerySet object.
 - `style` is a string indicating the style property value to set.
 - `value` is the value you wish to set the style property to.
 - `important` is a boolean indicating the style should be set as important, and will default to *false*.
@@ -566,7 +566,7 @@ core.setStyle(nodes, style, value, important);
 
 Get the computed style for the first element.
 
-- `nodes` is a HTMLElement, HTMLCollection, an Array of Elements or a QuerySet object.
+- `nodes` is a Query Selector string, a HTMLElement, HTMLCollection, an Array of Elements or a QuerySet object.
 - `style` is a string indicating the computed style property value to return.
 
 ```
@@ -577,7 +577,7 @@ const css = core.css(nodes, style);
 
 Hide each element from display.
 
-- `nodes` is a HTMLElement, HTMLCollection, an Array of Elements or a QuerySet object.
+- `nodes` is a Query Selector string, a HTMLElement, HTMLCollection, an Array of Elements or a QuerySet object.
 
 ```
 core.hide(nodes);
@@ -585,7 +585,7 @@ core.hide(nodes);
 
 Display each hidden element.
 
-- `nodes` is a HTMLElement, HTMLCollection, an Array of Elements or a QuerySet object.
+- `nodes` is a Query Selector string, a HTMLElement, HTMLCollection, an Array of Elements or a QuerySet object.
 
 ```
 core.show(nodes);
@@ -593,7 +593,7 @@ core.show(nodes);
 
 Toggle the visibility of each element.
 
-- `nodes` is a HTMLElement, HTMLCollection, an Array of Elements or a QuerySet object.
+- `nodes` is a Query Selector string, a HTMLElement, HTMLCollection, an Array of Elements or a QuerySet object.
 
 ```
 core.toggle(nodes);
@@ -605,7 +605,7 @@ core.toggle(nodes);
 
 Add an event to each element.
 
-- `nodes` is a Window, Document, HTMLElement, HTMLCollection, an Array of Elements or a QuerySet object.
+- `nodes` is a Query Selector string, a Window, Document, HTMLElement, HTMLCollection, an Array of Elements or a QuerySet object.
 - `events` is a space-separated string of events to attach to the elements.
 - `callback` is a function that accepts an event argument, which will be called when the event is triggered.
 
@@ -618,7 +618,7 @@ core.addEvent(nodes, events, delegate, callback);
 
 Add a self-destructing event to each element.
 
-- `nodes` is a Window, Document, HTMLElement, HTMLCollection, an Array of Elements or a QuerySet object.
+- `nodes` is a Query Selector string, a Window, Document, HTMLElement, HTMLCollection, an Array of Elements or a QuerySet object.
 - `events` is a space-separated string of events to attach to the elements.
 - `callback` is a function that accepts an event argument, which will be called when the event is triggered.
 
@@ -631,7 +631,7 @@ core.addEventOnce(nodes, events, delegate, callback);
 
 Remove an event from each element.
 
-- `nodes` is a Window, Document, HTMLElement, HTMLCollection, an Array of Elements or a QuerySet object.
+- `nodes` is a Query Selector string, a Window, Document, HTMLElement, HTMLCollection, an Array of Elements or a QuerySet object.
 - `events` is a space-separated string of events to remove from the elements.
 - `callback` is a function that accepts an event argument, which will be called when the event is triggered.
 
@@ -642,7 +642,7 @@ core.removeEvent(nodes, events, delegate, callback);
 
 Trigger an event on each element.
 
-- `nodes` is a Window, Document, HTMLElement, HTMLCollection, an Array of Elements or a QuerySet object.
+- `nodes` is a Query Selector string, a Window, Document, HTMLElement, HTMLCollection, an Array of Elements or a QuerySet object.
 - `events` is a space-separated string of events to trigger on the elements.
 
 ```
@@ -651,8 +651,8 @@ core.triggerEvent(nodes, events, data);
 
 Clone all events from each element to other elements.
 
-- `nodes` is a Window, Document, HTMLElement, HTMLCollection, an Array of Elements or a QuerySet object.
-- `others` is a Window, Document, HTMLElement, HTMLCollection, an Array of Elements or a QuerySet object.
+- `nodes` is a Query Selector string, a Window, Document, HTMLElement, HTMLCollection, an Array of Elements or a QuerySet object.
+- `others` is a Query Selector string, a Window, Document, HTMLElement, HTMLCollection, an Array of Elements or a QuerySet object.
 
 ```
 core.cloneEvents(nodes, others);
@@ -660,7 +660,7 @@ core.cloneEvents(nodes, others);
 
 Trigger a blur event on the first element.
 
-- `nodes` is a HTMLElement, HTMLCollection, an Array of Elements or a QuerySet object.
+- `nodes` is a Query Selector string, a HTMLElement, HTMLCollection, an Array of Elements or a QuerySet object.
 
 ```
 core.blur(nodes);
@@ -668,7 +668,7 @@ core.blur(nodes);
 
 Trigger a click event on the first element.
 
-- `nodes` is a HTMLElement, HTMLCollection, an Array of Elements or a QuerySet object.
+- `nodes` is a Query Selector string, a HTMLElement, HTMLCollection, an Array of Elements or a QuerySet object.
 
 ```
 core.click(nodes);
@@ -676,7 +676,7 @@ core.click(nodes);
 
 Trigger a focus event on the first element.
 
-- `nodes` is a HTMLElement, HTMLCollection, an Array of Elements or a QuerySet object.
+- `nodes` is a Query Selector string, a HTMLElement, HTMLCollection, an Array of Elements or a QuerySet object.
 
 ```
 core.focus(nodes);
@@ -698,7 +698,7 @@ const element = core.create(tagName);
 
 Clone each node (optionally deep, and with events and data).
 
-- `nodes` is a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object.
+- `nodes` is a Query Selector string, a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object.
 - `deep` is a boolean indicating whether you wish to clone all descendent elements, and will default to *true*.
 - `eventsDate` is a boolean indicating whether you wish to clone all events and data to the new nodes, and will default to *false*.
 
@@ -708,7 +708,7 @@ const clones = core.clone(nodes, deep, eventsData);
 
 Detach an element from the DOM.
 
-- `nodes` is a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object.
+- `nodes` is a Query Selector string, a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object.
 
 ```
 core.detach(nodes);
@@ -716,7 +716,7 @@ core.detach(nodes);
 
 Remove all children of each node from the DOM.
 
-- `nodes` is a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object.
+- `nodes` is a Query Selector string, a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object.
 
 ```
 core.empty(nodes);
@@ -724,7 +724,7 @@ core.empty(nodes);
 
 Remove each node from the DOM.
 
-- `nodes` is a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object.
+- `nodes` is a Query Selector string, a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object.
 - `deep` is a boolean indicating whether to also remove all descendent elements, and will default to *true*.
 
 ```
@@ -734,7 +734,7 @@ core.remove(nodes, deep);
 Replace each other node with nodes.
 
 - `nodes` is a Query Selector string, a HTML string, a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object.
-- `others` is a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object.
+- `others` is a Query Selector string, a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object.
 
 ```
 core.replaceAll(nodes, others);
@@ -742,7 +742,7 @@ core.replaceAll(nodes, others);
 
 Replace each node with other nodes.
 
-- `nodes` is a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object.
+- `nodes` is a Query Selector string, a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object.
 - `others` is a Query Selector string, a HTML string, a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object.
 
 ```
@@ -755,7 +755,7 @@ core.replaceWith(nodes, others);
 
 Insert each other node after the first node.
 
-- `nodes` is a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object.
+- `nodes` is a Query Selector string, a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object.
 - `others` is a Query Selector string, a HTML string, a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object.
 
 ```
@@ -765,7 +765,7 @@ core.after(nodes, others);
 Insert each node after the first other node.
 
 - `nodes` is a Query Selector string, a HTML string, a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object.
-- `others` is a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object.
+- `others` is a Query Selector string, a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object.
 
 ```
 core.insertAfter(nodes, others);
@@ -773,7 +773,7 @@ core.insertAfter(nodes, others);
 
 Insert each other node before the first node.
 
-- `nodes` is a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object.
+- `nodes` is a Query Selector string, a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object.
 - `others` is a Query Selector string, a HTML string, a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object.
 
 ```
@@ -783,7 +783,7 @@ core.before(nodes, others);
 Insert each node before the first other node.
 
 - `nodes` is a Query Selector string, a HTML string, a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object.
-- `others` is a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object.
+- `others` is a Query Selector string, a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object.
 
 ```
 core.insertBefore(nodes, others);
@@ -791,7 +791,7 @@ core.insertBefore(nodes, others);
 
 Append each other node to the first node.
 
-- `nodes` is a HTMLElement, HTMLCollection, an Array of Elements or a QuerySet object.
+- `nodes` is a Query Selector string, a HTMLElement, HTMLCollection, an Array of Elements or a QuerySet object.
 - `others` is a Query Selector string, a HTML string, a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object.
 
 ```
@@ -801,7 +801,7 @@ core.append(nodes, others);
 Append each node to the first other node.
 
 - `nodes` is a Query Selector string, a HTML string, a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object.
-- `others` is a HTMLElement, HTMLCollection, an Array of Elements or a QuerySet object.
+- `others` is a Query Selector string, a HTMLElement, HTMLCollection, an Array of Elements or a QuerySet object.
 
 ```
 core.appendTo(nodes, others);
@@ -809,7 +809,7 @@ core.appendTo(nodes, others);
 
 Prepend each other node to the first node.
 
-- `nodes` is a HTMLElement, HTMLCollection, an Array of Elements or a QuerySet object.
+- `nodes` is a Query Selector string, a HTMLElement, HTMLCollection, an Array of Elements or a QuerySet object.
 - `others` is a Query Selector string, a HTML string, a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object.
 
 ```
@@ -819,7 +819,7 @@ core.prepend(nodes, others);
 Prepend each node to the first other node.
 
 - `nodes` is a Query Selector string, a HTML string, a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object.
-- `others` is a HTMLElement, HTMLCollection, an Array of Elements or a QuerySet object.
+- `others` is a Query Selector string, a HTMLElement, HTMLCollection, an Array of Elements or a QuerySet object.
 
 ```
 core.prependTo(nodes, others);
@@ -831,7 +831,7 @@ core.prependTo(nodes, others);
 
 Unwrap each node.
 
-- `nodes` is a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object.
+- `nodes` is a Query Selector string, a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object.
 - `filter` is either a function that accepts a node argument, a standard CSS selector, a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object that must match the parent of each node for it to be unwrapped.
 
 ```
@@ -840,7 +840,7 @@ core.unwrap(nodes, filter);
 
 Wrap each nodes with other nodes.
 
-- `nodes` is a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object.
+- `nodes` is a Query Selector string, a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object.
 - `others` is a Query Selector string, a HTML string, a HTMLElement, HTMLCollection, an Array of Elements or a QuerySet object.
 
 ```
@@ -849,7 +849,7 @@ core.wrap(nodes, others);
 
 Wrap all nodes with other nodes.
 
-- `nodes` is a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object.
+- `nodes` is a Query Selector string, a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object.
 - `others` is a Query Selector string, a HTML string, a HTMLElement, HTMLCollection, an Array of Elements or a QuerySet object.
 
 ```
@@ -858,7 +858,7 @@ core.wrapAll(nodes, others);
 
 Wrap the contents of each node with other nodes.
 
-- `nodes` is a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object.
+- `nodes` is a Query Selector string, a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object.
 - `others` is a Query Selector string, a HTML string, a HTMLElement, HTMLCollection, an Array of Elements or a QuerySet object.
 
 ```
@@ -873,7 +873,7 @@ core.wrapInner(nodes, others);
 
 Return all elements matching a filter.
 
-- `nodes` is a HTMLElement, HTMLCollection, an Array of Elements or a QuerySet object.
+- `nodes` is a Query Selector string, a HTMLElement, HTMLCollection, an Array of Elements or a QuerySet object.
 - `filter` is either a function that accepts a node argument, a standard CSS selector, a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object that the nodes will be filtered by.
 
 ```
@@ -882,7 +882,7 @@ const filtered = core.filter(nodes, filter);
 
 Return the first element matching a filter.
 
-- `nodes` is a HTMLElement, HTMLCollection, an Array of Elements or a QuerySet object.
+- `nodes` is a Query Selector string, a HTMLElement, HTMLCollection, an Array of Elements or a QuerySet object.
 - `filter` is either a function that accepts a node argument, a standard CSS selector, a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object that the nodes will be filtered by.
 
 ```
@@ -891,7 +891,7 @@ const filtered = core.filterOne(nodes, filter);
 
 Return all elements not matching a filter.
 
-- `nodes` is a HTMLElement, HTMLCollection, an Array of Elements or a QuerySet object.
+- `nodes` is a Query Selector string, a HTMLElement, HTMLCollection, an Array of Elements or a QuerySet object.
 - `filter` is either a function that accepts a node argument, a standard CSS selector, a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object that the nodes will be filtered by.
 
 ```
@@ -900,7 +900,7 @@ const filtered = core.not(nodes, filter);
 
 Return all elements with a descendent matching a filter.
 
-- `nodes` is a Document, HTMLElement, HTMLCollection, an Array of Elements or a QuerySet object.
+- `nodes` is a Query Selector string, a Document, HTMLElement, HTMLCollection, an Array of Elements or a QuerySet object.
 - `filter` is either a function that accepts a node argument, a standard CSS selector, a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object that the nodes will be filtered by.
 
 ```
@@ -909,7 +909,7 @@ const filtered = core.has(nodes, filter);
 
 Return all hidden elements.
 
-- `nodes` is a HTMLElement, HTMLCollection, an Array of Elements or a QuerySet object.
+- `nodes` is a Query Selector string, a HTMLElement, HTMLCollection, an Array of Elements or a QuerySet object.
 
 ```
 const filtered = core.hidden(nodes);
@@ -917,7 +917,7 @@ const filtered = core.hidden(nodes);
 
 Return all visible elements.
 
-- `nodes` is a HTMLElement, HTMLCollection, an Array of Elements or a QuerySet object.
+- `nodes` is a Query Selector string, a HTMLElement, HTMLCollection, an Array of Elements or a QuerySet object.
 
 ```
 const filtered = core.visible(nodes);
@@ -929,7 +929,7 @@ const filtered = core.visible(nodes);
 
 Find all elements matching a selector.
 
-- `nodes` is a Document, HTMLElement, HTMLCollection, an Array of Elements or a QuerySet object.
+- `nodes` is a Query Selector string, a Document, HTMLElement, HTMLCollection, an Array of Elements or a QuerySet object.
 - `selectors` is an Array or comma-seperated list of standard CSS selectors to search for.
 
 ```
@@ -939,7 +939,7 @@ const descendents = core.find(nodes, selectors);
 
 Find a single element matching a selector.
 
-- `nodes` is a Document, HTMLElement, HTMLCollection, an Array of Elements or a QuerySet object.
+- `nodes` is a Query Selector string, a Document, HTMLElement, HTMLCollection, an Array of Elements or a QuerySet object.
 - `selectors` is an Array or comma-seperated list of standard CSS selectors to search for.
 
 ```
@@ -949,7 +949,7 @@ const descendent = core.findOne(nodes, selectors);
 
 Find all elements with a specific class.
 
-- `nodes` is a Document, HTMLElement, HTMLCollection, an Array of Elements or a QuerySet object.
+- `nodes` is a Query Selector string, a Document, HTMLElement, HTMLCollection, an Array of Elements or a QuerySet object.
 - `className` is a string indicating the class name to search for.
 
 ```
@@ -959,7 +959,7 @@ const descendents = core.findByClass(nodes, className);
 
 Find the first element with a specific class.
 
-- `nodes` is a Document, HTMLElement, HTMLCollection, an Array of Elements or a QuerySet object.
+- `nodes` is a Query Selector string, a Document, HTMLElement, HTMLCollection, an Array of Elements or a QuerySet object.
 - `className` is a string indicating the class name to search for.
 
 ```
@@ -969,7 +969,7 @@ const descendent = core.findOneByClass(nodes, className);
 
 Find all elements with a specific ID.
 
-- `nodes` is a Document, HTMLElement, HTMLCollection, an Array of Elements or a QuerySet object.
+- `nodes` is a Query Selector string, a Document, HTMLElement, HTMLCollection, an Array of Elements or a QuerySet object.
 - `id` is a string indicating the id to search for.
 
 ```
@@ -979,7 +979,7 @@ const descendents = core.findById(nodes, id);
 
 Find the first element with a specific ID.
 
-- `nodes` is a Document, HTMLElement, HTMLCollection, an Array of Elements or a QuerySet object.
+- `nodes` is a Query Selector string, a Document, HTMLElement, HTMLCollection, an Array of Elements or a QuerySet object.
 - `id` is a string indicating the id to search for.
 
 ```
@@ -989,7 +989,7 @@ const descendent = core.findOneById(nodes, id);
 
 Find all elements with a specific tag.
 
-- `nodes` is a Document, HTMLElement, HTMLCollection, an Array of Elements or a QuerySet object.
+- `nodes` is a Query Selector string, a Document, HTMLElement, HTMLCollection, an Array of Elements or a QuerySet object.
 - `tagName` is a string indicating the tag name to search for.
 
 ```
@@ -999,7 +999,7 @@ const descendents = core.findByTag(nodes, tagName);
 
 Find the first element with a specific tag.
 
-- `nodes` is a Document, HTMLElement, HTMLCollection, an Array of Elements or a QuerySet object.
+- `nodes` is a Query Selector string, a Document, HTMLElement, HTMLCollection, an Array of Elements or a QuerySet object.
 - `tagName` is a string indicating the tag name to search for.
 
 ```
@@ -1012,7 +1012,7 @@ const descendent = core.findOneByTag(nodes, tagName);
 
 Find the first child of each element matching a filter.
 
-- `nodes` is a HTMLElement, HTMLCollection, an Array of Elements or a QuerySet object.
+- `nodes` is a Query Selector string, a HTMLElement, HTMLCollection, an Array of Elements or a QuerySet object.
 - `filter` is either a function that accepts a node argument, a standard CSS selector, a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object that the nodes will be filtered by.
 
 ```
@@ -1022,7 +1022,7 @@ const child = core.child(nodes, filter);
 
 Find all children of each element, and optionally matching a filter.
 
-- `nodes` is a HTMLElement, HTMLCollection, an Array of Elements or a QuerySet object.
+- `nodes` is a Query Selector string, a HTMLElement, HTMLCollection, an Array of Elements or a QuerySet object.
 - `filter` is either a function that accepts a node argument, a standard CSS selector, a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object that the nodes will be filtered by.
 
 ```
@@ -1032,7 +1032,7 @@ const children = core.children(nodes, filter);
 
 Find all child nodes for each element, (including text and comment nodes).
 
-- `nodes` is a HTMLElement, HTMLCollection, an Array of Elements or a QuerySet object.
+- `nodes` is a Query Selector string, a HTMLElement, HTMLCollection, an Array of Elements or a QuerySet object.
 
 ```
 const contents = core.contents(nodes);
@@ -1040,7 +1040,7 @@ const contents = core.contents(nodes);
 
 Find the closest ancestor to each element matching a filter, and optionally before hitting a limit.
 
-- `nodes` is a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object.
+- `nodes` is a Query Selector string, a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object.
 - `filter` is either a function that accepts a node argument, a standard CSS selector, a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object that the nodes will be filtered by.
 - `until` is either a function that accepts a node argument, a standard CSS selector, a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object that when matched will stop the search.
 
@@ -1050,7 +1050,7 @@ const closest = core.closest(nodes, filter, until);
 
 Find the parent of each element matching a filter.
 
-- `nodes` is a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object.
+- `nodes` is a Query Selector string, a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object.
 - `filter` is either a function that accepts a node argument, a standard CSS selector, a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object that the nodes will be filtered by.
 
 ```
@@ -1059,7 +1059,7 @@ const parent = core.parent(nodes, filter);
 
 Find all parents of each element matching a filter, and optionally before hitting a limit.
 
-- `nodes` is a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object.
+- `nodes` is a Query Selector string, a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object.
 - `filter` is either a function that accepts a node argument, a standard CSS selector, a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object that the nodes will be filtered by.
 - `until` is either a function that accepts a node argument, a standard CSS selector, a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object that when matched will stop the search.
 
@@ -1069,7 +1069,7 @@ const parents = core.parents(nodes, filter, until);
 
 Find the offset parent (relatively positioned) of the first element.
 
-- `nodes` is a HTMLElement, HTMLCollection, an Array of Elements or a QuerySet object.
+- `nodes` is a Query Selector string, a HTMLElement, HTMLCollection, an Array of Elements or a QuerySet object.
 
 ```
 const offsetParent = core.offsetParent(nodes);
@@ -1077,7 +1077,7 @@ const offsetParent = core.offsetParent(nodes);
 
 Find the next sibling for each element matching a filter.
 
-- `nodes` is a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object.
+- `nodes` is a Query Selector string, a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object.
 - `filter` is either a function that accepts a node argument, a standard CSS selector, a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object that the nodes will be filtered by.
 
 ```
@@ -1086,7 +1086,7 @@ const next = core.next(nodes, filter);
 
 Find all next siblings for each element matching a filter, and optionally before hitting a limit.
 
-- `nodes` is a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object.
+- `nodes` is a Query Selector string, a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object.
 - `filter` is either a function that accepts a node argument, a standard CSS selector, a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object that the nodes will be filtered by.
 - `until` is either a function that accepts a node argument, a standard CSS selector, a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object that when matched will stop the search.
 
@@ -1096,7 +1096,7 @@ const nextAll = core.nextAll(nodes, filter, until);
 
 Find the previous sibling for each element matching a filter, and optionally before hitting a limit.
 
-- `nodes` is a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object.
+- `nodes` is a Query Selector string, a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object.
 - `filter` is either a function that accepts a node argument, a standard CSS selector, a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object that the nodes will be filtered by.
 
 ```
@@ -1105,7 +1105,7 @@ const prev = core.prev(nodes, filter);
 
 Find all previous siblings for each element matching a filter, and optionally before hitting a limit.
 
-- `nodes` is a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object.
+- `nodes` is a Query Selector string, a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object.
 - `filter` is either a function that accepts a node argument, a standard CSS selector, a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object that the nodes will be filtered by.
 - `until` is either a function that accepts a node argument, a standard CSS selector, a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object that when matched will stop the search.
 
@@ -1115,7 +1115,7 @@ const prevAll = core.prevAll(nodes, filter, until);
 
 Find all siblings for each element matching a filter.
 
-- `nodes` is a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object.
+- `nodes` is a Query Selector string, a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object.
 - `filter` is either a function that accepts a node argument, a standard CSS selector, a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object that the nodes will be filtered by.
 
 ```
@@ -1130,7 +1130,7 @@ const siblings = core.siblings(nodes, filter);
 
 Returns true if any of the elements has a specified attribute.
 
-- `nodes` is a HTMLElement, HTMLCollection, an Array of Elements or a QuerySet object.
+- `nodes` is a Query Selector string, a HTMLElement, HTMLCollection, an Array of Elements or a QuerySet object.
 - `attribute` is a string indicating the attribute value to test for.
 
 ```
@@ -1139,7 +1139,7 @@ core.hasAttribute(nodes, attribute);
 
 Returns true if any of the elements has any of the specified classes.
 
-- `nodes` is a HTMLElement, HTMLCollection, an Array of Elements or a QuerySet object.
+- `nodes` is a Query Selector string, a HTMLElement, HTMLCollection, an Array of Elements or a QuerySet object.
 - `classes` is an Array of classes, or a space seperated string of class names to test for.
 
 ```
@@ -1148,7 +1148,7 @@ core.hasClass(nodes, ...classes);
 
 Returns true if any of the nodes has custom data.
 
-- `nodes` is a Window, Document, Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object.
+- `nodes` is a Query Selector string, a Window, Document, Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object.
 - `key` is a string indicating the custom data value to test for.
 
 ```
@@ -1158,7 +1158,7 @@ core.hasData(nodes, key);
 
 Returns true if any of the elements has a specified property.
 
-- `nodes` is a HTMLElement, HTMLCollection, an Array of Elements or a QuerySet object.
+- `nodes` is a Query Selector string, a HTMLElement, HTMLCollection, an Array of Elements or a QuerySet object.
 - `property` is a string indicating the property value to test for.
 
 ```
@@ -1167,7 +1167,7 @@ core.hasProperty(nodes, property);
 
 Returns true if any of the elements contains a descendent matching a filter.
 
-- `nodes` is a Document, HTMLElement, HTMLCollection, an Array of Elements or a QuerySet object.
+- `nodes` is a Query Selector string, a Document, HTMLElement, HTMLCollection, an Array of Elements or a QuerySet object.
 - `filter` is either a function that accepts a node argument, a standard CSS selector, a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object that the nodes will be tested for.
 
 ```
@@ -1176,7 +1176,7 @@ core.contains(nodes, filter);
 
 Returns true if any of the elements matches a filter.
 
-- `nodes` is a HTMLElement, HTMLCollection, an Array of Elements or a QuerySet object.
+- `nodes` is a Query Selector string, a HTMLElement, HTMLCollection, an Array of Elements or a QuerySet object.
 - `filter` is either a function that accepts a node argument, a standard CSS selector, a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object that the nodes will be tested for.
 
 ```
@@ -1185,7 +1185,7 @@ core.is(nodes, filter);
 
 Returns true if any of the elements or a parent of any of the elements is "fixed".
 
-- `nodes` is a HTMLElement, HTMLCollection, an Array of Elements or a QuerySet object.
+- `nodes` is a Query Selector string, a HTMLElement, HTMLCollection, an Array of Elements or a QuerySet object.
 
 ```
 core.isFixed(nodes);
@@ -1193,7 +1193,7 @@ core.isFixed(nodes);
 
 Returns true if any of the elements is hidden.
 
-- `nodes` is a Document, Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object.
+- `nodes` is a Query Selector string, a Document, Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object.
 
 ```
 core.isHidden(nodes);
@@ -1201,7 +1201,7 @@ core.isHidden(nodes);
 
 Returns true if any of the elements is visible.
 
-- `nodes` is a Window, Document, Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object.
+- `nodes` is a Query Selector string, a Window, Document, Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object.
 
 ```
 core.isVisible(nodes);
@@ -1212,7 +1212,7 @@ core.isVisible(nodes);
 
 Force an element to be temporarily shown, and then execute a callback.
 
-- `nodes` is a Window, Document, HTMLElement, HTMLCollection, an Array of Elements or a QuerySet object.
+- `nodes` is a Query Selector string, a Window, Document, HTMLElement, HTMLCollection, an Array of Elements or a QuerySet object.
 - `callback` is a function that accepts a node as a parameter.
 
 ```
@@ -1221,7 +1221,7 @@ core.forceShow(nodes, callback);
 
 Get the index of the first element matching a filter.
 
-- `nodes` is a HTMLElement, HTMLCollection, an Array of Elements or a QuerySet object.
+- `nodes` is a Query Selector string, a HTMLElement, HTMLCollection, an Array of Elements or a QuerySet object.
 - `filter` is either a function that accepts a node argument, a standard CSS selector, a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object that the nodes will be filtered by.
 
 ```
@@ -1230,7 +1230,7 @@ const index = core.index(nodes, filter);
 
 Get the index of the first element relative to it's parent element.
 
-- `nodes` is a HTMLElement, HTMLCollection, an Array of Elements or a QuerySet object.
+- `nodes` is a Query Selector string, a HTMLElement, HTMLCollection, an Array of Elements or a QuerySet object.
 
 ```
 const indexOf = core.indexOf(nodes);
@@ -1238,7 +1238,7 @@ const indexOf = core.indexOf(nodes);
 
 Create a selection on the first node.
 
-- `nodes` is a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object.
+- `nodes` is a Query Selector string, a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object.
 
 ```
 core.select(nodes);
@@ -1246,7 +1246,7 @@ core.select(nodes);
 
 Create a selection on all nodes.
 
-- `nodes` is a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object.
+- `nodes` is a Query Selector string, a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object.
 
 ```
 core.selectAll(nodes);
@@ -1254,7 +1254,7 @@ core.selectAll(nodes);
 
 Returns a serialized string containing names and values of all form elements.
 
-- `nodes` is a HTMLElement, HTMLCollection, an Array of Elements or a QuerySet object.
+- `nodes` is a Query Selector string, a HTMLElement, HTMLCollection, an Array of Elements or a QuerySet object.
 
 ```
 const serialize = core.serialize(nodes);
@@ -1262,7 +1262,7 @@ const serialize = core.serialize(nodes);
 
 Returns a serialized array containing names and values of all form elements.
 
-- `nodes` is a HTMLElement, HTMLCollection, an Array of Elements or a QuerySet object.
+- `nodes` is a Query Selector string, a HTMLElement, HTMLCollection, an Array of Elements or a QuerySet object.
 
 ```
 const serialArray = core.serializeArray(nodes);
@@ -1270,7 +1270,7 @@ const serialArray = core.serializeArray(nodes);
 
 Returns an object containing Key/Value pairs of all form elements.
 
-- `nodes` is a HTMLElement, HTMLCollection, an Array of Elements or a QuerySet object.
+- `nodes` is a Query Selector string, a HTMLElement, HTMLCollection, an Array of Elements or a QuerySet object.
 
 ```
 const serialObject = core.serializeObject(nodes);

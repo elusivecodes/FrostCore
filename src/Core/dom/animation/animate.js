@@ -6,7 +6,7 @@ Object.assign(Core.prototype, {
         const start = Date.now();
         const promises = [];
 
-        Core.nodeArray(nodes)
+        this.nodeArray(nodes)
             .forEach(node => {
                 if ( ! this.animations.has(node)) {
                     this.animations.set(node, []);
@@ -47,7 +47,7 @@ Object.assign(Core.prototype, {
     // stop all animations for each element
     stop(nodes, finish = true)
     {
-        Core.nodeArray(nodes)
+        this.nodeArray(nodes)
             .forEach(node => {
                 if ( ! this.animations.has(node)) {
                     return;

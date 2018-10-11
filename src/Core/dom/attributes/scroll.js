@@ -3,7 +3,7 @@ Object.assign(Core.prototype, {
     // scroll each element to an X,Y position
     setScroll(nodes, x, y)
     {
-        Core.nodeArray(nodes, true, true, true)
+        this.nodeArray(nodes, true, true, true)
             .forEach(node => {
                 if (Core.isWindow(node)) {
                     node.scroll(x, y);
@@ -20,7 +20,7 @@ Object.assign(Core.prototype, {
     // scroll each element to an X position
     setScrollX(nodes, x)
     {
-        Core.nodeArray(nodes, true, true, true)
+        this.nodeArray(nodes, true, true, true)
             .forEach(node => {
                 if (Core.isWindow(node)) {
                     node.scroll(x, node.scrollY)
@@ -35,7 +35,7 @@ Object.assign(Core.prototype, {
     // scroll each element to a Y position
     setScrollY(nodes, y)
     {
-        Core.nodeArray(nodes, true, true, true)
+        this.nodeArray(nodes, true, true, true)
             .forEach(node => {
                 if (Core.isWindow(node)) {
                     node.scroll(node.scrollX, y)
@@ -50,7 +50,7 @@ Object.assign(Core.prototype, {
     // get the scroll X position of the first element
     getScrollX(nodes)
     {
-        let node = Core.nodeFirst(nodes, true, true, true);
+        let node = this.nodeFirst(nodes, true, true, true);
 
         if ( ! node) {
             return;
@@ -70,7 +70,7 @@ Object.assign(Core.prototype, {
     // get the scroll Y position of the first element
     getScrollY(nodes)
     {
-        let node = Core.nodeFirst(nodes, true, true, true);
+        let node = this.nodeFirst(nodes, true, true, true);
 
         if ( ! node) {
             return;

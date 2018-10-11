@@ -3,7 +3,7 @@ Object.assign(Core.prototype, {
     // queue a callback on each element
     queue(nodes, callback)
     {
-        Core.nodeArray(nodes)
+        this.nodeArray(nodes)
             .forEach(node => {
                 const newQueue = ! this.queues.has(node);
                 if (newQueue) {
@@ -21,7 +21,7 @@ Object.assign(Core.prototype, {
     // clear the queue of each element
     clearQueue(nodes)
     {
-        Core.nodeArray(nodes)
+        this.nodeArray(nodes)
             .forEach(node => {
                 if ( ! this.queues.has(node)) {
                     return;
@@ -34,7 +34,7 @@ Object.assign(Core.prototype, {
     // run the next queued callback for each element
     _dequeue(nodes)
     {
-        Core.nodeArray(nodes)
+        this.nodeArray(nodes)
             .forEach(node => {
                 if ( ! this.queues.has(node)) {
                     return;

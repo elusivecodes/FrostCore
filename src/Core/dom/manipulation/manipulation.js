@@ -11,7 +11,7 @@ Object.assign(Core.prototype, {
     {
         const results = [];
 
-        Core.nodeArray(nodes, false)
+        this.nodeArray(nodes, false)
             .forEach(node => {
                 const clone = node.cloneNode(deep);
 
@@ -37,7 +37,7 @@ Object.assign(Core.prototype, {
     // detach an element from the DOM
     detach(nodes)
     {
-        Core.nodeArray(nodes, false)
+        this.nodeArray(nodes, false)
             .forEach(node => {
                 if ( ! node.parentNode) {
                     return;
@@ -79,7 +79,7 @@ Object.assign(Core.prototype, {
     {
         others = this.parseQuery(others, false);
 
-        Core.nodeArray(nodes, false)
+        this.nodeArray(nodes, false)
             .forEach(node => {
                 this.before(node, this.clone(others, true));
                 this.remove(node);

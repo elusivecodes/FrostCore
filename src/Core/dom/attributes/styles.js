@@ -11,7 +11,7 @@ Object.assign(Core.prototype, {
             return;
         }
 
-        Core.nodeArray(nodes)
+        this.nodeArray(nodes)
             .forEach(node => node.classList.add(...classes));
     },
 
@@ -24,7 +24,7 @@ Object.assign(Core.prototype, {
             return;
         }
 
-        Core.nodeArray(nodes)
+        this.nodeArray(nodes)
             .forEach(node => node.classList.remove(...classes));
     },
 
@@ -37,7 +37,7 @@ Object.assign(Core.prototype, {
             return;
         }
 
-        Core.nodeArray(nodes)
+        this.nodeArray(nodes)
             .forEach(node => classes.forEach(className => node.classList.toggle(className)));
     },
 
@@ -46,7 +46,7 @@ Object.assign(Core.prototype, {
     // get a style property for the first element
     getStyle(nodes, style)
     {
-        const node = Core.nodeFirst(nodes);
+        const node = this.nodeFirst(nodes);
 
         if ( ! node) {
             return;
@@ -78,7 +78,7 @@ Object.assign(Core.prototype, {
             value = value + 'px';
         }
 
-        Core.nodeArray(nodes)
+        this.nodeArray(nodes)
             .forEach(node =>
                 node.style.setProperty(style, value, important ? 'important' : '')
             );
@@ -89,7 +89,7 @@ Object.assign(Core.prototype, {
     // get the computed style for the first element
     css(nodes, style)
     {
-        const node = Core.nodeFirst(nodes);
+        const node = this.nodeFirst(nodes);
 
         if ( ! node) {
             return;
@@ -115,7 +115,7 @@ Object.assign(Core.prototype, {
     // toggle the visibility of each element
     toggle(nodes)
     {
-        Core.nodeArray(nodes)
+        this.nodeArray(nodes)
             .forEach(node =>
                 this.getStyle(node, 'display') === 'none' ?
                     this.show(node) :

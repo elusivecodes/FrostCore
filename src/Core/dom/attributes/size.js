@@ -4,7 +4,7 @@ Object.assign(Core.prototype, {
     // (and optionally padding, border or margin)
     height(nodes, padding, border, margin)
     {
-        let node = Core.nodeFirst(nodes, true, true, true);
+        let node = this.nodeFirst(nodes, true, true, true);
 
         if ( ! node) {
             return;
@@ -43,7 +43,7 @@ Object.assign(Core.prototype, {
     // (and optionally padding, border or margin)
     width(nodes, padding, border, margin)
     {
-        let node = Core.nodeFirst(nodes, true, true, true);
+        let node = this.nodeFirst(nodes, true, true, true);
 
         if ( ! node) {
             return;

@@ -68,7 +68,7 @@ Object.assign(Core.prototype, {
 
         const results = new Set;
 
-        Core.nodeArray(nodes, true, true)
+        this.nodeArray(nodes, true, true)
             .forEach(node =>
                 Array.from(node.getElementsByClassName(className))
                     .forEach(result => results.add(result))
@@ -99,7 +99,7 @@ Object.assign(Core.prototype, {
 
         const results = new Set;
 
-        Core.nodeArray(nodes, true, true)
+        this.nodeArray(nodes, true, true)
             .forEach(node => results.add(node.getElementById(id)));
 
         return Core.sortNodes([...results].filter(node => !! node)).shift() || null;
@@ -115,7 +115,7 @@ Object.assign(Core.prototype, {
 
         const results = new Set;
 
-        Core.nodeArray(nodes, true, true)
+        this.nodeArray(nodes, true, true)
             .forEach(node =>
                 Array.from(node.getElementsByTagName(tagName))
                     .forEach(result => results.add(result))
@@ -135,7 +135,7 @@ Object.assign(Core.prototype, {
     {
         const results = new Set;
 
-        Core.nodeArray(nodes, true, true)
+        this.nodeArray(nodes, true, true)
             .forEach(node =>
                 Array.from(node.querySelectorAll(selector))
                     .forEach(result => results.add(result))
@@ -149,7 +149,7 @@ Object.assign(Core.prototype, {
     {
         const results = new Set;
 
-        Core.nodeArray(nodes, true, true)
+        this.nodeArray(nodes, true, true)
             .forEach(node => results.add(node.querySelector(selector)));
 
         return Core.sortNodes([...results].filter(node => !! node)).shift() || null;
@@ -240,7 +240,7 @@ Object.assign(Core.prototype, {
                         selectorNode = this.findOne(selectorNode, query);
                     }
 
-                    selectorNode = Core.nodeArray(selectorNode).shift();
+                    selectorNode = this.nodeArray(selectorNode).shift();
                 }
 
                 if (selectorNode) {
