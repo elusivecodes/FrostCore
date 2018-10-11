@@ -125,12 +125,10 @@ Object.assign(Core.prototype, {
     // import A CSS Stylesheet file
     loadStyle(stylesheet)
     {
-        const head = this.findOne('head');
-
         const link = this.create('link');
         this.setAttribute(link, 'rel', 'stylesheet');
         this.setAttribute(link, 'href', stylesheet);
-        this.append(head, link);
+        this.append(this.findOne('head'), link);
     },
 
     // import multiple CSS Stylesheet files

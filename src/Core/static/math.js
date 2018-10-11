@@ -1,15 +1,15 @@
 Object.assign(Core, {
 
     // clamp a value between a min and max
-    clamp(val, min = 0, max = 1)
+    clamp(value, min = 0, max = 1)
     {
-        return Math.max(min, Math.min(max, val));
+        return Math.max(min, Math.min(max, value));
     },
 
     // clamp a value between 0 and 100
-    clampPercent(val)
+    clampPercent(value)
     {
-        return this.clamp(val, 0, 100);
+        return this.clamp(value, 0, 100);
     },
 
     // get the distance between two vectors
@@ -25,59 +25,9 @@ Object.assign(Core, {
     },
 
     // linear interpolation from one value to another
-    lerp(a, b, amount)
+    lerp(min, max, amount)
     {
-        return a * (1 - amount) + b * amount;
-    },
-
-    // get the linear percent of a value in a specified range
-    linearPercent(a, b, value)
-    {
-        if (a === b) {
-            return 0;
-        }
-
-        return this.clampPercent(100 * (value - a) / (b - a));
-    },
-
-    // get the linear value of a percent in a specified range
-    linearValue(a, b, percent)
-    {
-        return this.clamp(
-            a + (percent / 100 * (b - a)),
-            a,
-            b
-        );
-    },
-
-    // get the logarithmic percent of a value in a specified range
-    logPercent(a, b, value)
-    {
-        if (a === b) {
-            return 0;
-        }
-
-        const min = a ?
-            Math.log(a) :
-            0;
-
-        return this.clampPercent(
-            100 * ((value ? Math.log(value) : 0) - min) / (Math.log(b) - min)
-        );
-    },
-
-    // get the logarithmic value of a percent in a specified range
-    logValue(a, b, percent)
-    {
-        const min = a ?
-            Math.log(a) :
-            0;
-
-        return this.clamp(
-            Math.exp(min + (Math.log(b) - min) * percent / 100),
-            a,
-            b
-        );
+        return min * (1 - amount) + max * amount;
     },
 
     // map a value from one range to another
@@ -90,6 +40,56 @@ Object.assign(Core, {
     toStep(value, step)
     {
         return Math.round(value / step) * step;
+    },
+
+    // get the linear percent of a value in a specified range
+    linearPercent(value, min, max)
+    {
+        if (min === max) {
+            return 0;
+        }
+
+        return this.clampPercent(100 * (value - min) / (max - min));
+    },
+
+    // get the linear value of a percent in a specified range
+    linearValue(percent, min, max)
+    {
+        return this.clamp(
+            min + (percent / 100 * (max - min)),
+            min,
+            max
+        );
+    },
+
+    // get the logarithmic percent of a value in a specified range
+    logPercent(value, min, max)
+    {
+        if (min === max) {
+            return 0;
+        }
+
+        min = min ?
+            Math.log(min) :
+            0;
+
+        return this.clampPercent(
+            100 * ((value ? Math.log(value) : 0) - min) / (Math.log(max) - min)
+        );
+    },
+
+    // get the logarithmic value of a percent in a specified range
+    logValue(percent, min, max)
+    {
+        min = min ?
+            Math.log(min) :
+            0;
+
+        return this.clamp(
+            Math.exp(min + (Math.log(max) - min) * percent / 100),
+            min,
+            max
+        );
     }
 
 });

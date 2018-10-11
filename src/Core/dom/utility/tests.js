@@ -19,15 +19,15 @@ Object.assign(Core.prototype, {
     // returns true if any of the nodes has custom data
     hasData(nodes, key)
     {
-        return !! Core.nodeArray(nodes, false)
+        return !! Core.nodeArray(nodes, false, true, true)
             .find(node => this.nodeData.has(node) && ( ! key || this.nodeData.get(node).hasOwnProperty(key)));
     },
 
     // returns true if any of the elements has a specified property
-    hasProperty(nodes, prop)
+    hasProperty(nodes, property)
     {
         return !! Core.nodeArray(nodes)
-            .find(node => node.hasOwnProperty(prop));
+            .find(node => node.hasOwnProperty(property));
     },
 
     // returns true if any of the elements contains a descendent matching a filter
@@ -40,7 +40,7 @@ Object.assign(Core.prototype, {
     },
 
     // returns true if any of the elements matches a filter
-    is(filter)
+    is(nodes, filter)
     {
         filter = Core.parseFilter(filter);
 

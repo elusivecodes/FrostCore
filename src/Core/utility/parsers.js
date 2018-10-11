@@ -1,10 +1,10 @@
 Object.assign(Core.prototype, {
 
     // returns an array containing nodes parsed from a HTML string
-    parseHTML(string)
+    parseHTML(html)
     {
         const container = this.create('template');
-        this.html(container, string);
+        this.html(container, html);
         return this.contents(container);
     },
 
@@ -23,10 +23,10 @@ Object.assign(Core.prototype, {
     },
 
     // returns a DOM object from an XML string
-    parseXML(string)
+    parseXML(xml)
     {
-        const parser = new DOMParser();
-        return parser.parseFromString(string, 'application/xml');
+        const parser = new DOMParser;
+        return parser.parseFromString(xml, 'application/xml');
     }
 
 });

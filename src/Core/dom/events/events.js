@@ -59,57 +59,6 @@ Object.assign(Core.prototype, {
         return this.addEvent(nodes, events, delegate, callback, true);
     },
 
-    // trigger a blur event on the first element
-    blur(nodes)
-    {
-        const node = Core.nodeFirst(nodes);
-
-        if ( ! node) {
-            return;
-        }
-
-        node.blur();
-    },
-
-    // trigger a click event on the first element
-    click(nodes)
-    {
-        const node = Core.nodeFirst(nodes);
-
-        if ( ! node) {
-            return;
-        }
-
-        node.click();
-    },
-
-    // clone all events from each element to other elements
-    cloneEvents(nodes, others)
-    {
-        Core.nodeArray(nodes, true, true, true)
-            .forEach(node => {
-                if ( ! this.nodeEvents.has(node)) {
-                    return;
-                }
-
-                this.nodeEvents.get(node).forEach(eventData => {
-                    this.addEvent(others, eventData.event, eventData.delegate, eventData.callback);
-                });
-            });
-    },
-
-    // trigger a focus event on the first element
-    focus(nodes)
-    {
-        const node = Core.nodeFirst(nodes);
-
-        if ( ! node) {
-            return;
-        }
-
-        node.focus();
-    },
-
     // remove an event from each element
     removeEvent(nodes, events, delegate, callback)
     {
@@ -189,6 +138,57 @@ Object.assign(Core.prototype, {
                     node.dispatchEvent(eventData);
                 })
             );
+    },
+
+    // clone all events from each element to other elements
+    cloneEvents(nodes, others)
+    {
+        Core.nodeArray(nodes, true, true, true)
+            .forEach(node => {
+                if ( ! this.nodeEvents.has(node)) {
+                    return;
+                }
+
+                this.nodeEvents.get(node).forEach(eventData => {
+                    this.addEvent(others, eventData.event, eventData.delegate, eventData.callback);
+                });
+            });
+    },
+
+    // trigger a blur event on the first element
+    blur(nodes)
+    {
+        const node = Core.nodeFirst(nodes);
+
+        if ( ! node) {
+            return;
+        }
+
+        node.blur();
+    },
+
+    // trigger a click event on the first element
+    click(nodes)
+    {
+        const node = Core.nodeFirst(nodes);
+
+        if ( ! node) {
+            return;
+        }
+
+        node.click();
+    },
+
+    // trigger a focus event on the first element
+    focus(nodes)
+    {
+        const node = Core.nodeFirst(nodes);
+
+        if ( ! node) {
+            return;
+        }
+
+        node.focus();
     }
 
 });
