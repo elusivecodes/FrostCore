@@ -2,7 +2,7 @@
 
 **FrostCore** is a free, open-source DOM manipulation library for *JavaScript*.
 
-It is heavily inspired by jQuery, but utilizes ES6 syntax including Promises, and supports both functional and OOP style programming, with mutable and immutable Query Sets.
+It is heavily inspired by jQuery, but utilizes ES6 syntax and features including Promises, and supports both functional and OOP style programming, with mutable and immutable Query Sets.
 
 
 ## Table of contents
