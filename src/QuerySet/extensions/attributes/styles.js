@@ -3,44 +3,44 @@ Object.assign(QuerySet.prototype, {
     // add a class or classes to each element
     addClass(...classes)
     {
-        core.addClass(this.nodes, ...classes);
+        this.core.addClass(this.nodes, ...classes);
         return this;
     },
 
     // get the computed style for the first element
     css(style)
     {
-        return core.css(this.nodes, style);
+        return this.core.css(this.nodes, style);
     },
 
     // get a style property for the first element
     getStyle(style)
     {
-        return core.getStyle(this.nodes, style);
+        return this.core.getStyle(this.nodes, style);
     },
 
     // hide each element from display
     hide(duration = 0)
     {
         if (duration > 0) {
-            return this.fadeOut(duration).queue(node => core.hide(node));
+            return this.fadeOut(duration).queue(node => this.core.hide(node));
         }
 
-        core.hide(this.nodes);
+        this.core.hide(this.nodes);
         return this;
     },
 
     // remove a class or classes from each element
     removeClass(...classes)
     {
-        core.removeClass(this.nodes, ...classes);
+        this.core.removeClass(this.nodes, ...classes);
         return this;
     },
 
     // set style properties for each element
     setStyle(style, value)
     {
-        core.setStyle(this.nodes, style, value);
+        this.core.setStyle(this.nodes, style, value);
         return this;
     },
 
@@ -49,26 +49,26 @@ Object.assign(QuerySet.prototype, {
     {
         if (duration > 0) {
             return this.queue(node => {
-                core.show(nodes);
-                core.fadeIn(node, duration);
+                this.core.show(nodes);
+                this.core.fadeIn(node, duration);
             });
         }
 
-        core.show(this.nodes);
+        this.core.show(this.nodes);
         return this;
     },
 
     // toggle the visibility of each element
     toggle()
     {
-        core.toggle(this.nodes);
+        this.core.toggle(this.nodes);
         return this;
     },
 
     // toggle a class or classes for each element
     toggleClass(...classes)
     {
-        core.toggleClass(this.nodes, ...classes);
+        this.core.toggleClass(this.nodes, ...classes);
         return this;
     }
 

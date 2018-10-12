@@ -29,11 +29,27 @@ It is heavily inspired by jQuery, but utilizes ES6 syntax and features including
 
 ## Core
 
+The `Core` class provides all the "core" methods for manipulating the DOM, performing AJAX requests, handling Cookies and more.
+
+By default, a `Core` class is created on the document context, and is assigned to the lowercase `core` variable in the global scope.
+
+However, it is possible to create additional instances of the class on any context.
+
+```
+const myCore = new Core(context);
+```
+
 ### DOM
+
+The DOM methods listed below provide functionality for manipulating the DOM, and typically accept a `nodes` argument as the first parameter.
+
+The `nodes` argument can be one of the following: a Query Selector string, a Window, Document, Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes (such as returned by the `find` method) or a QuerySet object.
+
+The exact type of nodes accepted by each method is listed below.
 
 #### Animation
 
-##### Animate
+**Animate**
 
 Add an animation to each element.
 
@@ -47,6 +63,9 @@ This function returns a Promise, that will resolve after the animation has compl
 core.animate(nodes, callback, duration);
 ```
 
+
+**Stop Animations**
+
 Stop all animations for each element.
 
 - `nodes` is a Query Selector string, a HTMLElement, HTMLCollection, an Array of Elements or a QuerySet object.
@@ -56,9 +75,9 @@ Stop all animations for each element.
 core.stop(nodes, finish);
 ```
 
----
-
 ##### Animations
+
+**Fade In/Out**
 
 Slide each element in or out from the top over a duration.
 

@@ -1,9 +1,10 @@
 class QuerySet
 {
 
-    constructor(nodes)
+    constructor(nodes, core = core)
     {
-        this.nodes = core.parseQuery(nodes, true, true, true);
+        this.core = core;
+        this.nodes = this.core.parseQuery(nodes, true, true, true);
         this.stack = [];
     }
 
@@ -69,9 +70,9 @@ class QuerySet
         return this;
     }
 
-    slice()
+    slice(...args)
     {
-        return this.pushStack(this.nodes.slice(...arguments));
+        return this.pushStack(this.nodes.slice(...args));
     }
 
 }

@@ -83,7 +83,7 @@ Object.assign(Core.prototype, {
     // get a property value for the first element
     getProperty(nodes, property)
     {
-        const node = Cothisre.nodeFirst(nodes);
+        const node = this.nodeFirst(nodes);
 
         if ( ! node) {
             return;

@@ -23,8 +23,8 @@ class Core
         }
 
         return mutable ?
-            new QuerySet(query) :
-            new QuerySetImmutable(query);
+            new QuerySet(query, this) :
+            new QuerySetImmutable(query, this);
     }
 
     // add a function to the ready queue

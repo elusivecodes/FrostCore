@@ -33,8 +33,8 @@
             }
 
             return mutable ?
-                new QuerySet(query) :
-                new QuerySetImmutable(query);
+                new QuerySet(query, this) :
+                new QuerySetImmutable(query, this);
         }
 
         // add a function to the ready queue
@@ -520,7 +520,7 @@
         // get a property value for the first element
         getProperty(nodes, property)
         {
-            const node = Cothisre.nodeFirst(nodes);
+            const node = this.nodeFirst(nodes);
 
             if ( ! node) {
                 return;
@@ -3192,9 +3192,10 @@
     class QuerySet
     {
 
-        constructor(nodes)
+        constructor(nodes, core = core)
         {
-            this.nodes = core.parseQuery(nodes, true, true, true);
+            this.core = core;
+            this.nodes = this.core.parseQuery(nodes, true, true, true);
             this.stack = [];
         }
 
@@ -3260,9 +3261,9 @@
             return this;
         }
 
-        slice()
+        slice(...args)
         {
-            return this.pushStack(this.nodes.slice(...arguments));
+            return this.pushStack(this.nodes.slice(...args));
         }
 
     }
@@ -3287,13 +3288,13 @@
         // add an animation to each element
         animate(callback, duration)
         {
-            return this.queue(node => core.animate(node, callback, duration));
+            return this.queue(node => this.core.animate(node, callback, duration));
         },
 
         // stop all animations for each element
         stop(finish = true)
         {
-            core.stop(this.nodes, finish);
+            this.core.stop(this.nodes, finish);
             return this.clearQueue();
         }
 
@@ -3304,61 +3305,61 @@
         // slide each element in from the top over a duration
         dropIn(duration = 1000)
         {
-            return this.queue(node => core.dropIn(node, duration));
+            return this.queue(node => this.core.dropIn(node, duration));
         },
 
         // slide each element out to the top over a duration
         dropOut(duration = 1000)
         {
-            return this.queue(node => core.dropOut(node, duration));
+            return this.queue(node => this.core.dropOut(node, duration));
         },
 
         // fade the opacity of each element in over a duration
         fadeIn(duration = 1000)
         {
-            return this.queue(node => core.fadeIn(node, duration));
+            return this.queue(node => this.core.fadeIn(node, duration));
         },
 
         // fade the opacity of each element out over a duration
         fadeOut(duration = 1000)
         {
-            return this.queue(node => core.fadeOut(node, duration));
+            return this.queue(node => this.core.fadeOut(node, duration));
         },
 
         // rotate each element in on an x,y over a duration
         rotateIn(x = 0, y = 1, inverse = false, duration = 1000)
         {
-            return this.queue(node => core.rotateIn(node, x, y, inverse, duration));
+            return this.queue(node => this.core.rotateIn(node, x, y, inverse, duration));
         },
 
         // rotate each element out on an x,y over a duration
         rotateOut(x = 0, y = 1, inverse = false, duration = 1000)
         {
-            return this.queue(node => core.rotateOut(node, x, y, inverse, duration));
+            return this.queue(node => this.core.rotateOut(node, x, y, inverse, duration));
         },
 
         // slide each element into place from a direction over a duration
         slideIn(direction = 'bottom', duration = 1000)
         {
-            return this.queue(node => core.slideIn(node, direction, duration));
+            return this.queue(node => this.core.slideIn(node, direction, duration));
         },
 
         // slide each element out of place to a direction over a duration
         slideOut(direction = 'bottom', duration = 1000)
         {
-            return this.queue(node => core.slideOut(node, direction, duration));
+            return this.queue(node => this.core.slideOut(node, direction, duration));
         },
 
         // squeeze each element into place from a direction over a duration
         squeezeIn(direction = 'bottom', duration = 1000)
         {
-            return this.queue(node => core.squeezeIn(node, direction, duration));
+            return this.queue(node => this.core.squeezeIn(node, direction, duration));
         },
 
         // squeeze each element out of place to a direction over a duration
         squeezeOut(direction = 'bottom', duration = 1000)
         {
-            return this.queue(node => core.squeezeOut(node, direction, duration));
+            return this.queue(node => this.core.squeezeOut(node, direction, duration));
         }
 
     });
@@ -3368,14 +3369,14 @@
         // clear the queue of each element
         clearQueue()
         {
-            core.clearQueue(this.nodes);
+            this.core.clearQueue(this.nodes);
             return this;
         },
 
         // queue a callback on each element
         queue(callback)
         {
-            core.queue(this.nodes, callback);
+            this.core.queue(this.nodes, callback);
             return this;
         }
 
@@ -3386,92 +3387,92 @@
         // get an attribute value for the first element
         getAttribute(attribute)
         {
-            return core.getAttribute(this.nodes, attribute);
+            return this.core.getAttribute(this.nodes, attribute);
         },
 
         // get a dataset value for the first element
         getDataset(key)
         {
-            return core.getDataset(this.nodes, key);
+            return this.core.getDataset(this.nodes, key);
         },
 
         // get the HTML contents of the first element
         getHTML()
         {
-            return core.getHTML(this.nodes);
+            return this.core.getHTML(this.nodes);
         },
 
         // get a property value for the first element
         getProperty(property)
         {
-            return core.getProperty(this.nodes, property);
+            return this.core.getProperty(this.nodes, property);
         },
 
         // get the text contents of the first element
         getText()
         {
-            return core.getText(this.nodes);
+            return this.core.getText(this.nodes);
         },
 
         // get the value property of the first element
         getValue()
         {
-            return core.getValue(this.nodes);
+            return this.core.getValue(this.nodes);
         },
 
         // remove an attribute from each element
         removeAttribute(attribute)
         {
-            core.removeAttribute(this.nodes, attribute);
+            this.core.removeAttribute(this.nodes, attribute);
             return this;
         },
 
         // remove a property from each element
         removeProperty(property)
         {
-            core.removeProperty(this.nodes, property);
+            this.core.removeProperty(this.nodes, property);
             return this;
         },
 
         // set attributes for each element
         setAttribute(attribute, value)
         {
-            core.setAttribute(this.nodes, attribute, value);
+            this.core.setAttribute(this.nodes, attribute, value);
             return this;
         },
 
         // set dataset values for each element
         setDataset(key, value)
         {
-            core.setDataset(this.nodes, key, value);
+            this.core.setDataset(this.nodes, key, value);
             return this;
         },
 
         // set the HTML contents for each element
         setHTML(html)
         {
-            core.setHTML(this.nodes, html);
+            this.core.setHTML(this.nodes, html);
             return this;
         },
 
         // set property values for each element
         setProperty(property, value)
         {
-            core.setProperty(this.nodes, property, value);
+            this.core.setProperty(this.nodes, property, value);
             return this;
         },
 
         // set the text contents for each element
         setText(text)
         {
-            core.setText(this.nodes, text);
+            this.core.setText(this.nodes, text);
             return this;
         },
 
         // set the value property for each element
         setValue(value)
         {
-            core.setValue(this.nodes, value);
+            this.core.setValue(this.nodes, value);
             return this;
         }
 
@@ -3482,20 +3483,20 @@
         // get data for the first node
         getData(key)
         {
-            return core.getData(this.nodes, key);
+            return this.core.getData(this.nodes, key);
         },
 
         // remove custom data for each node
         removeData(key)
         {
-            core.removeData(this.nodes, key);
+            this.core.removeData(this.nodes, key);
             return this;
         },
 
         // set custom data for each node
         setData(key, value)
         {
-            core.setData(this.nodes, key, value);
+            this.core.setData(this.nodes, key, value);
             return this;
         }
 
@@ -3506,61 +3507,61 @@
         // get the X,Y co-ordinates for the center of the first element (optionally offset)
         center(offset)
         {
-            return core.center(this.nodes, offset);
+            return this.core.center(this.nodes, offset);
         },
 
         // constrain each element to a container element
         constrain(container)
         {
-            return core.constrain(this.nodes, container);
+            return this.core.constrain(this.nodes, container);
         },
 
         // get the distance of an element to an X, Y position in the window
         distTo(x, y)
         {
-            return core.distTo(this.nodes, x, y);
+            return this.core.distTo(this.nodes, x, y);
         },
 
         // get the distance between two elements
         distToNode(others)
         {
-            return core.distToNode(this.nodes, others);
+            return this.core.distToNode(this.nodes, others);
         },
 
         // get the nearest element to an X, Y position in the window
         nearestTo(x, y)
         {
-            return core.nearestTo(this.nodes, x, y);
+            return this.core.nearestTo(this.nodes, x, y);
         },
 
         // get the nearest element to another element
         nearestToNode(others)
         {
-            return core.nearestToNode(this.nodes, others);
+            return this.core.nearestToNode(this.nodes, others);
         },
 
         // get the percentage of an X co-ordinate relative to an element
         percentX(x)
         {
-            return core.percentX(this.nodes, x);
+            return this.core.percentX(this.nodes, x);
         },
 
         // get the percentage of a Y co-ordinate relative to an element
         percentY(y)
         {
-            return core.percentY(this.nodes, y);
+            return this.core.percentY(this.nodes, y);
         },
 
         // get the position of the first element relative to the window (optionally offset)
         position(offset)
         {
-            return core.position(this.nodes, offset);
+            return this.core.position(this.nodes, offset);
         },
 
         // get the computed bounding rectangle of the first element
         rect(offset)
         {
-            return core.rect(this.nodes, offset);
+            return this.core.rect(this.nodes, offset);
         }
 
     });
@@ -3570,34 +3571,34 @@
         // scroll each element to an X, Y position
         scrollTo(x, y)
         {
-            core.scrollTo(this.nodes, x, y);
+            this.core.scrollTo(this.nodes, x, y);
             return this;
         },
 
         // scroll each element to an X position
         scrollToX(x)
         {
-            core.scrollToX(this.nodes, x);
+            this.core.scrollToX(this.nodes, x);
             return this;
         },
 
         // scroll each element to a Y position
         scrollToY(y)
         {
-            core.scrollToY(this.nodes, y);
+            this.core.scrollToY(this.nodes, y);
             return this;
         },
 
         // get the scroll X position of the first element
         scrollX()
         {
-            return core.scrollX(this.nodes);
+            return this.core.scrollX(this.nodes);
         },
 
         // get the scroll Y position of the first element
         scrollY()
         {
-            return core.scrollY(this.nodes);
+            return this.core.scrollY(this.nodes);
         }
 
     });
@@ -3608,14 +3609,14 @@
         // (and optionally padding, border or margin)
         height(padding, border, margin)
         {
-            return core.height(this.nodes, padding, border, margin);
+            return this.core.height(this.nodes, padding, border, margin);
         },
 
         // get the computed width of the first element
         // (and optionally padding, border or margin)
         width(padding, border, margin)
         {
-            return core.width(this.nodes, padding, border, margin);
+            return this.core.width(this.nodes, padding, border, margin);
         }
 
     });
@@ -3625,44 +3626,44 @@
         // add a class or classes to each element
         addClass(...classes)
         {
-            core.addClass(this.nodes, ...classes);
+            this.core.addClass(this.nodes, ...classes);
             return this;
         },
 
         // get the computed style for the first element
         css(style)
         {
-            return core.css(this.nodes, style);
+            return this.core.css(this.nodes, style);
         },
 
         // get a style property for the first element
         getStyle(style)
         {
-            return core.getStyle(this.nodes, style);
+            return this.core.getStyle(this.nodes, style);
         },
 
         // hide each element from display
         hide(duration = 0)
         {
             if (duration > 0) {
-                return this.fadeOut(duration).queue(node => core.hide(node));
+                return this.fadeOut(duration).queue(node => this.core.hide(node));
             }
 
-            core.hide(this.nodes);
+            this.core.hide(this.nodes);
             return this;
         },
 
         // remove a class or classes from each element
         removeClass(...classes)
         {
-            core.removeClass(this.nodes, ...classes);
+            this.core.removeClass(this.nodes, ...classes);
             return this;
         },
 
         // set style properties for each element
         setStyle(style, value)
         {
-            core.setStyle(this.nodes, style, value);
+            this.core.setStyle(this.nodes, style, value);
             return this;
         },
 
@@ -3671,26 +3672,26 @@
         {
             if (duration > 0) {
                 return this.queue(node => {
-                    core.show(nodes);
-                    core.fadeIn(node, duration);
+                    this.core.show(nodes);
+                    this.core.fadeIn(node, duration);
                 });
             }
 
-            core.show(this.nodes);
+            this.core.show(this.nodes);
             return this;
         },
 
         // toggle the visibility of each element
         toggle()
         {
-            core.toggle(this.nodes);
+            this.core.toggle(this.nodes);
             return this;
         },
 
         // toggle a class or classes for each element
         toggleClass(...classes)
         {
-            core.toggleClass(this.nodes, ...classes);
+            this.core.toggleClass(this.nodes, ...classes);
             return this;
         }
 
@@ -3701,56 +3702,56 @@
         // add an event to each element
         addEvent(events, delegate, callback)
         {
-            core.addEvent(this.nodes, events, delegate, callback);
+            this.core.addEvent(this.nodes, events, delegate, callback);
             return this;
         },
 
         // add a self-destructing event to each element
         addEventOnce(events, delegate, callback)
         {
-            core.addEvent(this.nodes, events, delegate, callback, true);
+            this.core.addEvent(this.nodes, events, delegate, callback, true);
             return this;
         },
 
         // trigger a blur event on the first element
         blur()
         {
-            core.blur(this.nodes);
+            this.core.blur(this.nodes);
             return this;
         },
 
         // trigger a click event on the first element
         click()
         {
-            core.click(this.nodes);
+            this.core.click(this.nodes);
             return this;
         },
 
         // clone all events from each element to other elements
         cloneEvents(clones)
         {
-            core.cloneEvents(this.nodes, clones);
+            this.core.cloneEvents(this.nodes, clones);
             return this;
         },
 
         // trigger a focus event on the first element
         focus()
         {
-            core.focus(this.nodes);
+            this.core.focus(this.nodes);
             return this;
         },
 
         // remove an event from each element
         removeEvent(events, delegate, callback)
         {
-            core.removeEvent(this.nodes, events, delegate, callback);
+            this.core.removeEvent(this.nodes, events, delegate, callback);
             return this;
         },
 
         // trigger an event on each element
         triggerEvent(events, data)
         {
-            core.triggerEvent(this.nodes, events, data);
+            this.core.triggerEvent(this.nodes, events, data);
             return this;
         }
 
@@ -3761,125 +3762,125 @@
         // insert each other node after the first node
         after(others)
         {
-            core.after(this.nodes, others);
+            this.core.after(this.nodes, others);
             return this;
         },
 
         // append each other nodes to the first node
         append(others)
         {
-            core.append(this.nodes, others);
+            this.core.append(this.nodes, others);
             return this;
         },
 
         // append each node to the first other node
         appendTo(others)
         {
-            core.appendTo(this.nodes, others);
+            this.core.appendTo(this.nodes, others);
             return this;
         },
 
         // insert each other node before the first node
         before(others)
         {
-            core.before(this.nodes, others);
+            this.core.before(this.nodes, others);
             return this;
         },
 
         // clone each node (optionally deep, and with events and data)
         clone(deep = true, eventsData = false)
         {
-            return this.pushStack(core.clone(this.nodes, deep, eventsData));
+            return this.pushStack(this.core.clone(this.nodes, deep, eventsData));
         },
 
         // detach an element from the DOM
         detach()
         {
-            core.detach(this.nodes);
+            this.core.detach(this.nodes);
             return this;
         },
 
         // remove all children of each node from the DOM
         empty()
         {
-            core.empty(this.nodes);
+            this.core.empty(this.nodes);
             return this;
         },
 
         // insert each node after the first other node
         insertAfter(others)
         {
-            core.insertAfter(this.nodes, others);
+            this.core.insertAfter(this.nodes, others);
             return this;
         },
 
         // insert each node before the first other node
         insertBefore(others)
         {
-            core.insertBefore(this.nodes, others);
+            this.core.insertBefore(this.nodes, others);
             return this;
         },
 
         // prepend each other node to the first node
         prepend(others)
         {
-            core.prepend(this.nodes, others);
+            this.core.prepend(this.nodes, others);
             return this;
         },
 
         // prepend each node to the first other node
         prependTo(others)
         {
-            core.prependTo(this.nodes, others);
+            this.core.prependTo(this.nodes, others);
             return this;
         },
 
         // remove each node from the DOM
         remove()
         {
-            core.remove(this.nodes);
+            this.core.remove(this.nodes);
             return this;
         },
 
         // replace each other node with nodes
         replaceAll(others)
         {
-            core.replaceAll(this.nodes, others);
+            this.core.replaceAll(this.nodes, others);
             return this;
         },
 
         // replace each node with other nodes
         replaceWith(others)
         {
-            core.replaceWith(this.nodes, others);
+            this.core.replaceWith(this.nodes, others);
             return this;
         },
 
         // unwrap each node (optionally matching a filter)
         unwrap(filter)
         {
-            core.unwrap(this.nodes, filter);
+            this.core.unwrap(this.nodes, filter);
             return this;
         },
 
         // wrap each nodes with other nodes
         wrap(others)
         {
-            core.wrap(this.nodes, others);
+            this.core.wrap(this.nodes, others);
             return this;
         },
 
         // wrap all nodes with other nodes
         wrapAll(others)
         {
-            core.wrapAll(this.nodes, others);
+            this.core.wrapAll(this.nodes, others);
             return this;
         },
 
         // wrap the contents of each node with other nodes
         wrapInner(others)
         {
-            core.wrapInner(this.nodes, others);
+            this.core.wrapInner(this.nodes, others);
             return this;
         }
 
@@ -3890,49 +3891,49 @@
         // returns true if any of the elements contains a descendent matching a filter
         contains(filter)
         {
-            return core.contains(this.nodes, filter);
+            return this.core.contains(this.nodes, filter);
         },
 
         // returns true if any of the elements has a specified attribute
         hasAttribute(attribute)
         {
-            return core.hasAttribute(this.nodes, attribute);
+            return this.core.hasAttribute(this.nodes, attribute);
         },
 
         // returns true if any of the elements has any of the specified classes
         hasClass(...classes)
         {
-            return core.hasClass(this.nodes, ...classes);
+            return this.core.hasClass(this.nodes, ...classes);
         },
 
         // returns true if any of the nodes has data
         hasData(key)
         {
-            return core.hasData(this.nodes, key);
+            return this.core.hasData(this.nodes, key);
         },
 
         // returns true if any of the elements has a specified property
         hasProperty(property)
         {
-            return core.hasProperty(this.nodes, property);
+            return this.core.hasProperty(this.nodes, property);
         },
 
         // returns true if any of the elements or a parent of the elements is "fixed"
         isFixed()
         {
-            return core.isFixed(this.nodes);
+            return this.core.isFixed(this.nodes);
         },
 
         // returns true if any of the elements in the set is hidden
         isHidden()
         {
-            return core.isHidden(this.nodes);
+            return this.core.isHidden(this.nodes);
         },
 
         // returns true if any of the elements in the set is visible
         isVisible()
         {
-            return core.isVisible(this.nodes);
+            return this.core.isVisible(this.nodes);
         }
 
     });
@@ -3942,37 +3943,37 @@
         // return all elements matching a filter
         filter(filter)
         {
-            return this.pushStack(core.filter(this.nodes, filter));
+            return this.pushStack(this.core.filter(this.nodes, filter));
         },
 
         // return the first element matching a filter
         filterOne(filter)
         {
-            return this.pushStack(core.filterOne(this.nodes, filter));
+            return this.pushStack(this.core.filterOne(this.nodes, filter));
         },
 
         // return all elements with a descendent matching the selector
         has(selector)
         {
-            return this.pushStack(core.has(this.nodes, selector));
+            return this.pushStack(this.core.has(this.nodes, selector));
         },
 
         // return all hidden elements
         hidden()
         {
-            return this.pushStack(core.hidden(this.nodes));
+            return this.pushStack(this.core.hidden(this.nodes));
         },
 
         // return all elements not matching a filter
         not(filter)
         {
-            return this.pushStack(core.not(this.nodes, filter));
+            return this.pushStack(this.core.not(this.nodes, filter));
         },
 
         // return all visible elements
         visible()
         {
-            return this.pushStack(core.visible(this.nodes));
+            return this.pushStack(this.core.visible(this.nodes));
         }
 
     });
@@ -3982,49 +3983,49 @@
         // find all elements matching a selector
         find(selector)
         {
-            return this.pushStack(core.find(this.nodes, selector));
+            return this.pushStack(this.core.find(this.nodes, selector));
         },
 
         // find all elements with a specific class
         findByClass(className)
         {
-            return this.pushStack(core.findByClass(this.nodes, className));
+            return this.pushStack(this.core.findByClass(this.nodes, className));
         },
 
         // find all elements with a specific ID
         findById(id)
         {
-            return this.pushStack(core.findById(this.nodes, id));
+            return this.pushStack(this.core.findById(this.nodes, id));
         },
 
         // find all elements with a specific tag
         findByTag(tagName)
         {
-            return this.pushStack(core.findByTag(this.nodes, tagName));
+            return this.pushStack(this.core.findByTag(this.nodes, tagName));
         },
 
         // find a single element matching a selector
         findOne(selector)
         {
-            return this.pushStack(core.findOne(this.nodes, selector));
+            return this.pushStack(this.core.findOne(this.nodes, selector));
         },
 
         // find the first element with a specific class
         findOneByClass(className)
         {
-            return this.pushStack(core.findOneByClass(this.nodes, className));
+            return this.pushStack(this.core.findOneByClass(this.nodes, className));
         },
 
         // find the first element with a specific ID
         findOneById(id)
         {
-            return this.pushStack(core.findOneById(this.nodes, id));
+            return this.pushStack(this.core.findOneById(this.nodes, id));
         },
 
         // find the first element with a specific tag
         findOneByTag(tagName)
         {
-            return this.pushStack(core.findOneByTag(this.nodes, tagName));
+            return this.pushStack(this.core.findOneByTag(this.nodes, tagName));
         }
 
     });
@@ -4035,78 +4036,78 @@
         // and optionally before hitting a limit
         closest(filter, until)
         {
-            return this.pushStack(core.closest(this.nodes, filter, until));
+            return this.pushStack(this.core.closest(this.nodes, filter, until));
         },
 
         // find the first child of each element matching a filter
         child(filter)
         {
-            return this.pushStack(core.child(this.nodes, filter));
+            return this.pushStack(this.core.child(this.nodes, filter));
         },
 
         // find all children of each element,
         // and optionally matching a filter
         children(filter)
         {
-            return this.pushStack(core.children(this.nodes, filter));
+            return this.pushStack(this.core.children(this.nodes, filter));
         },
 
         // find all child nodes for each element,
         // (including text and comment nodes)
         contents() {
-            return this.pushStack(core.contents(this.nodes));
+            return this.pushStack(this.core.contents(this.nodes));
         },
 
         // find the next sibling for each element matching a filter
         next(filter)
         {
-            return this.pushStack(core.next(this.nodes, filter));
+            return this.pushStack(this.core.next(this.nodes, filter));
         },
 
         // find all next siblings for each element matching a filter,
         // and optionally before hitting a limit
         nextAll(filter, until = false, first = false)
         {
-            return this.pushStack(core.nextAll(this.nodes, filter, until, first));
+            return this.pushStack(this.core.nextAll(this.nodes, filter, until, first));
         },
 
         // find the offset parent (relatively positioned) of the first element
         offsetParent()
         {
-            return this.pushStack(core.offsetParent(this.nodes));
+            return this.pushStack(this.core.offsetParent(this.nodes));
         },
 
         // find the parent of each element matching a filter
         parent(filter)
         {
-            return this.pushStack(core.parent(this.nodes, filter));
+            return this.pushStack(this.core.parent(this.nodes, filter));
         },
 
         // find all parents of each element matching a filter,
         // and optionally before hitting a limit
         parents(filter, until)
         {
-            return this.pushStack(core.parents(this.nodes, filter, until));
+            return this.pushStack(this.core.parents(this.nodes, filter, until));
         },
 
         // find the previous sibling for each element matching a filter,
         // and optionally before hitting a limit
         prev(filter)
         {
-            return this.pushStack(core.prev(this.nodes, filter));
+            return this.pushStack(this.core.prev(this.nodes, filter));
         },
 
         // find all previous siblings for each element matching a filter,
         // and optionally before hitting a limit
         prevAll(filter, until = false, first = false)
         {
-            return this.pushStack(core.prevAll(this.nodes, filter, until, first));
+            return this.pushStack(this.core.prevAll(this.nodes, filter, until, first));
         },
 
         // find all siblings for each element matching a filter
         siblings(filter)
         {
-            return this.pushStack(core.siblings(this.nodes, filter));
+            return this.pushStack(this.core.siblings(this.nodes, filter));
         }
 
     });
@@ -4116,51 +4117,51 @@
         // force an element to be shown, and then execute a callback
         forceShow(callback)
         {
-            return core.forceShow(this.nodes, callback);
+            return this.core.forceShow(this.nodes, callback);
         },
 
         // get the index of the first element matching a filter
         index(filter)
         {
-            return core.index(this.nodes, filter);
+            return this.core.index(this.nodes, filter);
         },
 
         // get the index of the first element relative to it's parent element
         indexOf()
         {
-            return core.indexOf(this.nodes);
+            return this.core.indexOf(this.nodes);
         },
 
         // create a selection on the first node
         select()
         {
-            core.select(this.nodes);
+            this.core.select(this.nodes);
             return this;
         },
 
         // create a selection on all nodes
         selectAll()
         {
-            core.selectAll(this.nodes);
+            this.core.selectAll(this.nodes);
             return this;
         },
 
         // returns a serialized string containing names and values of all form elements
         serialize()
         {
-            return core.serialize(this.nodes);
+            return this.core.serialize(this.nodes);
         },
 
         // returns a serialized array containing names and values of all form elements
         serializeArray()
         {
-            return core.serializeArray(this.nodes);
+            return this.core.serializeArray(this.nodes);
         },
 
         // returns an object containing keys and values of all form elements
         serializeObject()
         {
-            return core.serializeObject(this.nodes);
+            return this.core.serializeObject(this.nodes);
         }
 
     });
