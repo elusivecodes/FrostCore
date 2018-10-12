@@ -18,7 +18,7 @@ It is heavily inspired by jQuery, but utilizes ES6 syntax and features including
     - [Cookie](#cookie)
     - [Event Factory](#event-factory)
     - [Parsers](#parsers)
-- [Static](#static)
+- [Static Methods](#static)
     - [Array](#array)
     - [Math](#math)
     - [String](#string)
@@ -63,7 +63,6 @@ This function returns a Promise, that will resolve after the animation has compl
 core.animate(nodes, callback, duration);
 ```
 
-
 **Stop Animations**
 
 Stop all animations for each element.
@@ -77,7 +76,7 @@ core.stop(nodes, finish);
 
 ##### Animations
 
-**Fade In/Out**
+**Drop In/Out**
 
 Slide each element in or out from the top over a duration.
 
@@ -91,6 +90,8 @@ core.dropIn(nodes, duration);
 core.dropOut(nodes, duration);
 ```
 
+**Fade In/Out**
+
 Fade the opacity of each element in or out over a duration.
 
 - `nodes` is a Query Selector string, a HTMLElement, HTMLCollection, an Array of Elements or a QuerySet object.
@@ -102,6 +103,8 @@ This function returns a Promise, that will resolve after the animation has compl
 core.fadeIn(nodes, duration);
 core.fadeOut(nodes, duration);
 ```
+
+**Rotate In/Out**
 
 Rotate each element in or out on an x y over a duration.
 
@@ -118,6 +121,8 @@ core.rotateIn(nodes, x, y, inverse, duration);
 core.rotateOut(nodes, x, y, inverse, duration);
 ```
 
+**Slide In/Out**
+
 Slide each element into or out of place to a direction over a duration.
 
 - `nodes` is a Query Selector string, a HTMLElement, HTMLCollection, an Array of Elements or a QuerySet object.
@@ -130,6 +135,8 @@ This function returns a Promise, that will resolve after the animation has compl
 core.slideIn(nodes, direction, duration);
 core.slideOut(nodes, direction, duration);
 ```
+
+**Squeeze In/Out**
 
 Squeeze each element into or out of place to a direction over a duration.
 
@@ -144,9 +151,9 @@ core.squeezeIn(nodes, direction, duration);
 core.squeezeOut(nodes, direction, duration);
 ```
 
----
-
 ##### Queue
+
+**Queue**
 
 Queue a callback on each element.
 
@@ -157,6 +164,8 @@ Queue a callback on each element.
 core.queue(nodes, callback);
 ```
 
+**Clear Queue**
+
 Clear the queue for each element.
 
 - `nodes` is a Query Selector string, a HTMLElement, HTMLCollection, an Array of Elements or a QuerySet object.
@@ -165,13 +174,9 @@ Clear the queue for each element.
 core.clearQueue(nodes);
 ```
 
----
-
 #### Attributes
 
-##### Attributes
-
-###### Attributes
+**Get Attribute**
 
 Get an attribute value for the first element.
 
@@ -181,6 +186,8 @@ Get an attribute value for the first element.
 ```
 const attr = core.getAttribute(nodes, attribute);
 ```
+
+**Set Attribute**
 
 Set attributes for each element.
 
@@ -195,6 +202,8 @@ core.setAttribute(nodes, attributes);
 core.setAttribute(nodes, attribute, value);
 ```
 
+**Remove Attribute**
+
 Remove an attribute from each element.
 
 - `nodes` is a Query Selector string, a HTMLElement, HTMLCollection, an Array of Elements or a QuerySet object.
@@ -204,7 +213,7 @@ Remove an attribute from each element.
 core.removeAttribute(nodes, attribute);
 ```
 
-###### DataSet
+**Get Dataset**
 
 Get a dataset value for the first element.
 
@@ -218,6 +227,8 @@ const dataset = core.getDataset(nodes);
 const keyDataset = core.getDataset(nodes, key);
 ```
 
+**Set Dataset**
+
 Set dataset values for each element.
 
 - `nodes` is a Query Selector string, a HTMLElement, HTMLCollection, an Array of Elements or a QuerySet object.
@@ -228,7 +239,7 @@ Set dataset values for each element.
 core.setDataset(nodes, key, value);
 ```
 
-###### HTML
+**Get HTML**
 
 Get the HTML contents of the first element.
 
@@ -237,6 +248,8 @@ Get the HTML contents of the first element.
 ```
 const html = core.getHTML(nodes);
 ```
+
+**Set HTML**
 
 Set the HTML contents for each element.
 
@@ -247,7 +260,7 @@ Set the HTML contents for each element.
 core.setHTML(nodes, html);
 ```
 
-###### Properties
+**Get Property**
 
 Get a property value for the first element.
 
@@ -257,6 +270,8 @@ Get a property value for the first element.
 ```
 const prop = core.getProperty(nodes, property);
 ```
+
+**Set Property**
 
 Set property values for each element.
 
@@ -271,6 +286,8 @@ core.setProperty(nodes, properties);
 core.setProperty(nodes, property, value);
 ```
 
+**Remove Property**
+
 Remove a property from each element.
 
 - `nodes` is a Query Selector string, a HTMLElement, HTMLCollection, an Array of Elements or a QuerySet object.
@@ -280,7 +297,7 @@ Remove a property from each element.
 core.removeProperty(nodes, property);
 ```
 
-###### Text
+**Get Text**
 
 Get the text contents of the first element.
 
@@ -289,6 +306,8 @@ Get the text contents of the first element.
 ```
 const text = core.getText(nodes);
 ```
+
+**Set Text**
 
 Set the text contents for each element.
 
@@ -299,7 +318,7 @@ Set the text contents for each element.
 core.setText(nodes, text);
 ```
 
-###### Value
+**Get Value**
 
 Get the value property of the first element.
 
@@ -308,6 +327,8 @@ Get the value property of the first element.
 ```
 const val = core.getValue(nodes);
 ```
+
+**Set Value**
 
 Set the value property for each element.
 
@@ -318,9 +339,9 @@ Set the value property for each element.
 core.setValue(nodes, value);
 ```
 
----
+##### Custom Data
 
-##### Data
+**Get Data**
 
 Get custom data for the first node.
 
@@ -334,6 +355,8 @@ const data = core.getData(nodes);
 const keyData = core.getData(nodes, key);
 ```
 
+**Set Data**
+
 Set custom data for each node.
 
 - `nodes` is a Query Selector string, a Window, Document, Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object.
@@ -344,6 +367,8 @@ Set custom data for each node.
 core.setData(nodes, key, value);
 ```
 
+**Remove Data**
+
 Remove custom data for each node.
 
 - `nodes` is a Query Selector string, a Window, Document, Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object.
@@ -353,9 +378,9 @@ Remove custom data for each node.
 core.removeData(nodes, key);
 ```
 
----
-
 ##### Position
+
+**Center**
 
 Get the X,Y co-ordinates for the center of the first element.
 
@@ -366,7 +391,9 @@ Get the X,Y co-ordinates for the center of the first element.
 const center = core.center(nodes, offset);
 ```
 
-Get the X,Y position of the first element.
+**Position**
+
+Get the X,Y position for the top/left of the first element.
 
 - `nodes` is a Query Selector string, a HTMLElement, HTMLCollection, an Array of Elements or a QuerySet object.
 - `offset` is a boolean indicating whether the co-ordinates should be offset from the top left of the document, and will default to *false*.
@@ -374,6 +401,8 @@ Get the X,Y position of the first element.
 ```
 const pos = core.position(nodes, offset);
 ```
+
+**Rectangle**
 
 Get the computed bounding rectangle of the first element.
 
@@ -384,6 +413,8 @@ Get the computed bounding rectangle of the first element.
 const rect = core.rect(nodes, offset);
 ```
 
+**Constrain**
+
 Constrain each element to a container element.
 
 - `nodes` is a Query Selector string, a HTMLElement, HTMLCollection, an Array of Elements or a QuerySet object.
@@ -392,6 +423,8 @@ Constrain each element to a container element.
 ```
 core.constrain(nodes, container);
 ```
+
+**Distance To**
 
 Get the distance of the first element to an X,Y position.
 
@@ -404,6 +437,8 @@ Get the distance of the first element to an X,Y position.
 const dist = core.distTo(nodes, x, y, offset);
 ```
 
+**Distance To Node**
+
 Get the distance between two elements.
 
 - `nodes` is a Query Selector string, a HTMLElement, HTMLCollection, an Array of Elements or a QuerySet object.
@@ -412,6 +447,8 @@ Get the distance between two elements.
 ```
 const dist = core.distToNode(nodes, others);
 ```
+
+**Nearest To**
 
 Get the nearest element to an X,Y position.
 
@@ -424,6 +461,8 @@ Get the nearest element to an X,Y position.
 const nearest = core.nearestTo(nodes, x, y, offset);
 ```
 
+**Nearest To Node**
+
 Get the nearest element to another element.
 
 - `nodes` is a Query Selector string, a HTMLElement, HTMLCollection, an Array of Elements or a QuerySet object.
@@ -432,6 +471,8 @@ Get the nearest element to another element.
 ```
 const nearest = core.nearestToNode(nodes, others);
 ```
+
+**Percent X**
 
 Get the percentage of an X co-ordinate relative to the first element.
 
@@ -443,6 +484,8 @@ Get the percentage of an X co-ordinate relative to the first element.
 const pX = core.percentX(nodes, x, offset);
 ```
 
+**Percent Y**
+
 Get the percentage of a Y co-ordinate relative to the first element.
 
 - `nodes` is a Query Selector string, a HTMLElement, HTMLCollection, an Array of Elements or a QuerySet object.
@@ -453,9 +496,9 @@ Get the percentage of a Y co-ordinate relative to the first element.
 const pY = core.percentY(nodes, y, offset);
 ```
 
----
-
 ##### Scroll
+
+**Set Scroll**
 
 Scroll each element to an X,Y position.
 
@@ -467,6 +510,8 @@ Scroll each element to an X,Y position.
 core.setScroll(nodes, x, y);
 ```
 
+**Set Scroll X**
+
 Scroll each element to an X position.
 
 - `nodes` is a Query Selector string, a Window, Document, HTMLElement, HTMLCollection, an Array of Elements or a QuerySet object.
@@ -475,6 +520,8 @@ Scroll each element to an X position.
 ```
 core.setScrollX(nodes, x);
 ```
+
+**Set Scroll Y**
 
 Scroll each element to a Y position.
 
@@ -485,6 +532,8 @@ Scroll each element to a Y position.
 core.setScrollY(nodes, y);
 ```
 
+**Get Scroll X**
+
 Get the scroll X position of the first element.
 
 - `nodes` is a Query Selector string, a Window, Document, HTMLElement, HTMLCollection, an Array of Elements or a QuerySet object.
@@ -492,6 +541,8 @@ Get the scroll X position of the first element.
 ```
 const scrollX = core.getScrollX(nodes);
 ```
+
+**Get Scroll Y**
 
 Get the scroll Y position of the first element.
 
@@ -501,9 +552,9 @@ Get the scroll Y position of the first element.
 const scrollY = core.getScrollY(nodes);
 ```
 
----
-
 ##### Size
+
+**Height**
 
 Get the computed height of the first element (and optionally padding, border or margin).
 
@@ -515,6 +566,8 @@ Get the computed height of the first element (and optionally padding, border or 
 ```
 const height = core.height(nodes, padding, border, margin);
 ```
+
+**Width**
 
 Get the computed width of the first element (and optionally padding, border or margin).
 
@@ -529,7 +582,7 @@ const width = core.width(nodes, padding, border, margin);
 
 ##### Styles
 
-###### Classes
+**Add Class**
 
 Add a class or classes to each element.
 
@@ -540,6 +593,8 @@ Add a class or classes to each element.
 core.addClass(nodes, ...classes);
 ```
 
+**Remove Class**
+
 Remove a class or classes from each element.
 
 - `nodes` is a Query Selector string, a HTMLElement, HTMLCollection, an Array of Elements or a QuerySet object.
@@ -548,6 +603,8 @@ Remove a class or classes from each element.
 ```
 core.removeClass(nodes, ...classes);
 ```
+
+**Toggle Class**
 
 Toggle a class or classes for each element.
 
@@ -558,7 +615,7 @@ Toggle a class or classes for each element.
 core.toggleClass(nodes, ...classes);
 ```
 
-###### Styles
+**Get Style**
 
 Get a style property for the first element.
 
@@ -568,6 +625,8 @@ Get a style property for the first element.
 ```
 const style = core.getStyle(nodes, style);
 ```
+
+**Set Style**
 
 Set style properties for each element.
 
@@ -581,7 +640,7 @@ core.setStyle(nodes, styles);
 core.setStyle(nodes, style, value, important);
 ```
 
-###### CSS
+**Computed Style**
 
 Get the computed style for the first element.
 
@@ -592,7 +651,7 @@ Get the computed style for the first element.
 const css = core.css(nodes, style);
 ```
 
-###### Visibility
+**Hide**
 
 Hide each element from display.
 
@@ -602,6 +661,8 @@ Hide each element from display.
 core.hide(nodes);
 ```
 
+**Show**
+
 Display each hidden element.
 
 - `nodes` is a Query Selector string, a HTMLElement, HTMLCollection, an Array of Elements or a QuerySet object.
@@ -609,6 +670,8 @@ Display each hidden element.
 ```
 core.show(nodes);
 ```
+
+**Toggle**
 
 Toggle the visibility of each element.
 
@@ -618,9 +681,9 @@ Toggle the visibility of each element.
 core.toggle(nodes);
 ```
 
----
-
 #### Events
+
+**Add Event**
 
 Add an event to each element.
 
@@ -635,6 +698,8 @@ core.addEvent(nodes, events, callback);
 core.addEvent(nodes, events, delegate, callback);
 ```
 
+**Add Event Once**
+
 Add a self-destructing event to each element.
 
 - `nodes` is a Query Selector string, a Window, Document, HTMLElement, HTMLCollection, an Array of Elements or a QuerySet object.
@@ -648,6 +713,8 @@ core.addEventOnce(nodes, events, callback);
 core.addEventOnce(nodes, events, delegate, callback);
 ```
 
+**Remove Event**
+
 Remove an event from each element.
 
 - `nodes` is a Query Selector string, a Window, Document, HTMLElement, HTMLCollection, an Array of Elements or a QuerySet object.
@@ -659,6 +726,8 @@ core.removeEvent(nodes, events, callback);
 core.removeEvent(nodes, events, delegate, callback);
 ```
 
+**Trigger Event**
+
 Trigger an event on each element.
 
 - `nodes` is a Query Selector string, a Window, Document, HTMLElement, HTMLCollection, an Array of Elements or a QuerySet object.
@@ -667,6 +736,8 @@ Trigger an event on each element.
 ```
 core.triggerEvent(nodes, events, data);
 ```
+
+**Clone Events**
 
 Clone all events from each element to other elements.
 
@@ -677,6 +748,8 @@ Clone all events from each element to other elements.
 core.cloneEvents(nodes, others);
 ```
 
+**Blur**
+
 Trigger a blur event on the first element.
 
 - `nodes` is a Query Selector string, a HTMLElement, HTMLCollection, an Array of Elements or a QuerySet object.
@@ -684,6 +757,8 @@ Trigger a blur event on the first element.
 ```
 core.blur(nodes);
 ```
+
+**Click**
 
 Trigger a click event on the first element.
 
@@ -693,6 +768,8 @@ Trigger a click event on the first element.
 core.click(nodes);
 ```
 
+**Focus**
+
 Trigger a focus event on the first element.
 
 - `nodes` is a Query Selector string, a HTMLElement, HTMLCollection, an Array of Elements or a QuerySet object.
@@ -701,11 +778,9 @@ Trigger a focus event on the first element.
 core.focus(nodes);
 ```
 
----
-
 #### Manipulation
 
-##### Manipulation
+**Create**
 
 Create a new DOM element.
 
@@ -714,6 +789,8 @@ Create a new DOM element.
 ```
 const element = core.create(tagName);
 ```
+
+**Clone**
 
 Clone each node (optionally deep, and with events and data).
 
@@ -725,6 +802,8 @@ Clone each node (optionally deep, and with events and data).
 const clones = core.clone(nodes, deep, eventsData);
 ```
 
+**Detach**
+
 Detach an element from the DOM.
 
 - `nodes` is a Query Selector string, a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object.
@@ -733,6 +812,8 @@ Detach an element from the DOM.
 core.detach(nodes);
 ```
 
+**Empty**
+
 Remove all children of each node from the DOM.
 
 - `nodes` is a Query Selector string, a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object.
@@ -740,6 +821,8 @@ Remove all children of each node from the DOM.
 ```
 core.empty(nodes);
 ```
+
+**Remove**
 
 Remove each node from the DOM.
 
@@ -750,6 +833,8 @@ Remove each node from the DOM.
 core.remove(nodes, deep);
 ```
 
+**Replace**
+
 Replace each other node with nodes.
 
 - `nodes` is a Query Selector string, a HTML string, a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object.
@@ -758,6 +843,8 @@ Replace each other node with nodes.
 ```
 core.replaceAll(nodes, others);
 ```
+
+**Replace All**
 
 Replace each node with other nodes.
 
@@ -768,9 +855,9 @@ Replace each node with other nodes.
 core.replaceWith(nodes, others);
 ```
 
----
-
 ##### Move
+
+**After**
 
 Insert each other node after the first node.
 
@@ -781,14 +868,7 @@ Insert each other node after the first node.
 core.after(nodes, others);
 ```
 
-Insert each node after the first other node.
-
-- `nodes` is a Query Selector string, a HTML string, a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object.
-- `others` is a Query Selector string, a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object.
-
-```
-core.insertAfter(nodes, others);
-```
+**Before**
 
 Insert each other node before the first node.
 
@@ -799,6 +879,19 @@ Insert each other node before the first node.
 core.before(nodes, others);
 ```
 
+**Insert After**
+
+Insert each node after the first other node.
+
+- `nodes` is a Query Selector string, a HTML string, a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object.
+- `others` is a Query Selector string, a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object.
+
+```
+core.insertAfter(nodes, others);
+```
+
+**Insert Before**
+
 Insert each node before the first other node.
 
 - `nodes` is a Query Selector string, a HTML string, a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object.
@@ -807,6 +900,8 @@ Insert each node before the first other node.
 ```
 core.insertBefore(nodes, others);
 ```
+
+**Append**
 
 Append each other node to the first node.
 
@@ -817,14 +912,7 @@ Append each other node to the first node.
 core.append(nodes, others);
 ```
 
-Append each node to the first other node.
-
-- `nodes` is a Query Selector string, a HTML string, a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object.
-- `others` is a Query Selector string, a HTMLElement, HTMLCollection, an Array of Elements or a QuerySet object.
-
-```
-core.appendTo(nodes, others);
-```
+**Prepend**
 
 Prepend each other node to the first node.
 
@@ -835,6 +923,19 @@ Prepend each other node to the first node.
 core.prepend(nodes, others);
 ```
 
+**Append To**
+
+Append each node to the first other node.
+
+- `nodes` is a Query Selector string, a HTML string, a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object.
+- `others` is a Query Selector string, a HTMLElement, HTMLCollection, an Array of Elements or a QuerySet object.
+
+```
+core.appendTo(nodes, others);
+```
+
+**Prepend To**
+
 Prepend each node to the first other node.
 
 - `nodes` is a Query Selector string, a HTML string, a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object.
@@ -844,9 +945,9 @@ Prepend each node to the first other node.
 core.prependTo(nodes, others);
 ```
 
----
-
 ##### Wrap
+
+**Unwrap**
 
 Unwrap each node.
 
@@ -857,6 +958,8 @@ Unwrap each node.
 core.unwrap(nodes, filter);
 ```
 
+**Wrap**
+
 Wrap each nodes with other nodes.
 
 - `nodes` is a Query Selector string, a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object.
@@ -865,6 +968,8 @@ Wrap each nodes with other nodes.
 ```
 core.wrap(nodes, others);
 ```
+
+**Wrap All**
 
 Wrap all nodes with other nodes.
 
@@ -875,6 +980,8 @@ Wrap all nodes with other nodes.
 core.wrapAll(nodes, others);
 ```
 
+**Wrap Contents**
+
 Wrap the contents of each node with other nodes.
 
 - `nodes` is a Query Selector string, a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object.
@@ -884,11 +991,11 @@ Wrap the contents of each node with other nodes.
 core.wrapInner(nodes, others);
 ```
 
----
-
 #### Traversal
 
 ##### Filter
+
+**Filter**
 
 Return all elements matching a filter.
 
@@ -899,6 +1006,8 @@ Return all elements matching a filter.
 const filtered = core.filter(nodes, filter);
 ```
 
+**Filter One**
+
 Return the first element matching a filter.
 
 - `nodes` is a Query Selector string, a HTMLElement, HTMLCollection, an Array of Elements or a QuerySet object.
@@ -907,6 +1016,8 @@ Return the first element matching a filter.
 ```
 const filtered = core.filterOne(nodes, filter);
 ```
+
+**Not**
 
 Return all elements not matching a filter.
 
@@ -917,6 +1028,8 @@ Return all elements not matching a filter.
 const filtered = core.not(nodes, filter);
 ```
 
+**Has**
+
 Return all elements with a descendent matching a filter.
 
 - `nodes` is a Query Selector string, a Document, HTMLElement, HTMLCollection, an Array of Elements or a QuerySet object.
@@ -926,6 +1039,8 @@ Return all elements with a descendent matching a filter.
 const filtered = core.has(nodes, filter);
 ```
 
+**Hidden**
+
 Return all hidden elements.
 
 - `nodes` is a Query Selector string, a HTMLElement, HTMLCollection, an Array of Elements or a QuerySet object.
@@ -933,6 +1048,8 @@ Return all hidden elements.
 ```
 const filtered = core.hidden(nodes);
 ```
+
+**Visible**
 
 Return all visible elements.
 
@@ -942,9 +1059,9 @@ Return all visible elements.
 const filtered = core.visible(nodes);
 ```
 
----
-
 ##### Find
+
+**Find**
 
 Find all elements matching a selector.
 
@@ -956,6 +1073,8 @@ const elements = core.find(selectors);
 const descendents = core.find(nodes, selectors);
 ```
 
+**Find One**
+
 Find a single element matching a selector.
 
 - `nodes` is a Query Selector string, a Document, HTMLElement, HTMLCollection, an Array of Elements or a QuerySet object.
@@ -965,6 +1084,8 @@ Find a single element matching a selector.
 const element = core.findOne(selectors);
 const descendent = core.findOne(nodes, selectors);
 ```
+
+**Find By Class**
 
 Find all elements with a specific class.
 
@@ -976,6 +1097,8 @@ const elements = core.findByClass(className);
 const descendents = core.findByClass(nodes, className);
 ```
 
+**Find One By Class**
+
 Find the first element with a specific class.
 
 - `nodes` is a Query Selector string, a Document, HTMLElement, HTMLCollection, an Array of Elements or a QuerySet object.
@@ -985,6 +1108,8 @@ Find the first element with a specific class.
 const element = core.findOneByClass(className);
 const descendent = core.findOneByClass(nodes, className);
 ```
+
+**Find By ID**
 
 Find all elements with a specific ID.
 
@@ -996,6 +1121,8 @@ const elements = core.findById(id);
 const descendents = core.findById(nodes, id);
 ```
 
+**Find One By ID**
+
 Find the first element with a specific ID.
 
 - `nodes` is a Query Selector string, a Document, HTMLElement, HTMLCollection, an Array of Elements or a QuerySet object.
@@ -1006,6 +1133,8 @@ const element = core.findOneById(id);
 const descendent = core.findOneById(nodes, id);
 ```
 
+**Find By Tag**
+
 Find all elements with a specific tag.
 
 - `nodes` is a Query Selector string, a Document, HTMLElement, HTMLCollection, an Array of Elements or a QuerySet object.
@@ -1015,6 +1144,8 @@ Find all elements with a specific tag.
 const elements = core.findByTag(tagName);
 const descendents = core.findByTag(nodes, tagName);
 ```
+
+**Find One By Tag**
 
 Find the first element with a specific tag.
 
@@ -1029,6 +1160,8 @@ const descendent = core.findOneByTag(nodes, tagName);
 
 ##### Traversal
 
+**Child**
+
 Find the first child of each element matching a filter.
 
 - `nodes` is a Query Selector string, a HTMLElement, HTMLCollection, an Array of Elements or a QuerySet object.
@@ -1038,6 +1171,8 @@ Find the first child of each element matching a filter.
 const child = core.child(nodes);
 const child = core.child(nodes, filter);
 ```
+
+**Children**
 
 Find all children of each element, and optionally matching a filter.
 
@@ -1049,6 +1184,8 @@ const children = core.children(nodes);
 const children = core.children(nodes, filter);
 ```
 
+**Contents**
+
 Find all child nodes for each element, (including text and comment nodes).
 
 - `nodes` is a Query Selector string, a HTMLElement, HTMLCollection, an Array of Elements or a QuerySet object.
@@ -1056,6 +1193,8 @@ Find all child nodes for each element, (including text and comment nodes).
 ```
 const contents = core.contents(nodes);
 ```
+
+**Closest**
 
 Find the closest ancestor to each element matching a filter, and optionally before hitting a limit.
 
@@ -1067,6 +1206,8 @@ Find the closest ancestor to each element matching a filter, and optionally befo
 const closest = core.closest(nodes, filter, until);
 ```
 
+**Parent**
+
 Find the parent of each element matching a filter.
 
 - `nodes` is a Query Selector string, a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object.
@@ -1075,6 +1216,8 @@ Find the parent of each element matching a filter.
 ```
 const parent = core.parent(nodes, filter);
 ```
+
+**Parents**
 
 Find all parents of each element matching a filter, and optionally before hitting a limit.
 
@@ -1086,6 +1229,8 @@ Find all parents of each element matching a filter, and optionally before hittin
 const parents = core.parents(nodes, filter, until);
 ```
 
+**Offset Parent**
+
 Find the offset parent (relatively positioned) of the first element.
 
 - `nodes` is a Query Selector string, a HTMLElement, HTMLCollection, an Array of Elements or a QuerySet object.
@@ -1093,6 +1238,8 @@ Find the offset parent (relatively positioned) of the first element.
 ```
 const offsetParent = core.offsetParent(nodes);
 ```
+
+**Next**
 
 Find the next sibling for each element matching a filter.
 
@@ -1102,6 +1249,8 @@ Find the next sibling for each element matching a filter.
 ```
 const next = core.next(nodes, filter);
 ```
+
+**Next All**
 
 Find all next siblings for each element matching a filter, and optionally before hitting a limit.
 
@@ -1113,6 +1262,8 @@ Find all next siblings for each element matching a filter, and optionally before
 const nextAll = core.nextAll(nodes, filter, until);
 ```
 
+**Previous**
+
 Find the previous sibling for each element matching a filter, and optionally before hitting a limit.
 
 - `nodes` is a Query Selector string, a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object.
@@ -1121,6 +1272,8 @@ Find the previous sibling for each element matching a filter, and optionally bef
 ```
 const prev = core.prev(nodes, filter);
 ```
+
+**Previous All**
 
 Find all previous siblings for each element matching a filter, and optionally before hitting a limit.
 
@@ -1132,6 +1285,8 @@ Find all previous siblings for each element matching a filter, and optionally be
 const prevAll = core.prevAll(nodes, filter, until);
 ```
 
+**Siblings**
+
 Find all siblings for each element matching a filter.
 
 - `nodes` is a Query Selector string, a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object.
@@ -1141,11 +1296,12 @@ Find all siblings for each element matching a filter.
 const siblings = core.siblings(nodes, filter);
 ```
 
----
 
 #### Utility
 
 ##### Tests
+
+**Has Attribute**
 
 Returns true if any of the elements has a specified attribute.
 
@@ -1156,7 +1312,9 @@ Returns true if any of the elements has a specified attribute.
 core.hasAttribute(nodes, attribute);
 ```
 
-Returns true if any of the elements has any of the specified classes.
+**Has Class**
+
+Returns *true* if any of the elements has any of the specified classes.
 
 - `nodes` is a Query Selector string, a HTMLElement, HTMLCollection, an Array of Elements or a QuerySet object.
 - `classes` is an Array of classes, or a space seperated string of class names to test for.
@@ -1165,7 +1323,9 @@ Returns true if any of the elements has any of the specified classes.
 core.hasClass(nodes, ...classes);
 ```
 
-Returns true if any of the nodes has custom data.
+**Has Data**
+
+Returns *true* if any of the nodes has custom data.
 
 - `nodes` is a Query Selector string, a Window, Document, Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object.
 - `key` is a string indicating the custom data value to test for.
@@ -1175,7 +1335,9 @@ core.hasData(nodes);
 core.hasData(nodes, key);
 ```
 
-Returns true if any of the elements has a specified property.
+**Has Property**
+
+Returns *true* if any of the elements has a specified property.
 
 - `nodes` is a Query Selector string, a HTMLElement, HTMLCollection, an Array of Elements or a QuerySet object.
 - `property` is a string indicating the property value to test for.
@@ -1184,7 +1346,9 @@ Returns true if any of the elements has a specified property.
 core.hasProperty(nodes, property);
 ```
 
-Returns true if any of the elements contains a descendent matching a filter.
+**Contains**
+
+Returns *true* if any of the elements contains a descendent matching a filter.
 
 - `nodes` is a Query Selector string, a Document, HTMLElement, HTMLCollection, an Array of Elements or a QuerySet object.
 - `filter` is either a function that accepts a node argument, a standard CSS selector, a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object that the nodes will be tested for.
@@ -1193,7 +1357,9 @@ Returns true if any of the elements contains a descendent matching a filter.
 core.contains(nodes, filter);
 ```
 
-Returns true if any of the elements matches a filter.
+**Is**
+
+Returns *true* if any of the elements matches a filter.
 
 - `nodes` is a Query Selector string, a HTMLElement, HTMLCollection, an Array of Elements or a QuerySet object.
 - `filter` is either a function that accepts a node argument, a standard CSS selector, a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object that the nodes will be tested for.
@@ -1202,7 +1368,9 @@ Returns true if any of the elements matches a filter.
 core.is(nodes, filter);
 ```
 
-Returns true if any of the elements or a parent of any of the elements is "fixed".
+**Is Fixed**
+
+Returns *true* if any of the elements or a parent of any of the elements is "fixed".
 
 - `nodes` is a Query Selector string, a HTMLElement, HTMLCollection, an Array of Elements or a QuerySet object.
 
@@ -1210,7 +1378,9 @@ Returns true if any of the elements or a parent of any of the elements is "fixed
 core.isFixed(nodes);
 ```
 
-Returns true if any of the elements is hidden.
+**Is Hidden**
+
+Returns *true* if any of the elements is hidden.
 
 - `nodes` is a Query Selector string, a Document, Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object.
 
@@ -1218,7 +1388,9 @@ Returns true if any of the elements is hidden.
 core.isHidden(nodes);
 ```
 
-Returns true if any of the elements is visible.
+**Is Visible**
+
+Returns *true* if any of the elements is visible.
 
 - `nodes` is a Query Selector string, a Window, Document, Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object.
 
@@ -1229,6 +1401,8 @@ core.isVisible(nodes);
 
 ##### Utility
 
+**Force Show**
+
 Force an element to be temporarily shown, and then execute a callback.
 
 - `nodes` is a Query Selector string, a Window, Document, HTMLElement, HTMLCollection, an Array of Elements or a QuerySet object.
@@ -1237,6 +1411,8 @@ Force an element to be temporarily shown, and then execute a callback.
 ```
 core.forceShow(nodes, callback);
 ```
+
+**Index**
 
 Get the index of the first element matching a filter.
 
@@ -1247,6 +1423,8 @@ Get the index of the first element matching a filter.
 const index = core.index(nodes, filter);
 ```
 
+**Index Of**
+
 Get the index of the first element relative to it's parent element.
 
 - `nodes` is a Query Selector string, a HTMLElement, HTMLCollection, an Array of Elements or a QuerySet object.
@@ -1254,6 +1432,8 @@ Get the index of the first element relative to it's parent element.
 ```
 const indexOf = core.indexOf(nodes);
 ```
+
+**Select**
 
 Create a selection on the first node.
 
@@ -1263,6 +1443,8 @@ Create a selection on the first node.
 core.select(nodes);
 ```
 
+**Select All**
+
 Create a selection on all nodes.
 
 - `nodes` is a Query Selector string, a Node, NodeList, HTMLElement, HTMLCollection, an Array of Nodes or a QuerySet object.
@@ -1270,6 +1452,8 @@ Create a selection on all nodes.
 ```
 core.selectAll(nodes);
 ```
+
+**Serialize**
 
 Returns a serialized string containing names and values of all form elements.
 
@@ -1279,6 +1463,8 @@ Returns a serialized string containing names and values of all form elements.
 const serialize = core.serialize(nodes);
 ```
 
+**Serialize Array**
+
 Returns a serialized array containing names and values of all form elements.
 
 - `nodes` is a Query Selector string, a HTMLElement, HTMLCollection, an Array of Elements or a QuerySet object.
@@ -1286,6 +1472,8 @@ Returns a serialized array containing names and values of all form elements.
 ```
 const serialArray = core.serializeArray(nodes);
 ```
+
+**Serialize Object**
 
 Returns an object containing Key/Value pairs of all form elements.
 
@@ -1295,9 +1483,10 @@ Returns an object containing Key/Value pairs of all form elements.
 const serialObject = core.serializeObject(nodes);
 ```
 
----
 
 ### AJAX
+
+**Ajax**
 
 Perform an XHR request.
 
@@ -1311,6 +1500,8 @@ core.ajax(data);
 core.ajax(url, data);
 ```
 
+**Upload**
+
 Perform an XHR request for a file upload.
 
 - `url` is a string containing the destination URL for the request.
@@ -1323,6 +1514,8 @@ core.upload(data);
 core.upload(url, data);
 ```
 
+**Load Script**
+
 Load and executes a JavaScript file.
 
 - `script` is a string containing the destination URL for the script to load.
@@ -1330,6 +1523,8 @@ Load and executes a JavaScript file.
 ```
 core.loadScript(script);
 ```
+
+**Load Scripts**
 
 Load and execute multiple JavaScript files (in order).
 
@@ -1339,6 +1534,8 @@ Load and execute multiple JavaScript files (in order).
 core.loadScripts(scripts);
 ```
 
+**Load Stylesheet**
+
 Import A CSS Stylesheet file.
 
 - `stylesheet` is a string containing the destination URL for the stylesheet to load.
@@ -1346,6 +1543,8 @@ Import A CSS Stylesheet file.
 ```
 core.loadStyle(stylesheet);
 ```
+
+**Load Stylesheets**
 
 Import multiple CSS Stylesheet files.
 
@@ -1355,9 +1554,10 @@ Import multiple CSS Stylesheet files.
 core.loadStyles(stylesheets);
 ```
 
----
 
 ### Cookie
+
+**Get Cookie**
 
 Get a cookie value (optionally json encoded).
 
@@ -1367,6 +1567,8 @@ Get a cookie value (optionally json encoded).
 ```
 const value = core.getCookie(name, json);
 ```
+
+**Set Cookie**
 
 Set a cookie (optionally json encoded).
 
@@ -1379,6 +1581,8 @@ Set a cookie (optionally json encoded).
 core.setCookie(name, value, options, json);
 ```
 
+**Remove Cookie**
+
 Remove a cookie.
 
 - `name` is a string containing the name of the cookie value to remove.
@@ -1388,9 +1592,10 @@ Remove a cookie.
 core.removeCookie(name, options);
 ```
 
----
 
 ### Event Factory
+
+**Animation Event Factory**
 
 Create a self regenerating event that will execute once per animation frame.
 
@@ -1399,6 +1604,8 @@ Create a self regenerating event that will execute once per animation frame.
 ```
 core.animationEventFactory(callback);
 ```
+
+**Mouse Drag Event Factory**
 
 Create a mouse drag event (optionally limited by animation frame).
 
@@ -1411,9 +1618,10 @@ Create a mouse drag event (optionally limited by animation frame).
 core.mouseDragFactory(down, move, up, animated);
 ```
 
----
 
 ### Parsers
+
+**Parse HTML**
 
 Returns an array containing nodes parsed from a HTML string.
 
@@ -1423,6 +1631,8 @@ Returns an array containing nodes parsed from a HTML string.
 const nodes = core.parseHTML(html);
 ```
 
+**Parse XML**
+
 Returns a DOM object from an XML string.
 
 - `xml` is a string containing the XML data to parse.
@@ -1431,11 +1641,12 @@ Returns a DOM object from an XML string.
 const xml = core.parseXML(xml);
 ```
 
----
 
-## Static
+## Static Methods
 
 ### Array
+
+**Flatten Array**
 
 Create a single-dimensional Array from a multiple-dimensional Array.
 
@@ -1445,6 +1656,8 @@ Create a single-dimensional Array from a multiple-dimensional Array.
 const flatArray = Core.flattenArray(array);
 ```
 
+**Unique Array**
+
 Remove duplicate elements in an array.
 
 - `array` is an Array you wish to remove duplicates from.
@@ -1453,19 +1666,22 @@ Remove duplicate elements in an array.
 const uniqueArray = Core.uniqueArray(array);
 ```
 
----
 
 ### Math
+
+**Clamp**
 
 Clamp a value between a min and max.
 
 - `value` is a number you wish to clamp.
-- `min` is a number which will be the minimum of the clamped value, and will default to 0.
-- `max` is a number which will be the maximum of the clamped value, and will default to 1.
+- `min` is a number which will be the minimum of the clamped value, and will default to *0*.
+- `max` is a number which will be the maximum of the clamped value, and will default to *1*.
 
 ```
 const clamp = Core.clamp(value, min = 0, max = 1);
 ```
+
+**Clamp Percent**
 
 Clamp a value between 0 and 100.
 
@@ -1474,6 +1690,8 @@ Clamp a value between 0 and 100.
 ```
 const clampPercent = Core.clampPercent(value);
 ```
+
+**Distance**
 
 Get the distance between two vectors.
 
@@ -1486,6 +1704,8 @@ Get the distance between two vectors.
 const dist = Core.dist(x1, y1, x2, y2);
 ```
 
+**Length**
+
 Get the length of an X,Y vector.
 
 - `x` is a number containing the X co-ordinate.
@@ -1494,6 +1714,8 @@ Get the length of an X,Y vector.
 ```
 const len = Core.len(x, y);
 ```
+
+**Linear Interpolation**
 
 Linear interpolation from one value to another.
 
@@ -1504,6 +1726,8 @@ Linear interpolation from one value to another.
 ```
 const lerp = Core.lerp(min, max, amount);
 ```
+
+**Map**
 
 Map a value from one range to another.
 
@@ -1517,14 +1741,18 @@ Map a value from one range to another.
 const map = Core.map(value, fromMin, fromMax, toMin, toMax);
 ```
 
+**To Step**
+
 Round a number to a specified step-size.
 
 - `value` is a number you wish to constrain to a specified "step".
-- `step` is a number to be used as the minimum step size.
+- `step` is a number to be used as the minimum step-size.
 
 ```
 const toStep = Core.toStep(value, step);
 ```
+
+**Linear Percent**
 
 Get the linear percent of a value in a specified range.
 
@@ -1536,6 +1764,8 @@ Get the linear percent of a value in a specified range.
 const linearPercent = Core.linearPercent(value, min, max);
 ```
 
+**Linear Value**
+
 Get the linear value of a percent in a specified range.
 
 - `percent` is a number you wish to calculate the linear value of.
@@ -1545,6 +1775,8 @@ Get the linear value of a percent in a specified range.
 ```
 const linearValue = Core.linearValue(percent, min, max);
 ```
+
+**Logarithmic Percent**
 
 Get the logarithmic percent of a value in a specified range.
 
@@ -1556,6 +1788,8 @@ Get the logarithmic percent of a value in a specified range.
 const logPrecent = Core.logPercent(value, min, max);
 ```
 
+**Logarithmic Value**
+
 Get the logarithmic value of a percent in a specified range.
 
 - `percent` is a number you wish to calculate the logarithmic value of.
@@ -1566,9 +1800,10 @@ Get the logarithmic value of a percent in a specified range.
 const logValue = Core.logValue(percent, min, max);
 ```
 
----
 
 ### String
+
+**Camel Case**
 
 Convert a string to camelCase.
 
@@ -1578,6 +1813,8 @@ Convert a string to camelCase.
 const camelCase = Core.camelCase(string);
 ```
 
+**Snake Case**
+
 Convert a string to snake-case.
 
 - `string` is a string you wish to transform to snake-case.
@@ -1586,11 +1823,12 @@ Convert a string to snake-case.
 const snakeCase = Core.snakeCase(string);
 ```
 
----
 
 ### Tests
 
-Returns true if the value is an Array.
+**Is Array**
+
+Returns *true* if the value is an Array.
 
 - `value` is the value you wish to test.
 
@@ -1598,7 +1836,9 @@ Returns true if the value is an Array.
 const isArray = Core.isArray(value);
 ```
 
-Returns true if the value is a Boolean.
+**Is Boolean**
+
+Returns *true* if the value is a Boolean.
 
 - `value` is the value you wish to test.
 
@@ -1606,7 +1846,9 @@ Returns true if the value is a Boolean.
 const isBoolean = Core.isBoolean(value);
 ```
 
-Returns true if the value if a Document.
+**Is Document**
+
+Returns *true* if the value if a Document.
 
 - `value` is the value you wish to test.
 
@@ -1614,7 +1856,9 @@ Returns true if the value if a Document.
 const isDocument = Core.isDocument(value);
 ```
 
-Returns true if the value is a HTML Element.
+**Is Element**
+
+Returns *true* if the value is a HTML Element.
 
 - `value` is the value you wish to test.
 
@@ -1622,7 +1866,9 @@ Returns true if the value is a HTML Element.
 const isElement = Core.isElement(value);
 ```
 
-Returns true if the value is a HTML Collection.
+**Is Element List**
+
+Returns *true* if the value is a HTML Collection.
 
 - `value` is the value you wish to test.
 
@@ -1630,7 +1876,9 @@ Returns true if the value is a HTML Collection.
 const isElementList = Core.isElementList(value);
 ```
 
-Returns true if the value is a Function.
+**Is Function**
+
+Returns *true* if the value is a function.
 
 - `value` is the value you wish to test.
 
@@ -1638,7 +1886,9 @@ Returns true if the value is a Function.
 const isFunction = Core.isFunction(value);
 ```
 
-Returns true if the value is a Node.
+**Is Node**
+
+Returns *true* if the value is a Node.
 
 - `value` is the value you wish to test.
 
@@ -1646,7 +1896,9 @@ Returns true if the value is a Node.
 const isNode = Core.isNode(value);
 ```
 
-Returns true if the value is a Node List.
+**Is Node List**
+
+Returns *true* if the value is a Node List.
 
 - `value` is the value you wish to test.
 
@@ -1654,7 +1906,9 @@ Returns true if the value is a Node List.
 const isNodeList = Core.isNodeList(value);
 ```
 
-Returns true if the value is numeric.
+**Is Numeric**
+
+Returns *true* if the value is numeric.
 
 - `value` is the value you wish to test.
 
@@ -1662,7 +1916,9 @@ Returns true if the value is numeric.
 const isNumeric = Core.isNumeric(value);
 ```
 
-Returns true if the value is an Object.
+**Is Object**
+
+Returns *true* if the value is an Object.
 
 - `value` is the value you wish to test.
 
@@ -1670,7 +1926,9 @@ Returns true if the value is an Object.
 const isObject = Core.isObject(value);
 ```
 
-Returns true if the value is a Query Set.
+**Is Query Set**
+
+Returns *true* if the value is a Query Set.
 
 - `value` is the value you wish to test.
 
@@ -1678,7 +1936,9 @@ Returns true if the value is a Query Set.
 const isQuerySet = Core.isQuerySet(value);
 ```
 
-Returns true if the value is a String.
+**Is String**
+
+Returns *true* if the value is a string.
 
 - `value` is the value you wish to test.
 
@@ -1686,7 +1946,9 @@ Returns true if the value is a String.
 const isString = Core.isString(value);
 ```
 
-Returns true if the value is a Window.
+**Is Window**
+
+Returns *true* if the value is a Window.
 
 - `value` is the value you wish to test.
 
