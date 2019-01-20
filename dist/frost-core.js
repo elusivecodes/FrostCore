@@ -2184,8 +2184,7 @@
     Object.assign(Core.prototype, {
 
         // find all elements matching a selector
-        find(nodes, selectors)
-        {
+        find(nodes, selectors) {
             if (!selectors) {
                 selectors = nodes;
                 nodes = this.context;
@@ -2213,8 +2212,7 @@
         },
 
         // find a single element matching a selector
-        findOne(nodes, selectors)
-        {
+        findOne(nodes, selectors) {
             if (!selectors) {
                 selectors = nodes;
                 nodes = this.context;
@@ -2242,8 +2240,7 @@
         },
 
         // find all elements with a specific class
-        findByClass(nodes, className)
-        {
+        findByClass(nodes, className) {
             if (!className) {
                 className = nodes;
                 nodes = this.context;
@@ -2263,15 +2260,13 @@
         },
 
         // find the first element with a specific class
-        findOneByClass(nodes, className)
-        {
+        findOneByClass(nodes, className) {
             return this.findByClass(nodes, className)
                 .shift() || null;
         },
 
         // find all elements with a specific ID
-        findById(nodes, id)
-        {
+        findById(nodes, id) {
             if (!id) {
                 id = nodes;
                 nodes = this.context;
@@ -2290,15 +2285,13 @@
         },
 
         // find the first element with a specific ID
-        findOneById(nodes, id)
-        {
+        findOneById(nodes, id) {
             return this.findById(nodes, id)
                 .shift() || null;
         },
 
         // find all elements with a specific tag
-        findByTag(nodes, tagName)
-        {
+        findByTag(nodes, tagName) {
             if (!tagName) {
                 tagName = nodes;
                 nodes = this.context;
@@ -2318,15 +2311,13 @@
         },
 
         // find the first element with a specific tag
-        findOneByTag(nodes, tagName)
-        {
+        findOneByTag(nodes, tagName) {
             return this.findByTag(nodes, tagName)
                 .shift() || null;
         },
 
         // find all elements matching a standard CSS selector
-        findSelector(nodes, selector)
-        {
+        findSelector(nodes, selector) {
             const results = new Set;
 
             this.nodeArray(nodes, true, true)
@@ -2341,8 +2332,7 @@
         },
 
         // find the first element matching a standard CSS selector
-        findOneSelector(nodes, selector)
-        {
+        findOneSelector(nodes, selector) {
             const results = new Set;
 
             this.nodeArray(nodes, true, true)
@@ -2360,13 +2350,11 @@
         },
 
         // find all elements matching a custom CSS selector
-        _findByCustom(nodes, selectors)
-        {
+        _findByCustom(nodes, selectors) {
             const results = new Set;
 
-            Core._parseSelector(selectors)
-                .forEach(selector =>
-                {
+            Core._parseSelectors(selectors)
+                .forEach(selector => {
                     const [type, value] = selector;
                     let selectorNodes = [];
 
@@ -2416,13 +2404,11 @@
         },
 
         // find the first element matching a custom CSS selector
-        _findOneByCustom(nodes, selectors)
-        {
+        _findOneByCustom(nodes, selectors) {
             const results = new Set;
 
             Core._parseSelectors(selectors)
-                .forEach(selector =>
-                {
+                .forEach(selector => {
                     const [type, value] = selector;
                     let selectorNode;
 

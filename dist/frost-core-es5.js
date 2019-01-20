@@ -1800,7 +1800,7 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
 
       var results = new Set();
 
-      Core._parseSelector(selectors).forEach(function (selector) {
+      Core._parseSelectors(selectors).forEach(function (selector) {
         var _selector = _slicedToArray(selector, 2),
             type = _selector[0],
             value = _selector[1];
