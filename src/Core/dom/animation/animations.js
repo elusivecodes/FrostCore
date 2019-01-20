@@ -325,8 +325,7 @@ Object.assign(Core.prototype, {
                             }
                             core.setStyle(parent, styles);
                         },
-                        duration,
-                        'ease-in-out'
+                        options
                     )
                 );
             });

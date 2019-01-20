@@ -1539,12 +1539,12 @@
                 this.setValue(node, options.value);
             }
 
-            if (options.attribute) {
-                this.setAttribute(node, options.attribute);
+            if (options.attributes) {
+                this.setAttribute(node, options.attributes);
             }
 
-            if (options.property) {
-                this.setProperty(nodes, options.property);
+            if (options.properties) {
+                this.setProperty(nodes, options.properties);
             }
 
             if (options.dataset) {
