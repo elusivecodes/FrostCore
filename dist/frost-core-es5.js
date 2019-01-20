@@ -2446,6 +2446,73 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
       };
     }
   });
+  Object.assign(Core, {
+    forgetDot: function forgetDot(pointer, key) {
+      var keys = key.split('.');
+      var current;
+
+      while (current = keys.shift() && keys.length) {
+        if (!pointer.hasOwnProperty(current)) {
+          return;
+        }
+      }
+
+      delete pointer[current];
+    },
+    getDot: function getDot(pointer, key, defaultValue) {
+      key.split('.').forEach(function (key) {
+        if (!pointer.hasOwnProperty(key)) {
+          pointer = defaultValue;
+          return false;
+        }
+
+        pointer = pointer[key];
+      });
+      return pointer;
+    },
+    hasDot: function hasDot(pointer, key) {
+      var result = true;
+      key.split('.').forEach(function (key) {
+        if (!pointer.hasOwnProperty(key)) {
+          result = false;
+          return false;
+        }
+      });
+      return result;
+    },
+    pluckDot: function pluckDot(pointers, key) {
+      var _this48 = this;
+
+      return pointers.map(function (pointer) {
+        return _this48.getDot(pointer, key);
+      });
+    },
+    setDot: function setDot(pointer, key, value) {
+      var _this49 = this;
+
+      var overwrite = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : true;
+      var keys = key.split('.');
+      var current;
+
+      while (current = keys.shift() && keys.length) {
+        if (current === '*') {
+          return Object.keys(pointer).forEach(function (k) {
+            return _this49.dotSet(pointer[k], keys.join('.'), value, overwrite);
+          });
+        }
+
+        if (!pointer.hasOwnProperty(current)) {
+          pointer[current] = {};
+        }
+
+        pointer = pointer[current];
+      }
+
+      if (overwrite || !pointer.hasOwnProperty(current)) {
+        pointer[current] = value;
+      }
+    }
+  });
   Object.assign(Core.prototype, {
     // returns a DOM object from an HTML string
     parseHTML: function parseHTML(html) {
@@ -2578,20 +2645,20 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
     },
     // recursively appends an object to a formData object
     _parseFormValues: function _parseFormValues(data, formData, prevKey) {
-      var _this48 = this;
+      var _this50 = this;
 
       Object.keys(data).forEach(function (key) {
         var value = data[key];
 
-        if (_this48.isPlainObject(value)) {
-          return _this48._parseFormValues(value, formData, key);
+        if (_this50.isPlainObject(value)) {
+          return _this50._parseFormValues(value, formData, key);
         }
 
         if (prevKey) {
           key = "".concat(prevKey, "[").concat(key, "]");
         }
 
-        if (!_this48.isArray(value)) {
+        if (!_this50.isArray(value)) {
           return formData.set(key, value);
         }
 
@@ -2602,17 +2669,17 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
     },
     // returns a URI-encoded attribute string from an array or object
     _parseParams: function _parseParams(data) {
-      var _this49 = this;
+      var _this51 = this;
 
       var values = [];
 
       if (this.isArray(data)) {
         values = data.map(function (value) {
-          return _this49._parseParam(value.name, value.value);
+          return _this51._parseParam(value.name, value.value);
         });
       } else if (this.isObject(data)) {
         values = Object.keys(data).map(function (key) {
-          return _this49._parseParam(key, data[key]);
+          return _this51._parseParam(key, data[key]);
         });
       }
 
@@ -2620,17 +2687,17 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
     },
     // returns an array or string of key value pairs from an array, object or string
     _parseParam: function _parseParam(key, value) {
-      var _this50 = this;
+      var _this52 = this;
 
       if (this.isArray(value)) {
         return value.map(function (val) {
-          return _this50._parseParam(key, val);
+          return _this52._parseParam(key, val);
         });
       }
 
       if (this.isObject(value)) {
         return Object.keys(value).map(function (subKey) {
-          return _this50._parseParam(key + '[' + subKey + ']', value[subKey]);
+          return _this52._parseParam(key + '[' + subKey + ']', value[subKey]);
         });
       }
 
@@ -2657,7 +2724,7 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
     },
     // returns an array of types and selectors from an array or string
     _parseSelectors: function _parseSelectors(selectors) {
-      var _this51 = this;
+      var _this53 = this;
 
       if (!this.isArray(selectors)) {
         selectors = selectors.split(this.splitRegex).filter(function (selector) {
@@ -2666,7 +2733,7 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
       }
 
       return selectors.map(function (selector) {
-        return _this51._parseSelector(selector.trim(), false);
+        return _this53._parseSelector(selector.trim(), false);
       });
     },
     // returns the subquery selector from a string
@@ -2782,10 +2849,10 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
     },
     // load and execute multiple JavaScript files (in order)
     loadScripts: function loadScripts(scripts, cache) {
-      var _this52 = this;
+      var _this54 = this;
 
       return Promise.all(scripts.map(function (script) {
-        return _this52.ajax(script, {
+        return _this54.ajax(script, {
           cache: cache
         });
       })).then(function (responses) {
@@ -2796,26 +2863,26 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
     },
     // import A CSS Stylesheet file
     loadStyle: function loadStyle(stylesheet, cache) {
-      var _this53 = this;
+      var _this55 = this;
 
       return this.ajax(stylesheet, {
         cache: cache
       }).then(function (response) {
-        return _this53.append(_this53.findOne('head'), _this53.create('style', response));
+        return _this55.append(_this55.findOne('head'), _this55.create('style', response));
       });
     },
     // import multiple CSS Stylesheet files
     loadStyles: function loadStyles(stylesheets, cache) {
-      var _this54 = this;
+      var _this56 = this;
 
       var head = this.findOne('head');
       return Promise.all(stylesheets.map(function (stylesheet) {
-        return _this54.ajax(stylesheet, {
+        return _this56.ajax(stylesheet, {
           cache: cache
         });
       })).then(function (responses) {
         return responses.forEach(function (response) {
-          return _this54.append(head, _this54.create('style', response));
+          return _this56.append(head, _this56.create('style', response));
         });
       });
     }
@@ -2892,7 +2959,7 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
     },
     // create a mouse drag event (optionally limited by animation frame)
     mouseDragFactory: function mouseDragFactory(down, move, up) {
-      var _this55 = this;
+      var _this57 = this;
 
       var animated = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : true;
 
@@ -2906,14 +2973,14 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
         }
 
         if (move) {
-          _this55.addEvent(window, 'mousemove', move);
+          _this57.addEvent(window, 'mousemove', move);
         }
 
-        _this55.addEventOnce(window, 'mouseup', function (e) {
+        _this57.addEventOnce(window, 'mouseup', function (e) {
           // needed to make sure up callback runs after move callback
           window.requestAnimationFrame(function () {
             if (move) {
-              _this55.removeEvent(window, 'mousemove', move);
+              _this57.removeEvent(window, 'mousemove', move);
             }
 
             if (up) {
@@ -2943,10 +3010,10 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
     },
     // returns a function for matching a delegate target to a complex selector
     _getDelegateContainsFactory: function _getDelegateContainsFactory(node, selector) {
-      var _this56 = this;
+      var _this58 = this;
 
       return function (target) {
-        var matches = _this56.find(node, selector);
+        var matches = _this58.find(node, selector);
 
         if (!matches.length) {
           return false;
@@ -2956,27 +3023,27 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
           return target;
         }
 
-        return _this56.closest(target, function (parent) {
+        return _this58.closest(target, function (parent) {
           return matches.contains(parent);
         }, node);
       };
     },
     // returns a function for matching a delegate target to a simple selector
     _getDelegateMatchFactory: function _getDelegateMatchFactory(node, selector) {
-      var _this57 = this;
+      var _this59 = this;
 
       return function (target) {
-        return target.matches(selector) ? target : _this57.closest(target, function (parent) {
+        return target.matches(selector) ? target : _this59.closest(target, function (parent) {
           return parent.matches(selector);
         }, node);
       };
     },
     // create a self-destructing event
     _selfDestructFactory: function _selfDestructFactory(node, event, callback) {
-      var _this58 = this;
+      var _this60 = this;
 
       var realCallback = function realCallback(e) {
-        _this58.removeEvent(node, event, realCallback);
+        _this60.removeEvent(node, event, realCallback);
 
         return callback(e);
       };
@@ -3019,7 +3086,7 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
     },
     // returns an element contains filter function from a function, string, node, node list, element list or array
     _parseFilterContains: function _parseFilterContains(filter) {
-      var _this59 = this;
+      var _this61 = this;
 
       if (!filter) {
         return false;
@@ -3031,7 +3098,7 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
 
       if (Core.isString(filter)) {
         return function (node) {
-          return !!_this59.findOne(node, filter);
+          return !!_this61.findOne(node, filter);
         };
       }
 
@@ -3243,11 +3310,11 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
 
   Object.assign(QuerySet.prototype, {
     // add an animation to each element
-    animate: function animate(callback, duration) {
-      var _this60 = this;
+    animate: function animate(callback, options) {
+      var _this62 = this;
 
       return this.queue(function (node) {
-        return _this60.core.animate(node, callback, duration);
+        return _this62.core.animate(node, callback, options);
       });
     },
     // stop all animations for each element
@@ -3259,103 +3326,83 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
   });
   Object.assign(QuerySet.prototype, {
     // slide each element in from the top over a duration
-    dropIn: function dropIn() {
-      var _this61 = this;
+    dropIn: function dropIn(options) {
+      var _this63 = this;
 
-      var duration = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 1000;
       return this.queue(function (node) {
-        return _this61.core.dropIn(node, duration);
+        return _this63.core.dropIn(node, options);
       });
     },
     // slide each element out to the top over a duration
-    dropOut: function dropOut() {
-      var _this62 = this;
+    dropOut: function dropOut(options) {
+      var _this64 = this;
 
-      var duration = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 1000;
       return this.queue(function (node) {
-        return _this62.core.dropOut(node, duration);
+        return _this64.core.dropOut(node, options);
       });
     },
     // fade the opacity of each element in over a duration
-    fadeIn: function fadeIn() {
-      var _this63 = this;
+    fadeIn: function fadeIn(options) {
+      var _this65 = this;
 
-      var duration = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 1000;
       return this.queue(function (node) {
-        return _this63.core.fadeIn(node, duration);
+        return _this65.core.fadeIn(node, options);
       });
     },
     // fade the opacity of each element out over a duration
-    fadeOut: function fadeOut() {
-      var _this64 = this;
+    fadeOut: function fadeOut(options) {
+      var _this66 = this;
 
-      var duration = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 1000;
       return this.queue(function (node) {
-        return _this64.core.fadeOut(node, duration);
+        return _this66.core.fadeOut(node, options);
       });
     },
     // rotate each element in on an x,y over a duration
-    rotateIn: function rotateIn() {
-      var _this65 = this;
+    rotateIn: function rotateIn(options) {
+      var _this67 = this;
 
-      var x = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 0;
-      var y = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 1;
-      var inverse = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : false;
-      var duration = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : 1000;
       return this.queue(function (node) {
-        return _this65.core.rotateIn(node, x, y, inverse, duration);
+        return _this67.core.rotateIn(node, options);
       });
     },
     // rotate each element out on an x,y over a duration
-    rotateOut: function rotateOut() {
-      var _this66 = this;
+    rotateOut: function rotateOut(options) {
+      var _this68 = this;
 
-      var x = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 0;
-      var y = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 1;
-      var inverse = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : false;
-      var duration = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : 1000;
       return this.queue(function (node) {
-        return _this66.core.rotateOut(node, x, y, inverse, duration);
+        return _this68.core.rotateOut(node, options);
       });
     },
     // slide each element into place from a direction over a duration
-    slideIn: function slideIn() {
-      var _this67 = this;
+    slideIn: function slideIn(options) {
+      var _this69 = this;
 
-      var direction = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 'bottom';
-      var duration = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 1000;
       return this.queue(function (node) {
-        return _this67.core.slideIn(node, direction, duration);
+        return _this69.core.slideIn(node, options);
       });
     },
     // slide each element out of place to a direction over a duration
-    slideOut: function slideOut() {
-      var _this68 = this;
+    slideOut: function slideOut(options) {
+      var _this70 = this;
 
-      var direction = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 'bottom';
-      var duration = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 1000;
       return this.queue(function (node) {
-        return _this68.core.slideOut(node, direction, duration);
+        return _this70.core.slideOut(node, options);
       });
     },
     // squeeze each element into place from a direction over a duration
-    squeezeIn: function squeezeIn() {
-      var _this69 = this;
+    squeezeIn: function squeezeIn(options) {
+      var _this71 = this;
 
-      var direction = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 'bottom';
-      var duration = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 1000;
       return this.queue(function (node) {
-        return _this69.core.squeezeIn(node, direction, duration);
+        return _this71.core.squeezeIn(node, options);
       });
     },
     // squeeze each element out of place to a direction over a duration
-    squeezeOut: function squeezeOut() {
-      var _this70 = this;
+    squeezeOut: function squeezeOut(options) {
+      var _this72 = this;
 
-      var direction = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 'bottom';
-      var duration = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 1000;
       return this.queue(function (node) {
-        return _this70.core.squeezeOut(node, direction, duration);
+        return _this72.core.squeezeOut(node, options);
       });
     }
   });
@@ -3555,13 +3602,13 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
     },
     // hide each element from display
     hide: function hide() {
-      var _this71 = this;
+      var _this73 = this;
 
       var duration = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 0;
 
       if (duration > 0) {
         return this.fadeOut(duration).queue(function (node) {
-          return _this71.core.hide(node);
+          return _this73.core.hide(node);
         });
       }
 
@@ -3587,15 +3634,15 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
     },
     // display each hidden element
     show: function show() {
-      var _this72 = this;
+      var _this74 = this;
 
       var duration = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 0;
 
       if (duration > 0) {
         return this.queue(function (node) {
-          _this72.core.show(nodes);
+          _this74.core.show(nodes);
 
-          _this72.core.fadeIn(node, duration);
+          _this74.core.fadeIn(node, duration);
         });
       }
 
