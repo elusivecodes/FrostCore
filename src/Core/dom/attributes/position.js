@@ -5,7 +5,8 @@ Object.assign(Core.prototype, {
     {
         const nodeBox = this.rect(nodes, offset);
 
-        if ( ! nodeBox) {
+        if ( ! nodeBox)
+        {
             return;
         }
 
@@ -20,26 +21,34 @@ Object.assign(Core.prototype, {
     {
         const node = this.nodeFirst(nodes);
 
-        if ( ! node) {
+        if ( ! node)
+        {
             return;
         }
 
-        return this.forceShow(node, node => {
-            const result = {
-                x: node.offsetLeft,
-                y: node.offsetTop
-            };
+        return this.forceShow(
+            node,
+            node =>
+            {
+                const result = {
+                    x: node.offsetLeft,
+                    y: node.offsetTop
+                };
 
-            if (offset) {
-                const parentPosition = this.position(this.offsetParent(node), true);
-                if (parentPosition) {
-                    result.x += parentPosition.x;
-                    result.y += parentPosition.y;
+                if (offset)
+                {
+                    let offsetParent = node;
+
+                    while (offsetParent = offsetParent.offsetParent)
+                    {
+                        result.x += offsetParent.offsetLeft;
+                        result.y += offsetParent.offsetTop;
+                    }
                 }
-            }
 
-            return result;
-        });
+                return result;
+            }
+        );
     },
 
     // get the computed bounding rectangle of the first element
@@ -47,20 +56,26 @@ Object.assign(Core.prototype, {
     {
         const node = this.nodeFirst(nodes);
 
-        if ( ! node) {
+        if ( ! node)
+        {
             return;
         }
 
-        return this.forceShow(node, node => {
-            const result = node.getBoundingClientRect();
+        return this.forceShow(
+            node,
+            node =>
+            {
+                const result = node.getBoundingClientRect();
 
-            if (offset) {
-                result.x += this.scrollX(window);
-                result.y += this.scrollY(window);
+                if (offset)
+                {
+                    result.x += this.getScrollX(window);
+                    result.y += this.getScrollY(window);
+                }
+
+                return result;
             }
-
-            return result;
-        });
+        );
     },
 
     // constrain each element to a container element
@@ -68,36 +83,68 @@ Object.assign(Core.prototype, {
     {
         const containerBox = this.rect(container);
 
-        if ( ! containerBox) {
+        if ( ! containerBox)
+        {
             return;
         }
 
         this.nodeArray(nodes)
-            .forEach(node => {
+            .forEach(node =>
+            {
                 const nodeBox = this.rect(node);
 
-                if (nodeBox.height > containerBox.height) {
-                    this.setStyle(node, 'height', containerBox.height + 'px');
+                if (nodeBox.height > containerBox.height)
+                {
+                    this.setStyle(
+                        node,
+                        'height',
+                        containerBox.height
+                    );
                 }
 
-                if (nodeBox.width > containerBox.width) {
-                    this.setStyle(node, 'width', containerBox.width + 'px');
+                if (nodeBox.width > containerBox.width)
+                {
+                    this.setStyle(
+                        node,
+                        'width',
+                        containerBox.width
+                    );
                 }
 
-                if (nodeBox.top < containerBox.top) {
-                    this.setStyle(node, 'top', containerBox.top);
+                if (nodeBox.top < containerBox.top)
+                {
+                    this.setStyle(
+                        node,
+                        'top',
+                        containerBox.top
+                    );
                 }
 
-                if (nodeBox.right > containerBox.right) {
-                    this.setStyle(node, 'left', containerBox.right - nodeBox.width);
+                if (nodeBox.right > containerBox.right)
+                {
+                    this.setStyle(
+                        node,
+                        'left',
+                        containerBox.right - nodeBox.width
+                    );
                 }
 
-                if (nodeBox.bottom > containerBox.bottom) {
-                    this.setStyle(node, 'top', containerBox.bottom - nodeBox.height);
+                if (nodeBox.bottom > containerBox.bottom)
+                {
+                    this.setStyle(
+                        node,
+                        'top',
+                        containerBox.bottom - nodeBox.height
+                    );
                 }
 
-                if (nodeBox.left < containerBox.left) {
-                    this.setStyle(node, 'left', containerBox.left);
+                if (nodeBox.left < containerBox.left)
+                {
+                    this.setStyle(
+                        node,
+                        'left',
+                        containerBox.left
+                    );
                 }
             });
     },
@@ -107,11 +154,17 @@ Object.assign(Core.prototype, {
     {
         const nodeCenter = this.center(nodes, offset);
 
-        if ( ! nodeCenter) {
+        if ( ! nodeCenter)
+        {
             return;
         }
 
-        return Core.dist(nodeCenter.x, nodeCenter.y, x, y);
+        return Core.dist(
+            nodeCenter.x,
+            nodeCenter.y,
+            x,
+            y
+        );
     },
 
     // get the distance between two elements
@@ -119,11 +172,16 @@ Object.assign(Core.prototype, {
     {
         const otherCenter = this.center(others);
 
-        if ( ! otherCenter) {
+        if ( ! otherCenter)
+        {
             return;
         }
 
-        return this.distTo(nodes, otherCenter.x, otherCenter.y);
+        return this.distTo(
+            nodes,
+            otherCenter.x,
+            otherCenter.y
+        );
     },
 
     // get the nearest element to an X,Y position in the window (optionally offset)
@@ -133,9 +191,11 @@ Object.assign(Core.prototype, {
         let closestDistance = Number.MAX_VALUE;
 
         this.nodeArray(nodes)
-            .forEach(node => {
+            .forEach(node =>
+            {
                 const dist = this.distTo(node, x, y, offset);
-                if (dist && dist < closestDistance) {
+                if (dist && dist < closestDistance)
+                {
                     closestDistance = dist;
                     closest = node;
                 }
@@ -149,11 +209,16 @@ Object.assign(Core.prototype, {
     {
         const otherCenter = this.center(others);
 
-        if ( ! otherCenter) {
+        if ( ! otherCenter)
+        {
             return;
         }
 
-        return this.nearestTo(nodes, otherCenter.x, otherCenter.y);
+        return this.nearestTo(
+            nodes,
+            otherCenter.x,
+            otherCenter.y
+        );
     },
 
     // get the percentage of an X co-ordinate relative to an element
@@ -161,11 +226,16 @@ Object.assign(Core.prototype, {
     {
         const nodeBox = this.rect(nodes, offset);
 
-        if ( ! nodeBox) {
+        if ( ! nodeBox)
+        {
             return;
         }
 
-        return Core.clampPercent((x - nodeBox.left) / nodeBox.width * 100);
+        return Core.clampPercent(
+            (x - nodeBox.left)
+            / nodeBox.width
+            * 100
+        );
     },
 
     // get the percentage of a Y co-ordinate relative to an element
@@ -173,11 +243,16 @@ Object.assign(Core.prototype, {
     {
         const nodeBox = this.rect(nodes, offset);
 
-        if ( ! nodeBox) {
+        if ( ! nodeBox)
+        {
             return;
         }
 
-        return Core.clampPercent((y - nodeBox.top) / nodeBox.height * 100);
+        return Core.clampPercent(
+            (y - nodeBox.top)
+            / nodeBox.height
+            * 100
+        );
     }
 
 });

@@ -6,37 +6,50 @@ Object.assign(Core.prototype, {
     {
         let node = this.nodeFirst(nodes, true, true, true);
 
-        if ( ! node) {
+        if ( ! node)
+        {
             return;
         }
 
-        if (Core.isWindow(node)) {
+        if (Core.isWindow(node))
+        {
             return padding ?
                 node.outerHeight :
                 node.innerHeight;
         }
 
-        if (Core.isDocument(node)) {
+        if (Core.isDocument(node))
+        {
             node = node.documentElement;
         }
 
-        return this.forceShow(node, node => {
-            let result = node.clientHeight;
+        return this.forceShow(
+            node,
+            node =>
+            {
+                let result = node.clientHeight;
 
-            if ( ! padding) {
-                result -= parseInt(this.css(node, 'padding-top')) + parseInt(this.css(node, 'padding-bottom'));
+                if ( ! padding)
+                {
+                    result -= parseInt(this.css(node, 'padding-top'))
+                        + parseInt(this.css(node, 'padding-bottom'));
+                }
+
+                if (border)
+                {
+                    result += parseInt(this.css(node, 'border-top-width'))
+                        + parseInt(this.css(node, 'border-bottom-width'));
+                }
+
+                if (margin)
+                {
+                    result += parseInt(this.css(node, 'margin-top'))
+                        + parseInt(this.css(node, 'margin-bottom'));
+                }
+
+                return result;
             }
-
-            if (border) {
-                result += parseInt(this.css(node, 'border-top-width')) + parseInt(this.css(node, 'border-bottom-width'));
-            }
-
-            if (margin) {
-                result += parseInt(this.css(node, 'margin-top')) + parseInt(this.css(node, 'margin-bottom'));
-            }
-
-            return result;
-        });
+        );
     },
 
     // get the computed width of the first element
@@ -45,37 +58,50 @@ Object.assign(Core.prototype, {
     {
         let node = this.nodeFirst(nodes, true, true, true);
 
-        if ( ! node) {
+        if ( ! node)
+        {
             return;
         }
 
-        if (Core.isWindow(node)) {
+        if (Core.isWindow(node))
+        {
             return padding ?
                 node.outerWidth :
                 node.innerWidth;
         }
 
-        if (Core.isDocument(node)) {
+        if (Core.isDocument(node))
+        {
             node = node.documentElement;
         }
 
-        return this.forceShow(node, node => {
-            let result = node.clientWidth;
+        return this.forceShow(
+            node,
+            node =>
+            {
+                let result = node.clientWidth;
 
-            if ( ! padding) {
-                result -= parseInt(this.css(node, 'padding-left')) + parseInt(this.css(node, 'padding-right'));
+                if ( ! padding)
+                {
+                    result -= parseInt(this.css(node, 'padding-left'))
+                        + parseInt(this.css(node, 'padding-right'));
+                }
+
+                if (border)
+                {
+                    result += parseInt(this.css(node, 'border-left-width'))
+                        + parseInt(this.css(node, 'border-right-width'));
+                }
+
+                if (margin)
+                {
+                    result += parseInt(this.css(node, 'margin-left'))
+                        + parseInt(this.css(node, 'margin-right'));
+                }
+
+                return result;
             }
-
-            if (border) {
-                result += parseInt(this.css(node, 'border-left-width')) + parseInt(this.css(node, 'border-right-width'));
-            }
-
-            if (margin) {
-                result += parseInt(this.css(node, 'margin-left')) + parseInt(this.css(node, 'margin-right'));
-            }
-
-            return result;
-        });
+        );
     }
 
 });

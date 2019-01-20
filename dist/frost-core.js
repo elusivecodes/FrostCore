@@ -8,11 +8,9 @@
 
 })(window, function(window) {
 
-    class Core
-    {
+    class Core {
 
-        constructor(context)
-        {
+        constructor(context) {
             this.context = context || window.document;
 
             this.animating = false;
@@ -24,10 +22,13 @@
             this.nodeStyles = new WeakMap;
         }
 
+        exec(command, showDefaultUI, value = null) {
+            return this.context.execCommand(command, showDefaultUI, value);
+        }
+
         // jQuery-like query method,
         // add a function to the ready queue or return a QuerySet (optionally mutable)
-        query(query, mutable = true)
-        {
+        query(query, mutable = true) {
             if (Core.isFunction(query)) {
                 return this.ready(query);
             }
@@ -37,16 +38,6 @@
                 new QuerySetImmutable(query, this);
         }
 
-        // add a function to the ready queue
-        ready(callback)
-        {
-            if (this.context.readyState === 'complete') {
-                callback();
-            } else {
-                this.addEvent(window, 'DOMContentLoaded', callback);
-            }
-        }
-
     }
 
     Object.assign(Core.prototype, {
@@ -54,58 +45,103 @@
         // add an animation to each element
         animate(nodes, callback, duration = 1000)
         {
+            // get current timestamp for progress calculation
             const start = Date.now();
+
+            // initialize promises array
             const promises = [];
 
+            // loop through nodes
             this.nodeArray(nodes)
-                .forEach(node => {
-                    if ( ! this.animations.has(node)) {
+                .forEach(node =>
+                {
+
+                    // if this is the first animation for the node,
+                    // initialize an animation array
+                    if ( ! this.animations.has(node))
+                    {
                         this.animations.set(node, []);
                     }
 
-                    const promise = new Promise((resolve, reject) => {
-                        const animation = (stop = false, finish = false) => {
-                            if ( ! core.contains(this.context, node) || (stop && ! finish)) {
+                    // create promise for the animation
+                    const promise = new Promise((resolve, reject) =>
+                    {
+
+                        // create function for the animation
+                        const animation = (stop = false, finish = false) =>
+                        {
+
+                            // if the node is no longer in the document,
+                            // or the animation was stopped and not finished
+                            // reject the promise and return false
+                            if ( ! core.contains(this.context, node) || (stop && ! finish))
+                            {
                                 reject(node);
-                                return false;
+                                return true;
                             }
 
-                            const progress = finish ? 1 : Core.clamp((Date.now() - start) / duration);
+                            // calculate the progress
+                            const progress = finish ?
+                                1 :
+                                Core.clamp(
+                                    (Date.now() - start)
+                                    / duration
+                                );
+
+                            // run the animation callback
                             callback(node, progress);
 
-                            if (progress === 1) {
+                            // if the animation is complete,
+                            // resolve the promise and return false
+                            if (progress === 1)
+                            {
                                 resolve(node);
-                                return false;
+                                return true;
                             }
-
-                            return true;
                         };
 
-                        this.animations.get(node).push(animation);
+                        // push the animation to the animations array
+                        this.animations.get(node)
+                            .push(animation);
                     });
 
+                    // push the promise to the promises array
                     promises.push(promise);
                 });
 
-            if (promises.length && ! this.animating) {
+            // if we have animations, and are not already animating
+            // start the animation
+            if (promises.length && ! this.animating)
+            {
                 this.animating = true;
                 this._animationFrame();
             }
 
+            // return all promises
             return Promise.all(promises);
         },
 
         // stop all animations for each element
         stop(nodes, finish = true)
         {
+            // loop through nodes
             this.nodeArray(nodes)
-                .forEach(node => {
-                    if ( ! this.animations.has(node)) {
+                .forEach(node =>
+                {
+
+                    // if no animations exist for the node, return
+                    if ( ! this.animations.has(node))
+                    {
                         return;
                     }
 
-                    const animations = this.animations.get(node);
-                    animations.forEach(animation => animation(true, finish));
+                    // loop through the animations and run the callback
+                    this.animations.get(node)
+                        .forEach(animation =>
+                            animation(true, finish)
+                        );
+
+                    // remove node from animations
                     this.animations.delete(node);
                 });
         },
@@ -113,33 +149,60 @@
         // run a single frame of all animations, and then queue up the next frame
         _animationFrame()
         {
+            // initialize complete nodes array
             const completeNodes = [];
 
-            this.animations.forEach((animations, node) => {
+            // loop through animations
+            this.animations.forEach((animations, node) =>
+            {
+
+                // initialize complete animations array
                 const completeAnimations = [];
 
-                animations.forEach((animation, index) => {
-                    if ( ! animation()) {
+                // loop through node animations
+                animations.forEach((animation, index) =>
+                {
+                    // if the animation is complete,
+                    // push index to complete animations
+                    if (animation())
+                    {
                         completeAnimations.push(index);
                     }
                 });
 
-                if ( ! completeAnimations.length) {
+                // if we have no complete animations, return
+                if ( ! completeAnimations.length)
+                {
                     return;
                 }
 
-                animations = animations.filter((animation, index) => ! completeAnimations.includes(index));
+                // filter complete animations from the node animations array
+                animations = animations.filter((animation, index) =>
+                    ! completeAnimations.includes(index)
+                );
 
-                if ( ! animations.length) {
+                // if we have no remaining animations, push the node to complete nodes
+                if ( ! animations.length)
+                {
                     completeNodes.push(node);
                 }
             });
 
-            completeNodes.forEach(node => this.animations.delete(node));
+            // loop through complete nodes and delete from animations
+            completeNodes.forEach(node =>
+                this.animations.delete(node)
+            );
 
-            if (this.animations.size) {
-                window.requestAnimationFrame(() => this._animationFrame());
-            } else {
+            // if we have remaining animations, queue up the next frame,
+            // otherwise, set animating to false
+            if (this.animations.size)
+            {
+                window.requestAnimationFrame(() =>
+                    this._animationFrame()
+                );
+            }
+            else
+            {
                 this.animating = false;
             }
         }
@@ -151,230 +214,297 @@
         // slide each element in from the top over a duration
         dropIn(nodes, duration = 1000)
         {
-            return this.slideIn(nodes, 'top', duration);
+            return this.slideIn(
+                nodes,
+                'top',
+                duration
+            );
         },
 
         // slide each element out to the top over a duration
         dropOut(nodes, duration = 1000)
         {
-            return this.slideOut(nodes, 'top', duration);
+            return this.slideOut(
+                nodes,
+                'top',
+                duration
+            );
         },
 
         // fade the opacity of each element in over a duration
         fadeIn(nodes, duration = 1000)
         {
-            return this.animate(nodes, (node, progress) =>
-                this.setStyle(node, 'opacity', progress < 1 ? progress : '')
-            , duration);
+            return this.animate(
+                nodes,
+                (node, progress) =>
+                    this.setStyle(
+                        node,
+                        'opacity',
+                        progress < 1 ?
+                            progress :
+                            ''
+                    ),
+                duration
+            );
         },
 
         // fade the opacity of each element out over a duration
         fadeOut(nodes, duration = 1000)
         {
-            return this.animate(nodes, (node, progress) =>
-                this.setStyle(node, 'opacity', progress < 1 ? 1 - progress : '')
-            , duration);
+            return this.animate(
+                nodes,
+                (node, progress) =>
+                    this.setStyle(
+                        node,
+                        'opacity',
+                        progress < 1 ?
+                            1 - progress :
+                            ''
+                    ),
+                duration
+            );
         },
 
         // rotate each element in on an x,y over a duration
         rotateIn(nodes, x = 0, y = 1, inverse = false, duration = 1000)
         {
-            return this.animate(nodes, (node, progress) => {
-                if (progress === 1) {
-                    return this.setStyle(node, 'transform', '');
-                }
-
-                let amount = 90 - (progress * 90);
-
-                if (inverse) {
-                    amount *= -1;
-                }
-
-                this.setStyle(node, 'transform', 'rotate3d(' + x + ', ' + y + ', 0, ' + amount + 'deg)');
-            }, duration);
+            return this.animate(
+                nodes,
+                (node, progress) =>
+                    this.setStyle(
+                        node,
+                        'transform',
+                        progress < 1 ?
+                            `rotate3d(${x}, ${y}, 0, ${(90 - (progress * 90)) * (inverse ? -1 : 1)}deg)` :
+                            ''
+                    ),
+                duration
+            );
         },
 
         // rotate each element out on an x,y over a duration
         rotateOut(nodes, x = 0, y = 1, inverse = false, duration = 1000)
         {
-            return this.animate(nodes, (node, progress) => {
-
-                if (progress === 1) {
-                    return this.setStyle(node, 'transform', '');
-                }
-
-                let amount = progress * 90;
-
-                if (inverse) {
-                    amount *= -1;
-                }
-
-                this.setStyle(node, 'transform', 'rotate3d(' + x + ', ' + y + ', 0, ' + amount + 'deg)');
-            }, duration);
+            return this.animate(
+                nodes,
+                (node, progress) =>
+                    this.setStyle(
+                        node,
+                        'transform',
+                        progress < 1 ?
+                            `rotate3d(${x}, ${y}, 0, ${(progress * 90) * (inverse ? -1 : 1)}deg)` :
+                            ''
+                    ),
+                duration
+            );
         },
 
         // slide each element into place from a direction over a duration
         slideIn(nodes, direction = 'bottom', duration = 1000)
         {
-            return this.animate(nodes, (node, progress) => {
+            return this.animate(
+                nodes,
+                (node, progress) =>
+                {
+                    let axis, size, inverse;
 
-                if (progress === 1) {
-                    return this.setStyle(node, 'transform', '');
-                }
+                    if (progress < 1) {
+                        const dir = Core.isFunction(direction) ?
+                            direction() :
+                            direction;
 
-                const dir = Core.isFunction(direction) ?
-                    direction() : direction;
-
-                if (dir === 'top' || dir === 'bottom') {
-                    const height = this.height(node);
-                    let amount = Math.round(height - (height * progress));
-                    if (dir === 'top') {
-                        amount *= -1;
+                        if (dir === 'top' || dir === 'bottom') {
+                            axis = 'Y';
+                            size = this.height(node);
+                            inverse = dir === 'top';
+                        }
+                        else {
+                            axis = 'X';
+                            size = this.width(node);
+                            inverse = dir === 'left';
+                        }
                     }
-                    this.setStyle(node, 'transform', 'translateY(' + amount + 'px)');
-                } else {
-                    const width = this.width(node);
-                    let amount = Math.round(width - (width * progress));
-                    if (dir === 'left') {
-                        amount *= -1;
-                    }
-                    this.setStyle(node, 'transform', 'translateX(' + amount + 'px)');
-                }
 
-            }, duration);
+                    this.setStyle(
+                        node,
+                        'transform',
+                        progress < 1 ?
+                            `translate${axis}(${
+                            Math.round(
+                                size
+                                - (size * progress)
+                            )
+                            * (inverse ?
+                                -1 :
+                                1
+                            )
+                            }px)` :
+                            ''
+                    );
+                },
+                duration
+            );
         },
 
         // slide each element out of place to a direction over a duration
         slideOut(nodes, direction = 'bottom', duration = 1000)
         {
-            return this.animate(nodes, (node, progress) => {
+            return this.animate(
+                nodes,
+                (node, progress) =>
+                {
+                    let axis, size, inverse;
 
-                if (progress === 1) {
-                    return this.setStyle(node, 'transform', '');
-                }
+                    if (progress < 1) {
+                        const dir = Core.isFunction(direction) ?
+                            direction() :
+                            direction;
 
-                const dir = Core.isFunction(direction) ?
-                    direction() : direction;
-
-                if (dir === 'top' || dir === 'bottom') {
-                    const height = this.height(node);
-                    let amount = Math.round(height * progress);
-                    if (dir === 'top') {
-                        amount *= -1;
+                        if (dir === 'top' || dir === 'bottom') {
+                            axis = 'Y';
+                            size = this.height(node);
+                            inverse = dir === 'top';
+                        }
+                        else {
+                            axis = 'X';
+                            size = this.width(node);
+                            inverse = dir === 'left';
+                        }
                     }
-                    this.setStyle(node, 'transform', 'translateY(' + amount + 'px)');
-                } else {
-                    const width = this.width(node);
-                    let amount = Math.round(width * progress);
-                    if (dir === 'left') {
-                        amount *= -1;
-                    }
-                    this.setStyle(node, 'transform', 'translateX(' + amount + 'px)');
-                }
 
-            }, duration);
+                    this.setStyle(
+                        node,
+                        'transform',
+                        progress < 1 ?
+                            `translate${axis}(${
+                            Math.round(
+                                size * progress
+                            )
+                            * (inverse ?
+                                -1 :
+                                1
+                            )
+                            }px)` :
+                            ''
+                    );
+                },
+                duration
+            );
         },
 
         // squeeze each element into place from a direction over a duration
         squeezeIn(nodes, direction = 'bottom', duration = 1000)
         {
-            const wrapper = this.create('div');
-            this.setStyle(wrapper, 'overflow', 'hidden');
-            this.setStyle(wrapper, 'position', 'relative');
-
-            const animations = [];
-
-            this.nodeArray(nodes)
-                .forEach(node => {
-                    this.wrap(node, wrapper);
-                    const parent = this.parent(node);
-
-                    animations.push(this.animate(node, (node, progress) => {
-                        if (progress === 1) {
-                            this.before(parent, this.contents(parent));
-                            this.remove(parent);
-                            return;
+            return this.animate(
+                nodes,
+                (node, progress) =>
+                {
+                    this.setStyle(
+                        node,
+                        {
+                            overflow: '',
+                            height: '',
+                            width: '',
+                            marginTop: '',
+                            marginLeft: ''
                         }
+                    );
 
-                        const dir = Core.isFunction(direction) ?
-                            direction() : direction;
+                    if (progress === 1) {
+                        return;
+                    }
 
-                        if (dir === 'top' || dir === 'bottom') {
-                            const height = Math.round(this.height(node, true));
-                            const width = Math.round(this.width(node, true, true, true));
-                            this.setStyle(parent, 'width', width);
+                    const dir = Core.isFunction(direction) ?
+                        direction() :
+                        direction;
 
-                            const amount = Math.round(height * progress);
-                            this.setStyle(parent, 'height', amount);
-                            if (dir === 'top') {
-                                this.setStyle(parent, 'transform', 'translateY(' + (height - amount) + 'px)');
-                            }
-                        } else {
-                            const height = Math.round(this.height(node, true, true, true));
-                            const width = Math.round(this.width(node, true));
-                            this.setStyle(parent, 'height', height);
-
-                            const amount = Math.round(width * progress);
-                            this.setStyle(parent, 'width', amount);
-                            if (dir === 'left') {
-                                this.setStyle(parent, 'transform', 'translateX(' + (width - amount) + 'px)');
-                            }
+                    let sizeStyle, marginStyle;
+                    if (dir === 'top' || dir === 'bottom') {
+                        sizeStyle = 'height';
+                        if (dir === 'top') {
+                            marginStyle = 'marginTop';
                         }
-                    }, duration));
-                });
+                    }
+                    else if (dir === 'left' || dir === 'right') {
+                        sizeStyle = 'width';
+                        if (dir === 'left') {
+                            marginStyle = 'marginLeft';
+                        }
+                    }
 
-            return Promise.all(animations);
+                    const size = Math.round(this[sizeStyle](node, true));
+                    const amount = Math.round(size * progress);
+
+                    const styles = {
+                        overflow: 'hidden',
+                        [sizeStyle]: amount
+                    };
+
+                    if (marginStyle) {
+                        styles[marginStyle] = size - amount;
+                    }
+
+                    this.setStyle(node, styles);
+                },
+                duration
+            );
         },
 
         // squeeze each element out of place to a direction over a duration
         squeezeOut(nodes, direction = 'bottom', duration = 1000)
         {
-            const wrapper = this.create('div');
-            this.setStyle(wrapper, 'overflow', 'hidden');
-            this.setStyle(wrapper, 'position', 'relative');
-
-            const animations = [];
-
-            this.nodeArray(nodes)
-                .forEach(node => {
-                    this.wrap(node, wrapper);
-                    const parent = this.parent(node);
-
-                    animations.push(this.animate(node, (node, progress) => {
-                        if (progress === 1) {
-                            this.before(parent, this.contents(parent));
-                            this.remove(parent);
-                            return;
+            return this.animate(
+                nodes,
+                (node, progress) =>
+                {
+                    this.setStyle(
+                        node,
+                        {
+                            overflow: '',
+                            height: '',
+                            width: '',
+                            marginTop: '',
+                            marginLeft: ''
                         }
+                    );
 
-                        const dir = Core.isFunction(direction) ?
-                            direction() : direction;
+                    if (progress === 1) {
+                        return;
+                    }
 
-                        if (dir === 'top' || dir === 'bottom') {
-                            const height = Math.round(this.height(node, true));
-                            const width = Math.round(this.width(node, true, true, true));
-                            this.setStyle(parent, 'width', width);
+                    const dir = Core.isFunction(direction) ?
+                        direction() :
+                        direction;
 
-                            const amount = Math.round(height - (height * progress));
-                            this.setStyle(parent, 'height', amount);
-                            if (dir === 'top') {
-                                this.setStyle(parent, 'transform', 'translateY(' + (height - amount) + 'px)');
-                            }
-                        } else {
-                            const height = Math.round(this.height(node, true, true, true));
-                            const width = Math.round(this.width(node, true));
-                            this.setStyle(parent, 'height', height);
-
-                            const amount = Math.round(width - (width * progress));
-                            this.setStyle(parent, 'width', amount);
-                            if (dir === 'left') {
-                                this.setStyle(parent, 'transform', 'translateX(' + (width - amount) + 'px)');
-                            }
+                    let sizeStyle, marginStyle;
+                    if (dir === 'top' || dir === 'bottom') {
+                        sizeStyle = 'height';
+                        if (dir === 'top') {
+                            marginStyle = 'marginTop';
                         }
-                    }, duration));
-                });
+                    }
+                    else if (dir === 'left' || dir === 'right') {
+                        sizeStyle = 'width';
+                        if (dir === 'left') {
+                            marginStyle = 'marginLeft';
+                        }
+                    }
 
-            return Promise.all(animations);
+                    const size = Math.round(this[sizeStyle](node, true));
+                    const amount = Math.round(size - (size * progress));
+
+                    const styles = {
+                        overflow: 'hidden',
+                        [sizeStyle]: amount
+                    };
+                    if (marginStyle) {
+                        styles[marginStyle] = size - amount;
+                    }
+
+                    this.setStyle(node, styles);
+                },
+                duration
+            );
         }
 
     });
@@ -384,16 +514,28 @@
         // queue a callback on each element
         queue(nodes, callback)
         {
+            // loop through nodes
             this.nodeArray(nodes)
-                .forEach(node => {
+                .forEach(node =>
+                {
+                    // test if node has a new queue
                     const newQueue = ! this.queues.has(node);
-                    if (newQueue) {
+
+                    // if it's a new queue,
+                    // initialize an empty array in the queue
+                    if (newQueue)
+                    {
                         this.queues.set(node, []);
                     }
 
-                    this.queues.get(node).push(callback);
+                    // push the callback to the queue
+                    this.queues.get(node)
+                        .push(callback);
 
-                    if (newQueue) {
+                    // if it's a new queue,
+                    // dequeue the node
+                    if (newQueue)
+                    {
                         this._dequeue(node);
                     }
                 });
@@ -402,34 +544,43 @@
         // clear the queue of each element
         clearQueue(nodes)
         {
+            // loop through nodes
             this.nodeArray(nodes)
-                .forEach(node => {
-                    if ( ! this.queues.has(node)) {
-                        return;
-                    }
-
-                    this.queues.delete(node);
-                });
+                .forEach(node =>
+                    this.queues.has(node) &&
+                    this.queues.delete(node)
+                );
         },
 
         // run the next queued callback for each element
         _dequeue(nodes)
         {
+            // loop through nodes
             this.nodeArray(nodes)
-                .forEach(node => {
-                    if ( ! this.queues.has(node)) {
+                .forEach(node =>
+                {
+                    // if node doesn't have a queue, return
+                    if ( ! this.queues.has(node))
+                    {
                         return;
                     }
 
+                    // get next item in queue
                     const next = this.queues.get(node).shift();
 
-                    if ( ! next) {
+                    // if there's no next item,
+                    // delete node from the queue
+                    if ( ! next)
+                    {
                         this.queues.delete(node);
                         return;
                     }
 
-                    Promise.resolve(next.bind(node)(node))
-                        .finally(() => this._dequeue(node));
+                    // resolve next item then dequeue node
+                    Promise.resolve(next(node))
+                        .finally(() =>
+                            this._dequeue(node)
+                        );
                 });
         }
 
@@ -437,14 +588,12 @@
 
     Object.assign(Core.prototype, {
 
-        /* ATTRIBUTES */
-
         // get an attribute value for the first element
         getAttribute(nodes, attribute)
         {
             const node = this.nodeFirst(nodes);
 
-            if ( ! node) {
+            if (!node) {
                 return;
             }
 
@@ -454,37 +603,39 @@
         // set attributes for each element
         setAttribute(nodes, attribute, value)
         {
-            this.nodeArray(nodes)
-                .forEach(node => {
-                    if (Core.isObject(attribute)) {
-                        Object.keys(attribute)
-                            .forEach(key => node.setAttribute(key, attribute[key]));
-                        return;
-                    }
+            const attributes = Core._parseData(attribute, value);
+            const keys = Object.keys(attributes);
 
-                    node.setAttribute(attribute, value);
-                });
+            this.nodeArray(nodes)
+                .forEach(node =>
+                    keys.forEach(key =>
+                        node.setAttribute(
+                            key,
+                            attributes[key]
+                        )
+                    )
+                );
         },
 
         // remove an attribute from each element
         removeAttribute(nodes, attribute)
         {
             this.nodeArray(nodes)
-                .forEach(node => node.removeAttribute(attribute));
+                .forEach(node =>
+                    node.removeAttribute(attribute)
+                );
         },
-
-        /* DATASET */
 
         // get a dataset value for the first element
         getDataset(nodes, key)
         {
             const node = this.nodeFirst(nodes);
 
-            if ( ! node) {
+            if (!node) {
                 return;
             }
 
-            if ( ! key) {
+            if (!key) {
                 return node.dataset;
             }
 
@@ -494,35 +645,46 @@
         // set dataset values for each element
         setDataset(nodes, key, value)
         {
-            this.nodeArray(nodes)
-                .forEach(node => {
-                    node.dataset[key] = value;
-                });
-        },
+            const dataset = Core._parseData(key, value);
 
-        /* HTML */
+            this.nodeArray(nodes)
+                .forEach(node =>
+                    Object.assign(
+                        node.dataset,
+                        dataset
+                    )
+                );
+        },
 
         // get the HTML contents of the first element
         getHTML(nodes)
         {
-            return this.getProperty(nodes, 'innerHTML');
+            return this.getProperty(
+                nodes,
+                'innerHTML'
+            );
         },
 
         // set the HTML contents for each element
         setHTML(nodes, html)
         {
+            // empty nodes
             this.empty(nodes);
-            this.setProperty(nodes, 'innerHTML', html);
-        },
 
-        /* PROPERTIES */
+            // set inner html property
+            this.setProperty(
+                nodes,
+                'innerHTML',
+                html
+            );
+        },
 
         // get a property value for the first element
         getProperty(nodes, property)
         {
             const node = this.nodeFirst(nodes);
 
-            if ( ! node) {
+            if (!node) {
                 return;
             }
 
@@ -532,53 +694,67 @@
         // set property values for each element
         setProperty(nodes, property, value)
         {
-            this.nodeArray(nodes)
-                .forEach(node => {
-                    if (Core.isObject(property)) {
-                        Object.keys(property).forEach(key => node[key] = property[key]);
-                        return;
-                    }
+            const properties = Core._parseData(property, value);
 
-                    node[property] = value;
-                });
+            this.nodeArray(nodes)
+                .forEach(node =>
+                    Object.assign(
+                        node,
+                        properties
+                    )
+                );
         },
 
         // remove a property from each element
         removeProperty(nodes, property)
         {
             this.nodeArray(nodes)
-                .forEach(node => {
+                .forEach(node =>
+                {
                     delete node[property];
                 });
         },
 
-        /* TEXT */
-
         // get the text contents of the first element
         getText(nodes)
         {
-            return this.getProperty(nodes, 'innerText');
+            return this.getProperty(
+                nodes,
+                'innerText'
+            );
         },
 
         // set the text contents for each element
         setText(nodes, text)
         {
+            // empty nodes
             this.empty(nodes);
-            this.setProperty(nodes, 'innerText', text);
-        },
 
-        /* VALUE */
+            // set inner text property
+            this.setProperty(
+                nodes,
+                'innerText',
+                text
+            );
+        },
 
         // get the value property of the first element
         getValue(nodes)
         {
-            return this.getProperty(nodes, 'value');
+            return this.getProperty(
+                nodes,
+                'value'
+            );
         },
 
         // set the value property for each element
         setValue(nodes, value)
-        { 
-            this.setProperty(nodes, 'value', value);
+        {
+            this.setProperty(
+                nodes,
+                'value',
+                value
+            );
         }
 
     });
@@ -590,33 +766,37 @@
         {
             const node = this.nodeFirst(nodes, false, true, true);
 
-            if ( ! node) {
+            if (!node) {
                 return;
             }
 
-            if ( ! this.nodeData.has(node)) {
+            if (!this.nodeData.has(node)) {
                 return;
             }
 
-            const nodeData = this.nodeData.get(node);
-
-            if ( ! key) {
-                return nodeData;
+            if (!key) {
+                return this.nodeData.get(node);
             }
 
-            return nodeData[key];
+            return this.nodeData.get(node)[key];
         },
 
         // set custom data for each node
         setData(nodes, key, value)
         {
+            const data = Core._parseData(key, value);
+
             this.nodeArray(nodes, false, true, true)
-                .forEach(node => {
-                    if ( ! this.nodeData.has(node)) {
+                .forEach(node =>
+                {
+                    if (!this.nodeData.has(node)) {
                         this.nodeData.set(node, {});
                     }
 
-                    this.getData(node)[key] = value;
+                    Object.assign(
+                        this.nodeData.get(node),
+                        data
+                    );
                 });
         },
 
@@ -624,8 +804,9 @@
         removeData(nodes, key)
         {
             this.nodeArray(nodes, false, true, true)
-                .forEach(node => {
-                    if ( ! this.nodeData.has(node)) {
+                .forEach(node =>
+                {
+                    if (!this.nodeData.has(node)) {
                         return;
                     }
 
@@ -650,7 +831,8 @@
         {
             const nodeBox = this.rect(nodes, offset);
 
-            if ( ! nodeBox) {
+            if ( ! nodeBox)
+            {
                 return;
             }
 
@@ -665,26 +847,34 @@
         {
             const node = this.nodeFirst(nodes);
 
-            if ( ! node) {
+            if ( ! node)
+            {
                 return;
             }
 
-            return this.forceShow(node, node => {
-                const result = {
-                    x: node.offsetLeft,
-                    y: node.offsetTop
-                };
+            return this.forceShow(
+                node,
+                node =>
+                {
+                    const result = {
+                        x: node.offsetLeft,
+                        y: node.offsetTop
+                    };
 
-                if (offset) {
-                    const parentPosition = this.position(this.offsetParent(node), true);
-                    if (parentPosition) {
-                        result.x += parentPosition.x;
-                        result.y += parentPosition.y;
+                    if (offset)
+                    {
+                        let offsetParent = node;
+
+                        while (offsetParent = offsetParent.offsetParent)
+                        {
+                            result.x += offsetParent.offsetLeft;
+                            result.y += offsetParent.offsetTop;
+                        }
                     }
-                }
 
-                return result;
-            });
+                    return result;
+                }
+            );
         },
 
         // get the computed bounding rectangle of the first element
@@ -692,20 +882,26 @@
         {
             const node = this.nodeFirst(nodes);
 
-            if ( ! node) {
+            if ( ! node)
+            {
                 return;
             }
 
-            return this.forceShow(node, node => {
-                const result = node.getBoundingClientRect();
+            return this.forceShow(
+                node,
+                node =>
+                {
+                    const result = node.getBoundingClientRect();
 
-                if (offset) {
-                    result.x += this.scrollX(window);
-                    result.y += this.scrollY(window);
+                    if (offset)
+                    {
+                        result.x += this.getScrollX(window);
+                        result.y += this.getScrollY(window);
+                    }
+
+                    return result;
                 }
-
-                return result;
-            });
+            );
         },
 
         // constrain each element to a container element
@@ -713,36 +909,68 @@
         {
             const containerBox = this.rect(container);
 
-            if ( ! containerBox) {
+            if ( ! containerBox)
+            {
                 return;
             }
 
             this.nodeArray(nodes)
-                .forEach(node => {
+                .forEach(node =>
+                {
                     const nodeBox = this.rect(node);
 
-                    if (nodeBox.height > containerBox.height) {
-                        this.setStyle(node, 'height', containerBox.height + 'px');
+                    if (nodeBox.height > containerBox.height)
+                    {
+                        this.setStyle(
+                            node,
+                            'height',
+                            containerBox.height
+                        );
                     }
 
-                    if (nodeBox.width > containerBox.width) {
-                        this.setStyle(node, 'width', containerBox.width + 'px');
+                    if (nodeBox.width > containerBox.width)
+                    {
+                        this.setStyle(
+                            node,
+                            'width',
+                            containerBox.width
+                        );
                     }
 
-                    if (nodeBox.top < containerBox.top) {
-                        this.setStyle(node, 'top', containerBox.top);
+                    if (nodeBox.top < containerBox.top)
+                    {
+                        this.setStyle(
+                            node,
+                            'top',
+                            containerBox.top
+                        );
                     }
 
-                    if (nodeBox.right > containerBox.right) {
-                        this.setStyle(node, 'left', containerBox.right - nodeBox.width);
+                    if (nodeBox.right > containerBox.right)
+                    {
+                        this.setStyle(
+                            node,
+                            'left',
+                            containerBox.right - nodeBox.width
+                        );
                     }
 
-                    if (nodeBox.bottom > containerBox.bottom) {
-                        this.setStyle(node, 'top', containerBox.bottom - nodeBox.height);
+                    if (nodeBox.bottom > containerBox.bottom)
+                    {
+                        this.setStyle(
+                            node,
+                            'top',
+                            containerBox.bottom - nodeBox.height
+                        );
                     }
 
-                    if (nodeBox.left < containerBox.left) {
-                        this.setStyle(node, 'left', containerBox.left);
+                    if (nodeBox.left < containerBox.left)
+                    {
+                        this.setStyle(
+                            node,
+                            'left',
+                            containerBox.left
+                        );
                     }
                 });
         },
@@ -752,11 +980,17 @@
         {
             const nodeCenter = this.center(nodes, offset);
 
-            if ( ! nodeCenter) {
+            if ( ! nodeCenter)
+            {
                 return;
             }
 
-            return Core.dist(nodeCenter.x, nodeCenter.y, x, y);
+            return Core.dist(
+                nodeCenter.x,
+                nodeCenter.y,
+                x,
+                y
+            );
         },
 
         // get the distance between two elements
@@ -764,11 +998,16 @@
         {
             const otherCenter = this.center(others);
 
-            if ( ! otherCenter) {
+            if ( ! otherCenter)
+            {
                 return;
             }
 
-            return this.distTo(nodes, otherCenter.x, otherCenter.y);
+            return this.distTo(
+                nodes,
+                otherCenter.x,
+                otherCenter.y
+            );
         },
 
         // get the nearest element to an X,Y position in the window (optionally offset)
@@ -778,9 +1017,11 @@
             let closestDistance = Number.MAX_VALUE;
 
             this.nodeArray(nodes)
-                .forEach(node => {
+                .forEach(node =>
+                {
                     const dist = this.distTo(node, x, y, offset);
-                    if (dist && dist < closestDistance) {
+                    if (dist && dist < closestDistance)
+                    {
                         closestDistance = dist;
                         closest = node;
                     }
@@ -794,11 +1035,16 @@
         {
             const otherCenter = this.center(others);
 
-            if ( ! otherCenter) {
+            if ( ! otherCenter)
+            {
                 return;
             }
 
-            return this.nearestTo(nodes, otherCenter.x, otherCenter.y);
+            return this.nearestTo(
+                nodes,
+                otherCenter.x,
+                otherCenter.y
+            );
         },
 
         // get the percentage of an X co-ordinate relative to an element
@@ -806,11 +1052,16 @@
         {
             const nodeBox = this.rect(nodes, offset);
 
-            if ( ! nodeBox) {
+            if ( ! nodeBox)
+            {
                 return;
             }
 
-            return Core.clampPercent((x - nodeBox.left) / nodeBox.width * 100);
+            return Core.clampPercent(
+                (x - nodeBox.left)
+                / nodeBox.width
+                * 100
+            );
         },
 
         // get the percentage of a Y co-ordinate relative to an element
@@ -818,78 +1069,39 @@
         {
             const nodeBox = this.rect(nodes, offset);
 
-            if ( ! nodeBox) {
+            if ( ! nodeBox)
+            {
                 return;
             }
 
-            return Core.clampPercent((y - nodeBox.top) / nodeBox.height * 100);
+            return Core.clampPercent(
+                (y - nodeBox.top)
+                / nodeBox.height
+                * 100
+            );
         }
 
     });
 
     Object.assign(Core.prototype, {
 
-        // scroll each element to an X,Y position
-        setScroll(nodes, x, y)
-        {
-            this.nodeArray(nodes, true, true, true)
-                .forEach(node => {
-                    if (Core.isWindow(node)) {
-                        node.scroll(x, y);
-                    } else if (Core.isDocument(node)) {
-                        node.scrollingElement.scrollLeft = x;
-                        node.scrollingElement.scrollTop = y;
-                    } else if (Core.isElement(node)) {
-                        node.scrollLeft = x;
-                        node.scrollTop = y;
-                    }
-                });
-        },
-
-        // scroll each element to an X position
-        setScrollX(nodes, x)
-        {
-            this.nodeArray(nodes, true, true, true)
-                .forEach(node => {
-                    if (Core.isWindow(node)) {
-                        node.scroll(x, node.scrollY)
-                    } else if (Core.isDocument(node)) {
-                        node.scrollingElement.scrollLeft = x;
-                    } else if (Core.isElement(node)) {
-                        node.scrollLeft = x;
-                    }
-                });
-        },
-
-        // scroll each element to a Y position
-        setScrollY(nodes, y)
-        {
-            this.nodeArray(nodes, true, true, true)
-                .forEach(node => {
-                    if (Core.isWindow(node)) {
-                        node.scroll(node.scrollX, y)
-                    } else if (Core.isDocument(node)) {
-                        node.scrollingElement.scrollTop = y;
-                    } else if (Core.isElement(node)) {
-                        node.scrollTop = y;
-                    }
-                });
-        },
-
         // get the scroll X position of the first element
         getScrollX(nodes)
         {
             let node = this.nodeFirst(nodes, true, true, true);
 
-            if ( ! node) {
+            if ( ! node)
+            {
                 return;
             }
 
-            if (Core.isWindow(node)) {
+            if (Core.isWindow(node))
+            {
                 return node.scrollX;
             }
 
-            if (Core.isDocument(node)) {
+            if (Core.isDocument(node))
+            {
                 node = node.scrollingElement;
             }
 
@@ -901,19 +1113,83 @@
         {
             let node = this.nodeFirst(nodes, true, true, true);
 
-            if ( ! node) {
+            if ( ! node)
+            {
                 return;
             }
 
-            if (Core.isWindow(node)) {
+            if (Core.isWindow(node))
+            {
                 return node.scrollY;
             }
 
-            if (Core.isDocument(node)) {
+            if (Core.isDocument(node))
+            {
                 node = node.scrollingElement;
             }
 
             return node.scrollTop;
+        },
+
+        // scroll each element to an X,Y position
+        setScroll(nodes, x, y)
+        {
+            this.nodeArray(nodes, true, true, true)
+                .forEach(node =>
+                {
+                    if (Core.isWindow(node))
+                    {
+                        return node.scroll(x, y);
+                    }
+
+                    if (Core.isDocument(node))
+                    {
+                        node = node.scrollingElement;
+                    }
+
+                    node.scrollLeft = x;
+                    node.scrollTop = y;
+                });
+        },
+
+        // scroll each element to an X position
+        setScrollX(nodes, x)
+        {
+            this.nodeArray(nodes, true, true, true)
+                .forEach(node =>
+                {
+                    if (Core.isWindow(node))
+                    {
+                        return node.scroll(x, node.scrollY)
+                    }
+
+                    if (Core.isDocument(node))
+                    {
+                        node = node.scrollingElement;
+                    }
+
+                    node.scrollLeft = x;
+                });
+        },
+
+        // scroll each element to a Y position
+        setScrollY(nodes, y)
+        {
+            this.nodeArray(nodes, true, true, true)
+                .forEach(node =>
+                {
+                    if (Core.isWindow(node))
+                    {
+                        return node.scroll(node.scrollX, y)
+                    }
+
+                    if (Core.isDocument(node))
+                    {
+                        node = node.scrollingElement;
+                    }
+
+                    node.scrollTop = y;
+                });
         }
 
     });
@@ -926,37 +1202,50 @@
         {
             let node = this.nodeFirst(nodes, true, true, true);
 
-            if ( ! node) {
+            if ( ! node)
+            {
                 return;
             }
 
-            if (Core.isWindow(node)) {
+            if (Core.isWindow(node))
+            {
                 return padding ?
                     node.outerHeight :
                     node.innerHeight;
             }
 
-            if (Core.isDocument(node)) {
+            if (Core.isDocument(node))
+            {
                 node = node.documentElement;
             }
 
-            return this.forceShow(node, node => {
-                let result = node.clientHeight;
+            return this.forceShow(
+                node,
+                node =>
+                {
+                    let result = node.clientHeight;
 
-                if ( ! padding) {
-                    result -= parseInt(this.css(node, 'padding-top')) + parseInt(this.css(node, 'padding-bottom'));
+                    if ( ! padding)
+                    {
+                        result -= parseInt(this.css(node, 'padding-top'))
+                            + parseInt(this.css(node, 'padding-bottom'));
+                    }
+
+                    if (border)
+                    {
+                        result += parseInt(this.css(node, 'border-top-width'))
+                            + parseInt(this.css(node, 'border-bottom-width'));
+                    }
+
+                    if (margin)
+                    {
+                        result += parseInt(this.css(node, 'margin-top'))
+                            + parseInt(this.css(node, 'margin-bottom'));
+                    }
+
+                    return result;
                 }
-
-                if (border) {
-                    result += parseInt(this.css(node, 'border-top-width')) + parseInt(this.css(node, 'border-bottom-width'));
-                }
-
-                if (margin) {
-                    result += parseInt(this.css(node, 'margin-top')) + parseInt(this.css(node, 'margin-bottom'));
-                }
-
-                return result;
-            });
+            );
         },
 
         // get the computed width of the first element
@@ -965,37 +1254,50 @@
         {
             let node = this.nodeFirst(nodes, true, true, true);
 
-            if ( ! node) {
+            if ( ! node)
+            {
                 return;
             }
 
-            if (Core.isWindow(node)) {
+            if (Core.isWindow(node))
+            {
                 return padding ?
                     node.outerWidth :
                     node.innerWidth;
             }
 
-            if (Core.isDocument(node)) {
+            if (Core.isDocument(node))
+            {
                 node = node.documentElement;
             }
 
-            return this.forceShow(node, node => {
-                let result = node.clientWidth;
+            return this.forceShow(
+                node,
+                node =>
+                {
+                    let result = node.clientWidth;
 
-                if ( ! padding) {
-                    result -= parseInt(this.css(node, 'padding-left')) + parseInt(this.css(node, 'padding-right'));
+                    if ( ! padding)
+                    {
+                        result -= parseInt(this.css(node, 'padding-left'))
+                            + parseInt(this.css(node, 'padding-right'));
+                    }
+
+                    if (border)
+                    {
+                        result += parseInt(this.css(node, 'border-left-width'))
+                            + parseInt(this.css(node, 'border-right-width'));
+                    }
+
+                    if (margin)
+                    {
+                        result += parseInt(this.css(node, 'margin-left'))
+                            + parseInt(this.css(node, 'margin-right'));
+                    }
+
+                    return result;
                 }
-
-                if (border) {
-                    result += parseInt(this.css(node, 'border-left-width')) + parseInt(this.css(node, 'border-right-width'));
-                }
-
-                if (margin) {
-                    result += parseInt(this.css(node, 'margin-left')) + parseInt(this.css(node, 'margin-right'));
-                }
-
-                return result;
-            });
+            );
         }
 
     });
@@ -1007,40 +1309,48 @@
         // add a class or classes to each element
         addClass(nodes, ...classes)
         {
-            classes = Core.parseClasses(classes);
+            classes = Core._parseClasses(classes);
 
-            if ( ! classes.length) {
+            if (!classes.length) {
                 return;
             }
 
             this.nodeArray(nodes)
-                .forEach(node => node.classList.add(...classes));
+                .forEach(node =>
+                    node.classList.add(...classes)
+                );
         },
 
         // remove a class or classes from each element
         removeClass(nodes, ...classes)
         {
-            classes = Core.parseClasses(classes);
+            classes = Core._parseClasses(classes);
 
-            if ( ! classes.length) {
+            if (!classes.length) {
                 return;
             }
 
             this.nodeArray(nodes)
-                .forEach(node => node.classList.remove(...classes));
+                .forEach(node =>
+                    node.classList.remove(...classes)
+                );
         },
 
         // toggle a class or classes for each element
         toggleClass(nodes, ...classes)
         {
-            classes = Core.parseClasses(classes);
+            classes = Core._parseClasses(classes);
 
-            if ( ! classes.length) {
+            if (!classes.length) {
                 return;
             }
 
             this.nodeArray(nodes)
-                .forEach(node => classes.forEach(className => node.classList.toggle(className)));
+                .forEach(node =>
+                    classes.forEach(className =>
+                        node.classList.toggle(className)
+                    )
+                );
         },
 
         /* STYLES */
@@ -1050,39 +1360,54 @@
         {
             const node = this.nodeFirst(nodes);
 
-            if ( ! node) {
+            if (!node) {
                 return;
             }
 
             // camelize style property
             style = Core.snakeCase(style);
 
-            return node.style.getPropertyValue(style);
+            return node.style[style];
         },
 
         // set style properties for each element
         setStyle(nodes, style, value, important)
         {
-            // if style value is an object, loop through and set all values
             if (Core.isObject(style)) {
-                Object.keys(style).forEach(key => this.setStyle(nodes, key, style[key]));
-                return;
+                important = value;
             }
 
-            // camelize style property
-            style = Core.snakeCase(style);
+            const styles = Core._parseData(style, value);
+            const realStyles = {};
 
-            // convert value to string
-            value = '' + value;
+            Object.keys(styles)
+                .forEach(key =>
+                {
+                    let value = '' + styles[key];
+                    key = Core.snakeCase(key);
 
-            // if value is numeric and not a number property, add px
-            if (value && Core.isNumeric(value) && ! Core.cssNumberProperties.includes(style)) {
-                value = value + 'px';
-            }
+                    // if value is numeric and not a number property, add px
+                    if (value && Core.isNumeric(value) && !Core.cssNumberProperties.includes(key)) {
+                        value = value + 'px';
+                    }
+
+                    realStyles[key] = value;
+                });
+
+            important = important ?
+                'important' :
+                '';
 
             this.nodeArray(nodes)
                 .forEach(node =>
-                    node.style.setProperty(style, value, important ? 'important' : '')
+                    Object.keys(realStyles)
+                        .forEach(style =>
+                            node.style.setProperty(
+                                style,
+                                realStyles[style],
+                                important
+                            )
+                        )
                 );
         },
 
@@ -1093,11 +1418,19 @@
         {
             const node = this.nodeFirst(nodes);
 
-            if ( ! node) {
+            if (!node) {
                 return;
             }
 
-            return window.getComputedStyle(node)[style];
+            if (!this.nodeStyles.has(node)) {
+                this.nodeStyles.set(
+                    node,
+                    window.getComputedStyle(node)
+                );
+            }
+
+            return this.nodeStyles.get(node)
+                .getPropertyValue(style);
         },
 
         /* VISIBILITY */
@@ -1105,13 +1438,21 @@
         // hide each element from display
         hide(nodes)
         {
-            this.setStyle(nodes, 'display', 'none');
+            this.setStyle(
+                nodes,
+                'display',
+                'none'
+            );
         },
 
         // display each hidden element
         show(nodes)
         {
-            this.setStyle(nodes, 'display', '');
+            this.setStyle(
+                nodes,
+                'display',
+                ''
+            );
         },
 
         // toggle the visibility of each element
@@ -1129,6 +1470,56 @@
 
     Object.assign(Core.prototype, {
 
+        // create a new DOM element
+        create(tagName, options = {})
+        {
+            const node = this.context.createElement(tagName);
+
+            if (options.html) {
+                this.setHTML(node, options.html);
+            } else if (options.text) {
+                this.setText(node, options.text);
+            }
+
+            if (options.classes) {
+                this.addClass(node, options.classes);
+            }
+
+            if (options.styles) {
+                this.setStyle(node, options.styles);
+            }
+
+            if (options.value) {
+                this.setValue(node, options.value);
+            }
+
+            if (options.attributes) {
+                this.setAttribute(node, options.attributes);
+            }
+
+            if (options.properties) {
+                this.setProperty(nodes, options.properties);
+            }
+
+            return node;
+        },
+
+        // create a new comment node
+        createComment(comment)
+        {
+            return this.context.createComment(comment);
+        },
+
+        // create a new text node
+        createText(text)
+        {
+            return this.context.createTextNode(text);
+        }
+
+    });
+
+    Object.assign(Core.prototype, {
+
         // add an event to each element
         addEvent(nodes, events, delegate, callback, selfDestruct = false)
         {
@@ -1136,27 +1527,30 @@
                 if (Core.isBoolean(callback)) {
                     selfDestruct = callback;
                 }
+
                 callback = delegate;
                 delegate = false;
             }
 
-            const eventArray = Core.parseEvents(events);
+            const eventArray = Core._parseEvents(events);
 
             this.nodeArray(nodes, true, true, true)
-                .forEach(node => {
+                .forEach(node =>
+                {
                     let realCallback = callback;
 
                     if (selfDestruct) {
-                        realCallback = this.selfDestructFactory(node, events, realCallback);
+                        realCallback = this._selfDestructFactory(node, events, realCallback);
                     }
 
                     if (delegate) {
-                        realCallback = this.delegateFactory(node, delegate, realCallback);
+                        realCallback = this._delegateFactory(node, delegate, realCallback);
                     }
 
-                    if ( ! this.nodeEvents.has(node)) {
+                    if (!this.nodeEvents.has(node)) {
                         this.nodeEvents.set(node, {});
                     }
+
                     const nodeEvents = this.nodeEvents.get(node);
 
                     const eventData = {
@@ -1165,18 +1559,21 @@
                         realCallback: realCallback
                     };
 
-                    eventArray.forEach(event => {
-                        const realEvent = Core.parseEvent(event);
+                    eventArray.forEach(event =>
+                    {
+                        const realEvent = Core._parseEvent(event);
                         eventData.event = event;
                         eventData.realEvent = realEvent;
 
-                        if ( ! nodeEvents[realEvent]) {
+                        if (!nodeEvents[realEvent]) {
                             nodeEvents[realEvent] = [];
-                        } else if (nodeEvents[realEvent].includes(eventData)) {
+                        }
+                        else if (nodeEvents[realEvent].includes(eventData)) {
                             return;
                         }
 
                         node.addEventListener(realEvent, realCallback);
+
                         nodeEvents[realEvent].push(eventData);
                     });
                 });
@@ -1185,7 +1582,13 @@
         // add a self-destructing event to each element
         addEventOnce(nodes, events, delegate, callback)
         {
-            return this.addEvent(nodes, events, delegate, callback, true);
+            return this.addEvent(
+                nodes,
+                events,
+                delegate,
+                callback,
+                true
+            );
         },
 
         // remove an event from each element
@@ -1196,34 +1599,43 @@
                 delegate = false;
             }
 
-            let eventArray = events ? Core.parseEvents(events) : false;
+            let eventArray = events ?
+                Core._parseEvents(events) :
+                false;
 
             this.nodeArray(nodes, true, true, true)
-                .forEach(node => {
-                    if ( ! this.nodeEvents.has(node)) {
+                .forEach(node =>
+                {
+                    if (!this.nodeEvents.has(node)) {
                         return;
                     }
 
                     const nodeEvents = this.nodeEvents.get(node);
-                    if ( ! eventArray) {
+
+                    if (!eventArray) {
                         eventArray = Object.keys(nodeEvents);
                     }
 
-                    eventArray.forEach(event => {
-                        const realEvent = Core.parseEvent(event);
+                    eventArray.forEach(event =>
+                    {
+                        const realEvent = Core._parseEvent(event);
 
-                        if ( ! nodeEvents[realEvent]) {
+                        if (!nodeEvents[realEvent]) {
                             return;
                         }
 
                         let realEvents = nodeEvents[realEvent];
+
                         const remove = [];
-                        realEvents.forEach((eventData, index) => {
+
+                        realEvents.forEach((eventData, index) =>
+                        {
                             if (realEvent === event) {
                                 if (realEvent !== eventData.realEvent) {
                                     return;
                                 }
-                            } else if (event !== eventData.event) {
+                            }
+                            else if (event !== eventData.event) {
                                 return;
                             }
 
@@ -1231,21 +1643,26 @@
                                 if (delegate !== eventData.delegate || (callback && callback !== eventData.callback)) {
                                     return;
                                 }
-                            } else if (callback && callback !== eventData.realCallback) {
+                            }
+                            else if (callback && callback !== eventData.realCallback) {
                                 return;
                             }
 
                             node.removeEventListener(eventData.realEvent, eventData.realCallback);
+
                             remove.push(index);
                         });
 
-                        realEvents = realEvents.filter((eventData, index) => ! remove.includes(index));
-                        if ( ! realEvents.length) {
+                        realEvents = realEvents.filter((eventData, index) =>
+                            !remove.includes(index)
+                        );
+
+                        if (!realEvents.length) {
                             delete nodeEvents[realEvent];
                         }
                     });
 
-                    if ( ! Object.keys(nodeEvents).length) {
+                    if (!Object.keys(nodeEvents).length) {
                         this.nodeEvents.delete(node);
                     }
                 });
@@ -1256,16 +1673,19 @@
         {
             this.nodeArray(nodes, true, true, true)
                 .forEach(node =>
-                    Core.parseEvents(events).forEach(event => {
-                        const realEvent = Core.parseEvent(event);
+                    Core._parseEvents(events)
+                        .forEach(event =>
+                        {
+                            const realEvent = Core._parseEvent(event);
 
-                        const eventData = new Event(realEvent);
-                        if (data) {
-                            Object.assign(eventData, data);
-                        }
+                            const eventData = new Event(realEvent);
 
-                        node.dispatchEvent(eventData);
-                    })
+                            if (data) {
+                                Object.assign(eventData, data);
+                            }
+
+                            node.dispatchEvent(eventData);
+                        })
                 );
         },
 
@@ -1273,14 +1693,22 @@
         cloneEvents(nodes, others)
         {
             this.nodeArray(nodes, true, true, true)
-                .forEach(node => {
-                    if ( ! this.nodeEvents.has(node)) {
+                .forEach(node => 
+                {
+                    if (!this.nodeEvents.has(node)) {
                         return;
                     }
 
-                    this.nodeEvents.get(node).forEach(eventData => {
-                        this.addEvent(others, eventData.event, eventData.delegate, eventData.callback);
-                    });
+                    this.nodeEvents.get(node)
+                        .forEach(eventData =>
+                        {
+                            this.addEvent(
+                                others,
+                                eventData.event,
+                                eventData.delegate,
+                                eventData.callback
+                            );
+                        });
                 });
         },
 
@@ -1289,7 +1717,7 @@
         {
             const node = this.nodeFirst(nodes);
 
-            if ( ! node) {
+            if (!node) {
                 return;
             }
 
@@ -1301,7 +1729,7 @@
         {
             const node = this.nodeFirst(nodes);
 
-            if ( ! node) {
+            if (!node) {
                 return;
             }
 
@@ -1313,22 +1741,31 @@
         {
             const node = this.nodeFirst(nodes);
 
-            if ( ! node) {
+            if (!node) {
                 return;
             }
 
             node.focus();
+        },
+
+        // add a function to the ready queue
+        ready(callback)
+        {
+            if (this.context.readyState === 'complete') {
+                callback();
+            }
+            else {
+                this.addEvent(
+                    window,
+                    'DOMContentLoaded',
+                    callback
+                );
+            }
         }
 
     });
 
     Object.assign(Core.prototype, {
-
-        // create a new DOM element
-        create(tagName)
-        {
-            return this.context.createElement(tagName);
-        },
 
         // clone each node (optionally deep, and with events and data)
         clone(nodes, deep = true, eventsData = false)
@@ -1336,7 +1773,8 @@
             const results = [];
 
             this.nodeArray(nodes, false)
-                .forEach(node => {
+                .forEach(node =>
+                {
                     const clone = node.cloneNode(deep);
 
                     if (eventsData) {
@@ -1345,10 +1783,12 @@
 
                         if (deep) {
                             const contents = this.find(node, '*');
-                            this.find(clone, '*').forEach((child, index) => {
-                                this.cloneEvents(contents[index], child);
-                                this.cloneData(contents[index], child);
-                            });
+                            this.find(clone, '*')
+                                .forEach((child, index) =>
+                                {
+                                    this.cloneEvents(contents[index], child);
+                                    this.cloneData(contents[index], child);
+                                });
                         }
                     }
 
@@ -1362,8 +1802,9 @@
         detach(nodes)
         {
             this.nodeArray(nodes, false)
-                .forEach(node => {
-                    if ( ! node.parentNode) {
+                .forEach(node =>
+                {
+                    if (!node.parentNode) {
                         return;
                     }
 
@@ -1374,8 +1815,15 @@
         // remove all children of each node from the DOM
         empty(nodes)
         {
-            this.remove(this.find(nodes, '*'), false);
-            this.setProperty(nodes, 'innerHTML', '');
+            this.remove(
+                this.find(nodes, '*'),
+                false
+            );
+            this.setProperty(
+                nodes,
+                'innerHTML',
+                ''
+            );
         },
 
         // remove each node from the DOM
@@ -1385,10 +1833,27 @@
                 this.empty(nodes);
             }
 
+            // clear queue
             this.clearQueue(nodes);
+
+            // stop animations
             this.stop(nodes);
+
+            // remove events
             this.removeEvent(nodes);
+
+            // remove data
             this.removeData(nodes);
+
+            // delete styles
+            this.nodeArray(nodes)
+                .forEach(
+                    node =>
+                        this.nodeStyles.has(node) &&
+                        this.nodeStyles.delete(node)
+                );
+
+            // detach node
             this.detach(nodes);
         },
 
@@ -1401,11 +1866,15 @@
         // replace each node with other nodes
         replaceWith(nodes, others)
         {
-            others = this.parseQuery(others, false);
+            others = this._parseQuery(others, false);
 
             this.nodeArray(nodes, false)
-                .forEach(node => {
-                    this.before(node, this.clone(others, true));
+                .forEach(node =>
+                {
+                    this.before(
+                        node,
+                        this.clone(others, true)
+                    );
                     this.remove(node);
                 });
         }
@@ -1419,17 +1888,22 @@
         {
             const node = this.nodeFirst(nodes, false);
 
-            if ( ! node) {
+            if (!node) {
                 return;
             }
 
-            if ( ! node.parentNode) {
+            if (!node.parentNode) {
                 return;
             }
 
-            this.parseQuery(others)
+            this._parseQuery(others)
                 .reverse()
-                .forEach(other => node.parentNode.insertBefore(other, node.nextSibling));
+                .forEach(other =>
+                    node.parentNode.insertBefore(
+                        other,
+                        node.nextSibling
+                    )
+                );
         },
 
         // insert each node after the first other node
@@ -1443,16 +1917,21 @@
         {
             const node = this.nodeFirst(nodes, false);
 
-            if ( ! node) {
+            if (!node) {
                 return;
             }
 
-            if ( ! node.parentNode) {
+            if (!node.parentNode) {
                 return;
             }
 
-            this.parseQuery(others, false)
-                .forEach(other => node.parentNode.insertBefore(other, node));
+            this._parseQuery(others, false)
+                .forEach(other =>
+                    node.parentNode.insertBefore(
+                        other,
+                        node
+                    )
+                );
         },
 
         // insert each node before the first other node
@@ -1466,12 +1945,14 @@
         {
             const node = this.nodeFirst(nodes);
 
-            if ( ! node) {
+            if (!node) {
                 return;
             }
 
-            this.parseQuery(others, false)
-                .forEach(other => node.insertBefore(other, null));
+            this._parseQuery(others, false)
+                .forEach(other =>
+                    node.insertBefore(other, null)
+                );
         },
 
         // append each node to the first other node
@@ -1485,13 +1966,15 @@
         {
             const node = this.nodeFirst(nodes);
 
-            if ( ! node) {
+            if (!node) {
                 return;
             }
 
-            this.parseQuery(others, false)
+            this._parseQuery(others, false)
                 .reverse()
-                .forEach(other => node.insertBefore(other, node.firstChild));
+                .forEach(other =>
+                    node.insertBefore(other, node.firstChild)
+                );
         },
 
         // prepend each node to the first other node
@@ -1508,14 +1991,18 @@
         unwrap(nodes, filter)
         {
             this.nodeArray(nodes, false)
-                .forEach(node => {
+                .forEach(node =>
+                {
                     const parent = this.parent(node, filter);
 
-                    if ( ! parent) {
+                    if (!parent) {
                         return;
                     }
 
-                    this.before(parent, this.contents(parent));
+                    this.before(
+                        parent,
+                        this.contents(parent)
+                    );
                     this.remove(parent);
                 });
         },
@@ -1523,36 +2010,60 @@
         // wrap each nodes with other nodes
         wrap(nodes, others)
         {
-            others = this.parseQuery(others);
+            others = this._parseQuery(others);
 
             this.nodeArray(nodes, false)
-                .forEach(node => {
+                .forEach(node =>
+                {
                     const clone = this.clone(others, true);
                     this.before(node, clone);
-                    this.append(this.filterOne(this.find(clone, '*'), test => ! this.child(test)) || clone, node);
+                    this.append(
+                        this.filterOne(
+                            this.find(clone, '*'),
+                            test => !this.child(test)
+                        ) || clone,
+                        node
+                    );
                 });
         },
 
         // wrap all nodes with other nodes
         wrapAll(nodes, others)
         {
-            others = this.parseQuery(others);
+            others = this._parseQuery(others);
 
             const clone = this.clone(others, true);
+
             this.before(nodes, clone);
-            this.append(this.filterOne(this.find(clone, '*'), test => ! this.child(test)) || clone, nodes);
+
+            this.append(
+                this.filterOne(
+                    this.find(clone, '*'),
+                    test => !this.child(test)
+                ) || clone,
+                nodes
+            );
         },
 
         // wrap the contents of each node with other nodes
         wrapInner(nodes, others)
         {
-            others = this.parseQuery(others);
+            others = this._parseQuery(others);
 
             this.nodeArray(nodes, false)
-                .forEach(node => {
+                .forEach(node =>
+                {
                     const clone = this.clone(others, true);
+
                     this.append(node, clone);
-                    this.append(this.filterOne(this.find(clone, '*'), test => ! this.child(test)) || clone, this.contents(node));
+
+                    this.append(
+                        this.filterOne(
+                            this.find(clone, '*'),
+                            test => !this.child(test)
+                        ) || clone,
+                        this.contents(node)
+                    );
                 });
         }
 
@@ -1563,51 +2074,63 @@
         // return all elements matching a filter
         filter(nodes, filter)
         {
-            filter = this.parseFilter(filter);
+            filter = this._parseFilter(filter);
 
             return this.nodeArray(nodes)
-                .filter((node, index) => ! filter || filter(node, index));
+                .filter((node, index) =>
+                    !filter || filter(node, index)
+                );
         },
 
         // return the first element matching a filter
         filterOne(nodes, filter)
         {
-            filter = this.parseFilter(filter);
+            filter = this._parseFilter(filter);
 
             return this.nodeArray(nodes)
-                .find((node, index) => ! filter || filter(node, index)) || null;
+                .find((node, index) =>
+                    !filter || filter(node, index)
+                ) || null;
         },
 
         // return all elements not matching a filter
         not(nodes, filter)
         {
-            filter = this.parseFilter(filter);
+            filter = this._parseFilter(filter);
 
             return this.nodeArray(nodes)
-                .filter((node, index) => filter && ! filter(node, index));
+                .filter((node, index) =>
+                    filter && !filter(node, index)
+                );
         },
 
         // return all elements with a descendent matching a filter
         has(nodes, filter)
         {
-            filter = this.parseFilterContains(filter);
+            filter = this._parseFilterContains(filter);
 
-            return !! this.nodeArray(nodes, true, true)
-                .filter(node => ! filter || filter(node));
+            return this.nodeArray(nodes, true, true)
+                .filter(node =>
+                    !filter || filter(node)
+                );
         },
 
         // return all hidden elements
         hidden(nodes)
         {
-            return this.nodeArray(nodes)
-                .filter(node => this.isHidden(node));
+            return this.nodeArray(nodes, false, true, true)
+                .filter(node =>
+                    this.isHidden(node)
+                );
         },
 
         // return all visible elements
         visible(nodes)
         {
-            return this.nodeArray(nodes)
-                .filter(node => this.isVisible(node));
+            return this.nodeArray(nodes, false, true, true)
+                .filter(node =>
+                    this.isVisible(node)
+                );
         }
 
     });
@@ -1617,13 +2140,13 @@
         // find all elements matching a selector
         find(nodes, selectors)
         {
-            if ( ! selectors) {
+            if (!selectors) {
                 selectors = nodes;
                 nodes = this.context;
             }
 
-            const [type, value] = Core.parseSelector(selectors);
- 
+            const [type, value] = Core._parseSelector(selectors);
+
             if (type === '#') {
                 return this.findById(nodes, value);
             }
@@ -1646,13 +2169,13 @@
         // find a single element matching a selector
         findOne(nodes, selectors)
         {
-            if ( ! selectors) {
+            if (!selectors) {
                 selectors = nodes;
                 nodes = this.context;
             }
 
-            const [type, value] = Core.parseSelector(selectors);
- 
+            const [type, value] = Core._parseSelector(selectors);
+
             if (type === '#') {
                 return this.findOneById(nodes, value);
             }
@@ -1675,7 +2198,7 @@
         // find all elements with a specific class
         findByClass(nodes, className)
         {
-            if ( ! className) {
+            if (!className) {
                 className = nodes;
                 nodes = this.context;
             }
@@ -1685,28 +2208,25 @@
             this.nodeArray(nodes, true, true)
                 .forEach(node =>
                     Array.from(node.getElementsByClassName(className))
-                        .forEach(result => results.add(result))
+                        .forEach(result =>
+                            results.add(result)
+                        )
                 );
 
-            return Core.sortNodes([...results]);
+            return this.sortNodes([...results]);
         },
 
         // find the first element with a specific class
         findOneByClass(nodes, className)
         {
-            return this.findByClass(nodes, className).shift() || null;
+            return this.findByClass(nodes, className)
+                .shift() || null;
         },
 
         // find all elements with a specific ID
         findById(nodes, id)
         {
-            return this.findSelector(nodes, '#' + id);
-        },
-
-        // find the first element with a specific ID
-        findOneById(nodes, id)
-        {
-            if ( ! id) {
+            if (!id) {
                 id = nodes;
                 nodes = this.context;
             }
@@ -1714,15 +2234,26 @@
             const results = new Set;
 
             this.nodeArray(nodes, true, true)
-                .forEach(node => results.add(node.getElementById(id)));
+                .forEach(node =>
+                    results.add(
+                        node.getElementById(id)
+                    )
+                );
 
-            return Core.sortNodes([...results].filter(node => !! node)).shift() || null;
+            return this.sortNodes([...results].filter(node => !!node));
+        },
+
+        // find the first element with a specific ID
+        findOneById(nodes, id)
+        {
+            return this.findById(nodes, id)
+                .shift() || null;
         },
 
         // find all elements with a specific tag
         findByTag(nodes, tagName)
         {
-            if ( ! tagName) {
+            if (!tagName) {
                 tagName = nodes;
                 nodes = this.context;
             }
@@ -1732,16 +2263,19 @@
             this.nodeArray(nodes, true, true)
                 .forEach(node =>
                     Array.from(node.getElementsByTagName(tagName))
-                        .forEach(result => results.add(result))
+                        .forEach(result =>
+                            results.add(result)
+                        )
                 );
 
-            return Core.sortNodes([...results]);
+            return this.sortNodes([...results]);
         },
 
         // find the first element with a specific tag
         findOneByTag(nodes, tagName)
         {
-            return this.findByTag(nodes, tagName).shift() || null;
+            return this.findByTag(nodes, tagName)
+                .shift() || null;
         },
 
         // find all elements matching a standard CSS selector
@@ -1752,10 +2286,12 @@
             this.nodeArray(nodes, true, true)
                 .forEach(node =>
                     Array.from(node.querySelectorAll(selector))
-                        .forEach(result => results.add(result))
+                        .forEach(result =>
+                            results.add(result)
+                        )
                 );
 
-            return Core.sortNodes([...results]);
+            return this.sortNodes([...results]);
         },
 
         // find the first element matching a standard CSS selector
@@ -1764,9 +2300,17 @@
             const results = new Set;
 
             this.nodeArray(nodes, true, true)
-                .forEach(node => results.add(node.querySelector(selector)));
+                .forEach(node =>
+                    results.add(
+                        node.querySelector(selector)
+                    )
+                );
 
-            return Core.sortNodes([...results].filter(node => !! node)).shift() || null;
+            return this.sortNodes(
+                [...results]
+                    .filter(node => !!node)
+            )
+                .shift() || null;
         },
 
         // find all elements matching a custom CSS selector
@@ -1774,34 +2318,41 @@
         {
             const results = new Set;
 
-            Core.parseSelectors(selectors)
-                .forEach(selector => {
+            Core._parseSelector(selectors)
+                .forEach(selector =>
+                {
                     const [type, value] = selector;
                     let selectorNodes = [];
 
                     if (type === '#') {
                         selectorNodes = this.findById(nodes, value);
-                    } else if (type === '.') {
+                    }
+                    else if (type === '.') {
                         selectorNodes = this.findByClass(nodes, value);
-                    } else if (type === true) {
+                    }
+                    else if (type === true) {
                         selectorNodes = this.findByTag(nodes, value);
-                    } else if ( ! type) {
+                    }
+                    else if (!type) {
                         selectorNodes = this.findSelector(nodes, value);
 
-                    // special cases
-                    } else if (['>', '+', '~'].includes(type)) {
-                        const [filter, query] = Core.parseSubQuery(value);
+                        // special cases
+                    }
+                    else if (['>', '+', '~'].includes(type)) {
+                        const [filter, query] = Core._parseSubQuery(value);
 
                         // node child
                         if (type === '>') {
                             selectorNodes = this.children(nodes, filter);
 
-                        // node next
-                        } else if (type === '+') {
+                            // node next
+                        }
+                        else if (type === '+') {
                             selectorNodes = this.next(nodes, filter);
 
-                        // node after
-                        } else if (type === '~') {
+                            // node after
+                        }
+                        else if (type === '~') {
                             selectorNodes = this.nextAll(nodes, filter);
                         }
 
@@ -1810,10 +2361,12 @@
                         }
                     }
 
-                    selectorNodes.forEach(node => results.add(node));
+                    selectorNodes.forEach(node =>
+                        results.add(node)
+                    );
                 });
 
-            return Core.sortNodes([...results]);
+            return this.sortNodes([...results]);
         },
 
         // find the first element matching a custom CSS selector
@@ -1821,32 +2374,39 @@
         {
             const results = new Set;
 
-            Core.parseSelectors(selectors)
-                .forEach(selector => {
+            Core._parseSelectors(selectors)
+                .forEach(selector =>
+                {
                     const [type, value] = selector;
                     let selectorNode;
 
                     if (type === '#') {
                         selectorNode = this.findOneById(nodes, value);
-                    } else if (type === '.') {
+                    }
+                    else if (type === '.') {
                         selectorNode = this.findOneByClass(nodes, value);
-                    } else if (type === true) {
+                    }
+                    else if (type === true) {
                         selectorNode = this.findOneByTag(nodes, value);
-                    } else if ( ! type) {
+                    }
+                    else if (!type) {
                         selectorNode = this.findOneSelector(nodes, value);
 
-                    // special cases
-                    } else if (['>', '+', '~'].includes(type)) {
-                        const [filter, query] = Core.parseSubQuery(value);
+                        // special cases
+                    }
+                    else if (['>', '+', '~'].includes(type)) {
+                        const [filter, query] = Core._parseSubQuery(value);
 
                         // node child
                         if (type === '>') {
                             selectorNode = this.child(nodes, filter);
-                        // node next
-                        } else if (type === '+') {
+                            // node next
+                        }
+                        else if (type === '+') {
                             selectorNode = this.next(nodes, filter);
-                        // node after
-                        } else if (type === '~') {
+                            // node after
+                        }
+                        else if (type === '~') {
                             selectorNode = this.nextAll(nodes, filter, false, true);
                         }
 
@@ -1854,7 +2414,8 @@
                             selectorNode = this.findOne(selectorNode, query);
                         }
 
-                        selectorNode = this.nodeArray(selectorNode).shift();
+                        selectorNode = this.nodeArray(selectorNode)
+                            .shift();
                     }
 
                     if (selectorNode) {
@@ -1862,7 +2423,8 @@
                     }
                 });
 
-            return Core.sortNodes([...results]).shift() || null;
+            return this.sortNodes([...results])
+                .shift() || null;
         }
 
     });
@@ -1872,22 +2434,27 @@
         // find the first child of each element matching a filter
         child(nodes, filter)
         {
-            return this.children(nodes, filter, true);
+            return this.children(
+                nodes,
+                filter,
+                true
+            );
         },
 
         // find all children of each element,
         // and optionally matching a filter
         children(nodes, filter, first = false, elementsOnly = true)
         {
-            filter = this.parseFilter(filter);
+            filter = this._parseFilter(filter);
 
             const results = new Set;
 
             this.nodeArray(nodes)
                 .forEach(node =>
                     this.nodeArray(node.childNodes, elementsOnly)
-                        .forEach(child => {
-                            if (filter && ! filter(child)) {
+                        .forEach(child =>
+                        {
+                            if (filter && !filter(child)) {
                                 return;
                             }
 
@@ -1896,7 +2463,7 @@
                         })
                 );
 
-            const nodeArray = Core.sortNodes([...results]);
+            const nodeArray = this.sortNodes([...results]);
 
             return first && Core.isNode(nodes) ?
                 nodeArray.shift() || null :
@@ -1907,37 +2474,48 @@
         // (including text and comment nodes)
         contents(nodes)
         {
-            return this.children(nodes, false, false, false);
+            return this.children(
+                nodes,
+                false,
+                false,
+                false
+            );
         },
 
         // find the closest ancestor to each element matching a filter,
         // and optionally before hitting a limit
         closest(nodes, filter, until)
         {
-            return this.parents(nodes, filter, until, true);
+            return this.parents(
+                nodes,
+                filter,
+                until,
+                true
+            );
         },
 
         // find the parent of each element matching a filter
         parent(nodes, filter)
         {
-            filter = this.parseFilter(filter);
+            filter = this._parseFilter(filter);
 
             const results = new Set;
 
             this.nodeArray(nodes, false)
-                .forEach(node => {
-                    if ( ! node.parentNode) {
+                .forEach(node =>
+                {
+                    if (!node.parentNode) {
                         return;
                     }
 
-                    if (filter && ! filter(node.parentNode)) {
+                    if (filter && !filter(node.parentNode)) {
                         return;
                     }
 
                     results.add(node.parentNode);
                 });
 
-            const nodeArray = Core.sortNodes([...results]);
+            const nodeArray = this.sortNodes([...results]);
 
             return Core.isNode(nodes) ?
                 nodeArray.shift() || null :
@@ -1948,19 +2526,20 @@
         // and optionally before hitting a limit
         parents(nodes, filter, until, closest = false)
         {
-            filter = this.parseFilter(filter);
-            until = this.parseFilter(until);
+            filter = this._parseFilter(filter);
+            until = this._parseFilter(until);
 
             const results = new Set;
 
             this.nodeArray(nodes, false)
-                .forEach(node => {
+                .forEach(node =>
+                {
                     while (node = node.parentNode) {
                         if (until && until(node)) {
                             break;
                         }
 
-                        if (filter && ! filter(node)) {
+                        if (filter && !filter(node)) {
                             continue;
                         }
 
@@ -1972,7 +2551,7 @@
                     }
                 });
 
-            const nodeArray = Core.sortNodes([...results]);
+            const nodeArray = this.sortNodes([...results]);
 
             return closest && Core.isNode(nodes) ?
                 nodeArray.shift() || null :
@@ -1982,30 +2561,34 @@
         // find the offset parent (relatively positioned) of the first element
         offsetParent(nodes)
         {
-            return this.forceShow(nodes, node => node.offsetParent);
+            return this.forceShow(
+                nodes,
+                node => node.offsetParent
+            );
         },
 
         // find the next sibling for each element matching a filter
         next(nodes, filter)
         {
-            filter = this.parseFilter(filter);
+            filter = this._parseFilter(filter);
 
             const results = new Set;
 
             this.nodeArray(nodes, false)
-                .forEach(node => {
-                    if ( ! node.nextSibling) {
+                .forEach(node =>
+                {
+                    if (!node.nextSibling) {
                         return;
                     }
 
-                    if (filter && ! filter(node.nextSibling)) {
+                    if (filter && !filter(node.nextSibling)) {
                         return;
                     }
 
                     results.add(node.nextSibling);
                 });
 
-            const nodeArray = Core.sortNodes([...results]);
+            const nodeArray = this.sortNodes([...results]);
 
             return Core.isNode(nodes) ?
                 nodeArray.shift() || null :
@@ -2016,19 +2599,20 @@
         // and optionally before hitting a limit
         nextAll(nodes, filter, until = false, first = false)
         {
-            filter = this.parseFilter(filter);
-            until = this.parseFilter(until);
+            filter = this._parseFilter(filter);
+            until = this._parseFilter(until);
 
             const results = new Set;
 
             this.nodeArray(nodes, false)
-                .forEach(node => {
+                .forEach(node =>
+                {
                     while (node = node.nextSibling) {
                         if (until && until(node)) {
                             break;
                         }
 
-                        if (filter && ! filter(node)) {
+                        if (filter && !filter(node)) {
                             continue;
                         }
 
@@ -2040,31 +2624,32 @@
                     }
                 });
 
-            return Core.sortNodes([...results]);
+            return this.sortNodes([...results]);
         },
 
         // find the previous sibling for each element matching a filter,
         // and optionally before hitting a limit
         prev(nodes, filter)
         {
-            filter = this.parseFilter(filter);
+            filter = this._parseFilter(filter);
 
             const results = new Set;
 
             this.nodeArray(nodes, false)
-                .forEach(node => {
-                    if ( ! node.previousSibling) {
+                .forEach(node =>
+                {
+                    if (!node.previousSibling) {
                         return;
                     }
 
-                    if (filter && ! filter(node.previousSibling)) {
+                    if (filter && !filter(node.previousSibling)) {
                         return;
                     }
 
                     results.add(node.previousSibling);
                 });
 
-            const nodeArray = Core.sortNodes([...results]);
+            const nodeArray = this.sortNodes([...results]);
 
             return Core.isNode(nodes) ?
                 nodeArray.shift() || null :
@@ -2075,19 +2660,20 @@
         // and optionally before hitting a limit
         prevAll(nodes, filter, until = false, first = false)
         {
-            filter = this.parseFilter(filter);
-            until = this.parseFilter(until);
+            filter = this._parseFilter(filter);
+            until = this._parseFilter(until);
 
             const results = new Set;
 
             this.nodeArray(nodes, false)
-                .forEach(node => {
+                .forEach(node =>
+                {
                     while (node = node.previousSibling) {
                         if (until && until(node)) {
                             break;
                         }
 
-                        if (filter && ! filter(node)) {
+                        if (filter && !filter(node)) {
                             continue;
                         }
 
@@ -2099,37 +2685,39 @@
                     }
                 });
 
-            return Core.sortNodes([...results]);
+            return this.sortNodes([...results]);
         },
 
         // find all siblings for each element matching a filter
         siblings(nodes, filter, elementsOnly = true)
         {
-            filter = this.parseFilter(filter);
+            filter = this._parseFilter(filter);
 
             const results = new Set;
 
             this.nodeArray(nodes, false)
-                .forEach(node => {
-                    if ( ! node.parentNode) {
+                .forEach(node =>
+                {
+                    if (!node.parentNode) {
                         return;
                     }
 
                     this.nodeArray(node.parentNode.childNodes, elementsOnly)
-                        .forEach(child => {
+                        .forEach(child =>
+                        {
                             if (child.isSameNode(node)) {
                                 return;
                             }
 
-                            if (filter && ! filter(child)) {
+                            if (filter && !filter(child)) {
                                 return;
                             }
 
                             results.add(child);
                         })
-                    });
+                });
 
-            return Core.sortNodes([...results]);
+            return this.sortNodes([...results]);
         }
 
     });
@@ -2139,70 +2727,134 @@
         // returns true if any of the elements has a specified attribute
         hasAttribute(nodes, attribute)
         {
-            return !! this.nodeArray(nodes)
-                .find(node => node.hasAttribute(attribute));
+            return !!this.nodeArray(nodes)
+                .find(node =>
+                    node.hasAttribute(attribute)
+                );
         },
 
         // returns true if any of the elements has any of the specified classes
         hasClass(nodes, ...classes)
         {
-            classes = Core.parseClasses(classes);
+            classes = Core._parseClasses(classes);
 
-            return !! this.nodeArray(nodes)
-                .find(node => classes.find(className => node.classList.contains(className)));
+            return !!this.nodeArray(nodes)
+                .find(node =>
+                    classes.find(className =>
+                        node.classList.contains(className)
+                    )
+                );
         },
 
         // returns true if any of the nodes has custom data
         hasData(nodes, key)
         {
-            return !! this.nodeArray(nodes, false, true, true)
-                .find(node => this.nodeData.has(node) && ( ! key || this.nodeData.get(node).hasOwnProperty(key)));
+            return !!this.nodeArray(nodes, false, true, true)
+                .find(node =>
+                    this.nodeData.has(node) &&
+                    (!key || this.nodeData.get(node).hasOwnProperty(key))
+                );
         },
 
         // returns true if any of the elements has a specified property
         hasProperty(nodes, property)
         {
-            return !! this.nodeArray(nodes)
-                .find(node => node.hasOwnProperty(property));
+            return !!this.nodeArray(nodes)
+                .find(node =>
+                    node.hasOwnProperty(property)
+                );
         },
 
         // returns true if any of the elements contains a descendent matching a filter
         contains(nodes, filter)
         {
-            filter = this.parseFilterContains(filter);
+            filter = this._parseFilterContains(filter);
 
-            return !! this.nodeArray(nodes, true, true)
-                .find(node => ! filter || filter(node));
+            return !!this.nodeArray(nodes, true, true)
+                .find(node =>
+                    !filter ||
+                    filter(node)
+                );
         },
 
         // returns true if any of the elements matches a filter
         is(nodes, filter)
         {
-            filter = this.parseFilter(filter);
+            filter = this._parseFilter(filter);
 
-            return !! this.nodeArray(nodes)
-                .find(node => ! filter || filter(node));
+            return !!this.nodeArray(nodes)
+                .find(node =>
+                    !filter ||
+                    filter(node)
+                );
+        },
+
+        // returns true if any of the nodes is connected to the DOM
+        isConnected(nodes)
+        {
+            return !!this.nodeArray(nodes, false)
+                .find(node => node.isConnected);
         },
 
         // returns true if any of the elements or a parent of any of the elements is "fixed"
         isFixed(nodes)
         {
-            return !! this.nodeArray(nodes)
-                .find(node => this.css(node, 'position') === 'fixed' || this.closest(node, parent => this.css(parent, 'position') === 'fixed'));
+            return !!this.nodeArray(nodes)
+                .find(node =>
+                    this.css(node, 'position') === 'fixed' ||
+                    this.closest(
+                        node,
+                        parent =>
+                            this.css(parent, 'position') === 'fixed')
+                );
         },
 
         // returns true if any of the elements is hidden
         isHidden(nodes)
         {
-            return !! this.nodeArray(nodes, false, true)
-                .find(node => ! Core.isDocument(node) && (Core.isNode(node) && ! node.offsetParent));
+            return !!this.nodeArray(nodes, false, true, true)
+                .find(node =>
+                {
+                    if (Core.isWindow(node)) {
+                        return this.context.visibilityState !== 'visible';
+                    }
+
+                    if (Core.isDocument(node)) {
+                        return node.visibilityState !== 'visible';
+                    }
+
+                    if (Core.isBody(node)) {
+                        return this.getStyle(node, 'display') === 'none';
+                    }
+
+                    if (Core.isNode(node)) {
+                        return !node.offsetParent;
+                    }
+                });
         },
 
         // returns true if any of the elements is visible
         isVisible(nodes)
         {
-            return !! this.nodeArray(nodes, false, true, true)
-                .find(node => Core.isWindow(node) || Core.isDocument(node) || (Core.isNode(node) && node.offsetParent));
+            return !!this.nodeArray(nodes, false, true, true)
+                .find(node =>
+                {
+                    if (Core.isWindow(node)) {
+                        return this.context.visibilityState === 'visible';
+                    }
+
+                    if (Core.isDocument(node)) {
+                        return node.visibilityState === 'visible';
+                    }
+
+                    if (Core.isBody(node)) {
+                        return this.getStyle(node, 'display') !== 'none';
+                    }
+
+                    if (Core.isNode(node)) {
+                        return node.offsetParent;
+                    }
+                });
         }
 
     });
@@ -2210,11 +2862,10 @@
     Object.assign(Core.prototype, {
 
         // force an element to be shown, and then execute a callback
-        forceShow(nodes, callback)
-        {
+        forceShow(nodes, callback) {
             const node = this.nodeFirst(nodes, true, true, true);
 
-            if ( ! node) {
+            if (!node) {
                 return;
             }
 
@@ -2233,42 +2884,56 @@
             this.parents(node, parent => this.css(parent, 'display') === 'none')
                 .forEach(parent => {
                     elements.push(parent);
-                    styles.push(this.getStyle(parent, 'display'));
+                    styles.push(
+                        this.getStyle(parent, 'display')
+                    );
                 });
 
-            this.setStyle(elements, 'display', 'initial', true);
+            this.setStyle(
+                elements,
+                'display',
+                'initial',
+                true
+            );
 
             const result = callback(node);
 
-            elements.forEach((element, index) => this.setStyle(element, 'display', styles[index]));
+            elements.forEach((element, index) =>
+                this.setStyle(
+                    element,
+                    'display',
+                    styles[index]
+                )
+            );
 
             return result;
         },
 
         // get the index of the first element matching a filter
-        index(nodes, filter)
-        {
-            filter = this.parseFilter(filter);
+        index(nodes, filter) {
+            filter = this._parseFilter(filter);
 
             return this.nodeArray(nodes)
-                .findIndex(node => ! filter || filter(node));
+                .findIndex(node =>
+                    !filter || filter(node)
+                );
         },
 
         // get the index of the first element relative to it's parent element
-        indexOf(nodes)
-        {
+        indexOf(nodes) {
             const node = this.nodeFirst(nodes);
 
-            if ( ! node) {
+            if (!node) {
                 return;
             }
 
-            return this.children(this.parent(node)).indexOf(node);
+            return this.children(
+                this.parent(node)
+            ).indexOf(node);
         },
 
         // create a selection on the first node
-        select(nodes)
-        {
+        select(nodes) {
             const node = this.nodeFirst(nodes, false);
 
             if (node && node.select) {
@@ -2281,7 +2946,7 @@
                 selection.removeAllRanges();
             }
 
-            if ( ! node) {
+            if (!node) {
                 return;
             }
 
@@ -2291,8 +2956,7 @@
         },
 
         // create a selection on all nodes
-        selectAll(nodes)
-        {
+        selectAll(nodes) {
             const selection = window.getSelection();
 
             if (selection.rangeCount > 0) {
@@ -2308,15 +2972,14 @@
         },
 
         // returns a serialized string containing names and values of all form elements
-        serialize(nodes)
-        {
-            return Core.parseParams(this.serializeObject(nodes));
+        serialize(nodes) {
+            return Core._parseParams(this.serializeObject(nodes));
         },
 
         // returns a serialized array containing names and values of all form elements
-        serializeArray(nodes)
-        {
+        serializeArray(nodes) {
             const values = this.serializeObject(nodes);
+
             return Object.keys(values)
                 .map(name => {
                     return {
@@ -2327,32 +2990,39 @@
         },
 
         // returns an object containing keys and values of all form elements
-        serializeObject(nodes)
-        {
+        serializeObject(nodes) {
             return this.nodeArray(nodes)
-                .reduce((values, node) => {
-                    if (node.matches('form')) {
-                        Object.assign(values, this.serializeObject(core.find(node, 'input, select, textarea')));
-                        return;
-                    }
+                .reduce(
+                    (values, node) => {
+                        if (node.matches('form')) {
+                            Object.assign(
+                                values,
+                                this.serializeObject(
+                                    this.find(
+                                        node,
+                                        'input, select, textarea'
+                                    )
+                                )
+                            );
+                        } else if (!this.is(node, '[disabled], input[type=submit], input[type=reset], input[type=radio]:not(:checked), input[type=checkbox]:not(:checked)')) {
+                            const name = this.getAttribute(node, 'name');
+                            const value = this.getValue(node);
 
-                    if (node.matches('[disabled], input[type=submit], input[type=reset], input[type=radio]:not(:checked), input[type=checkbox]:not(:checked)')) {
-                        return;
-                    }
+                            if (name.substring(-2) === '[]') {
+                                if (!values[name]) {
+                                    values[name] = [];
+                                }
 
-                    const name = core.getAttribute(node, 'name');
-                    const value = core.getValue(node);
-
-                    if (name.substring(-2) === '[]') {
-                        if ( ! values[name]) {
-                            values[name] = [];
+                                values[name].push(value);
+                            }
+                            else {
+                                values[name] = value;
+                            }
                         }
-
-                        values[name].push(value);
-                    } else {
-                        values[name] = value;
-                    }
-                }, {});
+                        return values;
+                    },
+                    {}
+                );
         }
 
     });
@@ -2362,11 +3032,15 @@
         // create a single-dimensional Array from a multiple-dimensional Array
         flattenArray(array)
         {
-            return array.reduce((acc, val) =>
-                Array.isArray(val) ?
-                    acc.concat(...this.flattenArray(val)) :
-                    acc.concat(val)
-                , []);
+            return array.reduce(
+                (acc, val) =>
+                    Array.isArray(val) ?
+                        acc.concat(
+                            ...this.flattenArray(val)
+                        ) :
+                        acc.concat(val),
+                []
+            );
         },
 
         // remove duplicate elements in an array
@@ -2382,19 +3056,32 @@
         // clamp a value between a min and max
         clamp(value, min = 0, max = 1)
         {
-            return Math.max(min, Math.min(max, value));
+            return Math.max(
+                min,
+                Math.min(
+                    max,
+                    value
+                )
+            );
         },
 
         // clamp a value between 0 and 100
         clampPercent(value)
         {
-            return this.clamp(value, 0, 100);
+            return this.clamp(
+                value,
+                0,
+                100
+            );
         },
 
         // get the distance between two vectors
         dist(x1, y1, x2, y2)
         {
-            return this.len(x1 - x2, y1 - y2);
+            return this.len(
+                x1 - x2,
+                y1 - y2
+            );
         },
 
         // get the length of an X,Y vector
@@ -2406,19 +3093,26 @@
         // linear interpolation from one value to another
         lerp(min, max, amount)
         {
-            return min * (1 - amount) + max * amount;
+            return min
+                * (1 - amount)
+                + max
+                * amount;
         },
 
         // map a value from one range to another
         map(value, fromMin, fromMax, toMin, toMax)
         {
-            return (value - fromMin) * (toMax - toMin) / (fromMax - fromMin) + toMin;
+            return (value - fromMin)
+                * (toMax - toMin)
+                / (fromMax - fromMin)
+                + toMin;
         },
 
         // round a number to a specified precision
         toStep(value, step)
         {
-            return Math.round(value / step) * step;
+            return Math.round(value / step)
+                * step;
         },
 
         // get the linear percent of a value in a specified range
@@ -2428,14 +3122,23 @@
                 return 0;
             }
 
-            return this.clampPercent(100 * (value - min) / (max - min));
+            return this.clampPercent(
+                100
+                * (value - min)
+                / (max - min)
+            );
         },
 
         // get the linear value of a percent in a specified range
         linearValue(percent, min, max)
         {
             return this.clamp(
-                min + (percent / 100 * (max - min)),
+                min
+                    + (
+                        percent
+                        / 100
+                        * (max - min)
+                    ),
                 min,
                 max
             );
@@ -2453,7 +3156,18 @@
                 0;
 
             return this.clampPercent(
-                100 * ((value ? Math.log(value) : 0) - min) / (Math.log(max) - min)
+                100
+                * (
+                    (value ?
+                        Math.log(value) :
+                        0
+                    )
+                    - min
+                )
+                / (
+                    Math.log(max)
+                    - min
+                )
             );
         },
 
@@ -2465,7 +3179,15 @@
                 0;
 
             return this.clamp(
-                Math.exp(min + (Math.log(max) - min) * percent / 100),
+                Math.exp(
+                    min
+                    + (
+                        Math.log(max)
+                        - min
+                    )
+                    * percent
+                    / 100
+                ),
                 min,
                 max
             );
@@ -2478,7 +3200,7 @@
         // returns an array from an array, node list, element list, query list or arbitrary value
         makeArray(value)
         {
-            if ( ! value) {
+            if (!value) {
                 return [];
             }
 
@@ -2498,35 +3220,146 @@
         },
 
         // returns a function for filtering nodes (by element, document or window)
-        nodeFilterFactory(elementsOnly = true, allowDocument = false, allowWindow = false)
+        _nodeFilterFactory(elementsOnly = true, allowDocument = false, allowWindow = false)
         {
             return node =>
-                ( ! elementsOnly && this.isNode(node)) ||
+                (!elementsOnly && this.isNode(node)) ||
                 (elementsOnly && this.isElement(node)) ||
                 (allowDocument && this.isDocument(node)) ||
                 (allowWindow && this.isWindow(node));
+        }
+
+    });
+
+    Object.assign(Core.prototype, {
+
+        // returns a DOM object from an HTML string
+        parseHTML(html)
+        {
+            const parser = new DOMParser;
+            return parser.parseFromString(html, 'application/html');
         },
 
-        // sorts nodes by their position in the document
-        sortNodes(nodes)
+        // returns a DOM object from an XML string
+        parseXML(xml)
         {
-            return this.nodeArray(nodes, false)
-                .sort((a, b) => {
-                    if (a.isSameNode(b)) {
-                        return 0;
-                    }
+            const parser = new DOMParser;
+            return parser.parseFromString(xml, 'application/xml');
+        }
 
-                    const pos = a.compareDocumentPosition(b);
-                    if (pos & Node.DOCUMENT_POSITION_FOLLOWING ||
-                        pos & Node.DOCUMENT_POSITION_CONTAINED_BY) {
-                        return -1;
-                    } else if (pos & Node.DOCUMENT_POSITION_PRECEDING ||
-                        pos & Node.DOCUMENT_POSITION_CONTAINS) {
-                        return 1;
-                    } else {
-                        return 0;
-                    }
-                });
+    });
+
+    Object.assign(Core, {
+
+        // convert a string to Camel Case
+        camelCase(string)
+        {
+            return '' + string
+                .replace(
+                    /(\-[a-z])/g,
+                    match =>
+                        match.toUpperCase()
+                )
+                .replace('-', '');
+        },
+
+        // convert a string to Snake Case
+        snakeCase(string)
+        {
+            return '' + string
+                .replace(
+                    /([A-Z])/g,
+                    match =>
+                        `-${match.toLowerCase()}`
+                );
+        }
+
+    });
+
+    Object.assign(Core, {
+
+        // returns true if the value is an Array
+        isArray(value) {
+            return Array.isArray(value);
+        },
+
+        // returns true if the value if a Body Element
+        isBody(value) {
+            return value instanceof HTMLBodyElement;
+        },
+
+        // returns true if the value is a Boolean
+        isBoolean(value) {
+            return value === !!value;
+        },
+
+        // returns true if the value if a Document
+        isDocument(value) {
+            return value instanceof Document;
+        },
+
+        // returns true if the value is a HTML Element
+        isElement(value) {
+            return value instanceof HTMLElement;
+        },
+
+        // returns true if the value is a HTML Collection
+        isElementList(value) {
+            return value instanceof HTMLCollection;
+        },
+
+        // returns true if the value is a Function
+        isFunction(value) {
+            return typeof value === 'function';
+        },
+
+        // returns true if the value is a Node
+        isNode(value) {
+            return value instanceof Node;
+        },
+
+        // returns true if the value is a Node List
+        isNodeList(value) {
+            return value instanceof NodeList;
+        },
+
+        // returns true if the value is numeric
+        isNumeric(value) {
+            return !isNaN(parseFloat(value)) &&
+                isFinite(value);
+        },
+
+        // returns true if the value is a plain Object
+        isPlainObject(value) {
+            return this.isObject(value) && value.constructor === Object;
+        },
+
+        // returns true if the value is an Object
+        isObject(value) {
+            return value instanceof Object;
+        },
+
+        // returns true if the value is a Query Set
+        isQuerySet(value) {
+            return value instanceof QuerySet;
+        },
+
+        // returns true if any of the selectors is "complex"
+        isSelectorComplex(selectors) {
+            return !!this._parseSelectors(selectors)
+                .find(selector =>
+                    ['>', '+', '~'].includes(selector[0])
+                );
+        },
+
+        // returns true if the value is a String
+        isString(value) {
+            return value === '' + value;
+        },
+
+        // returns true if the value is a Window
+        isWindow(value) {
+            return value instanceof Window;
         }
 
     });
@@ -2534,37 +3367,91 @@
     Object.assign(Core, {
 
         // returns a single dimensional array of classes (from a multi-dimensional array or space-separated strings)
-        parseClasses(classList)
-        {
+        _parseClasses(classList) {
             return this.uniqueArray(
                 this.flattenArray(classList)
-                    .reduce((acc, val) => acc.concat(...val.split(' ')), [])
+                    .reduce(
+                        (acc, val) =>
+                            acc.concat(
+                                ...val.split(' ')
+                            ),
+                        []
+                    )
                     .filter(val => val)
             );
         },
 
+        _parseData(key, value) {
+            return this.isObject(key) ?
+                key :
+                { [key]: value };
+        },
+
         // returns a "real" event from a dot-separated namespaced event
-        parseEvent(event)
-        {
+        _parseEvent(event) {
             return event.split('.').shift();
         },
 
         // returns an array of events from a space-separated string
-        parseEvents(events)
-        {
+        _parseEvents(events) {
             return events.split(' ');
         },
 
+        // returns a FormData object from an array or object
+        _parseFormData(data) {
+            const formData = new FormData;
+
+            if (this.isArray(data)) {
+                const obj = {};
+                data.forEach(value => obj[value.name] = value.value);
+                data = obj;
+            }
+
+            this._parseFormValues(data, formData);
+
+            return formData;
+        },
+
+        // recursively appends an object to a formData object
+        _parseFormValues(data, formData, prevKey) {
+            Object.keys(data).forEach(key => {
+                const value = data[key];
+
+                if (this.isPlainObject(value)) {
+                    return this._parseFormValues(value, formData, key);
+                }
+
+                if (prevKey) {
+                    key = `${prevKey}[${key}]`;
+                }
+
+                if (!this.isArray(value)) {
+                    return formData.set(key, value);
+                }
+
+                value.forEach(val =>
+                    formData.append(key, val)
+                );
+            });
+        },
+
         // returns a URI-encoded attribute string from an array or object
-        parseParams(data)
-        {
+        _parseParams(data) {
             let values = [];
 
             if (this.isArray(data)) {
-                values = data.map(value => this.parseParam(value.name, value.value));
-            } else if (this.isObject(data)) {
+                values = data.map(value =>
+                    this._parseParam(
+                        value.name,
+                        value.value
+                    )
+                );
+            }
+            else if (this.isObject(data)) {
                 values = Object.keys(data)
-                    .map(key => this.parseParam(key, data[key]));
+                    .map(key =>
+                        this._parseParam(key, data[key])
+                    );
             }
 
             return this.flattenArray(values)
@@ -2573,29 +3460,35 @@
         },
 
         // returns an array or string of key value pairs from an array, object or string
-        parseParam(key, value)
-        {
+        _parseParam(key, value) {
             if (this.isArray(value)) {
-                return value.map(val => this.parseParam(key, val));
+                return value.map(val =>
+                    this._parseParam(key, val)
+                );
             }
 
             if (this.isObject(value)) {
                 return Object.keys(value)
-                    .map(subKey => this.parseParam(key + '[' + subKey + ']', value[subKey]));
+                    .map(subKey =>
+                        this._parseParam(
+                            key + '[' + subKey + ']',
+                            value[subKey]
+                        )
+                    );
             }
 
             return key + '=' + value;
         },
 
         // returns a type and selector from a string (optionally only fast)
-        parseSelector(selector, fast = true)
-        {
+        _parseSelector(selector, fast = true) {
             const fastMatch = selector.match(this.fastRegex);
+
             if (fastMatch) {
                 return fastMatch.slice(1);
             }
 
-            if ( ! fast) {
+            if (!fast) {
                 const specialMatch = selector.match(this.specialRegex);
                 if (specialMatch) {
                     return specialMatch.slice(1);
@@ -2606,127 +3499,24 @@
         },
 
         // returns an array of types and selectors from an array or string
-        parseSelectors(selectors)
-        {
-            if ( ! this.isArray(selectors)) {
+        _parseSelectors(selectors) {
+            if (!this.isArray(selectors)) {
                 selectors = selectors.split(this.splitRegex)
                     .filter(selector => selector);
             }
 
-            return selectors.map(selector => this.parseSelector(selector.trim(), false));
+            return selectors.map(selector =>
+                this._parseSelector(
+                    selector.trim(),
+                    false
+                )
+            );
         },
 
         // returns the subquery selector from a string
-        parseSubQuery(selector)
-        {
+        _parseSubQuery(selector) {
             return selector.match(this.subRegex)
                 .slice(1);
-        }
-
-    });
-
-    Object.assign(Core, {
-
-        // convert a string to Camel Case
-        camelCase(string)
-        {
-            return '' + string.replace(/(\-[a-z])/g, match => match.toUpperCase())
-                .replace('-', '');
-        },
-
-        // convert a string to Snake Case
-        snakeCase(string)
-        {
-            return '' + string.replace(/([A-Z])/g, match => '-' + match.toLowerCase());
-        }
-
-    });
-
-    Object.assign(Core, {
-
-        // returns true if the value is an Array
-        isArray(value)
-        {
-            return Array.isArray(value);
-        },
-
-        // returns true if the value is a Boolean
-        isBoolean(value)
-        {
-            return value === !!value;
-        },
-
-        // returns true if the value if a Document
-        isDocument(value)
-        {
-            return value instanceof Document;
-        },
-
-        // returns true if the value is a HTML Element
-        isElement(value)
-        {
-            return value instanceof HTMLElement;
-        },
-
-        // returns true if the value is a HTML Collection
-        isElementList(value)
-        {
-            return value instanceof HTMLCollection;
-        },
-
-        // returns true if the value is a Function
-        isFunction(value)
-        {
-            return typeof value === 'function';
-        },
-
-        // returns true if the value is a Node
-        isNode(value)
-        {
-            return value instanceof Node;
-        },
-
-        // returns true if the value is a Node List
-        isNodeList(value)
-        {
-            return value instanceof NodeList;
-        },
-
-        // returns true if the value is numeric
-        isNumeric(value)
-        {
-            return ! isNaN(parseFloat(value)) && isFinite(value);
-        },
-
-        // returns true if the value is an Object
-        isObject(value)
-        {
-            return value instanceof Object;
-        },
-
-        // returns true if the value is a Query Set
-        isQuerySet(value)
-        {
-            return value instanceof QuerySet;
-        },
-
-        // returns true if any of the selectors is "complex"
-        isSelectorComplex(selectors)
-        {
-            return !! this.parseSelectors(selectors)
-                .find(selector => ['>', '+', '~'].includes(selector[0]));
-        },
-
-        // returns true if the value is a String
-        isString(value)
-        {
-            return value === '' + value;
-        },
-
-        // returns true if the value is a Window
-        isWindow(value)
-        {
-            return value instanceof Window;
         }
 
     });
@@ -2734,10 +3524,8 @@
     Object.assign(Core.prototype, {
 
         // perform an XHR request
-        ajax(url, data = null, method = 'GET')
-        {
+        ajax(url, data = null) {
             if (Core.isObject(url)) {
-                method = data || method;
                 data = url;
             } else {
                 data = data || {};
@@ -2749,42 +3537,49 @@
                 ...data
             };
 
-            if ( ! settings.method) {
-                settings.method = method;
-            }
-
-            if ( ! settings.url) {
+            if (!settings.url) {
                 settings.url = window.location;
             }
 
             if (settings.cache) {
-                settings.url += (settings.url.indexOf('?') < 0 ? '?' : '&') + Date.now();
+                settings.url += (
+                    settings.url.indexOf('?') < 0 ?
+                        '?' :
+                        '&'
+                ) + Date.now();
             }
 
-            if (settings.contentType && ! settings.headers['Content-Type']) {
+            if (!settings.headers) {
+                settings.headers = {};
+            }
+
+            if (settings.contentType && !settings.headers['Content-Type']) {
                 settings.headers['Content-Type'] = settings.contentType;
             }
 
-            if ( ! settings.headers['X-Requested-With']) {
+            if (!settings.headers['X-Requested-With']) {
                 settings.headers['X-Requested-With'] = 'XMLHttpRequest';
             }
 
             return new Promise((resolve, reject) => {
-                const xhr = new XMLHttpRequest();
+                const xhr = new XMLHttpRequest;
 
                 xhr.open(settings.method, settings.url, true);
 
-                Object.keys(settings.headers).forEach(key => xhr.setRequestHeader(key, settings.headers[key]));
+                Object.keys(settings.headers)
+                    .forEach(key =>
+                        xhr.setRequestHeader(key, settings.headers[key])
+                    );
 
                 if (settings.responseType) {
                     xhr.responseType = settings.responseType;
                 }
 
                 xhr.onload = e => {
-                    if (xhr.status === 200) {
-                        resolve(xhr.response, xhr, e);
-                    } else {
+                    if (xhr.status > 400) {
                         reject(xhr.status, xhr, e);
+                    } else {
+                        resolve(xhr.response, xhr, e);
                     }
                 };
 
@@ -2794,7 +3589,7 @@
 
                 if (settings.uploadProgress) {
                     xhr.upload.onprogress = e => {
-                        settings.uploadProgress(e.loaded / e.total * 100, xhr, e);
+                        settings.uploadProgress(e.loaded / e.total, xhr, e);
                     };
                 }
 
@@ -2802,72 +3597,90 @@
                     settings.beforeSend(xhr);
                 }
 
-                if (settings.data) {
-                    if (settings.processData) {
-                        if (settings.contentType == 'application/json') {
-                            settings.data = JSON.stringify(settings.data);
-                        } else {
-                            settings.data = Core.parseParams(settings.data);
-                        }
+                if (settings.data && settings.processData) {
+                    if (settings.contentType == 'application/json') {
+                        settings.data = JSON.stringify(settings.data);
+                    } else {
+                        settings.data = Core._parseParams(settings.data);
                     }
-                    xhr.send(settings.data);
-                } else {
-                    xhr.send();
                 }
+                xhr.send(settings.data);
             });
         },
 
         // perform an XHR request for a file upload
-        upload(url, data, method = 'POST')
-        {
+        upload(url, data) {
             if (Core.isObject(url)) {
                 data = url;
             } else {
                 data.url = url;
             }
 
-            const formData = new FormData();
-            Object.keys(data.data).forEach(key => formData.append(key, data.data[key]));
-            data.data = formData;
-
-            if ( ! data.contentType) {
-                data.contentType = 'multipart/form-data';
+            if (!data.method) {
+                data.method = 'POST';
             }
 
-            if ( ! data.processData) {
+            if (data.data) {
+                data.data = Core._parseFormData(data.data);
                 data.processData = false;
+                data.contentType = false;
             }
 
-            this.xhr(data, null, method);
+            return this.ajax(data);
         },
 
         // load and executes a JavaScript file
-        loadScript(script)
-        {
-            return this.xhr(script)
-                .then(response => eval.apply(window, response));
+        loadScript(script, cache) {
+            return this.ajax(script, { cache })
+                .then(response =>
+                    eval.apply(window, response)
+                );
         },
 
         // load and execute multiple JavaScript files (in order)
-        loadScripts(scripts)
-        {
-            return Promise.all(scripts.map(script => this.xhr(script)))
-                .then(responses => responses.forEach(response => eval.apply(window, response)));
+        loadScripts(scripts, cache) {
+            return Promise.all
+                (
+                    scripts.map(script =>
+                        this.ajax(script, { cache })
+                    )
+                )
+                .then(responses =>
+                    responses.forEach(response =>
+                        eval.apply(window, response)
+                    )
+                );
         },
 
         // import A CSS Stylesheet file
-        loadStyle(stylesheet)
-        {
-            const link = this.create('link');
-            this.setAttribute(link, 'rel', 'stylesheet');
-            this.setAttribute(link, 'href', stylesheet);
-            this.append(this.findOne('head'), link);
+        loadStyle(stylesheet, cache) {
+            return this.ajax(stylesheet, { cache })
+                .then(response =>
+                    this.append(
+                        this.findOne('head'),
+                        this.create('style', response)
+                    )
+                );
         },
 
         // import multiple CSS Stylesheet files
-        loadStyles(stylesheets)
-        {
-            stylesheets.forEach(stylesheet => this.loadStyle(stylesheet));
+        loadStyles(stylesheets, cache) {
+            const head = this.findOne('head');
+
+            return Promise.all
+                (
+                    stylesheets.map(stylesheet =>
+                        this.ajax(stylesheet, { cache })
+                    )
+                )
+                .then(responses =>
+                    responses.forEach(response =>
+                        this.append(
+                            head,
+                            this.create('style', response)
+                        )
+                    )
+                );
         }
 
     });
@@ -2879,13 +3692,17 @@
         {
             const cookie = decodeURIComponent(this.context.cookie)
                 .split(';')
-                .find(cookie => cookie.trimStart().substring(0, name.length - 1) === name);
+                .find(cookie =>
+                    cookie.trimStart()
+                        .substring(0, name.length) === name
+                );
 
-            if ( ! cookie) {
+            if (!cookie) {
                 return null;
             }
 
-            const value = cookie.trimStart().substring(name.length + 1);
+            const value = cookie.trimStart().
+                substring(name.length + 1);
 
             return json ?
                 JSON.parse(value) :
@@ -2908,7 +3725,7 @@
         // set a cookie (optionally json encoded)
         setCookie(name, value, options, json = false)
         {
-            if ( ! name) {
+            if (!name) {
                 return;
             }
 
@@ -2934,7 +3751,7 @@
                 }
             }
 
-    	    this.context.cookie = cookie;
+            this.context.cookie = cookie;
         }
 
     });
@@ -2946,36 +3763,71 @@
         {
             let updating = false;
 
-            const realCallback = e => {
+            return e =>
+            {
                 if (updating) {
                     return;
                 }
 
                 updating = true;
-                window.requestAnimationFrame(() => {
+                window.requestAnimationFrame(() =>
+                {
                     callback(e);
                     updating = false;
                 });
             };
+        },
 
-            return realCallback;
+        // create a mouse drag event (optionally limited by animation frame)
+        mouseDragFactory(down, move, up, animated = true)
+        {
+            if (move && animated) {
+                move = this.animationEventFactory(move);
+            }
+
+            return e =>
+            {
+                if (down && down(e) === false) {
+                    return;
+                }
+
+                if (move) {
+                    this.addEvent(window, 'mousemove', move);
+                }
+
+                this.addEventOnce(window, 'mouseup', e =>
+                {
+                    // needed to make sure up callback runs after move callback
+                    window.requestAnimationFrame(() =>
+                    {
+                        if (move) {
+                            this.removeEvent(window, 'mousemove', move);
+                        }
+
+                        if (up) {
+                            up(e);
+                        }
+                    });
+                });
+            };
         },
 
         // create a delegated event
-        delegateFactory(node, selectors, callback)
+        _delegateFactory(node, selectors, callback)
         {
             const getDelegate = Core.isSelectorComplex(selectors) ?
-                this.getDelegateContainsFactory(node, selectors) :
-                this.getDelegateMatchFactory(node, selectors);
+                this._getDelegateContainsFactory(node, selectors) :
+                this._getDelegateMatchFactory(node, selectors);
 
-            return e => {
+            return e =>
+            {
                 if (e.target.isSameNode(node)) {
                     return;
                 }
 
                 const delegate = getDelegate(e.target);
 
-                if ( ! delegate) {
+                if (!delegate) {
                     return;
                 }
 
@@ -2986,11 +3838,12 @@
         },
 
         // returns a function for matching a delegate target to a complex selector
-        getDelegateContainsFactory(node, selector)
+        _getDelegateContainsFactory(node, selector)
         {
-            return target => {
+            return target =>
+            {
                 const matches = this.find(node, selector);
-                if ( ! matches.length) {
+                if (!matches.length) {
                     return false;
                 }
 
@@ -3003,47 +3856,21 @@
         },
 
         // returns a function for matching a delegate target to a simple selector
-        getDelegateMatchFactory(node, selector)
+        _getDelegateMatchFactory(node, selector)
         {
-            return target => {
+            return target =>
+            {
                 return target.matches(selector) ?
                     target :
                     this.closest(target, parent => parent.matches(selector), node);
             };
         },
 
-        // create a mouse drag event (optionally limited by animation frame)
-        mouseDragFactory(down, move, up, animated = true)
-        {
-            if (move && animated) {
-                move = this.animationEventFactory(move);
-            }
-
-            return e => {
-                if (down && down(e) === false) {
-                    return;
-                }
-
-                if (move) {
-                    this.addEvent(window, 'mousemove', move);
-                }
-
-                this.addEventOnce(window, 'mouseup', e => {
-                    if (move) {
-                        this.removeEvent(window, 'mousemove', move);
-                    }
-
-                    if (up) {
-                        up(e);
-                    }
-                });
-            };
-        },
-
         // create a self-destructing event
-        selfDestructFactory(node, event, callback)
+        _selfDestructFactory(node, event, callback)
         {
-            const realCallback = e => {
+            const realCallback = e =>
+            {
                 this.removeEvent(node, event, realCallback);
                 return callback(e);
             };
@@ -3056,8 +3883,9 @@
     Object.assign(Core.prototype, {
 
         // returns an element filter function from a function, string, node, node list, element list or array
-        parseFilter(filter) {
-            if ( ! filter) {
+        _parseFilter(filter)
+        {
+            if (!filter) {
                 return false;
             }
 
@@ -3082,9 +3910,9 @@
         },
 
         // returns an element contains filter function from a function, string, node, node list, element list or array
-        parseFilterContains(filter)
+        _parseFilterContains(filter)
         {
-            if ( ! filter) {
+            if (!filter) {
                 return false;
             }
 
@@ -3093,7 +3921,7 @@
             }
 
             if (Core.isString(filter)) {
-                return node => !! this.findOne(node, filter);
+                return node => !!this.findOne(node, filter);
             }
 
             if (Core.isNode(filter)) {
@@ -3102,7 +3930,7 @@
 
             filter = this.nodeArray(filter);
             if (filter.length) {
-                return node => !! filter.find(other => node.contains(other));
+                return node => !!filter.find(other => node.contains(other));
             }
 
             return false;
@@ -3117,7 +3945,7 @@
             return Core.isString(value) ?
                 this.find(value) :
                 Core.makeArray(value)
-                    .filter(Core.nodeFilterFactory(elementsOnly, allowDocument, allowWindow));
+                    .filter(Core._nodeFilterFactory(elementsOnly, allowDocument, allowWindow));
         },
 
         nodeFirst(value, elementsOnly = true, allowDocument = false, allowWindow = false)
@@ -3125,7 +3953,32 @@
             return Core.isString(value) ?
                 this.findOne(value) :
                 Core.makeArray(value)
-                    .find(Core.nodeFilterFactory(elementsOnly, allowDocument, allowWindow));
+                    .find(Core._nodeFilterFactory(elementsOnly, allowDocument, allowWindow));
+        },
+
+        // sorts nodes by their position in the document
+        sortNodes(nodes)
+        {
+            return this.nodeArray(nodes, false)
+                .sort((a, b) =>
+                {
+                    if (a.isSameNode(b)) {
+                        return 0;
+                    }
+
+                    const pos = a.compareDocumentPosition(b);
+                    if (pos & Node.DOCUMENT_POSITION_FOLLOWING ||
+                        pos & Node.DOCUMENT_POSITION_CONTAINED_BY) {
+                        return -1;
+                    }
+                    else if (pos & Node.DOCUMENT_POSITION_PRECEDING ||
+                        pos & Node.DOCUMENT_POSITION_CONTAINS) {
+                        return 1;
+                    }
+                    else {
+                        return 0;
+                    }
+                });
         }
 
     });
@@ -3133,28 +3986,18 @@
     Object.assign(Core.prototype, {
 
         // returns an array containing nodes parsed from a HTML string
-        parseHTML(html)
-        {
-            const container = this.create('template');
-            this.html(container, html);
-            return this.contents(container);
+        parseHTML(html) {
+            const fragment = this.context.createRange().createContextualFragment(html);
+            return Array.from(fragment.children);
         },
 
         // returns an array of nodes from a HTML string, query selector string, node, node list, element list or array
-        parseQuery(query, elementsOnly = true, allowDocument = false, allowWindow = false)
-        {
+        _parseQuery(query, elementsOnly = true, allowDocument = false, allowWindow = false) {
             if (query && Core.isString(query) && query.match(Core.htmlRegex)) {
                 return this.parseHTML(query);
             }
 
             return this.nodeArray(query || '*', elementsOnly, allowDocument, allowWindow);
-        },
-
-        // returns a DOM object from an XML string
-        parseXML(xml)
-        {
-            const parser = new DOMParser;
-            return parser.parseFromString(xml, 'application/xml');
         }
 
     });
@@ -3181,12 +4024,12 @@
     Core.ajaxDefaults = {
         beforeSend: false,
         cache: false,
-        contentType: 'application/x-www-form-urlencoded',
+        contentType: 'application/x-www-form-urlencoded', //'application/x-www-form-urlencoded',
         data: false,
         dataType: false,
-        headers: {},
-        method: false,
-        processData: true
+        method: 'GET',
+        processData: true,
+        url: false
     };
 
     class QuerySet
@@ -3195,15 +4038,20 @@
         constructor(nodes, core = core)
         {
             this.core = core;
-            this.nodes = this.core.parseQuery(nodes, true, true, true);
+            this.nodes = this.core._parseQuery(nodes, true, true, true);
             this.stack = [];
         }
 
         delay(duration)
         {
-            return this.queue(() => {
-                return new Promise(resolve => setTimeout(resolve, duration));
-            });
+            return this.queue(() =>
+                new Promise(resolve =>
+                    setTimeout(
+                        resolve,
+                        duration
+                    )
+                )
+            );
         }
 
         each(callback)
@@ -3227,14 +4075,15 @@
             return this.eq(0);
         }
 
-        get(index)
+        get(index = false)
         {
-            if ( ! index) {
+            if (index === false) {
                 return this.nodes;
             }
 
             return index < 0 ?
-                this.nodes[index + this.nodes.length] : this.nodes[index];
+                this.nodes[index + this.nodes.length] :
+                this.nodes[index];
         }
 
         last()
@@ -3270,11 +4119,6 @@
 
     class QuerySetImmutable extends QuerySet
     {
-
-        constructor(...args)
-        {
-            super(...args);
-        }
 
         pushStack(nodes)
         {

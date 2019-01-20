@@ -3,19 +3,32 @@ Object.assign(Core, {
     // clamp a value between a min and max
     clamp(value, min = 0, max = 1)
     {
-        return Math.max(min, Math.min(max, value));
+        return Math.max(
+            min,
+            Math.min(
+                max,
+                value
+            )
+        );
     },
 
     // clamp a value between 0 and 100
     clampPercent(value)
     {
-        return this.clamp(value, 0, 100);
+        return this.clamp(
+            value,
+            0,
+            100
+        );
     },
 
     // get the distance between two vectors
     dist(x1, y1, x2, y2)
     {
-        return this.len(x1 - x2, y1 - y2);
+        return this.len(
+            x1 - x2,
+            y1 - y2
+        );
     },
 
     // get the length of an X,Y vector
@@ -27,19 +40,26 @@ Object.assign(Core, {
     // linear interpolation from one value to another
     lerp(min, max, amount)
     {
-        return min * (1 - amount) + max * amount;
+        return min
+            * (1 - amount)
+            + max
+            * amount;
     },
 
     // map a value from one range to another
     map(value, fromMin, fromMax, toMin, toMax)
     {
-        return (value - fromMin) * (toMax - toMin) / (fromMax - fromMin) + toMin;
+        return (value - fromMin)
+            * (toMax - toMin)
+            / (fromMax - fromMin)
+            + toMin;
     },
 
     // round a number to a specified precision
     toStep(value, step)
     {
-        return Math.round(value / step) * step;
+        return Math.round(value / step)
+            * step;
     },
 
     // get the linear percent of a value in a specified range
@@ -49,14 +69,23 @@ Object.assign(Core, {
             return 0;
         }
 
-        return this.clampPercent(100 * (value - min) / (max - min));
+        return this.clampPercent(
+            100
+            * (value - min)
+            / (max - min)
+        );
     },
 
     // get the linear value of a percent in a specified range
     linearValue(percent, min, max)
     {
         return this.clamp(
-            min + (percent / 100 * (max - min)),
+            min
+                + (
+                    percent
+                    / 100
+                    * (max - min)
+                ),
             min,
             max
         );
@@ -74,7 +103,18 @@ Object.assign(Core, {
             0;
 
         return this.clampPercent(
-            100 * ((value ? Math.log(value) : 0) - min) / (Math.log(max) - min)
+            100
+            * (
+                (value ?
+                    Math.log(value) :
+                    0
+                )
+                - min
+            )
+            / (
+                Math.log(max)
+                - min
+            )
         );
     },
 
@@ -86,7 +126,15 @@ Object.assign(Core, {
             0;
 
         return this.clamp(
-            Math.exp(min + (Math.log(max) - min) * percent / 100),
+            Math.exp(
+                min
+                + (
+                    Math.log(max)
+                    - min
+                )
+                * percent
+                / 100
+            ),
             min,
             max
         );

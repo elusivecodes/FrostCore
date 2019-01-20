@@ -20,10 +20,10 @@ Core.cssNumberProperties = ['font-weight', 'line-height', 'opacity', 'orphans', 
 Core.ajaxDefaults = {
     beforeSend: false,
     cache: false,
-    contentType: 'application/x-www-form-urlencoded',
+    contentType: 'application/x-www-form-urlencoded', //'application/x-www-form-urlencoded',
     data: false,
     dataType: false,
-    headers: {},
-    method: false,
-    processData: true
+    method: 'GET',
+    processData: true,
+    url: false
 };

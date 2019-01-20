@@ -1,10 +1,8 @@
 Object.assign(Core.prototype, {
 
     // perform an XHR request
-    ajax(url, data = null, method = 'GET')
-    {
+    ajax(url, data = null) {
         if (Core.isObject(url)) {
-            method = data || method;
             data = url;
         } else {
             data = data || {};
@@ -16,42 +14,49 @@ Object.assign(Core.prototype, {
             ...data
         };
 
-        if ( ! settings.method) {
-            settings.method = method;
-        }
-
-        if ( ! settings.url) {
+        if (!settings.url) {
             settings.url = window.location;
         }
 
         if (settings.cache) {
-            settings.url += (settings.url.indexOf('?') < 0 ? '?' : '&') + Date.now();
+            settings.url += (
+                settings.url.indexOf('?') < 0 ?
+                    '?' :
+                    '&'
+            ) + Date.now();
         }
 
-        if (settings.contentType && ! settings.headers['Content-Type']) {
+        if (!settings.headers) {
+            settings.headers = {};
+        }
+
+        if (settings.contentType && !settings.headers['Content-Type']) {
             settings.headers['Content-Type'] = settings.contentType;
         }
 
-        if ( ! settings.headers['X-Requested-With']) {
+        if (!settings.headers['X-Requested-With']) {
             settings.headers['X-Requested-With'] = 'XMLHttpRequest';
         }
 
         return new Promise((resolve, reject) => {
-            const xhr = new XMLHttpRequest();
+            const xhr = new XMLHttpRequest;
 
             xhr.open(settings.method, settings.url, true);
 
-            Object.keys(settings.headers).forEach(key => xhr.setRequestHeader(key, settings.headers[key]));
+            Object.keys(settings.headers)
+                .forEach(key =>
+                    xhr.setRequestHeader(key, settings.headers[key])
+                );
 
             if (settings.responseType) {
                 xhr.responseType = settings.responseType;
             }
 
             xhr.onload = e => {
-                if (xhr.status === 200) {
-                    resolve(xhr.response, xhr, e);
-                } else {
+                if (xhr.status > 400) {
                     reject(xhr.status, xhr, e);
+                } else {
+                    resolve(xhr.response, xhr, e);
                 }
             };
 
@@ -61,7 +66,7 @@ Object.assign(Core.prototype, {
 
             if (settings.uploadProgress) {
                 xhr.upload.onprogress = e => {
-                    settings.uploadProgress(e.loaded / e.total * 100, xhr, e);
+                    settings.uploadProgress(e.loaded / e.total, xhr, e);
                 };
             }
 
@@ -69,72 +74,90 @@ Object.assign(Core.prototype, {
                 settings.beforeSend(xhr);
             }
 
-            if (settings.data) {
-                if (settings.processData) {
-                    if (settings.contentType == 'application/json') {
-                        settings.data = JSON.stringify(settings.data);
-                    } else {
-                        settings.data = Core.parseParams(settings.data);
-                    }
+            if (settings.data && settings.processData) {
+                if (settings.contentType == 'application/json') {
+                    settings.data = JSON.stringify(settings.data);
+                } else {
+                    settings.data = Core._parseParams(settings.data);
                 }
-                xhr.send(settings.data);
-            } else {
-                xhr.send();
             }
+            xhr.send(settings.data);
         });
     },
 
     // perform an XHR request for a file upload
-    upload(url, data, method = 'POST')
-    {
+    upload(url, data) {
         if (Core.isObject(url)) {
             data = url;
         } else {
             data.url = url;
         }
 
-        const formData = new FormData();
-        Object.keys(data.data).forEach(key => formData.append(key, data.data[key]));
-        data.data = formData;
-
-        if ( ! data.contentType) {
-            data.contentType = 'multipart/form-data';
+        if (!data.method) {
+            data.method = 'POST';
         }
 
-        if ( ! data.processData) {
+        if (data.data) {
+            data.data = Core._parseFormData(data.data);
             data.processData = false;
+            data.contentType = false;
         }
 
-        this.xhr(data, null, method);
+        return this.ajax(data);
     },
 
     // load and executes a JavaScript file
-    loadScript(script)
-    {
-        return this.xhr(script)
-            .then(response => eval.apply(window, response));
+    loadScript(script, cache) {
+        return this.ajax(script, { cache })
+            .then(response =>
+                eval.apply(window, response)
+            );
     },
 
     // load and execute multiple JavaScript files (in order)
-    loadScripts(scripts)
-    {
-        return Promise.all(scripts.map(script => this.xhr(script)))
-            .then(responses => responses.forEach(response => eval.apply(window, response)));
+    loadScripts(scripts, cache) {
+        return Promise.all
+            (
+                scripts.map(script =>
+                    this.ajax(script, { cache })
+                )
+            )
+            .then(responses =>
+                responses.forEach(response =>
+                    eval.apply(window, response)
+                )
+            );
     },
 
     // import A CSS Stylesheet file
-    loadStyle(stylesheet)
-    {
-        const link = this.create('link');
-        this.setAttribute(link, 'rel', 'stylesheet');
-        this.setAttribute(link, 'href', stylesheet);
-        this.append(this.findOne('head'), link);
+    loadStyle(stylesheet, cache) {
+        return this.ajax(stylesheet, { cache })
+            .then(response =>
+                this.append(
+                    this.findOne('head'),
+                    this.create('style', response)
+                )
+            );
     },
 
     // import multiple CSS Stylesheet files
-    loadStyles(stylesheets)
-    {
-        stylesheets.forEach(stylesheet => this.loadStyle(stylesheet));
+    loadStyles(stylesheets, cache) {
+        const head = this.findOne('head');
+
+        return Promise.all
+            (
+                stylesheets.map(stylesheet =>
+                    this.ajax(stylesheet, { cache })
+                )
+            )
+            .then(responses =>
+                responses.forEach(response =>
+                    this.append(
+                        head,
+                        this.create('style', response)
+                    )
+                )
+            );
     }
 
 });

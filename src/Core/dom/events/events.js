@@ -7,27 +7,30 @@ Object.assign(Core.prototype, {
             if (Core.isBoolean(callback)) {
                 selfDestruct = callback;
             }
+
             callback = delegate;
             delegate = false;
         }
 
-        const eventArray = Core.parseEvents(events);
+        const eventArray = Core._parseEvents(events);
 
         this.nodeArray(nodes, true, true, true)
-            .forEach(node => {
+            .forEach(node =>
+            {
                 let realCallback = callback;
 
                 if (selfDestruct) {
-                    realCallback = this.selfDestructFactory(node, events, realCallback);
+                    realCallback = this._selfDestructFactory(node, events, realCallback);
                 }
 
                 if (delegate) {
-                    realCallback = this.delegateFactory(node, delegate, realCallback);
+                    realCallback = this._delegateFactory(node, delegate, realCallback);
                 }
 
-                if ( ! this.nodeEvents.has(node)) {
+                if (!this.nodeEvents.has(node)) {
                     this.nodeEvents.set(node, {});
                 }
+
                 const nodeEvents = this.nodeEvents.get(node);
 
                 const eventData = {
@@ -36,18 +39,21 @@ Object.assign(Core.prototype, {
                     realCallback: realCallback
                 };
 
-                eventArray.forEach(event => {
-                    const realEvent = Core.parseEvent(event);
+                eventArray.forEach(event =>
+                {
+                    const realEvent = Core._parseEvent(event);
                     eventData.event = event;
                     eventData.realEvent = realEvent;
 
-                    if ( ! nodeEvents[realEvent]) {
+                    if (!nodeEvents[realEvent]) {
                         nodeEvents[realEvent] = [];
-                    } else if (nodeEvents[realEvent].includes(eventData)) {
+                    }
+                    else if (nodeEvents[realEvent].includes(eventData)) {
                         return;
                     }
 
                     node.addEventListener(realEvent, realCallback);
+
                     nodeEvents[realEvent].push(eventData);
                 });
             });
@@ -56,7 +62,13 @@ Object.assign(Core.prototype, {
     // add a self-destructing event to each element
     addEventOnce(nodes, events, delegate, callback)
     {
-        return this.addEvent(nodes, events, delegate, callback, true);
+        return this.addEvent(
+            nodes,
+            events,
+            delegate,
+            callback,
+            true
+        );
     },
 
     // remove an event from each element
@@ -67,34 +79,43 @@ Object.assign(Core.prototype, {
             delegate = false;
         }
 
-        let eventArray = events ? Core.parseEvents(events) : false;
+        let eventArray = events ?
+            Core._parseEvents(events) :
+            false;
 
         this.nodeArray(nodes, true, true, true)
-            .forEach(node => {
-                if ( ! this.nodeEvents.has(node)) {
+            .forEach(node =>
+            {
+                if (!this.nodeEvents.has(node)) {
                     return;
                 }
 
                 const nodeEvents = this.nodeEvents.get(node);
-                if ( ! eventArray) {
+
+                if (!eventArray) {
                     eventArray = Object.keys(nodeEvents);
                 }
 
-                eventArray.forEach(event => {
-                    const realEvent = Core.parseEvent(event);
+                eventArray.forEach(event =>
+                {
+                    const realEvent = Core._parseEvent(event);
 
-                    if ( ! nodeEvents[realEvent]) {
+                    if (!nodeEvents[realEvent]) {
                         return;
                     }
 
                     let realEvents = nodeEvents[realEvent];
+
                     const remove = [];
-                    realEvents.forEach((eventData, index) => {
+
+                    realEvents.forEach((eventData, index) =>
+                    {
                         if (realEvent === event) {
                             if (realEvent !== eventData.realEvent) {
                                 return;
                             }
-                        } else if (event !== eventData.event) {
+                        }
+                        else if (event !== eventData.event) {
                             return;
                         }
 
@@ -102,21 +123,26 @@ Object.assign(Core.prototype, {
                             if (delegate !== eventData.delegate || (callback && callback !== eventData.callback)) {
                                 return;
                             }
-                        } else if (callback && callback !== eventData.realCallback) {
+                        }
+                        else if (callback && callback !== eventData.realCallback) {
                             return;
                         }
 
                         node.removeEventListener(eventData.realEvent, eventData.realCallback);
+
                         remove.push(index);
                     });
 
-                    realEvents = realEvents.filter((eventData, index) => ! remove.includes(index));
-                    if ( ! realEvents.length) {
+                    realEvents = realEvents.filter((eventData, index) =>
+                        !remove.includes(index)
+                    );
+
+                    if (!realEvents.length) {
                         delete nodeEvents[realEvent];
                     }
                 });
 
-                if ( ! Object.keys(nodeEvents).length) {
+                if (!Object.keys(nodeEvents).length) {
                     this.nodeEvents.delete(node);
                 }
             });
@@ -127,16 +153,19 @@ Object.assign(Core.prototype, {
     {
         this.nodeArray(nodes, true, true, true)
             .forEach(node =>
-                Core.parseEvents(events).forEach(event => {
-                    const realEvent = Core.parseEvent(event);
+                Core._parseEvents(events)
+                    .forEach(event =>
+                    {
+                        const realEvent = Core._parseEvent(event);
 
-                    const eventData = new Event(realEvent);
-                    if (data) {
-                        Object.assign(eventData, data);
-                    }
+                        const eventData = new Event(realEvent);
 
-                    node.dispatchEvent(eventData);
-                })
+                        if (data) {
+                            Object.assign(eventData, data);
+                        }
+
+                        node.dispatchEvent(eventData);
+                    })
             );
     },
 
@@ -144,14 +173,22 @@ Object.assign(Core.prototype, {
     cloneEvents(nodes, others)
     {
         this.nodeArray(nodes, true, true, true)
-            .forEach(node => {
-                if ( ! this.nodeEvents.has(node)) {
+            .forEach(node => 
+            {
+                if (!this.nodeEvents.has(node)) {
                     return;
                 }
 
-                this.nodeEvents.get(node).forEach(eventData => {
-                    this.addEvent(others, eventData.event, eventData.delegate, eventData.callback);
-                });
+                this.nodeEvents.get(node)
+                    .forEach(eventData =>
+                    {
+                        this.addEvent(
+                            others,
+                            eventData.event,
+                            eventData.delegate,
+                            eventData.callback
+                        );
+                    });
             });
     },
 
@@ -160,7 +197,7 @@ Object.assign(Core.prototype, {
     {
         const node = this.nodeFirst(nodes);
 
-        if ( ! node) {
+        if (!node) {
             return;
         }
 
@@ -172,7 +209,7 @@ Object.assign(Core.prototype, {
     {
         const node = this.nodeFirst(nodes);
 
-        if ( ! node) {
+        if (!node) {
             return;
         }
 
@@ -184,11 +221,26 @@ Object.assign(Core.prototype, {
     {
         const node = this.nodeFirst(nodes);
 
-        if ( ! node) {
+        if (!node) {
             return;
         }
 
         node.focus();
+    },
+
+    // add a function to the ready queue
+    ready(callback)
+    {
+        if (this.context.readyState === 'complete') {
+            callback();
+        }
+        else {
+            this.addEvent(
+                window,
+                'DOMContentLoaded',
+                callback
+            );
+        }
     }
 
 });

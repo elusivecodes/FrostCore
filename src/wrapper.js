@@ -8,7 +8,7 @@
 
 })(window, function(window) {
 
-// {{code}}
+    // {{code}}
 
     return {
         Core,

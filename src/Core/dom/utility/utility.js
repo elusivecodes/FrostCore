@@ -1,11 +1,10 @@
 Object.assign(Core.prototype, {
 
     // force an element to be shown, and then execute a callback
-    forceShow(nodes, callback)
-    {
+    forceShow(nodes, callback) {
         const node = this.nodeFirst(nodes, true, true, true);
 
-        if ( ! node) {
+        if (!node) {
             return;
         }
 
@@ -24,42 +23,56 @@ Object.assign(Core.prototype, {
         this.parents(node, parent => this.css(parent, 'display') === 'none')
             .forEach(parent => {
                 elements.push(parent);
-                styles.push(this.getStyle(parent, 'display'));
+                styles.push(
+                    this.getStyle(parent, 'display')
+                );
             });
 
-        this.setStyle(elements, 'display', 'initial', true);
+        this.setStyle(
+            elements,
+            'display',
+            'initial',
+            true
+        );
 
         const result = callback(node);
 
-        elements.forEach((element, index) => this.setStyle(element, 'display', styles[index]));
+        elements.forEach((element, index) =>
+            this.setStyle(
+                element,
+                'display',
+                styles[index]
+            )
+        );
 
         return result;
     },
 
     // get the index of the first element matching a filter
-    index(nodes, filter)
-    {
-        filter = this.parseFilter(filter);
+    index(nodes, filter) {
+        filter = this._parseFilter(filter);
 
         return this.nodeArray(nodes)
-            .findIndex(node => ! filter || filter(node));
+            .findIndex(node =>
+                !filter || filter(node)
+            );
     },
 
     // get the index of the first element relative to it's parent element
-    indexOf(nodes)
-    {
+    indexOf(nodes) {
         const node = this.nodeFirst(nodes);
 
-        if ( ! node) {
+        if (!node) {
             return;
         }
 
-        return this.children(this.parent(node)).indexOf(node);
+        return this.children(
+            this.parent(node)
+        ).indexOf(node);
     },
 
     // create a selection on the first node
-    select(nodes)
-    {
+    select(nodes) {
         const node = this.nodeFirst(nodes, false);
 
         if (node && node.select) {
@@ -72,7 +85,7 @@ Object.assign(Core.prototype, {
             selection.removeAllRanges();
         }
 
-        if ( ! node) {
+        if (!node) {
             return;
         }
 
@@ -82,8 +95,7 @@ Object.assign(Core.prototype, {
     },
 
     // create a selection on all nodes
-    selectAll(nodes)
-    {
+    selectAll(nodes) {
         const selection = window.getSelection();
 
         if (selection.rangeCount > 0) {
@@ -99,15 +111,14 @@ Object.assign(Core.prototype, {
     },
 
     // returns a serialized string containing names and values of all form elements
-    serialize(nodes)
-    {
-        return Core.parseParams(this.serializeObject(nodes));
+    serialize(nodes) {
+        return Core._parseParams(this.serializeObject(nodes));
     },
 
     // returns a serialized array containing names and values of all form elements
-    serializeArray(nodes)
-    {
+    serializeArray(nodes) {
         const values = this.serializeObject(nodes);
+
         return Object.keys(values)
             .map(name => {
                 return {
@@ -118,32 +129,39 @@ Object.assign(Core.prototype, {
     },
 
     // returns an object containing keys and values of all form elements
-    serializeObject(nodes)
-    {
+    serializeObject(nodes) {
         return this.nodeArray(nodes)
-            .reduce((values, node) => {
-                if (node.matches('form')) {
-                    Object.assign(values, this.serializeObject(core.find(node, 'input, select, textarea')));
-                    return;
-                }
+            .reduce(
+                (values, node) => {
+                    if (node.matches('form')) {
+                        Object.assign(
+                            values,
+                            this.serializeObject(
+                                this.find(
+                                    node,
+                                    'input, select, textarea'
+                                )
+                            )
+                        );
+                    } else if (!this.is(node, '[disabled], input[type=submit], input[type=reset], input[type=radio]:not(:checked), input[type=checkbox]:not(:checked)')) {
+                        const name = this.getAttribute(node, 'name');
+                        const value = this.getValue(node);
 
-                if (node.matches('[disabled], input[type=submit], input[type=reset], input[type=radio]:not(:checked), input[type=checkbox]:not(:checked)')) {
-                    return;
-                }
+                        if (name.substring(-2) === '[]') {
+                            if (!values[name]) {
+                                values[name] = [];
+                            }
 
-                const name = core.getAttribute(node, 'name');
-                const value = core.getValue(node);
-
-                if (name.substring(-2) === '[]') {
-                    if ( ! values[name]) {
-                        values[name] = [];
+                            values[name].push(value);
+                        }
+                        else {
+                            values[name] = value;
+                        }
                     }
-
-                    values[name].push(value);
-                } else {
-                    values[name] = value;
-                }
-            }, {});
+                    return values;
+                },
+                {}
+            );
     }
 
 });

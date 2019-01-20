@@ -5,17 +5,22 @@ Object.assign(Core.prototype, {
     {
         const node = this.nodeFirst(nodes, false);
 
-        if ( ! node) {
+        if (!node) {
             return;
         }
 
-        if ( ! node.parentNode) {
+        if (!node.parentNode) {
             return;
         }
 
-        this.parseQuery(others)
+        this._parseQuery(others)
             .reverse()
-            .forEach(other => node.parentNode.insertBefore(other, node.nextSibling));
+            .forEach(other =>
+                node.parentNode.insertBefore(
+                    other,
+                    node.nextSibling
+                )
+            );
     },
 
     // insert each node after the first other node
@@ -29,16 +34,21 @@ Object.assign(Core.prototype, {
     {
         const node = this.nodeFirst(nodes, false);
 
-        if ( ! node) {
+        if (!node) {
             return;
         }
 
-        if ( ! node.parentNode) {
+        if (!node.parentNode) {
             return;
         }
 
-        this.parseQuery(others, false)
-            .forEach(other => node.parentNode.insertBefore(other, node));
+        this._parseQuery(others, false)
+            .forEach(other =>
+                node.parentNode.insertBefore(
+                    other,
+                    node
+                )
+            );
     },
 
     // insert each node before the first other node
@@ -52,12 +62,14 @@ Object.assign(Core.prototype, {
     {
         const node = this.nodeFirst(nodes);
 
-        if ( ! node) {
+        if (!node) {
             return;
         }
 
-        this.parseQuery(others, false)
-            .forEach(other => node.insertBefore(other, null));
+        this._parseQuery(others, false)
+            .forEach(other =>
+                node.insertBefore(other, null)
+            );
     },
 
     // append each node to the first other node
@@ -71,13 +83,15 @@ Object.assign(Core.prototype, {
     {
         const node = this.nodeFirst(nodes);
 
-        if ( ! node) {
+        if (!node) {
             return;
         }
 
-        this.parseQuery(others, false)
+        this._parseQuery(others, false)
             .reverse()
-            .forEach(other => node.insertBefore(other, node.firstChild));
+            .forEach(other =>
+                node.insertBefore(other, node.firstChild)
+            );
     },
 
     // prepend each node to the first other node

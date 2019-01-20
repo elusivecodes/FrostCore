@@ -5,36 +5,71 @@ Object.assign(Core.prototype, {
     {
         let updating = false;
 
-        const realCallback = e => {
+        return e =>
+        {
             if (updating) {
                 return;
             }
 
             updating = true;
-            window.requestAnimationFrame(() => {
+            window.requestAnimationFrame(() =>
+            {
                 callback(e);
                 updating = false;
             });
         };
+    },
 
-        return realCallback;
+    // create a mouse drag event (optionally limited by animation frame)
+    mouseDragFactory(down, move, up, animated = true)
+    {
+        if (move && animated) {
+            move = this.animationEventFactory(move);
+        }
+
+        return e =>
+        {
+            if (down && down(e) === false) {
+                return;
+            }
+
+            if (move) {
+                this.addEvent(window, 'mousemove', move);
+            }
+
+            this.addEventOnce(window, 'mouseup', e =>
+            {
+                // needed to make sure up callback runs after move callback
+                window.requestAnimationFrame(() =>
+                {
+                    if (move) {
+                        this.removeEvent(window, 'mousemove', move);
+                    }
+
+                    if (up) {
+                        up(e);
+                    }
+                });
+            });
+        };
     },
 
     // create a delegated event
-    delegateFactory(node, selectors, callback)
+    _delegateFactory(node, selectors, callback)
     {
         const getDelegate = Core.isSelectorComplex(selectors) ?
-            this.getDelegateContainsFactory(node, selectors) :
-            this.getDelegateMatchFactory(node, selectors);
+            this._getDelegateContainsFactory(node, selectors) :
+            this._getDelegateMatchFactory(node, selectors);
 
-        return e => {
+        return e =>
+        {
             if (e.target.isSameNode(node)) {
                 return;
             }
 
             const delegate = getDelegate(e.target);
 
-            if ( ! delegate) {
+            if (!delegate) {
                 return;
             }
 
@@ -45,11 +80,12 @@ Object.assign(Core.prototype, {
     },
 
     // returns a function for matching a delegate target to a complex selector
-    getDelegateContainsFactory(node, selector)
+    _getDelegateContainsFactory(node, selector)
     {
-        return target => {
+        return target =>
+        {
             const matches = this.find(node, selector);
-            if ( ! matches.length) {
+            if (!matches.length) {
                 return false;
             }
 
@@ -62,47 +98,21 @@ Object.assign(Core.prototype, {
     },
 
     // returns a function for matching a delegate target to a simple selector
-    getDelegateMatchFactory(node, selector)
+    _getDelegateMatchFactory(node, selector)
     {
-        return target => {
+        return target =>
+        {
             return target.matches(selector) ?
                 target :
                 this.closest(target, parent => parent.matches(selector), node);
         };
     },
 
-    // create a mouse drag event (optionally limited by animation frame)
-    mouseDragFactory(down, move, up, animated = true)
-    {
-        if (move && animated) {
-            move = this.animationEventFactory(move);
-        }
-
-        return e => {
-            if (down && down(e) === false) {
-                return;
-            }
-
-            if (move) {
-                this.addEvent(window, 'mousemove', move);
-            }
-
-            this.addEventOnce(window, 'mouseup', e => {
-                if (move) {
-                    this.removeEvent(window, 'mousemove', move);
-                }
-
-                if (up) {
-                    up(e);
-                }
-            });
-        };
-    },
-
     // create a self-destructing event
-    selfDestructFactory(node, event, callback)
+    _selfDestructFactory(node, event, callback)
     {
-        const realCallback = e => {
+        const realCallback = e =>
+        {
             this.removeEvent(node, event, realCallback);
             return callback(e);
         };

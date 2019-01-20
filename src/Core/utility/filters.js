@@ -1,8 +1,9 @@
 Object.assign(Core.prototype, {
 
     // returns an element filter function from a function, string, node, node list, element list or array
-    parseFilter(filter) {
-        if ( ! filter) {
+    _parseFilter(filter)
+    {
+        if (!filter) {
             return false;
         }
 
@@ -27,9 +28,9 @@ Object.assign(Core.prototype, {
     },
 
     // returns an element contains filter function from a function, string, node, node list, element list or array
-    parseFilterContains(filter)
+    _parseFilterContains(filter)
     {
-        if ( ! filter) {
+        if (!filter) {
             return false;
         }
 
@@ -38,7 +39,7 @@ Object.assign(Core.prototype, {
         }
 
         if (Core.isString(filter)) {
-            return node => !! this.findOne(node, filter);
+            return node => !!this.findOne(node, filter);
         }
 
         if (Core.isNode(filter)) {
@@ -47,7 +48,7 @@ Object.assign(Core.prototype, {
 
         filter = this.nodeArray(filter);
         if (filter.length) {
-            return node => !! filter.find(other => node.contains(other));
+            return node => !!filter.find(other => node.contains(other));
         }
 
         return false;

@@ -4,15 +4,20 @@ class QuerySet
     constructor(nodes, core = core)
     {
         this.core = core;
-        this.nodes = this.core.parseQuery(nodes, true, true, true);
+        this.nodes = this.core._parseQuery(nodes, true, true, true);
         this.stack = [];
     }
 
     delay(duration)
     {
-        return this.queue(() => {
-            return new Promise(resolve => setTimeout(resolve, duration));
-        });
+        return this.queue(() =>
+            new Promise(resolve =>
+                setTimeout(
+                    resolve,
+                    duration
+                )
+            )
+        );
     }
 
     each(callback)
@@ -36,14 +41,15 @@ class QuerySet
         return this.eq(0);
     }
 
-    get(index)
+    get(index = false)
     {
-        if ( ! index) {
+        if (index === false) {
             return this.nodes;
         }
 
         return index < 0 ?
-            this.nodes[index + this.nodes.length] : this.nodes[index];
+            this.nodes[index + this.nodes.length] :
+            this.nodes[index];
     }
 
     last()

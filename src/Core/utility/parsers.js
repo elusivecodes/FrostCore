@@ -1,28 +1,18 @@
 Object.assign(Core.prototype, {
 
     // returns an array containing nodes parsed from a HTML string
-    parseHTML(html)
-    {
-        const container = this.create('template');
-        this.html(container, html);
-        return this.contents(container);
+    parseHTML(html) {
+        const fragment = this.context.createRange().createContextualFragment(html);
+        return Array.from(fragment.children);
     },
 
     // returns an array of nodes from a HTML string, query selector string, node, node list, element list or array
-    parseQuery(query, elementsOnly = true, allowDocument = false, allowWindow = false)
-    {
+    _parseQuery(query, elementsOnly = true, allowDocument = false, allowWindow = false) {
         if (query && Core.isString(query) && query.match(Core.htmlRegex)) {
             return this.parseHTML(query);
         }
 
         return this.nodeArray(query || '*', elementsOnly, allowDocument, allowWindow);
-    },
-
-    // returns a DOM object from an XML string
-    parseXML(xml)
-    {
-        const parser = new DOMParser;
-        return parser.parseFromString(xml, 'application/xml');
     }
 
 });

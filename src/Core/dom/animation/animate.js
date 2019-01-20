@@ -3,58 +3,103 @@ Object.assign(Core.prototype, {
     // add an animation to each element
     animate(nodes, callback, duration = 1000)
     {
+        // get current timestamp for progress calculation
         const start = Date.now();
+
+        // initialize promises array
         const promises = [];
 
+        // loop through nodes
         this.nodeArray(nodes)
-            .forEach(node => {
-                if ( ! this.animations.has(node)) {
+            .forEach(node =>
+            {
+
+                // if this is the first animation for the node,
+                // initialize an animation array
+                if ( ! this.animations.has(node))
+                {
                     this.animations.set(node, []);
                 }
 
-                const promise = new Promise((resolve, reject) => {
-                    const animation = (stop = false, finish = false) => {
-                        if ( ! core.contains(this.context, node) || (stop && ! finish)) {
+                // create promise for the animation
+                const promise = new Promise((resolve, reject) =>
+                {
+
+                    // create function for the animation
+                    const animation = (stop = false, finish = false) =>
+                    {
+
+                        // if the node is no longer in the document,
+                        // or the animation was stopped and not finished
+                        // reject the promise and return false
+                        if ( ! core.contains(this.context, node) || (stop && ! finish))
+                        {
                             reject(node);
-                            return false;
+                            return true;
                         }
 
-                        const progress = finish ? 1 : Core.clamp((Date.now() - start) / duration);
+                        // calculate the progress
+                        const progress = finish ?
+                            1 :
+                            Core.clamp(
+                                (Date.now() - start)
+                                / duration
+                            );
+
+                        // run the animation callback
                         callback(node, progress);
 
-                        if (progress === 1) {
+                        // if the animation is complete,
+                        // resolve the promise and return false
+                        if (progress === 1)
+                        {
                             resolve(node);
-                            return false;
+                            return true;
                         }
-
-                        return true;
                     };
 
-                    this.animations.get(node).push(animation);
+                    // push the animation to the animations array
+                    this.animations.get(node)
+                        .push(animation);
                 });
 
+                // push the promise to the promises array
                 promises.push(promise);
             });
 
-        if (promises.length && ! this.animating) {
+        // if we have animations, and are not already animating
+        // start the animation
+        if (promises.length && ! this.animating)
+        {
             this.animating = true;
             this._animationFrame();
         }
 
+        // return all promises
         return Promise.all(promises);
     },
 
     // stop all animations for each element
     stop(nodes, finish = true)
     {
+        // loop through nodes
         this.nodeArray(nodes)
-            .forEach(node => {
-                if ( ! this.animations.has(node)) {
+            .forEach(node =>
+            {
+
+                // if no animations exist for the node, return
+                if ( ! this.animations.has(node))
+                {
                     return;
                 }
 
-                const animations = this.animations.get(node);
-                animations.forEach(animation => animation(true, finish));
+                // loop through the animations and run the callback
+                this.animations.get(node)
+                    .forEach(animation =>
+                        animation(true, finish)
+                    );
+
+                // remove node from animations
                 this.animations.delete(node);
             });
     },
@@ -62,33 +107,60 @@ Object.assign(Core.prototype, {
     // run a single frame of all animations, and then queue up the next frame
     _animationFrame()
     {
+        // initialize complete nodes array
         const completeNodes = [];
 
-        this.animations.forEach((animations, node) => {
+        // loop through animations
+        this.animations.forEach((animations, node) =>
+        {
+
+            // initialize complete animations array
             const completeAnimations = [];
 
-            animations.forEach((animation, index) => {
-                if ( ! animation()) {
+            // loop through node animations
+            animations.forEach((animation, index) =>
+            {
+                // if the animation is complete,
+                // push index to complete animations
+                if (animation())
+                {
                     completeAnimations.push(index);
                 }
             });
 
-            if ( ! completeAnimations.length) {
+            // if we have no complete animations, return
+            if ( ! completeAnimations.length)
+            {
                 return;
             }
 
-            animations = animations.filter((animation, index) => ! completeAnimations.includes(index));
+            // filter complete animations from the node animations array
+            animations = animations.filter((animation, index) =>
+                ! completeAnimations.includes(index)
+            );
 
-            if ( ! animations.length) {
+            // if we have no remaining animations, push the node to complete nodes
+            if ( ! animations.length)
+            {
                 completeNodes.push(node);
             }
         });
 
-        completeNodes.forEach(node => this.animations.delete(node));
+        // loop through complete nodes and delete from animations
+        completeNodes.forEach(node =>
+            this.animations.delete(node)
+        );
 
-        if (this.animations.size) {
-            window.requestAnimationFrame(() => this._animationFrame());
-        } else {
+        // if we have remaining animations, queue up the next frame,
+        // otherwise, set animating to false
+        if (this.animations.size)
+        {
+            window.requestAnimationFrame(() =>
+                this._animationFrame()
+            );
+        }
+        else
+        {
             this.animating = false;
         }
     }

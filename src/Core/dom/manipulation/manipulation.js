@@ -1,18 +1,13 @@
 Object.assign(Core.prototype, {
 
-    // create a new DOM element
-    create(tagName)
-    {
-        return this.context.createElement(tagName);
-    },
-
     // clone each node (optionally deep, and with events and data)
     clone(nodes, deep = true, eventsData = false)
     {
         const results = [];
 
         this.nodeArray(nodes, false)
-            .forEach(node => {
+            .forEach(node =>
+            {
                 const clone = node.cloneNode(deep);
 
                 if (eventsData) {
@@ -21,10 +16,12 @@ Object.assign(Core.prototype, {
 
                     if (deep) {
                         const contents = this.find(node, '*');
-                        this.find(clone, '*').forEach((child, index) => {
-                            this.cloneEvents(contents[index], child);
-                            this.cloneData(contents[index], child);
-                        });
+                        this.find(clone, '*')
+                            .forEach((child, index) =>
+                            {
+                                this.cloneEvents(contents[index], child);
+                                this.cloneData(contents[index], child);
+                            });
                     }
                 }
 
@@ -38,8 +35,9 @@ Object.assign(Core.prototype, {
     detach(nodes)
     {
         this.nodeArray(nodes, false)
-            .forEach(node => {
-                if ( ! node.parentNode) {
+            .forEach(node =>
+            {
+                if (!node.parentNode) {
                     return;
                 }
 
@@ -50,8 +48,15 @@ Object.assign(Core.prototype, {
     // remove all children of each node from the DOM
     empty(nodes)
     {
-        this.remove(this.find(nodes, '*'), false);
-        this.setProperty(nodes, 'innerHTML', '');
+        this.remove(
+            this.find(nodes, '*'),
+            false
+        );
+        this.setProperty(
+            nodes,
+            'innerHTML',
+            ''
+        );
     },
 
     // remove each node from the DOM
@@ -61,10 +66,27 @@ Object.assign(Core.prototype, {
             this.empty(nodes);
         }
 
+        // clear queue
         this.clearQueue(nodes);
+
+        // stop animations
         this.stop(nodes);
+
+        // remove events
         this.removeEvent(nodes);
+
+        // remove data
         this.removeData(nodes);
+
+        // delete styles
+        this.nodeArray(nodes)
+            .forEach(
+                node =>
+                    this.nodeStyles.has(node) &&
+                    this.nodeStyles.delete(node)
+            );
+
+        // detach node
         this.detach(nodes);
     },
 
@@ -77,11 +99,15 @@ Object.assign(Core.prototype, {
     // replace each node with other nodes
     replaceWith(nodes, others)
     {
-        others = this.parseQuery(others, false);
+        others = this._parseQuery(others, false);
 
         this.nodeArray(nodes, false)
-            .forEach(node => {
-                this.before(node, this.clone(others, true));
+            .forEach(node =>
+            {
+                this.before(
+                    node,
+                    this.clone(others, true)
+                );
                 this.remove(node);
             });
     }

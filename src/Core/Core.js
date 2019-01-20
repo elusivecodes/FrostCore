@@ -1,8 +1,6 @@
-class Core
-{
+class Core {
 
-    constructor(context)
-    {
+    constructor(context) {
         this.context = context || window.document;
 
         this.animating = false;
@@ -14,10 +12,13 @@ class Core
         this.nodeStyles = new WeakMap;
     }
 
+    exec(command, showDefaultUI, value = null) {
+        return this.context.execCommand(command, showDefaultUI, value);
+    }
+
     // jQuery-like query method,
     // add a function to the ready queue or return a QuerySet (optionally mutable)
-    query(query, mutable = true)
-    {
+    query(query, mutable = true) {
         if (Core.isFunction(query)) {
             return this.ready(query);
         }
@@ -25,16 +26,6 @@ class Core
         return mutable ?
             new QuerySet(query, this) :
             new QuerySetImmutable(query, this);
-    }
-
-    // add a function to the ready queue
-    ready(callback)
-    {
-        if (this.context.readyState === 'complete') {
-            callback();
-        } else {
-            this.addEvent(window, 'DOMContentLoaded', callback);
-        }
     }
 
 }

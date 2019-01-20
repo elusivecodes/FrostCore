@@ -5,13 +5,17 @@ Object.assign(Core.prototype, {
     {
         const cookie = decodeURIComponent(this.context.cookie)
             .split(';')
-            .find(cookie => cookie.trimStart().substring(0, name.length - 1) === name);
+            .find(cookie =>
+                cookie.trimStart()
+                    .substring(0, name.length) === name
+            );
 
-        if ( ! cookie) {
+        if (!cookie) {
             return null;
         }
 
-        const value = cookie.trimStart().substring(name.length + 1);
+        const value = cookie.trimStart().
+            substring(name.length + 1);
 
         return json ?
             JSON.parse(value) :
@@ -34,7 +38,7 @@ Object.assign(Core.prototype, {
     // set a cookie (optionally json encoded)
     setCookie(name, value, options, json = false)
     {
-        if ( ! name) {
+        if (!name) {
             return;
         }
 
@@ -60,7 +64,7 @@ Object.assign(Core.prototype, {
             }
         }
 
-	    this.context.cookie = cookie;
+        this.context.cookie = cookie;
     }
 
 });

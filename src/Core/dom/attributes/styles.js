@@ -5,40 +5,48 @@ Object.assign(Core.prototype, {
     // add a class or classes to each element
     addClass(nodes, ...classes)
     {
-        classes = Core.parseClasses(classes);
+        classes = Core._parseClasses(classes);
 
-        if ( ! classes.length) {
+        if (!classes.length) {
             return;
         }
 
         this.nodeArray(nodes)
-            .forEach(node => node.classList.add(...classes));
+            .forEach(node =>
+                node.classList.add(...classes)
+            );
     },
 
     // remove a class or classes from each element
     removeClass(nodes, ...classes)
     {
-        classes = Core.parseClasses(classes);
+        classes = Core._parseClasses(classes);
 
-        if ( ! classes.length) {
+        if (!classes.length) {
             return;
         }
 
         this.nodeArray(nodes)
-            .forEach(node => node.classList.remove(...classes));
+            .forEach(node =>
+                node.classList.remove(...classes)
+            );
     },
 
     // toggle a class or classes for each element
     toggleClass(nodes, ...classes)
     {
-        classes = Core.parseClasses(classes);
+        classes = Core._parseClasses(classes);
 
-        if ( ! classes.length) {
+        if (!classes.length) {
             return;
         }
 
         this.nodeArray(nodes)
-            .forEach(node => classes.forEach(className => node.classList.toggle(className)));
+            .forEach(node =>
+                classes.forEach(className =>
+                    node.classList.toggle(className)
+                )
+            );
     },
 
     /* STYLES */
@@ -48,39 +56,54 @@ Object.assign(Core.prototype, {
     {
         const node = this.nodeFirst(nodes);
 
-        if ( ! node) {
+        if (!node) {
             return;
         }
 
         // camelize style property
         style = Core.snakeCase(style);
 
-        return node.style.getPropertyValue(style);
+        return node.style[style];
     },
 
     // set style properties for each element
     setStyle(nodes, style, value, important)
     {
-        // if style value is an object, loop through and set all values
         if (Core.isObject(style)) {
-            Object.keys(style).forEach(key => this.setStyle(nodes, key, style[key]));
-            return;
+            important = value;
         }
 
-        // camelize style property
-        style = Core.snakeCase(style);
+        const styles = Core._parseData(style, value);
+        const realStyles = {};
 
-        // convert value to string
-        value = '' + value;
+        Object.keys(styles)
+            .forEach(key =>
+            {
+                let value = '' + styles[key];
+                key = Core.snakeCase(key);
 
-        // if value is numeric and not a number property, add px
-        if (value && Core.isNumeric(value) && ! Core.cssNumberProperties.includes(style)) {
-            value = value + 'px';
-        }
+                // if value is numeric and not a number property, add px
+                if (value && Core.isNumeric(value) && !Core.cssNumberProperties.includes(key)) {
+                    value = value + 'px';
+                }
+
+                realStyles[key] = value;
+            });
+
+        important = important ?
+            'important' :
+            '';
 
         this.nodeArray(nodes)
             .forEach(node =>
-                node.style.setProperty(style, value, important ? 'important' : '')
+                Object.keys(realStyles)
+                    .forEach(style =>
+                        node.style.setProperty(
+                            style,
+                            realStyles[style],
+                            important
+                        )
+                    )
             );
     },
 
@@ -91,11 +114,19 @@ Object.assign(Core.prototype, {
     {
         const node = this.nodeFirst(nodes);
 
-        if ( ! node) {
+        if (!node) {
             return;
         }
 
-        return window.getComputedStyle(node)[style];
+        if (!this.nodeStyles.has(node)) {
+            this.nodeStyles.set(
+                node,
+                window.getComputedStyle(node)
+            );
+        }
+
+        return this.nodeStyles.get(node)
+            .getPropertyValue(style);
     },
 
     /* VISIBILITY */
@@ -103,13 +134,21 @@ Object.assign(Core.prototype, {
     // hide each element from display
     hide(nodes)
     {
-        this.setStyle(nodes, 'display', 'none');
+        this.setStyle(
+            nodes,
+            'display',
+            'none'
+        );
     },
 
     // display each hidden element
     show(nodes)
     {
-        this.setStyle(nodes, 'display', '');
+        this.setStyle(
+            nodes,
+            'display',
+            ''
+        );
     },
 
     // toggle the visibility of each element

@@ -5,33 +5,37 @@ Object.assign(Core.prototype, {
     {
         const node = this.nodeFirst(nodes, false, true, true);
 
-        if ( ! node) {
+        if (!node) {
             return;
         }
 
-        if ( ! this.nodeData.has(node)) {
+        if (!this.nodeData.has(node)) {
             return;
         }
 
-        const nodeData = this.nodeData.get(node);
-
-        if ( ! key) {
-            return nodeData;
+        if (!key) {
+            return this.nodeData.get(node);
         }
 
-        return nodeData[key];
+        return this.nodeData.get(node)[key];
     },
 
     // set custom data for each node
     setData(nodes, key, value)
     {
+        const data = Core._parseData(key, value);
+
         this.nodeArray(nodes, false, true, true)
-            .forEach(node => {
-                if ( ! this.nodeData.has(node)) {
+            .forEach(node =>
+            {
+                if (!this.nodeData.has(node)) {
                     this.nodeData.set(node, {});
                 }
 
-                this.getData(node)[key] = value;
+                Object.assign(
+                    this.nodeData.get(node),
+                    data
+                );
             });
     },
 
@@ -39,8 +43,9 @@ Object.assign(Core.prototype, {
     removeData(nodes, key)
     {
         this.nodeArray(nodes, false, true, true)
-            .forEach(node => {
-                if ( ! this.nodeData.has(node)) {
+            .forEach(node =>
+            {
+                if (!this.nodeData.has(node)) {
                     return;
                 }
 
