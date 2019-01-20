@@ -115,7 +115,7 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
             // if the node is no longer in the document,
             // or the animation was stopped and not finished
             // reject the promise and return false
-            if (!core.contains(_this.context, node) || stop && !finish) {
+            if (!_this.contains(_this.context, node) || stop && !finish) {
               reject(node);
               return true;
             } // calculate the progress
@@ -1178,11 +1178,11 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
       }
 
       if (options.properties) {
-        this.setProperty(nodes, options.properties);
+        this.setProperty(node, options.properties);
       }
 
       if (options.dataset) {
-        this.setDataset(nodes, options.dataset);
+        this.setDataset(node, options.dataset);
       }
 
       return node;

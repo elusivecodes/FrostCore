@@ -31,11 +31,11 @@ Object.assign(Core.prototype, {
         }
 
         if (options.properties) {
-            this.setProperty(nodes, options.properties);
+            this.setProperty(node, options.properties);
         }
 
         if (options.dataset) {
-            this.setDataset(nodes, options.dataset);
+            this.setDataset(node, options.dataset);
         }
 
         return node;

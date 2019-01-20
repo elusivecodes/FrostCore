@@ -33,7 +33,7 @@ Object.assign(Core.prototype, {
                         // if the node is no longer in the document,
                         // or the animation was stopped and not finished
                         // reject the promise and return false
-                        if (!core.contains(this.context, node) || (stop && !finish)) {
+                        if (!this.contains(this.context, node) || (stop && !finish)) {
                             reject(node);
                             return true;
                         }
