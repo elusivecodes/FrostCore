@@ -404,7 +404,7 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
           }
 
           core.setStyle(parent, styles);
-        }, duration, 'ease-in-out'));
+        }, options));
       });
       return Promise.all(animations);
     },
@@ -463,7 +463,7 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
           }
 
           core.setStyle(parent, styles);
-        }, duration, 'ease-in-out'));
+        }, options));
       });
       return Promise.all(animations);
     }

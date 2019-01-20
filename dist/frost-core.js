@@ -472,8 +472,7 @@
                                 }
                                 core.setStyle(parent, styles);
                             },
-                            duration,
-                            'ease-in-out'
+                            options
                         )
                     );
                 });
@@ -541,8 +540,7 @@
                                 }
                                 core.setStyle(parent, styles);
                             },
-                            duration,
-                            'ease-in-out'
+                            options
                         )
                     );
                 });
