@@ -1,28 +1,29 @@
 Object.assign(Core.prototype, {
 
     // slide each element in from the top over a duration
-    dropIn(nodes, duration = 1000)
-    {
+    dropIn(nodes, options) {
         return this.slideIn(
             nodes,
-            'top',
-            duration
+            {
+                dir: 'top',
+                ...options
+            }
         );
     },
 
     // slide each element out to the top over a duration
-    dropOut(nodes, duration = 1000)
-    {
+    dropOut(nodes, options) {
         return this.slideOut(
             nodes,
-            'top',
-            duration
+            {
+                dir: 'top',
+                ...options
+            }
         );
     },
 
     // fade the opacity of each element in over a duration
-    fadeIn(nodes, duration = 1000)
-    {
+    fadeIn(nodes, options) {
         return this.animate(
             nodes,
             (node, progress) =>
@@ -33,13 +34,12 @@ Object.assign(Core.prototype, {
                         progress :
                         ''
                 ),
-            duration
+            options
         );
     },
 
     // fade the opacity of each element out over a duration
-    fadeOut(nodes, duration = 1000)
-    {
+    fadeOut(nodes, options) {
         return this.animate(
             nodes,
             (node, progress) =>
@@ -50,13 +50,18 @@ Object.assign(Core.prototype, {
                         1 - progress :
                         ''
                 ),
-            duration
+            options
         );
     },
 
     // rotate each element in on an x,y over a duration
-    rotateIn(nodes, x = 0, y = 1, inverse = false, duration = 1000)
-    {
+    rotateIn(nodes, options) {
+        options = {
+            x: 0,
+            y: 1,
+            ...options
+        };
+
         return this.animate(
             nodes,
             (node, progress) =>
@@ -64,16 +69,21 @@ Object.assign(Core.prototype, {
                     node,
                     'transform',
                     progress < 1 ?
-                        `rotate3d(${x}, ${y}, 0, ${(90 - (progress * 90)) * (inverse ? -1 : 1)}deg)` :
+                        `rotate3d(${options.x}, ${options.y}, 0, ${(90 - (progress * 90)) * (options.inverse ? -1 : 1)}deg)` :
                         ''
                 ),
-            duration
+            options
         );
     },
 
     // rotate each element out on an x,y over a duration
-    rotateOut(nodes, x = 0, y = 1, inverse = false, duration = 1000)
-    {
+    rotateOut(nodes, options) {
+        options = {
+            x: 0,
+            y: 1,
+            ...options
+        };
+
         return this.animate(
             nodes,
             (node, progress) =>
@@ -81,26 +91,29 @@ Object.assign(Core.prototype, {
                     node,
                     'transform',
                     progress < 1 ?
-                        `rotate3d(${x}, ${y}, 0, ${(progress * 90) * (inverse ? -1 : 1)}deg)` :
+                        `rotate3d(${options.x}, ${options.y}, 0, ${(progress * 90) * (options.inverse ? -1 : 1)}deg)` :
                         ''
                 ),
-            duration
+            options
         );
     },
 
     // slide each element into place from a direction over a duration
-    slideIn(nodes, direction = 'bottom', duration = 1000)
-    {
+    slideIn(nodes, options) {
+        options = {
+            dir: 'bottom',
+            ...options
+        };
+
         return this.animate(
             nodes,
-            (node, progress) =>
-            {
+            (node, progress) => {
                 let axis, size, inverse;
 
                 if (progress < 1) {
-                    const dir = Core.isFunction(direction) ?
-                        direction() :
-                        direction;
+                    const dir = Core.isFunction(options.dir) ?
+                        options.dir() :
+                        options.dir;
 
                     if (dir === 'top' || dir === 'bottom') {
                         axis = 'Y';
@@ -131,23 +144,26 @@ Object.assign(Core.prototype, {
                         ''
                 );
             },
-            duration
+            options
         );
     },
 
     // slide each element out of place to a direction over a duration
-    slideOut(nodes, direction = 'bottom', duration = 1000)
-    {
+    slideOut(nodes, options) {
+        options = {
+            dir: 'bottom',
+            ...options
+        };
+
         return this.animate(
             nodes,
-            (node, progress) =>
-            {
+            (node, progress) => {
                 let axis, size, inverse;
 
                 if (progress < 1) {
-                    const dir = Core.isFunction(direction) ?
-                        direction() :
-                        direction;
+                    const dir = Core.isFunction(options.dir) ?
+                        options.dir() :
+                        options.dir;
 
                     if (dir === 'top' || dir === 'bottom') {
                         axis = 'Y';
@@ -177,123 +193,145 @@ Object.assign(Core.prototype, {
                         ''
                 );
             },
-            duration
+            options
         );
     },
 
     // squeeze each element into place from a direction over a duration
-    squeezeIn(nodes, direction = 'bottom', duration = 1000)
-    {
-        return this.animate(
-            nodes,
-            (node, progress) =>
-            {
-                this.setStyle(
-                    node,
-                    {
-                        overflow: '',
-                        height: '',
-                        width: '',
-                        marginTop: '',
-                        marginLeft: ''
-                    }
+    squeezeIn(nodes, options) {
+        options = {
+            dir: 'bottom',
+            ...options
+        };
+
+        const wrapper = this.create('div', {
+            style: {
+                overflow: 'hidden',
+                position: 'relative'
+            }
+        });
+
+        const animations = [];
+
+        this.nodeArray(nodes)
+            .forEach(node => {
+                this.wrap(node, wrapper);
+                const parent = this.parent(node);
+
+                animations.push(
+                    this.animate(
+                        node,
+                        (node, progress) => {
+                            if (progress === 1) {
+                                this.before(parent, this.contents(parent));
+                                this.remove(parent);
+                                return;
+                            }
+
+                            const dir = Core.isFunction(options.dir) ?
+                                options.dir() :
+                                options.dir;
+
+                            let sizeStyle, translateStyle;
+                            if (dir === 'top' || dir === 'bottom') {
+                                sizeStyle = 'height';
+                                if (dir === 'top') {
+                                    translateStyle = 'Y';
+                                }
+                            } else if (dir === 'left' || dir === 'right') {
+                                sizeStyle = 'width';
+                                if (dir === 'left') {
+                                    translateStyle = 'X';
+                                }
+                            }
+
+                            const size = Math.round(this[sizeStyle](node, true));
+                            const amount = Math.round(size * progress);
+
+                            const styles = {
+                                [sizeStyle]: amount
+                            };
+                            if (translateStyle) {
+                                styles.transform = `translate${translateStyle}(${size - amount}px)`;
+                            }
+                            core.setStyle(parent, styles);
+                        },
+                        duration,
+                        'ease-in-out'
+                    )
                 );
+            });
 
-                if (progress === 1) {
-                    return;
-                }
-
-                const dir = Core.isFunction(direction) ?
-                    direction() :
-                    direction;
-
-                let sizeStyle, marginStyle;
-                if (dir === 'top' || dir === 'bottom') {
-                    sizeStyle = 'height';
-                    if (dir === 'top') {
-                        marginStyle = 'marginTop';
-                    }
-                }
-                else if (dir === 'left' || dir === 'right') {
-                    sizeStyle = 'width';
-                    if (dir === 'left') {
-                        marginStyle = 'marginLeft';
-                    }
-                }
-
-                const size = Math.round(this[sizeStyle](node, true));
-                const amount = Math.round(size * progress);
-
-                const styles = {
-                    overflow: 'hidden',
-                    [sizeStyle]: amount
-                };
-
-                if (marginStyle) {
-                    styles[marginStyle] = size - amount;
-                }
-
-                this.setStyle(node, styles);
-            },
-            duration
-        );
+        return Promise.all(animations);
     },
 
     // squeeze each element out of place to a direction over a duration
-    squeezeOut(nodes, direction = 'bottom', duration = 1000)
-    {
-        return this.animate(
-            nodes,
-            (node, progress) =>
-            {
-                this.setStyle(
-                    node,
-                    {
-                        overflow: '',
-                        height: '',
-                        width: '',
-                        marginTop: '',
-                        marginLeft: ''
-                    }
+    squeezeOut(nodes, options) {
+        options = {
+            dir: 'bottom',
+            ...options
+        };
+
+        const wrapper = this.create('div', {
+            style: {
+                overflow: 'hidden',
+                position: 'relative'
+            }
+        });
+
+        const animations = [];
+
+        this.nodeArray(nodes)
+            .forEach(node => {
+                this.wrap(node, wrapper);
+                const parent = this.parent(node);
+
+                animations.push(
+                    this.animate(
+                        node,
+                        (node, progress) => {
+                            if (progress === 1) {
+                                this.before(parent, this.contents(parent));
+                                this.remove(parent);
+                                return;
+                            }
+
+                            const dir = Core.isFunction(options.dir) ?
+                                options.dir() :
+                                options.dir;
+
+                            let sizeStyle, translateStyle;
+                            if (dir === 'top' || dir === 'bottom') {
+                                sizeStyle = 'height';
+                                if (dir === 'top') {
+                                    translateStyle = 'Y';
+                                }
+                            }
+                            else if (dir === 'left' || dir === 'right') {
+                                sizeStyle = 'width';
+                                if (dir === 'left') {
+                                    translateStyle = 'X';
+                                }
+                            }
+
+                            const size = Math.round(this[sizeStyle](node, true));
+                            const amount = Math.round(size - (size * progress));
+
+                            const styles = {
+                                [sizeStyle]: amount
+                            };
+                            if (translateStyle) {
+                                styles.transform = `translate${translateStyle}(${size - amount}px)`;
+                            }
+                            core.setStyle(parent, styles);
+                        },
+                        duration,
+                        'ease-in-out'
+                    )
                 );
+            });
 
-                if (progress === 1) {
-                    return;
-                }
-
-                const dir = Core.isFunction(direction) ?
-                    direction() :
-                    direction;
-
-                let sizeStyle, marginStyle;
-                if (dir === 'top' || dir === 'bottom') {
-                    sizeStyle = 'height';
-                    if (dir === 'top') {
-                        marginStyle = 'marginTop';
-                    }
-                }
-                else if (dir === 'left' || dir === 'right') {
-                    sizeStyle = 'width';
-                    if (dir === 'left') {
-                        marginStyle = 'marginLeft';
-                    }
-                }
-
-                const size = Math.round(this[sizeStyle](node, true));
-                const amount = Math.round(size - (size * progress));
-
-                const styles = {
-                    overflow: 'hidden',
-                    [sizeStyle]: amount
-                };
-                if (marginStyle) {
-                    styles[marginStyle] = size - amount;
-                }
-
-                this.setStyle(node, styles);
-            },
-            duration
-        );
+        return Promise.all(animations);
     }
 
 });

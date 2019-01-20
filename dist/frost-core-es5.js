@@ -10,8 +10,6 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
 
-function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; var ownKeys = Object.keys(source); if (typeof Object.getOwnPropertySymbols === 'function') { ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) { return Object.getOwnPropertyDescriptor(source, sym).enumerable; })); } ownKeys.forEach(function (key) { _defineProperty(target, key, source[key]); }); } return target; }
-
 function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _nonIterableRest(); }
 
 function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance"); }
@@ -27,6 +25,8 @@ function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread n
 function _iterableToArray(iter) { if (Symbol.iterator in Object(iter) || Object.prototype.toString.call(iter) === "[object Arguments]") return Array.from(iter); }
 
 function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; var ownKeys = Object.keys(source); if (typeof Object.getOwnPropertySymbols === 'function') { ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) { return Object.getOwnPropertyDescriptor(source, sym).enumerable; })); } ownKeys.forEach(function (key) { _defineProperty(target, key, source[key]); }); } return target; }
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
@@ -86,11 +86,14 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
 
   Object.assign(Core.prototype, {
     // add an animation to each element
-    animate: function animate(nodes, callback) {
+    animate: function animate(nodes, callback, options) {
       var _this = this;
 
-      var duration = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 1000;
-      // get current timestamp for progress calculation
+      options = _objectSpread({
+        duration: 1000,
+        type: 'ease-in-out'
+      }, options); // get current timestamp for progress calculation
+
       var start = Date.now(); // initialize promises array
 
       var promises = []; // loop through nodes
@@ -118,7 +121,32 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
             } // calculate the progress
 
 
-            var progress = finish ? 1 : Core.clamp((Date.now() - start) / duration); // run the animation callback
+            var progress;
+
+            if (finish) {
+              progress = 1;
+            } else {
+              progress = (Date.now() - start) / options.duration;
+
+              if (options.infinite) {
+                progress %= 1;
+              } else {
+                progress = Core.clamp(progress);
+              }
+
+              if (options.type === 'ease-in') {
+                progress = Math.pow(progress, 2);
+              } else if (options.type === 'ease-out') {
+                progress = Math.sqrt(progress);
+              } else if (options.type === 'ease-in-out') {
+                if (progress <= 0.5) {
+                  progress = Math.pow(progress, 2) * 2;
+                } else {
+                  progress = 1 - Math.pow(1 - progress, 2) * 2;
+                }
+              }
+            } // run the animation callback
+
 
             callback(node, progress); // if the animation is complete,
             // resolve the promise and return false
@@ -216,68 +244,69 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
   });
   Object.assign(Core.prototype, {
     // slide each element in from the top over a duration
-    dropIn: function dropIn(nodes) {
-      var duration = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 1000;
-      return this.slideIn(nodes, 'top', duration);
+    dropIn: function dropIn(nodes, options) {
+      return this.slideIn(nodes, _objectSpread({
+        dir: 'top'
+      }, options));
     },
     // slide each element out to the top over a duration
-    dropOut: function dropOut(nodes) {
-      var duration = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 1000;
-      return this.slideOut(nodes, 'top', duration);
+    dropOut: function dropOut(nodes, options) {
+      return this.slideOut(nodes, _objectSpread({
+        dir: 'top'
+      }, options));
     },
     // fade the opacity of each element in over a duration
-    fadeIn: function fadeIn(nodes) {
+    fadeIn: function fadeIn(nodes, options) {
       var _this4 = this;
 
-      var duration = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 1000;
       return this.animate(nodes, function (node, progress) {
         return _this4.setStyle(node, 'opacity', progress < 1 ? progress : '');
-      }, duration);
+      }, options);
     },
     // fade the opacity of each element out over a duration
-    fadeOut: function fadeOut(nodes) {
+    fadeOut: function fadeOut(nodes, options) {
       var _this5 = this;
 
-      var duration = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 1000;
       return this.animate(nodes, function (node, progress) {
         return _this5.setStyle(node, 'opacity', progress < 1 ? 1 - progress : '');
-      }, duration);
+      }, options);
     },
     // rotate each element in on an x,y over a duration
-    rotateIn: function rotateIn(nodes) {
+    rotateIn: function rotateIn(nodes, options) {
       var _this6 = this;
 
-      var x = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0;
-      var y = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 1;
-      var inverse = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : false;
-      var duration = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : 1000;
+      options = _objectSpread({
+        x: 0,
+        y: 1
+      }, options);
       return this.animate(nodes, function (node, progress) {
-        return _this6.setStyle(node, 'transform', progress < 1 ? "rotate3d(".concat(x, ", ").concat(y, ", 0, ").concat((90 - progress * 90) * (inverse ? -1 : 1), "deg)") : '');
-      }, duration);
+        return _this6.setStyle(node, 'transform', progress < 1 ? "rotate3d(".concat(options.x, ", ").concat(options.y, ", 0, ").concat((90 - progress * 90) * (options.inverse ? -1 : 1), "deg)") : '');
+      }, options);
     },
     // rotate each element out on an x,y over a duration
-    rotateOut: function rotateOut(nodes) {
+    rotateOut: function rotateOut(nodes, options) {
       var _this7 = this;
 
-      var x = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0;
-      var y = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 1;
-      var inverse = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : false;
-      var duration = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : 1000;
+      options = _objectSpread({
+        x: 0,
+        y: 1
+      }, options);
       return this.animate(nodes, function (node, progress) {
-        return _this7.setStyle(node, 'transform', progress < 1 ? "rotate3d(".concat(x, ", ").concat(y, ", 0, ").concat(progress * 90 * (inverse ? -1 : 1), "deg)") : '');
-      }, duration);
+        return _this7.setStyle(node, 'transform', progress < 1 ? "rotate3d(".concat(options.x, ", ").concat(options.y, ", 0, ").concat(progress * 90 * (options.inverse ? -1 : 1), "deg)") : '');
+      }, options);
     },
     // slide each element into place from a direction over a duration
-    slideIn: function slideIn(nodes) {
+    slideIn: function slideIn(nodes, options) {
       var _this8 = this;
 
-      var direction = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'bottom';
-      var duration = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 1000;
+      options = _objectSpread({
+        dir: 'bottom'
+      }, options);
       return this.animate(nodes, function (node, progress) {
         var axis, size, inverse;
 
         if (progress < 1) {
-          var dir = Core.isFunction(direction) ? direction() : direction;
+          var dir = Core.isFunction(options.dir) ? options.dir() : options.dir;
 
           if (dir === 'top' || dir === 'bottom') {
             axis = 'Y';
@@ -291,19 +320,20 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
         }
 
         _this8.setStyle(node, 'transform', progress < 1 ? "translate".concat(axis, "(").concat(Math.round(size - size * progress) * (inverse ? -1 : 1), "px)") : '');
-      }, duration);
+      }, options);
     },
     // slide each element out of place to a direction over a duration
-    slideOut: function slideOut(nodes) {
+    slideOut: function slideOut(nodes, options) {
       var _this9 = this;
 
-      var direction = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'bottom';
-      var duration = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 1000;
+      options = _objectSpread({
+        dir: 'bottom'
+      }, options);
       return this.animate(nodes, function (node, progress) {
         var axis, size, inverse;
 
         if (progress < 1) {
-          var dir = Core.isFunction(direction) ? direction() : direction;
+          var dir = Core.isFunction(options.dir) ? options.dir() : options.dir;
 
           if (dir === 'top' || dir === 'bottom') {
             axis = 'Y';
@@ -317,107 +347,125 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
         }
 
         _this9.setStyle(node, 'transform', progress < 1 ? "translate".concat(axis, "(").concat(Math.round(size * progress) * (inverse ? -1 : 1), "px)") : '');
-      }, duration);
+      }, options);
     },
     // squeeze each element into place from a direction over a duration
-    squeezeIn: function squeezeIn(nodes) {
+    squeezeIn: function squeezeIn(nodes, options) {
       var _this10 = this;
 
-      var direction = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'bottom';
-      var duration = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 1000;
-      return this.animate(nodes, function (node, progress) {
-        _this10.setStyle(node, {
-          overflow: '',
-          height: '',
-          width: '',
-          marginTop: '',
-          marginLeft: ''
-        });
-
-        if (progress === 1) {
-          return;
+      options = _objectSpread({
+        dir: 'bottom'
+      }, options);
+      var wrapper = this.create('div', {
+        style: {
+          overflow: 'hidden',
+          position: 'relative'
         }
+      });
+      var animations = [];
+      this.nodeArray(nodes).forEach(function (node) {
+        _this10.wrap(node, wrapper);
 
-        var dir = Core.isFunction(direction) ? direction() : direction;
-        var sizeStyle, marginStyle;
+        var parent = _this10.parent(node);
 
-        if (dir === 'top' || dir === 'bottom') {
-          sizeStyle = 'height';
+        animations.push(_this10.animate(node, function (node, progress) {
+          if (progress === 1) {
+            _this10.before(parent, _this10.contents(parent));
 
-          if (dir === 'top') {
-            marginStyle = 'marginTop';
+            _this10.remove(parent);
+
+            return;
           }
-        } else if (dir === 'left' || dir === 'right') {
-          sizeStyle = 'width';
 
-          if (dir === 'left') {
-            marginStyle = 'marginLeft';
+          var dir = Core.isFunction(options.dir) ? options.dir() : options.dir;
+          var sizeStyle, translateStyle;
+
+          if (dir === 'top' || dir === 'bottom') {
+            sizeStyle = 'height';
+
+            if (dir === 'top') {
+              translateStyle = 'Y';
+            }
+          } else if (dir === 'left' || dir === 'right') {
+            sizeStyle = 'width';
+
+            if (dir === 'left') {
+              translateStyle = 'X';
+            }
           }
-        }
 
-        var size = Math.round(_this10[sizeStyle](node, true));
-        var amount = Math.round(size * progress);
+          var size = Math.round(_this10[sizeStyle](node, true));
+          var amount = Math.round(size * progress);
 
-        var styles = _defineProperty({
-          overflow: 'hidden'
-        }, sizeStyle, amount);
+          var styles = _defineProperty({}, sizeStyle, amount);
 
-        if (marginStyle) {
-          styles[marginStyle] = size - amount;
-        }
+          if (translateStyle) {
+            styles.transform = "translate".concat(translateStyle, "(").concat(size - amount, "px)");
+          }
 
-        _this10.setStyle(node, styles);
-      }, duration);
+          core.setStyle(parent, styles);
+        }, duration, 'ease-in-out'));
+      });
+      return Promise.all(animations);
     },
     // squeeze each element out of place to a direction over a duration
-    squeezeOut: function squeezeOut(nodes) {
+    squeezeOut: function squeezeOut(nodes, options) {
       var _this11 = this;
 
-      var direction = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'bottom';
-      var duration = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 1000;
-      return this.animate(nodes, function (node, progress) {
-        _this11.setStyle(node, {
-          overflow: '',
-          height: '',
-          width: '',
-          marginTop: '',
-          marginLeft: ''
-        });
-
-        if (progress === 1) {
-          return;
+      options = _objectSpread({
+        dir: 'bottom'
+      }, options);
+      var wrapper = this.create('div', {
+        style: {
+          overflow: 'hidden',
+          position: 'relative'
         }
+      });
+      var animations = [];
+      this.nodeArray(nodes).forEach(function (node) {
+        _this11.wrap(node, wrapper);
 
-        var dir = Core.isFunction(direction) ? direction() : direction;
-        var sizeStyle, marginStyle;
+        var parent = _this11.parent(node);
 
-        if (dir === 'top' || dir === 'bottom') {
-          sizeStyle = 'height';
+        animations.push(_this11.animate(node, function (node, progress) {
+          if (progress === 1) {
+            _this11.before(parent, _this11.contents(parent));
 
-          if (dir === 'top') {
-            marginStyle = 'marginTop';
+            _this11.remove(parent);
+
+            return;
           }
-        } else if (dir === 'left' || dir === 'right') {
-          sizeStyle = 'width';
 
-          if (dir === 'left') {
-            marginStyle = 'marginLeft';
+          var dir = Core.isFunction(options.dir) ? options.dir() : options.dir;
+          var sizeStyle, translateStyle;
+
+          if (dir === 'top' || dir === 'bottom') {
+            sizeStyle = 'height';
+
+            if (dir === 'top') {
+              translateStyle = 'Y';
+            }
+          } else if (dir === 'left' || dir === 'right') {
+            sizeStyle = 'width';
+
+            if (dir === 'left') {
+              translateStyle = 'X';
+            }
           }
-        }
 
-        var size = Math.round(_this11[sizeStyle](node, true));
-        var amount = Math.round(size - size * progress);
+          var size = Math.round(_this11[sizeStyle](node, true));
+          var amount = Math.round(size - size * progress);
 
-        var styles = _defineProperty({
-          overflow: 'hidden'
-        }, sizeStyle, amount);
+          var styles = _defineProperty({}, sizeStyle, amount);
 
-        if (marginStyle) {
-          styles[marginStyle] = size - amount;
-        }
+          if (translateStyle) {
+            styles.transform = "translate".concat(translateStyle, "(").concat(size - amount, "px)");
+          }
 
-        _this11.setStyle(node, styles);
-      }, duration);
+          core.setStyle(parent, styles);
+        }, duration, 'ease-in-out'));
+      });
+      return Promise.all(animations);
     }
   });
   Object.assign(Core.prototype, {
@@ -1100,9 +1148,12 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
   });
   Object.assign(Core.prototype, {
     // create a new DOM element
-    create: function create(tagName) {
-      var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+    create: function create(tagName, options) {
       var node = this.context.createElement(tagName);
+
+      if (!options) {
+        return node;
+      }
 
       if (options.html) {
         this.setHTML(node, options.html);
@@ -1110,24 +1161,28 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
         this.setText(node, options.text);
       }
 
-      if (options.classes) {
-        this.addClass(node, options.classes);
+      if (options.class) {
+        this.addClass(node, options.class);
       }
 
-      if (options.styles) {
-        this.setStyle(node, options.styles);
+      if (options.style) {
+        this.setStyle(node, options.style);
       }
 
       if (options.value) {
         this.setValue(node, options.value);
       }
 
-      if (options.attributes) {
-        this.setAttribute(node, options.attributes);
+      if (options.attribute) {
+        this.setAttribute(node, options.attribute);
       }
 
-      if (options.properties) {
-        this.setProperty(nodes, options.properties);
+      if (options.property) {
+        this.setProperty(nodes, options.property);
+      }
+
+      if (options.dataset) {
+        this.setDataset(nodes, options.dataset);
       }
 
       return node;
