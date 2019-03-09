@@ -7,7 +7,7 @@ Object.assign(Core, {
      * @param {Boolean} [leading]
      * @returns {Promise}
      */
-    animationFactory(callback, leading) {
+    animation(callback, leading) {
         let newArgs,
             running;
 
@@ -44,7 +44,7 @@ Object.assign(Core, {
      * @param {Boolean} [leading]
      * @returns {Promise}
      */
-    debounceFactory(callback, wait, leading) {
+    debounce(callback, wait, leading) {
         let newArgs,
             running;
 
@@ -82,8 +82,8 @@ Object.assign(Core, {
      * @param {...*} [defaultArgs]
      * @returns {Promise}
      */
-    deferFactory(callback, ...defaultArgs) {
-        return this.delayFactory(callback, 0, ...defaultArgs);
+    defer(callback, ...defaultArgs) {
+        return this.delay(callback, 0, ...defaultArgs);
     },
 
     /**
@@ -93,7 +93,7 @@ Object.assign(Core, {
      * @param {...*} [defaultArgs]
      * @returns {Promise}
      */
-    delayFactory(callback, wait, ...defaultArgs) {
+    delay(callback, wait, ...defaultArgs) {
         return (...args) => new Promise(resolve =>
             setTimeout(
                 _ => resolve(
@@ -111,7 +111,7 @@ Object.assign(Core, {
      * @param {function} callback
      * @returns {function}
      */
-    onceFactory(callback) {
+    once(callback) {
         let ran;
 
         return (...args) => {
@@ -130,7 +130,7 @@ Object.assign(Core, {
      * @param {...*} [defaultArgs]
      * @returns {function}
      */
-    partialFactory(callback, ...defaultArgs) {
+    partial(callback, ...defaultArgs) {
         return (...args) =>
             callback(
                 ...(defaultArgs
@@ -152,7 +152,7 @@ Object.assign(Core, {
      * @param {Boolean} [trailing=true]
      * @returns {Promise}
      */
-    throttleFactory(callback, wait, leading = true, trailing = true) {
+    throttle(callback, wait, leading = true, trailing = true) {
         let ran,
             running;
 

@@ -7,6 +7,7 @@
     }
 
 })(this, function() {
+    'use strict';
 
     const Core = {};
 

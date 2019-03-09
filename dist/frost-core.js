@@ -7,6 +7,7 @@
     }
 
 })(this, function() {
+    'use strict';
 
     const Core = {};
 
@@ -17,12 +18,12 @@
          * @param {Array} array 
          * @returns {Array}
          */
-        flattenArray(array) {
+        flatten(array) {
             return array.reduce(
                 (acc, val) =>
                     Array.isArray(val) ?
                         acc.concat(
-                            ...this.flattenArray(val)
+                            ...this.flatten(val)
                         ) :
                         acc.concat(val),
                 []
@@ -34,7 +35,7 @@
          * @param {Array} array 
          * @returns {Array}
          */
-        uniqueArray(array) {
+        unique(array) {
             return [...new Set(array)];
         }
 
@@ -49,7 +50,7 @@
          * @param {Boolean} [leading]
          * @returns {Promise}
          */
-        animationFactory(callback, leading) {
+        animation(callback, leading) {
             let newArgs,
                 running;
 
@@ -86,7 +87,7 @@
          * @param {Boolean} [leading]
          * @returns {Promise}
          */
-        debounceFactory(callback, wait, leading) {
+        debounce(callback, wait, leading) {
             let newArgs,
                 running;
 
@@ -124,8 +125,8 @@
          * @param {...*} [defaultArgs]
          * @returns {Promise}
          */
-        deferFactory(callback, ...defaultArgs) {
-            return this.delayFactory(callback, 0, ...defaultArgs);
+        defer(callback, ...defaultArgs) {
+            return this.delay(callback, 0, ...defaultArgs);
         },
 
         /**
@@ -135,7 +136,7 @@
          * @param {...*} [defaultArgs]
          * @returns {Promise}
          */
-        delayFactory(callback, wait, ...defaultArgs) {
+        delay(callback, wait, ...defaultArgs) {
             return (...args) => new Promise(resolve =>
                 setTimeout(
                     _ => resolve(
@@ -153,7 +154,7 @@
          * @param {function} callback
          * @returns {function}
          */
-        onceFactory(callback) {
+        once(callback) {
             let ran;
 
             return (...args) => {
@@ -172,7 +173,7 @@
          * @param {...*} [defaultArgs]
          * @returns {function}
          */
-        partialFactory(callback, ...defaultArgs) {
+        partial(callback, ...defaultArgs) {
             return (...args) =>
                 callback(
                     ...(defaultArgs
@@ -194,7 +195,7 @@
          * @param {Boolean} [trailing=true]
          * @returns {Promise}
          */
-        throttleFactory(callback, wait, leading = true, trailing = true) {
+        throttle(callback, wait, leading = true, trailing = true) {
             let ran,
                 running;
 
@@ -495,7 +496,7 @@
 
         /**
          * Retrieve values of a specified key from an Array of Objects using dot notation.
-         * @param {Array} objects
+         * @param {Object[]} objects
          * @param {string} key
          * @param {*} [defaultValue]
          * @returns {Array}

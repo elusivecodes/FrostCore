@@ -66,7 +66,7 @@ Object.assign(Core, {
 
     /**
      * Retrieve values of a specified key from an Array of Objects using dot notation.
-     * @param {Array} objects
+     * @param {Object[]} objects
      * @param {string} key
      * @param {*} [defaultValue]
      * @returns {Array}

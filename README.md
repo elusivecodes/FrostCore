@@ -18,43 +18,43 @@ It is a lightweight (~2kb) and modern library, adding various functionality to y
 
 ## Arrays
 
-**Flatten Array**
+**Flatten**
 
 Create a single-dimensional Array from a multiple-dimensional Array.
 
 - `array` is an Array you wish to flatten.
 
 ```javascript
-const flatArray = Core.flattenArray(array);
+const flat = Core.flatten(array);
 ```
 
-**Unique Array**
+**Unique**
 
 Remove duplicate elements in an Array.
 
 - `array` is an Array you wish to remove duplicates from.
 
 ```javascript
-const uniqueArray = Core.uniqueArray(array);
+const unique = Core.unique(array);
 ```
 
 
 ## Functions
 
-**Animation Factory**
+**Animation**
 
 Create a wrapped version of a function that executes at most once per animation frame (using the most recent arguments passed to it).
 
 - `callback` is the function you wish to wrap.
 - `leading` is a Boolean indicating whether you wish the function to execute on the leading edge of the animation frame, and will default to *false*.
 
-This function returns a Promise that resolves after the callback has been executed, or rejects if the callback was not executed.
+The wrapped function returns a Promise that resolves after the callback has been executed, or rejects if the callback was not executed.
 
 ```javascript
-const animation = Core.animationFactory(callback, leading);
+const animation = Core.animation(callback, leading);
 ```
 
-**Debounce Factory**
+**Debounce**
 
 Create a wrapped version of a function that executes once per wait period (using the most recent arguments passed to it).
 
@@ -62,13 +62,13 @@ Create a wrapped version of a function that executes once per wait period (using
 - `wait` is the number of milliseconds to wait between executions.
 - `leading` is a Boolean indicating whether you wish the function to execute on the leading edge of the wait period, and will default to *false*.
 
-This function returns a Promise that resolves after the callback has been executed, or rejects if the callback was not executed.
+The wrapped function returns a Promise that resolves after the callback has been executed, or rejects if the callback was not executed.
 
 ```javascript
-const debounced = Core.debounceFactory(callback, wait, leading);
+const debounced = Core.debounce(callback, wait, leading);
 ```
 
-**Defer Factory**
+**Defer**
 
 Create a wrapped version of a function that executes on the next cycle of the event queue.
 
@@ -76,13 +76,13 @@ Create a wrapped version of a function that executes on the next cycle of the ev
 
 Any additional arguments supplied will be passed on as default arguments to the wrapped function.
 
-This function returns a Promise that resolves after the callback has been executed, or rejects if the callback was not executed.
+The wrapped function returns a Promise that resolves after the callback has been executed, or rejects if the callback was not executed.
 
 ```javascript
-const deferred = Core.debounceFactory(callback, ...defaultArgs);
+const deferred = Core.defer(callback, ...defaultArgs);
 ```
 
-**Delay Factory**
+**Delay**
 
 Create a wrapped version of a function that executes after a wait period.
 
@@ -91,23 +91,23 @@ Create a wrapped version of a function that executes after a wait period.
 
 Any additional arguments supplied will be passed on as default arguments to the wrapped function.
 
-This function returns a Promise that resolves after the callback has been executed, or rejects if the callback was not executed.
+The wrapped function returns a Promise that resolves after the callback has been executed, or rejects if the callback was not executed.
 
 ```javascript
-const delayed = Core.delayFactory(callback, wait, ...defaultArgs);
+const delayed = Core.delay(callback, wait, ...defaultArgs);
 ```
 
-**Once Factory**
+**Once**
 
 Create a wrapped version of a function that will only ever execute once.
 
 - `callback` is the function you wish to wrap.
 
 ```javascript
-const once = Core.onceFactory(callback);
+const once = Core.once(callback);
 ```
 
-**Partial Factory**
+**Partial**
 
 Create a wrapped version of a function with predefined arguments.
 
@@ -116,10 +116,10 @@ Create a wrapped version of a function with predefined arguments.
 Any additional arguments supplied will be passed on as default arguments to the wrapped function. Specify *undefined* for a default argument to allow that argument to be sent to the wrapped function.
 
 ```javascript
-const partial = Core.partialFactory(callback, ...defaultArgs);
+const partial = Core.partial(callback, ...defaultArgs);
 ```
 
-**Throttle Factory**
+**Throttle**
 
 Create a wrapped version of a function that executes at most once per wait period.
 
@@ -128,10 +128,10 @@ Create a wrapped version of a function that executes at most once per wait perio
 - `leading` is a Boolean indicating whether you wish the function to execute on the leading edge of the wait period, and will default to *true*.
 - `trailing` is a Boolean indicating whether you wish the function to execute on the trailing edge of the wait period, and will default to *true*.
 
-This function returns a Promise that resolves after the callback has been executed, or rejects if the callback was not executed.
+The wrapped function returns a Promise that resolves after the callback has been executed, or rejects if the callback was not executed.
 
 ```javascript
-const throttled = Core.throttleFactory(callback, wait, leading, trailing);
+const throttled = Core.throttle(callback, wait, leading, trailing);
 ```
 
 

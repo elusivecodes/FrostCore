@@ -5,12 +5,12 @@ Object.assign(Core, {
      * @param {Array} array 
      * @returns {Array}
      */
-    flattenArray(array) {
+    flatten(array) {
         return array.reduce(
             (acc, val) =>
                 Array.isArray(val) ?
                     acc.concat(
-                        ...this.flattenArray(val)
+                        ...this.flatten(val)
                     ) :
                     acc.concat(val),
             []
@@ -22,7 +22,7 @@ Object.assign(Core, {
      * @param {Array} array 
      * @returns {Array}
      */
-    uniqueArray(array) {
+    unique(array) {
         return [...new Set(array)];
     }
 

@@ -17,6 +17,8 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
     Object.assign(global, factory());
   }
 })(void 0, function () {
+  'use strict';
+
   var Core = {};
   Object.assign(Core, {
     /**
@@ -24,11 +26,11 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
      * @param {Array} array 
      * @returns {Array}
      */
-    flattenArray: function flattenArray(array) {
+    flatten: function flatten(array) {
       var _this = this;
 
       return array.reduce(function (acc, val) {
-        return Array.isArray(val) ? acc.concat.apply(acc, _toConsumableArray(_this.flattenArray(val))) : acc.concat(val);
+        return Array.isArray(val) ? acc.concat.apply(acc, _toConsumableArray(_this.flatten(val))) : acc.concat(val);
       }, []);
     },
 
@@ -37,7 +39,7 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
      * @param {Array} array 
      * @returns {Array}
      */
-    uniqueArray: function uniqueArray(array) {
+    unique: function unique(array) {
       return _toConsumableArray(new Set(array));
     }
   });
@@ -49,7 +51,7 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
      * @param {Boolean} [leading]
      * @returns {Promise}
      */
-    animationFactory: function animationFactory(callback, leading) {
+    animation: function animation(callback, leading) {
       var newArgs, running;
       return function () {
         for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
@@ -87,7 +89,7 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
      * @param {Boolean} [leading]
      * @returns {Promise}
      */
-    debounceFactory: function debounceFactory(callback, wait, leading) {
+    debounce: function debounce(callback, wait, leading) {
       var newArgs, running;
       return function () {
         for (var _len2 = arguments.length, args = new Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
@@ -123,12 +125,12 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
      * @param {...*} [defaultArgs]
      * @returns {Promise}
      */
-    deferFactory: function deferFactory(callback) {
+    defer: function defer(callback) {
       for (var _len3 = arguments.length, defaultArgs = new Array(_len3 > 1 ? _len3 - 1 : 0), _key3 = 1; _key3 < _len3; _key3++) {
         defaultArgs[_key3 - 1] = arguments[_key3];
       }
 
-      return this.delayFactory.apply(this, [callback, 0].concat(defaultArgs));
+      return this.delay.apply(this, [callback, 0].concat(defaultArgs));
     },
 
     /**
@@ -138,7 +140,7 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
      * @param {...*} [defaultArgs]
      * @returns {Promise}
      */
-    delayFactory: function delayFactory(callback, wait) {
+    delay: function delay(callback, wait) {
       for (var _len4 = arguments.length, defaultArgs = new Array(_len4 > 2 ? _len4 - 2 : 0), _key4 = 2; _key4 < _len4; _key4++) {
         defaultArgs[_key4 - 2] = arguments[_key4];
       }
@@ -161,7 +163,7 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
      * @param {function} callback
      * @returns {function}
      */
-    onceFactory: function onceFactory(callback) {
+    once: function once(callback) {
       var ran;
       return function () {
         if (ran) {
@@ -179,7 +181,7 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
      * @param {...*} [defaultArgs]
      * @returns {function}
      */
-    partialFactory: function partialFactory(callback) {
+    partial: function partial(callback) {
       for (var _len6 = arguments.length, defaultArgs = new Array(_len6 > 1 ? _len6 - 1 : 0), _key6 = 1; _key6 < _len6; _key6++) {
         defaultArgs[_key6 - 1] = arguments[_key6];
       }
@@ -203,7 +205,7 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
      * @param {Boolean} [trailing=true]
      * @returns {Promise}
      */
-    throttleFactory: function throttleFactory(callback, wait) {
+    throttle: function throttle(callback, wait) {
       var leading = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : true;
       var trailing = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : true;
       var ran, running;
@@ -432,7 +434,7 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
 
     /**
      * Retrieve values of a specified key from an Array of Objects using dot notation.
-     * @param {Array} objects
+     * @param {Object[]} objects
      * @param {string} key
      * @param {*} [defaultValue]
      * @returns {Array}
