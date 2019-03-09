@@ -1,6 +1,26 @@
 Object.assign(Core, {
 
     /**
+     * Returns true if the value is a Array-like.
+     * @param {*} value 
+     * @returns {Boolean}
+     */
+    isArrayLike(value) {
+        return Array.isArray(value) ||
+            (
+                this.isObject(value) &&
+                (
+                    this.isFunction(value[Symbol.iterator]) ||
+                    (
+                        this.isNumeric(value.length) &&
+                        !value.length ||
+                        value[value.length - 1]
+                    )
+                )
+            );
+    },
+
+    /**
      * Returns true if the value is a Boolean.
      * @param {*} value 
      * @returns {Boolean}

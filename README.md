@@ -38,6 +38,16 @@ Remove duplicate elements in an Array.
 const unique = Core.unique(array);
 ```
 
+**Wrap**
+
+Create an Array from any value.
+
+- `value` is the value you wish to create an Array from.
+
+```javascript
+const array = Core.wrap(value);
+```
+
 
 ## Functions
 
@@ -379,6 +389,16 @@ const snakeCase = Core.snakeCase(string);
 
 
 ## Testing
+
+**Is Array Like**
+
+Returns *true* is the value is Array-like.
+
+- `value` is the value you wish to test.
+
+```javascript
+const isArrayLike = Core.isArrayLike(value);
+```
 
 **Is Boolean**
 
