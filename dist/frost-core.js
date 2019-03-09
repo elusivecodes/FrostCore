@@ -37,6 +37,23 @@
          */
         unique(array) {
             return [...new Set(array)];
+        },
+
+        /**
+         * Create an Array from any value.
+         * @param {*} value
+         * @returns {Array}
+         */
+        wrap(value) {
+            if (Array.isArray(value)) {
+                return [...value];
+            }
+
+            if (this.isArrayLike(value)) {
+                return Array.from(value);
+            }
+
+            return [value];
         }
 
     });
@@ -603,6 +620,26 @@
     });
 
     Object.assign(Core, {
+
+        /**
+         * Returns true if the value is a Array-like.
+         * @param {*} value 
+         * @returns {Boolean}
+         */
+        isArrayLike(value) {
+            return Array.isArray(value) ||
+                (
+                    this.isObject(value) &&
+                    (
+                        this.isFunction(value[Symbol.iterator]) ||
+                        (
+                            this.isNumeric(value.length) &&
+                            !value.length ||
+                            value[value.length - 1]
+                        )
+                    )
+                );
+        },
 
         /**
          * Returns true if the value is a Boolean.

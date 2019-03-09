@@ -41,6 +41,23 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
      */
     unique: function unique(array) {
       return _toConsumableArray(new Set(array));
+    },
+
+    /**
+     * Create an Array from any value.
+     * @param {*} value
+     * @returns {Array}
+     */
+    wrap: function wrap(value) {
+      if (Array.isArray(value)) {
+        return _toConsumableArray(value);
+      }
+
+      if (this.isArrayLike(value)) {
+        return Array.from(value);
+      }
+
+      return [value];
     }
   });
   Object.assign(Core, {
@@ -526,6 +543,15 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
     }
   });
   Object.assign(Core, {
+    /**
+     * Returns true if the value is a Array-like.
+     * @param {*} value 
+     * @returns {Boolean}
+     */
+    isArrayLike: function isArrayLike(value) {
+      return Array.isArray(value) || this.isObject(value) && (this.isFunction(value[Symbol.iterator]) || this.isNumeric(value.length) && !value.length || value[value.length - 1]);
+    },
+
     /**
      * Returns true if the value is a Boolean.
      * @param {*} value 
