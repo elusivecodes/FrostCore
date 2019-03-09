@@ -1,20 +1,18 @@
 (function(global, factory) {
 
     if (typeof module === 'object' && typeof module.exports === 'object') {
-        module.exports = factory(global);
+        module.exports = factory();
     } else {
-        Object.assign(global, factory(global));
+        Object.assign(global, factory());
     }
 
-})(window, function(window) {
+})(this, function() {
+
+    const Core = {};
 
     // {{code}}
-
     return {
-        Core,
-        core: new Core,
-        QuerySet,
-        QuerySetImmutable
+        Core
     };
 
 });

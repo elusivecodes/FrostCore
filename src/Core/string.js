@@ -1,9 +1,12 @@
 Object.assign(Core, {
 
-    // convert a string to Camel Case
-    camelCase(string)
-    {
-        return '' + string
+    /**
+     * Convert a string to camelCase.
+     * @param {string} string
+     * @returns {string}
+     */
+    camelCase(string) {
+        return `${string}`
             .replace(
                 /(\-[a-z])/g,
                 match =>
@@ -12,10 +15,13 @@ Object.assign(Core, {
             .replace('-', '');
     },
 
-    // convert a string to Snake Case
-    snakeCase(string)
-    {
-        return '' + string
+    /**
+     * Convert a string to snake-case.
+     * @param {string} string
+     * @returns {string}
+     */
+    snakeCase(string) {
+        return `${string}`
             .replace(
                 /([A-Z])/g,
                 match =>
