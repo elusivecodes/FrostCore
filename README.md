@@ -2,21 +2,21 @@
 
 **FrostCore** is a free, open-source utility library for *JavaScript*.
 
-It is lightweight and modern, adding various functionality to your JS toolkit for manipulating Arrays, functions, Objects & more.
+It is a lightweight (~2kb) and modern library, adding various functionality to your JS toolkit for manipulating Arrays, functions, Objects & more.
 
 
 ## Table of contents
-- [Array](#array)
-- [Function](#functions)
+- [Arrays](#arrays)
+- [Functions](#functions)
 - [Math](#math)
-- [Object](#object)
+- [Objects](#objects)
 - [Parsing](#parsing)
-- [String](#string)
+- [Strings](#strings)
 - [Testing](#testing)
 
 
 
-## Array
+## Arrays
 
 **Flatten Array**
 
@@ -39,7 +39,7 @@ const uniqueArray = Core.uniqueArray(array);
 ```
 
 
-## Function
+## Functions
 
 **Animation Factory**
 
@@ -269,7 +269,7 @@ const logValue = Core.logValue(percent, min, max);
 ```
 
 
-## Object
+## Objects
 
 **Forget Dot**
 
@@ -355,7 +355,7 @@ const xmlDoc = Core.parseXML(html);
 ```
 
 
-## String
+## Strings
 
 **Camel Case**
 
