@@ -9,15 +9,17 @@ Object.assign(Core, {
         let pointer = object;
 
         const keys = key.split('.');
-        while (key = keys.shift() && keys.length) {
+        while (key = keys.shift()) {
             if (!pointer.hasOwnProperty(key)) {
-                return;
+                break;
             }
 
-            pointer = pointer[key];
+            if (keys.length) {
+                pointer = pointer[key];
+            } else {
+                delete pointer[key];
+            }
         }
-
-        delete pointer[key];
     },
 
     /**
@@ -89,27 +91,28 @@ Object.assign(Core, {
             current;
 
         const keys = key.split('.');
-        while (current = keys.shift() && keys.length) {
+        while (current = keys.shift()) {
             if (current === '*') {
-                return Object.keys(pointer).forEach(k =>
-                    this.dotSet(
-                        pointer[k],
-                        keys.join('.'),
+                Object.keys(pointer).forEach(k =>
+                    this.setDot(
+                        pointer,
+                        [k].concat(keys).join('.'),
                         value,
                         overwrite
                     )
                 );
+                return;
             }
 
-            if (!pointer.hasOwnProperty(current)) {
-                pointer[current] = {};
+            if (keys.length) {
+                if (!this.isObject(pointer[current]) || !pointer.hasOwnProperty(current)) {
+                    pointer[current] = {};
+                }
+
+                pointer = pointer[current];
+            } else if (overwrite || !pointer.hasOwnProperty(current)) {
+                pointer[current] = value;
             }
-
-            pointer = pointer[current];
-        }
-
-        if (overwrite || !pointer.hasOwnProperty(current)) {
-            pointer[current] = value;
         }
     }
 

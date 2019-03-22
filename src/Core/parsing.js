@@ -1,4 +1,4 @@
-Object.assign(Core.prototype, {
+Object.assign(Core, {
 
     /**
      * Create a Document object from a HTML string.
@@ -7,7 +7,7 @@ Object.assign(Core.prototype, {
      */
     parseHTML(html) {
         const parser = new DOMParser;
-        return parser.parseFromString(html, 'application/html');
+        return parser.parseFromString(html, 'text/html');
     },
 
     /**

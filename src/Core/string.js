@@ -8,11 +8,10 @@ Object.assign(Core, {
     camelCase(string) {
         return `${string}`
             .replace(
-                /(\-[a-z])/g,
+                /\-([a-z])/g,
                 match =>
-                    match.toUpperCase()
-            )
-            .replace('-', '');
+                    match.substring(1).toUpperCase()
+            );
     },
 
     /**

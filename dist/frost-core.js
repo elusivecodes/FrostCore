@@ -65,35 +65,31 @@
          * (using the most recent arguments passed to it).
          * @param {function} callback
          * @param {Boolean} [leading]
-         * @returns {Promise}
+         * @returns {function}
          */
         animation(callback, leading) {
             let newArgs,
                 running;
 
-            return (...args) => new Promise((resolve, reject) => {
+            return (...args) => {
                 newArgs = args;
 
                 if (running) {
-                    return reject();
+                    return;
                 }
 
                 running = true;
                 window.requestAnimationFrame(_ => {
                     running = false;
                     if (!leading) {
-                        resolve(
-                            callback(...newArgs)
-                        );
+                        callback(...newArgs);
                     }
                 });
 
                 if (leading) {
-                    resolve(
-                        callback(...newArgs)
-                    );
+                    callback(...newArgs);
                 }
-            });
+            };
         },
 
         /**
@@ -102,45 +98,44 @@
          * @param {function} callback
          * @param {number} wait
          * @param {Boolean} [leading]
-         * @returns {Promise}
+         * @returns {function}
          */
         debounce(callback, wait, leading) {
             let newArgs,
-                running;
+                running,
+                runLead = leading;
 
-            return (...args) => new Promise((resolve, reject) => {
+            return (...args) => {
                 newArgs = args;
 
                 if (running) {
-                    return reject();
+                    runLead = false;
+                    return;
+                }
+
+                if (runLead) {
+                    callback(...newArgs);
                 }
 
                 running = true;
                 setTimeout(
                     _ => {
-                        running = false;
-                        if (!leading) {
-                            resolve(
-                                callback(...newArgs)
-                            );
+                        if (!runLead) {
+                            callback(...newArgs);
                         }
+                        running = false;
+                        runLead = leading;
                     },
                     wait
                 );
-
-                if (leading) {
-                    resolve(
-                        callback(...newArgs)
-                    );
-                }
-            });
+            };
         },
 
         /**
          * Create a wrapped version of a function that executes on the next cycle of the event queue.
          * @param {function} callback
          * @param {...*} [defaultArgs]
-         * @returns {Promise}
+         * @returns {function}
          */
         defer(callback, ...defaultArgs) {
             return this.delay(callback, 0, ...defaultArgs);
@@ -151,19 +146,17 @@
          * @param {function} callback
          * @param {number} wait
          * @param {...*} [defaultArgs]
-         * @returns {Promise}
+         * @returns {function}
          */
         delay(callback, wait, ...defaultArgs) {
-            return (...args) => new Promise(resolve =>
+            return (...args) => {
                 setTimeout(
-                    _ => resolve(
-                        callback(...(
-                            defaultArgs.concat(args)
-                        ))
-                    ),
+                    _ => callback(...(
+                        defaultArgs.concat(args)
+                    )),
                     wait
-                )
-            );
+                );
+            };
         },
 
         /**
@@ -210,39 +203,33 @@
          * @param {number} wait
          * @param {Boolean} [leading=true]
          * @param {Boolean} [trailing=true]
-         * @returns {Promise}
+         * @returns {function}
          */
         throttle(callback, wait, leading = true, trailing = true) {
             let ran,
                 running;
 
-            return (...args) => new Promise((resolve, reject) => {
+            return (...args) => {
                 if (running) {
-                    return reject();
+                    return;
                 }
 
-                if (leading && !ran) {
+                if (leading && (!ran || !trailing)) {
                     ran = true;
-                    return resolve(
-                        callback(...args)
-                    );
+                    callback(...args);
                 }
 
                 running = true;
                 setTimeout(
                     _ => {
-                        running = false;
                         if (trailing) {
-                            resolve(
-                                callback(...args)
-                            );
-                        } else {
-                            reject();
+                            callback(...args);
                         }
+                        running = false;
                     },
                     wait
                 );
-            });
+            };
         }
 
     });
@@ -340,7 +327,7 @@
          * @param {number} step
          * @returns {number}
          */
-        toStep(value, step) {
+        toStep(value, step = 0.01) {
             return Math.round(value / step)
                 * step;
         },
@@ -456,15 +443,17 @@
             let pointer = object;
 
             const keys = key.split('.');
-            while (key = keys.shift() && keys.length) {
+            while (key = keys.shift()) {
                 if (!pointer.hasOwnProperty(key)) {
-                    return;
+                    break;
                 }
 
-                pointer = pointer[key];
+                if (keys.length) {
+                    pointer = pointer[key];
+                } else {
+                    delete pointer[key];
+                }
             }
-
-            delete pointer[key];
         },
 
         /**
@@ -536,33 +525,34 @@
                 current;
 
             const keys = key.split('.');
-            while (current = keys.shift() && keys.length) {
+            while (current = keys.shift()) {
                 if (current === '*') {
-                    return Object.keys(pointer).forEach(k =>
-                        this.dotSet(
-                            pointer[k],
-                            keys.join('.'),
+                    Object.keys(pointer).forEach(k =>
+                        this.setDot(
+                            pointer,
+                            [k].concat(keys).join('.'),
                             value,
                             overwrite
                         )
                     );
+                    return;
                 }
 
-                if (!pointer.hasOwnProperty(current)) {
-                    pointer[current] = {};
+                if (keys.length) {
+                    if (!this.isObject(pointer[current]) || !pointer.hasOwnProperty(current)) {
+                        pointer[current] = {};
+                    }
+
+                    pointer = pointer[current];
+                } else if (overwrite || !pointer.hasOwnProperty(current)) {
+                    pointer[current] = value;
                 }
-
-                pointer = pointer[current];
-            }
-
-            if (overwrite || !pointer.hasOwnProperty(current)) {
-                pointer[current] = value;
             }
         }
 
     });
 
-    Object.assign(Core.prototype, {
+    Object.assign(Core, {
 
         /**
          * Create a Document object from a HTML string.
@@ -571,7 +561,7 @@
          */
         parseHTML(html) {
             const parser = new DOMParser;
-            return parser.parseFromString(html, 'application/html');
+            return parser.parseFromString(html, 'text/html');
         },
 
         /**
@@ -596,11 +586,10 @@
         camelCase(string) {
             return `${string}`
                 .replace(
-                    /(\-[a-z])/g,
+                    /\-([a-z])/g,
                     match =>
-                        match.toUpperCase()
-                )
-                .replace('-', '');
+                        match.substring(1).toUpperCase()
+                );
         },
 
         /**
@@ -631,11 +620,17 @@
                 (
                     this.isObject(value) &&
                     (
-                        this.isFunction(value[Symbol.iterator]) ||
                         (
+                            value[Symbol.iterator] &&
+                            this.isFunction(value[Symbol.iterator])
+                        ) ||
+                        (
+                            value.hasOwnProperty('length') &&
                             this.isNumeric(value.length) &&
-                            !value.length ||
-                            value[value.length - 1]
+                            (
+                                !value.length ||
+                                value.hasOwnProperty(value.length - 1)
+                            )
                         )
                     )
                 );

@@ -58,8 +58,6 @@ Create a wrapped version of a function that executes at most once per animation 
 - `callback` is the function you wish to wrap.
 - `leading` is a Boolean indicating whether you wish the function to execute on the leading edge of the animation frame, and will default to *false*.
 
-The wrapped function returns a Promise that resolves after the callback has been executed, or rejects if the callback was not executed.
-
 ```javascript
 const animation = Core.animation(callback, leading);
 ```
@@ -71,8 +69,6 @@ Create a wrapped version of a function that executes once per wait period (using
 - `callback` is the function you wish to wrap.
 - `wait` is the number of milliseconds to wait between executions.
 - `leading` is a Boolean indicating whether you wish the function to execute on the leading edge of the wait period, and will default to *false*.
-
-The wrapped function returns a Promise that resolves after the callback has been executed, or rejects if the callback was not executed.
 
 ```javascript
 const debounced = Core.debounce(callback, wait, leading);
@@ -86,8 +82,6 @@ Create a wrapped version of a function that executes on the next cycle of the ev
 
 Any additional arguments supplied will be passed on as default arguments to the wrapped function.
 
-The wrapped function returns a Promise that resolves after the callback has been executed, or rejects if the callback was not executed.
-
 ```javascript
 const deferred = Core.defer(callback, ...defaultArgs);
 ```
@@ -100,8 +94,6 @@ Create a wrapped version of a function that executes after a wait period.
 - `wait` is the number of milliseconds to wait before execution.
 
 Any additional arguments supplied will be passed on as default arguments to the wrapped function.
-
-The wrapped function returns a Promise that resolves after the callback has been executed, or rejects if the callback was not executed.
 
 ```javascript
 const delayed = Core.delay(callback, wait, ...defaultArgs);
@@ -137,8 +129,6 @@ Create a wrapped version of a function that executes at most once per wait perio
 - `wait` is the number of milliseconds to wait between executions.
 - `leading` is a Boolean indicating whether you wish the function to execute on the leading edge of the wait period, and will default to *true*.
 - `trailing` is a Boolean indicating whether you wish the function to execute on the trailing edge of the wait period, and will default to *true*.
-
-The wrapped function returns a Promise that resolves after the callback has been executed, or rejects if the callback was not executed.
 
 ```javascript
 const throttled = Core.throttle(callback, wait, leading, trailing);

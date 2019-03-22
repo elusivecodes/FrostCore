@@ -10,11 +10,17 @@ Object.assign(Core, {
             (
                 this.isObject(value) &&
                 (
-                    this.isFunction(value[Symbol.iterator]) ||
                     (
+                        value[Symbol.iterator] &&
+                        this.isFunction(value[Symbol.iterator])
+                    ) ||
+                    (
+                        value.hasOwnProperty('length') &&
                         this.isNumeric(value.length) &&
-                        !value.length ||
-                        value[value.length - 1]
+                        (
+                            !value.length ||
+                            value.hasOwnProperty(value.length - 1)
+                        )
                     )
                 )
             );

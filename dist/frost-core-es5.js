@@ -66,7 +66,7 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
      * (using the most recent arguments passed to it).
      * @param {function} callback
      * @param {Boolean} [leading]
-     * @returns {Promise}
+     * @returns {function}
      */
     animation: function animation(callback, leading) {
       var newArgs, running;
@@ -75,26 +75,24 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
           args[_key] = arguments[_key];
         }
 
-        return new Promise(function (resolve, reject) {
-          newArgs = args;
+        newArgs = args;
 
-          if (running) {
-            return reject();
-          }
+        if (running) {
+          return;
+        }
 
-          running = true;
-          window.requestAnimationFrame(function (_) {
-            running = false;
+        running = true;
+        window.requestAnimationFrame(function (_) {
+          running = false;
 
-            if (!leading) {
-              resolve(callback.apply(void 0, _toConsumableArray(newArgs)));
-            }
-          });
-
-          if (leading) {
-            resolve(callback.apply(void 0, _toConsumableArray(newArgs)));
+          if (!leading) {
+            callback.apply(void 0, _toConsumableArray(newArgs));
           }
         });
+
+        if (leading) {
+          callback.apply(void 0, _toConsumableArray(newArgs));
+        }
       };
     },
 
@@ -104,35 +102,37 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
      * @param {function} callback
      * @param {number} wait
      * @param {Boolean} [leading]
-     * @returns {Promise}
+     * @returns {function}
      */
     debounce: function debounce(callback, wait, leading) {
-      var newArgs, running;
+      var newArgs,
+          running,
+          runLead = leading;
       return function () {
         for (var _len2 = arguments.length, args = new Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
           args[_key2] = arguments[_key2];
         }
 
-        return new Promise(function (resolve, reject) {
-          newArgs = args;
+        newArgs = args;
 
-          if (running) {
-            return reject();
+        if (running) {
+          runLead = false;
+          return;
+        }
+
+        if (runLead) {
+          callback.apply(void 0, _toConsumableArray(newArgs));
+        }
+
+        running = true;
+        setTimeout(function (_) {
+          if (!runLead) {
+            callback.apply(void 0, _toConsumableArray(newArgs));
           }
 
-          running = true;
-          setTimeout(function (_) {
-            running = false;
-
-            if (!leading) {
-              resolve(callback.apply(void 0, _toConsumableArray(newArgs)));
-            }
-          }, wait);
-
-          if (leading) {
-            resolve(callback.apply(void 0, _toConsumableArray(newArgs)));
-          }
-        });
+          running = false;
+          runLead = leading;
+        }, wait);
       };
     },
 
@@ -140,7 +140,7 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
      * Create a wrapped version of a function that executes on the next cycle of the event queue.
      * @param {function} callback
      * @param {...*} [defaultArgs]
-     * @returns {Promise}
+     * @returns {function}
      */
     defer: function defer(callback) {
       for (var _len3 = arguments.length, defaultArgs = new Array(_len3 > 1 ? _len3 - 1 : 0), _key3 = 1; _key3 < _len3; _key3++) {
@@ -155,7 +155,7 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
      * @param {function} callback
      * @param {number} wait
      * @param {...*} [defaultArgs]
-     * @returns {Promise}
+     * @returns {function}
      */
     delay: function delay(callback, wait) {
       for (var _len4 = arguments.length, defaultArgs = new Array(_len4 > 2 ? _len4 - 2 : 0), _key4 = 2; _key4 < _len4; _key4++) {
@@ -167,11 +167,9 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
           args[_key5] = arguments[_key5];
         }
 
-        return new Promise(function (resolve) {
-          return setTimeout(function (_) {
-            return resolve(callback.apply(void 0, _toConsumableArray(defaultArgs.concat(args))));
-          }, wait);
-        });
+        setTimeout(function (_) {
+          return callback.apply(void 0, _toConsumableArray(defaultArgs.concat(args)));
+        }, wait);
       };
     },
 
@@ -220,7 +218,7 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
      * @param {number} wait
      * @param {Boolean} [leading=true]
      * @param {Boolean} [trailing=true]
-     * @returns {Promise}
+     * @returns {function}
      */
     throttle: function throttle(callback, wait) {
       var leading = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : true;
@@ -231,27 +229,23 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
           args[_key8] = arguments[_key8];
         }
 
-        return new Promise(function (resolve, reject) {
-          if (running) {
-            return reject();
+        if (running) {
+          return;
+        }
+
+        if (leading && (!ran || !trailing)) {
+          ran = true;
+          callback.apply(void 0, args);
+        }
+
+        running = true;
+        setTimeout(function (_) {
+          if (trailing) {
+            callback.apply(void 0, args);
           }
 
-          if (leading && !ran) {
-            ran = true;
-            return resolve(callback.apply(void 0, args));
-          }
-
-          running = true;
-          setTimeout(function (_) {
-            running = false;
-
-            if (trailing) {
-              resolve(callback.apply(void 0, args));
-            } else {
-              reject();
-            }
-          }, wait);
-        });
+          running = false;
+        }, wait);
       };
     }
   });
@@ -330,7 +324,8 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
      * @param {number} step
      * @returns {number}
      */
-    toStep: function toStep(value, step) {
+    toStep: function toStep(value) {
+      var step = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0.01;
       return Math.round(value / step) * step;
     },
 
@@ -398,15 +393,17 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
       var pointer = object;
       var keys = key.split('.');
 
-      while (key = keys.shift() && keys.length) {
+      while (key = keys.shift()) {
         if (!pointer.hasOwnProperty(key)) {
-          return;
+          break;
         }
 
-        pointer = pointer[key];
+        if (keys.length) {
+          pointer = pointer[key];
+        } else {
+          delete pointer[key];
+        }
       }
-
-      delete pointer[key];
     },
 
     /**
@@ -479,26 +476,27 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
           current;
       var keys = key.split('.');
 
-      while (current = keys.shift() && keys.length) {
+      while (current = keys.shift()) {
         if (current === '*') {
-          return Object.keys(pointer).forEach(function (k) {
-            return _this3.dotSet(pointer[k], keys.join('.'), value, overwrite);
+          Object.keys(pointer).forEach(function (k) {
+            return _this3.setDot(pointer, [k].concat(keys).join('.'), value, overwrite);
           });
+          return;
         }
 
-        if (!pointer.hasOwnProperty(current)) {
-          pointer[current] = {};
+        if (keys.length) {
+          if (!this.isObject(pointer[current]) || !pointer.hasOwnProperty(current)) {
+            pointer[current] = {};
+          }
+
+          pointer = pointer[current];
+        } else if (overwrite || !pointer.hasOwnProperty(current)) {
+          pointer[current] = value;
         }
-
-        pointer = pointer[current];
-      }
-
-      if (overwrite || !pointer.hasOwnProperty(current)) {
-        pointer[current] = value;
       }
     }
   });
-  Object.assign(Core.prototype, {
+  Object.assign(Core, {
     /**
      * Create a Document object from a HTML string.
      * @param {string} html
@@ -506,7 +504,7 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
      */
     parseHTML: function parseHTML(html) {
       var parser = new DOMParser();
-      return parser.parseFromString(html, 'application/html');
+      return parser.parseFromString(html, 'text/html');
     },
 
     /**
@@ -526,9 +524,9 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
      * @returns {string}
      */
     camelCase: function camelCase(string) {
-      return "".concat(string).replace(/(\-[a-z])/g, function (match) {
-        return match.toUpperCase();
-      }).replace('-', '');
+      return "".concat(string).replace(/\-([a-z])/g, function (match) {
+        return match.substring(1).toUpperCase();
+      });
     },
 
     /**
@@ -549,7 +547,7 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
      * @returns {Boolean}
      */
     isArrayLike: function isArrayLike(value) {
-      return Array.isArray(value) || this.isObject(value) && (this.isFunction(value[Symbol.iterator]) || this.isNumeric(value.length) && !value.length || value[value.length - 1]);
+      return Array.isArray(value) || this.isObject(value) && (value[Symbol.iterator] && this.isFunction(value[Symbol.iterator]) || value.hasOwnProperty('length') && this.isNumeric(value.length) && (!value.length || value.hasOwnProperty(value.length - 1)));
     },
 
     /**

@@ -91,7 +91,7 @@ Object.assign(Core, {
      * @param {number} step
      * @returns {number}
      */
-    toStep(value, step) {
+    toStep(value, step = 0.01) {
         return Math.round(value / step)
             * step;
     },

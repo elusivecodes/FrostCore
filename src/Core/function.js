@@ -5,35 +5,31 @@ Object.assign(Core, {
      * (using the most recent arguments passed to it).
      * @param {function} callback
      * @param {Boolean} [leading]
-     * @returns {Promise}
+     * @returns {function}
      */
     animation(callback, leading) {
         let newArgs,
             running;
 
-        return (...args) => new Promise((resolve, reject) => {
+        return (...args) => {
             newArgs = args;
 
             if (running) {
-                return reject();
+                return;
             }
 
             running = true;
             window.requestAnimationFrame(_ => {
                 running = false;
                 if (!leading) {
-                    resolve(
-                        callback(...newArgs)
-                    );
+                    callback(...newArgs);
                 }
             });
 
             if (leading) {
-                resolve(
-                    callback(...newArgs)
-                );
+                callback(...newArgs);
             }
-        });
+        };
     },
 
     /**
@@ -42,45 +38,44 @@ Object.assign(Core, {
      * @param {function} callback
      * @param {number} wait
      * @param {Boolean} [leading]
-     * @returns {Promise}
+     * @returns {function}
      */
     debounce(callback, wait, leading) {
         let newArgs,
-            running;
+            running,
+            runLead = leading;
 
-        return (...args) => new Promise((resolve, reject) => {
+        return (...args) => {
             newArgs = args;
 
             if (running) {
-                return reject();
+                runLead = false;
+                return;
+            }
+
+            if (runLead) {
+                callback(...newArgs);
             }
 
             running = true;
             setTimeout(
                 _ => {
-                    running = false;
-                    if (!leading) {
-                        resolve(
-                            callback(...newArgs)
-                        );
+                    if (!runLead) {
+                        callback(...newArgs);
                     }
+                    running = false;
+                    runLead = leading;
                 },
                 wait
             );
-
-            if (leading) {
-                resolve(
-                    callback(...newArgs)
-                );
-            }
-        });
+        };
     },
 
     /**
      * Create a wrapped version of a function that executes on the next cycle of the event queue.
      * @param {function} callback
      * @param {...*} [defaultArgs]
-     * @returns {Promise}
+     * @returns {function}
      */
     defer(callback, ...defaultArgs) {
         return this.delay(callback, 0, ...defaultArgs);
@@ -91,19 +86,17 @@ Object.assign(Core, {
      * @param {function} callback
      * @param {number} wait
      * @param {...*} [defaultArgs]
-     * @returns {Promise}
+     * @returns {function}
      */
     delay(callback, wait, ...defaultArgs) {
-        return (...args) => new Promise(resolve =>
+        return (...args) => {
             setTimeout(
-                _ => resolve(
-                    callback(...(
-                        defaultArgs.concat(args)
-                    ))
-                ),
+                _ => callback(...(
+                    defaultArgs.concat(args)
+                )),
                 wait
-            )
-        );
+            );
+        };
     },
 
     /**
@@ -150,39 +143,33 @@ Object.assign(Core, {
      * @param {number} wait
      * @param {Boolean} [leading=true]
      * @param {Boolean} [trailing=true]
-     * @returns {Promise}
+     * @returns {function}
      */
     throttle(callback, wait, leading = true, trailing = true) {
         let ran,
             running;
 
-        return (...args) => new Promise((resolve, reject) => {
+        return (...args) => {
             if (running) {
-                return reject();
+                return;
             }
 
-            if (leading && !ran) {
+            if (leading && (!ran || !trailing)) {
                 ran = true;
-                return resolve(
-                    callback(...args)
-                );
+                callback(...args);
             }
 
             running = true;
             setTimeout(
                 _ => {
-                    running = false;
                     if (trailing) {
-                        resolve(
-                            callback(...args)
-                        );
-                    } else {
-                        reject();
+                        callback(...args);
                     }
+                    running = false;
                 },
                 wait
             );
-        });
+        };
     }
 
 });
