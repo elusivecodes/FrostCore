@@ -170,6 +170,19 @@ Object.assign(Core, {
                 wait
             );
         };
+    },
+
+    /**
+     * Execute a function a specified number of times.
+     * @param {function} callback
+     * @param {times} wait
+     */
+    times(callback, amount) {
+        for (let i = 0; i < amount; i++) {
+            if (callback() === false) {
+                break;
+            }
+        }
     }
 
 });

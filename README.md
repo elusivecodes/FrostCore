@@ -124,6 +124,17 @@ Create a wrapped version of a function that executes at most once per wait perio
 const throttled = Core.throttle(callback, wait, leading, trailing);
 ```
 
+**Times**
+
+Execute a function a specified number of times.
+
+- `callback` is the function you wish to execute.
+- `amount` is the number of times you wish the function to execute.
+
+```javascript
+Core.times(callback, amount);
+```
+
 
 ## Math
 

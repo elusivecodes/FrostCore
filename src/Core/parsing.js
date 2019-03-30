@@ -6,8 +6,8 @@ Object.assign(Core, {
      * @returns {Document}
      */
     parseHTML(html) {
-        const parser = new DOMParser;
-        return parser.parseFromString(html, 'text/html');
+        return new DOMParser()
+            .parseFromString(html, 'text/html');
     },
 
     /**
@@ -16,8 +16,8 @@ Object.assign(Core, {
      * @returns {Document}
      */
     parseXML(xml) {
-        const parser = new DOMParser;
-        return parser.parseFromString(xml, 'application/xml');
+        return new DOMParser()
+            .parseFromString(xml, 'application/xml');
     }
 
 });

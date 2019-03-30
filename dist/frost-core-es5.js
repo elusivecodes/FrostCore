@@ -234,6 +234,19 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
           running = false;
         }, wait);
       };
+    },
+
+    /**
+     * Execute a function a specified number of times.
+     * @param {function} callback
+     * @param {times} wait
+     */
+    times: function times(callback, amount) {
+      for (var i = 0; i < amount; i++) {
+        if (callback() === false) {
+          break;
+        }
+      }
     }
   });
   Object.assign(Core, {
@@ -533,8 +546,7 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
      * @returns {Document}
      */
     parseHTML: function parseHTML(html) {
-      var parser = new DOMParser();
-      return parser.parseFromString(html, 'text/html');
+      return new DOMParser().parseFromString(html, 'text/html');
     },
 
     /**
@@ -543,8 +555,7 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
      * @returns {Document}
      */
     parseXML: function parseXML(xml) {
-      var parser = new DOMParser();
-      return parser.parseFromString(xml, 'application/xml');
+      return new DOMParser().parseFromString(xml, 'application/xml');
     }
   });
   Object.assign(Core, {

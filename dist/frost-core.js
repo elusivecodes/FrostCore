@@ -213,6 +213,19 @@
                     wait
                 );
             };
+        },
+
+        /**
+         * Execute a function a specified number of times.
+         * @param {function} callback
+         * @param {times} wait
+         */
+        times(callback, amount) {
+            for (let i = 0; i < amount; i++) {
+                if (callback() === false) {
+                    break;
+                }
+            }
         }
 
     });
@@ -540,8 +553,8 @@
          * @returns {Document}
          */
         parseHTML(html) {
-            const parser = new DOMParser;
-            return parser.parseFromString(html, 'text/html');
+            return new DOMParser()
+                .parseFromString(html, 'text/html');
         },
 
         /**
@@ -550,8 +563,8 @@
          * @returns {Document}
          */
         parseXML(xml) {
-            const parser = new DOMParser;
-            return parser.parseFromString(xml, 'application/xml');
+            return new DOMParser()
+                .parseFromString(xml, 'application/xml');
         }
 
     });
