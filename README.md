@@ -18,16 +18,6 @@ It is a lightweight (~2kb) and modern library, adding various functionality to y
 
 ## Arrays
 
-**Flatten**
-
-Create a single-dimensional Array from a multiple-dimensional Array.
-
-- `array` is an Array you wish to flatten.
-
-```javascript
-const flat = Core.flatten(array);
-```
-
 **Unique**
 
 Remove duplicate elements in an Array.

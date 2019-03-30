@@ -8,6 +8,8 @@ Object.assign(Core, {
     isArrayLike(value) {
         return Array.isArray(value) ||
             (
+                !this.isFunction(value) &&
+                !(value instanceof Window) &&
                 this.isObject(value) &&
                 (
                     (
@@ -15,11 +17,11 @@ Object.assign(Core, {
                         this.isFunction(value[Symbol.iterator])
                     ) ||
                     (
-                        value.hasOwnProperty('length') &&
+                        'length' in value &&
                         this.isNumeric(value.length) &&
                         (
                             !value.length ||
-                            value.hasOwnProperty(value.length - 1)
+                            value.length - 1 in value
                         )
                     )
                 )

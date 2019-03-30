@@ -22,19 +22,6 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
   var Core = {};
   Object.assign(Core, {
     /**
-     * Create a single-dimensional Array from a multiple-dimensional Array.
-     * @param {Array} array 
-     * @returns {Array}
-     */
-    flatten: function flatten(array) {
-      var _this = this;
-
-      return array.reduce(function (acc, val) {
-        return Array.isArray(val) ? acc.concat.apply(acc, _toConsumableArray(_this.flatten(val))) : acc.concat(val);
-      }, []);
-    },
-
-    /**
      * Remove duplicate elements in an Array.
      * @param {Array} array 
      * @returns {Array}
@@ -394,7 +381,7 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
       var keys = key.split('.');
 
       while (key = keys.shift()) {
-        if (!pointer.hasOwnProperty(key)) {
+        if (!key in pointer) {
           break;
         }
 
@@ -414,16 +401,37 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
      * @returns {*}
      */
     getDot: function getDot(object, key, defaultValue) {
-      var value = object;
-      key.split('.').forEach(function (key) {
-        if (!value.hasOwnProperty(key)) {
-          value = defaultValue;
-          return false;
-        }
+      var pointer = object;
+      var _iteratorNormalCompletion = true;
+      var _didIteratorError = false;
+      var _iteratorError = undefined;
 
-        value = value[key];
-      });
-      return value;
+      try {
+        for (var _iterator = key.split('.')[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+          key = _step.value;
+
+          if (!key in pointer) {
+            return defaultValue;
+          }
+
+          pointer = pointer[key];
+        }
+      } catch (err) {
+        _didIteratorError = true;
+        _iteratorError = err;
+      } finally {
+        try {
+          if (!_iteratorNormalCompletion && _iterator.return != null) {
+            _iterator.return();
+          }
+        } finally {
+          if (_didIteratorError) {
+            throw _iteratorError;
+          }
+        }
+      }
+
+      return pointer;
     },
 
     /**
@@ -433,17 +441,37 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
      * @returns {Boolean}
      */
     hasDot: function hasDot(object, key) {
-      var result = true,
-          pointer = object;
-      key.split('.').forEach(function (key) {
-        if (!pointer.hasOwnProperty(key)) {
-          result = false;
-          return false;
-        }
+      var pointer = object;
+      var _iteratorNormalCompletion2 = true;
+      var _didIteratorError2 = false;
+      var _iteratorError2 = undefined;
 
-        pointer = pointer[key];
-      });
-      return result;
+      try {
+        for (var _iterator2 = key.split('.')[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
+          key = _step2.value;
+
+          if (!key in pointer) {
+            return false;
+          }
+
+          pointer = pointer[key];
+        }
+      } catch (err) {
+        _didIteratorError2 = true;
+        _iteratorError2 = err;
+      } finally {
+        try {
+          if (!_iteratorNormalCompletion2 && _iterator2.return != null) {
+            _iterator2.return();
+          }
+        } finally {
+          if (_didIteratorError2) {
+            throw _iteratorError2;
+          }
+        }
+      }
+
+      return true;
     },
 
     /**
@@ -454,10 +482,10 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
      * @returns {Array}
      */
     pluckDot: function pluckDot(objects, key, defaultValue) {
-      var _this2 = this;
+      var _this = this;
 
       return objects.slice().map(function (pointer) {
-        return _this2.getDot(pointer, key, defaultValue);
+        return _this.getDot(pointer, key, defaultValue);
       });
     },
 
@@ -469,8 +497,6 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
      * @param {Boolean} [overwrite=true]
      */
     setDot: function setDot(object, key, value) {
-      var _this3 = this;
-
       var overwrite = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : true;
       var pointer = object,
           current;
@@ -478,19 +504,23 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
 
       while (current = keys.shift()) {
         if (current === '*') {
-          Object.keys(pointer).forEach(function (k) {
-            return _this3.setDot(pointer, [k].concat(keys).join('.'), value, overwrite);
-          });
+          var _arr = Object.keys(pointer);
+
+          for (var _i = 0; _i < _arr.length; _i++) {
+            var k = _arr[_i];
+            this.setDot(pointer, [k].concat(keys).join('.'), value, overwrite);
+          }
+
           return;
         }
 
         if (keys.length) {
-          if (!this.isObject(pointer[current]) || !pointer.hasOwnProperty(current)) {
+          if (!this.isObject(pointer[current]) || !current in pointer) {
             pointer[current] = {};
           }
 
           pointer = pointer[current];
-        } else if (overwrite || !pointer.hasOwnProperty(current)) {
+        } else if (overwrite || !current in pointer) {
           pointer[current] = value;
         }
       }
@@ -547,7 +577,7 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
      * @returns {Boolean}
      */
     isArrayLike: function isArrayLike(value) {
-      return Array.isArray(value) || this.isObject(value) && (value[Symbol.iterator] && this.isFunction(value[Symbol.iterator]) || value.hasOwnProperty('length') && this.isNumeric(value.length) && (!value.length || value.hasOwnProperty(value.length - 1)));
+      return Array.isArray(value) || !this.isFunction(value) && !(value instanceof Window) && this.isObject(value) && (value[Symbol.iterator] && this.isFunction(value[Symbol.iterator]) || 'length' in value && this.isNumeric(value.length) && (!value.length || value.length - 1 in value));
     },
 
     /**

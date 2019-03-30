@@ -10,7 +10,7 @@ Object.assign(Core, {
 
         const keys = key.split('.');
         while (key = keys.shift()) {
-            if (!pointer.hasOwnProperty(key)) {
+            if (!key in pointer) {
                 break;
             }
 
@@ -30,18 +30,17 @@ Object.assign(Core, {
      * @returns {*}
      */
     getDot(object, key, defaultValue) {
-        let value = object;
+        let pointer = object;
 
-        key.split('.').forEach(key => {
-            if (!value.hasOwnProperty(key)) {
-                value = defaultValue;
-                return false;
+        for (key of key.split('.')) {
+            if (!key in pointer) {
+                return defaultValue;
             }
 
-            value = value[key];
-        });
+            pointer = pointer[key];
+        }
 
-        return value;
+        return pointer;
     },
 
     /**
@@ -51,19 +50,17 @@ Object.assign(Core, {
      * @returns {Boolean}
      */
     hasDot(object, key) {
-        let result = true,
-            pointer = object;
+        let pointer = object;
 
-        key.split('.').forEach(key => {
-            if (!pointer.hasOwnProperty(key)) {
-                result = false;
+        for (key of key.split('.')) {
+            if (!key in pointer) {
                 return false;
             }
 
             pointer = pointer[key];
-        });
+        }
 
-        return result;
+        return true;
     },
 
     /**
@@ -93,24 +90,24 @@ Object.assign(Core, {
         const keys = key.split('.');
         while (current = keys.shift()) {
             if (current === '*') {
-                Object.keys(pointer).forEach(k =>
+                for (const k of Object.keys(pointer)) {
                     this.setDot(
                         pointer,
                         [k].concat(keys).join('.'),
                         value,
                         overwrite
-                    )
-                );
+                    );
+                }
                 return;
             }
 
             if (keys.length) {
-                if (!this.isObject(pointer[current]) || !pointer.hasOwnProperty(current)) {
+                if (!this.isObject(pointer[current]) || !current in pointer) {
                     pointer[current] = {};
                 }
 
                 pointer = pointer[current];
-            } else if (overwrite || !pointer.hasOwnProperty(current)) {
+            } else if (overwrite || !current in pointer) {
                 pointer[current] = value;
             }
         }
