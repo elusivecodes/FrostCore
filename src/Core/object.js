@@ -10,7 +10,7 @@ Object.assign(Core, {
 
         const keys = key.split('.');
         while (key = keys.shift()) {
-            if (!key in pointer) {
+            if (!this.isObject(pointer) || !(key in pointer)) {
                 break;
             }
 
@@ -33,7 +33,7 @@ Object.assign(Core, {
         let pointer = object;
 
         for (key of key.split('.')) {
-            if (!key in pointer) {
+            if (!this.isObject(pointer) || !(key in pointer)) {
                 return defaultValue;
             }
 
@@ -53,7 +53,7 @@ Object.assign(Core, {
         let pointer = object;
 
         for (key of key.split('.')) {
-            if (!key in pointer) {
+            if (!this.isObject(pointer) || !(key in pointer)) {
                 return false;
             }
 
@@ -102,12 +102,12 @@ Object.assign(Core, {
             }
 
             if (keys.length) {
-                if (!this.isObject(pointer[current]) || !current in pointer) {
+                if (!this.isObject(pointer[current]) || !(current in pointer)) {
                     pointer[current] = {};
                 }
 
                 pointer = pointer[current];
-            } else if (overwrite || !current in pointer) {
+            } else if (overwrite || !(current in pointer)) {
                 pointer[current] = value;
             }
         }
