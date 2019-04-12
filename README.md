@@ -20,7 +20,7 @@ It is a lightweight (~2kb) and modern library, adding various functionality to y
 
 **Unique**
 
-Remove duplicate elements in an Array.
+Remove duplicate elements in an array.
 
 - `array` is an Array you wish to remove duplicates from.
 
@@ -30,9 +30,9 @@ const unique = Core.unique(array);
 
 **Wrap**
 
-Create an Array from any value.
+Create an array from any value.
 
-- `value` is the value you wish to create an Array from.
+- `value` is the value you wish to create an array from.
 
 ```javascript
 const array = Core.wrap(value);
@@ -46,7 +46,7 @@ const array = Core.wrap(value);
 Create a wrapped version of a function that executes at most once per animation frame (using the most recent arguments passed to it).
 
 - `callback` is the function you wish to wrap.
-- `leading` is a Boolean indicating whether you wish the function to execute on the leading edge of the animation frame, and will default to *false*.
+- `leading` is a boolean indicating whether you wish the function to execute on the leading edge of the animation frame, and will default to *false*.
 
 ```javascript
 const animation = Core.animation(callback, leading);
@@ -58,7 +58,7 @@ Create a wrapped version of a function that executes once per wait period (using
 
 - `callback` is the function you wish to wrap.
 - `wait` is the number of milliseconds to wait between executions.
-- `leading` is a Boolean indicating whether you wish the function to execute on the leading edge of the wait period, and will default to *false*.
+- `leading` is a boolean indicating whether you wish the function to execute on the leading edge of the wait period, and will default to *false*.
 
 ```javascript
 const debounced = Core.debounce(callback, wait, leading);
@@ -117,8 +117,8 @@ Create a wrapped version of a function that executes at most once per wait perio
 
 - `callback` is the function you wish to wrap.
 - `wait` is the number of milliseconds to wait between executions.
-- `leading` is a Boolean indicating whether you wish the function to execute on the leading edge of the wait period, and will default to *true*.
-- `trailing` is a Boolean indicating whether you wish the function to execute on the trailing edge of the wait period, and will default to *true*.
+- `leading` is a boolean indicating whether you wish the function to execute on the leading edge of the wait period, and will default to *true*.
+- `trailing` is a boolean indicating whether you wish the function to execute on the trailing edge of the wait period, and will default to *true*.
 
 ```javascript
 const throttled = Core.throttle(callback, wait, leading, trailing);
@@ -152,7 +152,7 @@ const clamp = Core.clamp(value, min, max);
 
 **Clamp Percent**
 
-Clamp a value between 0 and 100.
+Clamp a value between *0* and *100*.
 
 - `value` is a number you wish to clamp.
 
@@ -190,7 +190,7 @@ Linear interpolation from one value to another.
 
 - `min` is a number to be used as the minimum of the "lerped" amount.
 - `max` is a number to be used as the maximum of the "lerped" amount.
-- `amount` is the amount to "lerp" (between 0 and 1).
+- `amount` is the amount to "lerp" (between *0* and *1*).
 
 ```javascript
 const lerp = Core.lerp(min, max, amount);
@@ -274,9 +274,9 @@ const logValue = Core.logValue(percent, min, max);
 
 **Forget Dot**
 
-Remove a specified key from an Object using dot notation.
+Remove a specified key from an object using dot notation.
 
-- `object` is the Object you wish to remove a key from.
+- `object` is the object you wish to remove a key from.
 - `key` is a string using dot notation, indicating the key to remove.
 
 ```javascript
@@ -285,9 +285,9 @@ Core.forgetDot(object, key);
 
 **Get Dot**
 
-Retrieve the value of a specified key from an Object using dot notation.
+Retrieve the value of a specified key from an object using dot notation.
 
-- `object` is the Object you wish to retrieve a value from.
+- `object` is the object you wish to retrieve a value from.
 - `key` is a string using dot notation, indicating the key to retrieve.
 - `defaultValue` is the default value to return if the key does not exist, and will default to *undefined*.
 
@@ -297,9 +297,9 @@ const value = Core.getDot(object, key);
 
 **Has Dot**
 
-Returns *true* if a specified key exists in an Object using dot notation.
+Returns *true* if a specified key exists in an object using dot notation.
 
-- `object` is the Object you wish to test for a key.
+- `object` is the object you wish to test for a key.
 - `key` is a string using dot notation, indicating the key to test for.
 
 ```javascript
@@ -308,9 +308,9 @@ const hasKey = Core.hasDot(object, key);
 
 **Pluck Dot**
 
-Retrieve values of a specified key from an Array of Objects using dot notation.
+Retrieve values of a specified key from an array of objects using dot notation.
 
-- `objects` is an Array of Objects you wish to retrieve values from.
+- `objects` is an array of objects you wish to retrieve values from.
 - `key` is a string using dot notation, indicating the key to retrieve.
 - `defaultValue` is the default value to return if the key does not exist, and will default to *undefined*.
 
@@ -322,37 +322,13 @@ const values = Core.pluckDot(objects, key, defaultValue);
 
 Set a specified value of a key for an object using dot notation.
 
-- `object` is the Object you wish to set a value for.
+- `object` is the object you wish to set a value for.
 - `key` is a string using dot notation, indicating the key to set the value.
 - `value` is the value you wish to set the key to.
-- `overwrite` is a Boolean indicating whether you wish to overwrite an existing key, and will default to *true*.
+- `overwrite` is a boolean indicating whether you wish to overwrite an existing key, and will default to *true*.
 
 ```javascript
 Core.setDot(object, key, value, overwrite);
-```
-
-
-## Parsing
-
-**Parse HTML**
-
-Create a Document object from a HTML string.
-
-- `html` is a string indicating the HTML to parse.
-
-```javascript
-const htmlDoc = Core.parseHTML(html);
-```
-
-
-**Parse XML**
-
-Create a Document object from an XML string.
-
-- `xml` is a string indicating the XML to parse.
-
-```javascript
-const xmlDoc = Core.parseXML(html);
 ```
 
 
@@ -383,7 +359,7 @@ const snakeCase = Core.snakeCase(string);
 
 **Is Array Like**
 
-Returns *true* is the value is Array-like.
+Returns *true* is the value is array-like.
 
 - `value` is the value you wish to test.
 
@@ -393,7 +369,7 @@ const isArrayLike = Core.isArrayLike(value);
 
 **Is Boolean**
 
-Returns *true* if the value is a Boolean.
+Returns *true* if the value is a boolean.
 
 - `value` is the value you wish to test.
 
@@ -423,7 +399,7 @@ const isNumeric = Core.isNumeric(value);
 
 **Is Plain Object**
 
-Returns *true* if the value is a plain Object.
+Returns *true* if the value is a plain object.
 
 - `value` is the value you wish to test.
 
@@ -433,7 +409,7 @@ const isPlainObject = Core.isPlainObject(value);
 
 **Is Object**
 
-Returns *true* if the value is an Object.
+Returns *true* if the value is an object.
 
 - `value` is the value you wish to test.
 
