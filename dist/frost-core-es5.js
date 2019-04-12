@@ -23,8 +23,6 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
 })(void 0, function () {
   'use strict';
 
-  var _this = this;
-
   var Core = {};
   /**
    * Array methods
@@ -422,7 +420,7 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
     var keys = key.split('.');
 
     while (key = keys.shift()) {
-      if (!_this.isObject(pointer) || !(key in pointer)) {
+      if (!Core.isObject(pointer) || !(key in pointer)) {
         break;
       }
 
@@ -452,7 +450,7 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
       for (var _iterator = key.split('.')[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
         key = _step.value;
 
-        if (!_this.isObject(pointer) || !(key in pointer)) {
+        if (!Core.isObject(pointer) || !(key in pointer)) {
           return defaultValue;
         }
 
@@ -493,7 +491,7 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
       for (var _iterator2 = key.split('.')[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
         key = _step2.value;
 
-        if (!_this.isObject(pointer) || !(key in pointer)) {
+        if (!Core.isObject(pointer) || !(key in pointer)) {
           return false;
         }
 
@@ -527,7 +525,7 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
 
   Core.pluckDot = function (objects, key, defaultValue) {
     return objects.map(function (pointer) {
-      return _this.getDot(pointer, key, defaultValue);
+      return Core.getDot(pointer, key, defaultValue);
     });
   };
   /**
@@ -551,15 +549,14 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
 
         for (var _i = 0; _i < _arr.length; _i++) {
           var k = _arr[_i];
-
-          _this.setDot(pointer, [k].concat(keys).join('.'), value, overwrite);
+          Core.setDot(pointer, [k].concat(keys).join('.'), value, overwrite);
         }
 
         return;
       }
 
       if (keys.length) {
-        if (!_this.isObject(pointer[current]) || !(current in pointer)) {
+        if (!Core.isObject(pointer[current]) || !(current in pointer)) {
           pointer[current] = {};
         }
 

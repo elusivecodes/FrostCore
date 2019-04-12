@@ -418,7 +418,7 @@
 
         const keys = key.split('.');
         while (key = keys.shift()) {
-            if (!this.isObject(pointer) || !(key in pointer)) {
+            if (!Core.isObject(pointer) || !(key in pointer)) {
                 break;
             }
 
@@ -441,7 +441,7 @@
         let pointer = object;
 
         for (key of key.split('.')) {
-            if (!this.isObject(pointer) || !(key in pointer)) {
+            if (!Core.isObject(pointer) || !(key in pointer)) {
                 return defaultValue;
             }
 
@@ -461,7 +461,7 @@
         let pointer = object;
 
         for (key of key.split('.')) {
-            if (!this.isObject(pointer) || !(key in pointer)) {
+            if (!Core.isObject(pointer) || !(key in pointer)) {
                 return false;
             }
 
@@ -479,7 +479,7 @@
      * @returns {Array} An array of values retrieved from the objects.
      */
     Core.pluckDot = (objects, key, defaultValue) => objects
-        .map(pointer => this.getDot(pointer, key, defaultValue));
+        .map(pointer => Core.getDot(pointer, key, defaultValue));
 
     /**
      * Set a specified value of a key for an object using dot notation.
@@ -496,7 +496,7 @@
         while (current = keys.shift()) {
             if (current === '*') {
                 for (const k of Object.keys(pointer)) {
-                    this.setDot(
+                    Core.setDot(
                         pointer,
                         [k].concat(keys).join('.'),
                         value,
@@ -507,7 +507,7 @@
             }
 
             if (keys.length) {
-                if (!this.isObject(pointer[current]) || !(current in pointer)) {
+                if (!Core.isObject(pointer[current]) || !(current in pointer)) {
                     pointer[current] = {};
                 }
 
