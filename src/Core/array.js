@@ -1,29 +1,22 @@
-Object.assign(Core, {
+/**
+ * Array methods
+ */
 
-    /**
-     * Remove duplicate elements in an Array.
-     * @param {Array} array 
-     * @returns {Array}
-     */
-    unique(array) {
-        return [...new Set(array)];
-    },
+/**
+ * Remove duplicate elements in an array.
+ * @param {Array} array The input array.
+ * @returns {Array} The filtered array.
+ */
+Core.unique = array => [...new Set(array)];
 
-    /**
-     * Create an Array from any value.
-     * @param {*} value
-     * @returns {Array}
-     */
-    wrap(value) {
-        if (Array.isArray(value)) {
-            return [...value];
-        }
-
-        if (this.isArrayLike(value)) {
-            return Array.from(value);
-        }
-
-        return [value];
-    }
-
-});
+/**
+ * Create an array from any value.
+ * @param {*} value The input value.
+ * @returns {Array} The wrapped array.
+ */
+Core.wrap = value =>
+    Array.isArray(value) ?
+        value :
+        Core.isArrayLike(value) ?
+            Array.from(value) :
+            [value];

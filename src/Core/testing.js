@@ -1,87 +1,72 @@
-Object.assign(Core, {
+/**
+ * Testing methods
+ */
 
-    /**
-     * Returns true if the value is a Array-like.
-     * @param {*} value 
-     * @returns {Boolean}
-     */
-    isArrayLike(value) {
-        return Array.isArray(value) ||
+/**
+ * Returns true if the value is a Array-like.
+ * @param {*} value The value to test.
+ * @returns {Boolean} TRUE if the value is array-like, otherwise FALSE.
+ */
+Core.isArrayLike = value =>
+    Array.isArray(value) ||
+    (
+        !Core.isFunction(value) &&
+        !(value instanceof Window) &&
+        Core.isObject(value) &&
+        (
             (
-                !this.isFunction(value) &&
-                !(value instanceof Window) &&
-                this.isObject(value) &&
+                value[Symbol.iterator] &&
+                Core.isFunction(value[Symbol.iterator])
+            ) ||
+            (
+                'length' in value &&
+                Core.isNumeric(value.length) &&
                 (
-                    (
-                        value[Symbol.iterator] &&
-                        this.isFunction(value[Symbol.iterator])
-                    ) ||
-                    (
-                        'length' in value &&
-                        this.isNumeric(value.length) &&
-                        (
-                            !value.length ||
-                            value.length - 1 in value
-                        )
-                    )
+                    !value.length ||
+                    value.length - 1 in value
                 )
-            );
-    },
+            )
+        )
+    );
 
-    /**
-     * Returns true if the value is a Boolean.
-     * @param {*} value 
-     * @returns {Boolean}
-     */
-    isBoolean(value) {
-        return value === !!value;
-    },
+/**
+ * Returns true if the value is a Boolean.
+ * @param {*} value The value to test.
+ * @returns {Boolean} TRUE if the value is boolean, otherwise FALSE.
+ */
+Core.isBoolean = value => value === !!value;
 
-    /**
-     * Returns true if the value is a function.
-     * @param {*} value 
-     * @returns {Boolean}
-     */
-    isFunction(value) {
-        return typeof value === 'function';
-    },
+/**
+ * Returns true if the value is a function.
+ * @param {*} value The value to test.
+ * @returns {Boolean} TRUE if the value is a function, otherwise FALSE.
+ */
+Core.isFunction = value => typeof value === 'function';
 
-    /**
-     * Returns true if the value is numeric.
-     * @param {*} value 
-     * @returns {Boolean}
-     */
-    isNumeric(value) {
-        return !isNaN(parseFloat(value)) &&
-            isFinite(value);
-    },
+/**
+ * Returns true if the value is numeric.
+ * @param {*} value The value to test.
+ * @returns {Boolean} TRUE if the value is numeric, otherwise FALSE.
+ */
+Core.isNumeric = value => !isNaN(parseFloat(value)) && isFinite(value);
 
-    /**
-     * Returns true if the value is a plain Object.
-     * @param {*} value 
-     * @returns {Boolean}
-     */
-    isPlainObject(value) {
-        return this.isObject(value) &&
-            value.constructor === Object;
-    },
+/**
+ * Returns true if the value is a plain Object.
+ * @param {*} value The value to test.
+ * @returns {Boolean} TRUE if the value is a plain object, otherwise FALSE.
+ */
+Core.isPlainObject = value => Core.isObject(value) && value.constructor === Object;
 
-    /**
-     * Returns true if the value is an Object.
-     * @param {*} value 
-     * @returns {Boolean}
-     */
-    isObject(value) {
-        return value === Object(value);
-    },
+/**
+ * Returns true if the value is an Object.
+ * @param {*} value The value to test.
+ * @returns {Boolean} TRUE if the value is an object, otherwise FALSE.
+ */
+Core.isObject = value => value === Object(value);
 
-    /**
-     * Returns true if the value is a string.
-     * @param {*} value 
-     * @returns {Boolean}
-     */
-    isString(value) {
-        return value === `${value}`;
-    }
-
-});
+/**
+ * Returns true if the value is a string.
+ * @param {*} value The value to test.
+ * @returns {Boolean} TRUE is the value is a string, otherwise FALSE.
+ */
+Core.isString = value => value === `${value}`;
