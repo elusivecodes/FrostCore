@@ -147,7 +147,7 @@ Clamp a value between a min and max.
 - `max` is a number which will be the maximum of the clamped value, and will default to *1*.
 
 ```javascript
-const clamp = Core.clamp(value, min = 0, max = 1);
+const clamp = Core.clamp(value, min, max);
 ```
 
 **Clamp Percent**
