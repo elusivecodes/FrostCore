@@ -29,10 +29,20 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
    */
 
   /**
+   * Return a random value from an array.
+   * @param {Array} array The input array.
+   * @returns {*} A random value from the array, or null if it is empty.
+   */
+
+  Core.randomValue = function (array) {
+    return array.length ? array[Core.random(array.length) | 0] : null;
+  };
+  /**
    * Remove duplicate elements in an array.
    * @param {Array} array The input array.
    * @returns {Array} The filtered array.
    */
+
 
   Core.unique = function (array) {
     return _toConsumableArray(new Set(array));
@@ -326,17 +336,30 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
   };
   /**
    * Map a value from one range to another.
-   * @param {number} value
-   * @param {number} fromMin
-   * @param {number} fromMax
-   * @param {number} toMin
-   * @param {number} toMax
+   * @param {number} value The value to map.
+   * @param {number} fromMin The minimum value of the current range.
+   * @param {number} fromMax The maximum value of the current range.
+   * @param {number} toMin The minimum value of the target range.
+   * @param {number} toMax The maximum value of the target range.
    * @returns {number} The mapped value.
    */
 
 
   Core.map = function (value, fromMin, fromMax, toMin, toMax) {
     return (value - fromMin) * (toMax - toMin) / (fromMax - fromMin) + toMin;
+  };
+  /**
+   * Return a random floating-point number.
+   * @param {number} [a=1] The minimum value (inclusive).
+   * @param {number} [b] The maximum value (exclusive).
+   * @returns {number} A random number.
+   */
+
+
+  Core.random = function () {
+    var a = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 1;
+    var b = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
+    return b === null ? Math.random() * a : Core.map(Math.random(), 0, 1, a, b);
   };
   /**
    * Constrain a number to a specified step-size.
@@ -567,30 +590,6 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
     }
   };
   /**
-   * Parsing methods
-   */
-
-  /**
-   * Create a Document object from a HTML string.
-   * @param {string} html The HTML input string.
-   * @returns {Document} A new document from the parsed HTML string.
-   */
-
-
-  Core.parseHTML = function (html) {
-    return new DOMParser().parseFromString(html, 'text/html');
-  };
-  /**
-   * Create a Document object from an XML string.
-   * @param {string} xml The XML input string.
-   * @returns {Document} A new document from the parsed XML string.
-   */
-
-
-  Core.parseXML = function (xml) {
-    return new DOMParser().parseFromString(xml, 'application/xml');
-  };
-  /**
    * String methods
    */
 
@@ -605,6 +604,21 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
     return "".concat(string).replace(/\-([a-z])/g, function (match) {
       return match.substring(1).toUpperCase();
     });
+  };
+  /**
+   * Return a random string.
+   * @param {number} [length=16] The length of the output string.
+   * @param {string} [chars=abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWYXZ0123456789] The characters to generate the string from.
+   * @returns {string} The random string.
+   */
+
+
+  Core.randomString = function () {
+    var length = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 16;
+    var chars = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWYXZ0123456789';
+    return new Array(length).fill().map(function (_) {
+      return chars[Core.random(chars.length) | 0];
+    }).join('');
   };
   /**
    * Convert a string to snake-case.

@@ -62,11 +62,11 @@ Core.lerp = (v1, v2, amount) =>
 
 /**
  * Map a value from one range to another.
- * @param {number} value
- * @param {number} fromMin
- * @param {number} fromMax
- * @param {number} toMin
- * @param {number} toMax
+ * @param {number} value The value to map.
+ * @param {number} fromMin The minimum value of the current range.
+ * @param {number} fromMax The maximum value of the current range.
+ * @param {number} toMin The minimum value of the target range.
+ * @param {number} toMax The maximum value of the target range.
  * @returns {number} The mapped value.
  */
 Core.map = (value, fromMin, fromMax, toMin, toMax) =>
@@ -74,6 +74,17 @@ Core.map = (value, fromMin, fromMax, toMin, toMax) =>
     * (toMax - toMin)
     / (fromMax - fromMin)
     + toMin;
+
+/**
+ * Return a random floating-point number.
+ * @param {number} [a=1] The minimum value (inclusive).
+ * @param {number} [b] The maximum value (exclusive).
+ * @returns {number} A random number.
+ */
+Core.random = (a = 1, b = null) =>
+    b === null ?
+        Math.random() * a :
+        Core.map(Math.random(), 0, 1, a, b);
 
 /**
  * Constrain a number to a specified step-size.

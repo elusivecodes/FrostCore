@@ -3,6 +3,16 @@
  */
 
 /**
+ * Return a random value from an array.
+ * @param {Array} array The input array.
+ * @returns {*} A random value from the array, or null if it is empty.
+ */
+Core.randomValue = array =>
+    array.length ?
+        array[Core.random(array.length) | 0] :
+        null;
+
+/**
  * Remove duplicate elements in an array.
  * @param {Array} array The input array.
  * @returns {Array} The filtered array.
