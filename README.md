@@ -384,8 +384,7 @@ const randomString = Core.randomString(length, characters);
 
 Escape a string for use in RegEx.
 
-- `length` is the length of the random string, and will default to *16*.
-- `characters` is the string you wish to escape.
+- `string` is the string you wish to escape.
 
 ```javascript
 const regExEscape = Core.regExEscape(string);
