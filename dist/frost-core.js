@@ -431,7 +431,7 @@
 
     /**
      * Remove a specified key from an object using dot notation.
-     * @param {Object} object The input object.
+     * @param {object} object The input object.
      * @param {string} key The key to remove from the object.
      */
     Core.forgetDot = (object, key) => {
@@ -453,7 +453,7 @@
 
     /**
      * Retrieve the value of a specified key from an object using dot notation.
-     * @param {Object} object The input object.
+     * @param {object} object The input object.
      * @param {string} key The key to retrieve from the object.
      * @param {*} [defaultValue] The default value if key does not exist.
      * @returns {*} The value retrieved from the object.
@@ -474,7 +474,7 @@
 
     /**
      * Returns true if a specified key exists in an object using dot notation.
-     * @param {Object} object The input object.
+     * @param {object} object The input object.
      * @param {string} key The key to test for in the object.
      * @returns {Boolean} TRUE if the key exists, otherwise FALSE.
      */
@@ -494,7 +494,7 @@
 
     /**
      * Retrieve values of a specified key from an array of objects using dot notation.
-     * @param {Object[]} objects The input objects.
+     * @param {object[]} objects The input objects.
      * @param {string} key The key to retrieve from the objects.
      * @param {*} [defaultValue] The default value if key does not exist.
      * @returns {Array} An array of values retrieved from the objects.
@@ -504,7 +504,7 @@
 
     /**
      * Set a specified value of a key for an object using dot notation.
-     * @param {Array} object The input object.
+     * @param {object} object The input object.
      * @param {string} key The key to set in the object.
      * @param {*} value The value to set.
      * @param {Boolean} [overwrite=true] Whether to overwrite, if the key already exists.
@@ -566,6 +566,13 @@
             .fill()
             .map(_ => chars[Core.random(chars.length) | 0])
             .join('');
+
+    /**
+     * Return an escaped string for use in RegEx.
+     * @param {string} string The string to escape.
+     * @returns {string} The escaped string.
+     */
+    Core.regExEscape = string => string.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
 
     /**
      * Convert a string to snake-case.

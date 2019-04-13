@@ -27,6 +27,13 @@ Core.randomString = (length = 16, chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJK
         .join('');
 
 /**
+ * Return an escaped string for use in RegEx.
+ * @param {string} string The string to escape.
+ * @returns {string} The escaped string.
+ */
+Core.regExEscape = string => string.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$$&');
+
+/**
  * Convert a string to snake-case.
  * @param {string} string The input string.
  * @returns {string} The snake-cased string.
