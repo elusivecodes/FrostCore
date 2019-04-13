@@ -211,10 +211,10 @@ const lerp = Core.lerp(min, max, amount);
 Map a value from one range to another.
 
 - `value` is the number you wish to map.
-- `fromMin` is the number to be used as the minimum amount of the current range.
-- `fromMax` is the number to be used as the maximum amount of the current range.
-- `toMin` is the number to be used as the minimum amount of the target range.
-- `toMax` is the number to be used as the maximum amount of the target range.
+- `fromMin` is the number to be used as the minimum value of the current range.
+- `fromMax` is the number to be used as the maximum value of the current range.
+- `toMin` is the number to be used as the minimum value of the target range.
+- `toMax` is the number to be used as the maximum value of the target range.
 
 ```javascript
 const map = Core.map(value, fromMin, fromMax, toMin, toMax);
@@ -251,8 +251,8 @@ const toStep = Core.toStep(value, step);
 Get the linear percent of a value in a specified range.
 
 - `value` is the number you wish to calculate the linear percent of.
-- `min` is the number to be used as the minimum amount of the range.
-- `max` is the number to be used as the maximum amount of the range.
+- `min` is the number to be used as the minimum value of the range.
+- `max` is the number to be used as the maximum value of the range.
 
 ```javascript
 const linearPercent = Core.linearPercent(value, min, max);
@@ -263,8 +263,8 @@ const linearPercent = Core.linearPercent(value, min, max);
 Get the linear value of a percent in a specified range.
 
 - `percent` is the number you wish to calculate the linear value of.
-- `min` is the number to be used as the minimum amount of the range.
-- `max` is the number to be used as the maximum amount of the range.
+- `min` is the number to be used as the minimum value of the range.
+- `max` is the number to be used as the maximum value of the range.
 
 ```javascript
 const linearValue = Core.linearValue(percent, min, max);
@@ -275,8 +275,8 @@ const linearValue = Core.linearValue(percent, min, max);
 Get the logarithmic percent of a value in a specified range.
 
 - `value` is the number you wish to calculate the logarithmic percent of.
-- `min` is the number to be used as the minimum amount of the range.
-- `max` is the number to be used as the maximum amount of the range.
+- `min` is the number to be used as the minimum value of the range.
+- `max` is the number to be used as the maximum value of the range.
 
 ```javascript
 const logPrecent = Core.logPercent(value, min, max);
@@ -287,8 +287,8 @@ const logPrecent = Core.logPercent(value, min, max);
 Get the logarithmic value of a percent in a specified range.
 
 - `percent` is the number you wish to calculate the logarithmic value of.
-- `min` is the number to be used as the minimum amount of the range.
-- `max` is the number to be used as the maximum amount of the range.
+- `min` is the number to be used as the minimum value of the range.
+- `max` is the number to be used as the maximum value of the range.
 
 ```javascript
 const logValue = Core.logValue(percent, min, max);
