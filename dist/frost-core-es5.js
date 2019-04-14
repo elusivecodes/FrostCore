@@ -16,11 +16,11 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
  */
 (function (global, factory) {
   if ((typeof module === "undefined" ? "undefined" : _typeof(module)) === 'object' && _typeof(module.exports) === 'object') {
-    module.exports = factory(global);
+    module.exports = factory();
   } else {
-    global.Core = factory(global);
+    global.Core = factory();
   }
-})(void 0, function (window) {
+})(void 0, function () {
   'use strict';
 
   var Core = {};
@@ -722,7 +722,7 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
 
 
   Core.isWindow = function (value) {
-    return value === window;
+    return Core.isObject(value) && Core.isObject(value.document) && value.document.defaultView === value;
   };
 
   return Core;

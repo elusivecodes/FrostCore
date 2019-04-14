@@ -5,12 +5,12 @@
 (function(global, factory) {
 
     if (typeof module === 'object' && typeof module.exports === 'object') {
-        module.exports = factory(global);
+        module.exports = factory();
     } else {
-        global.Core = factory(global);
+        global.Core = factory();
     }
 
-})(this, function(window) {
+})(this, function() {
     'use strict';
 
     const Core = {};
@@ -664,7 +664,7 @@
      * @param {*} value The value to test.
      * @returns {Boolean} TRUE is the value is a Window, otherwise FALSE.
      */
-    Core.isWindow = value => value === window;
+    Core.isWindow = value => Core.isObject(value) && Core.isObject(value.document) && value.document.defaultView === value;
 
     return Core;
 

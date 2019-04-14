@@ -76,4 +76,4 @@ Core.isString = value => value === `${value}`;
  * @param {*} value The value to test.
  * @returns {Boolean} TRUE is the value is a Window, otherwise FALSE.
  */
-Core.isWindow = value => value === window;
+Core.isWindow = value => Core.isObject(value) && Core.isObject(value.document) && value.document.defaultView === value;

@@ -5,12 +5,12 @@
 (function(global, factory) {
 
     if (typeof module === 'object' && typeof module.exports === 'object') {
-        module.exports = factory(global);
+        module.exports = factory();
     } else {
-        global.Core = factory(global);
+        global.Core = factory();
     }
 
-})(this, function(window) {
+})(this, function() {
     'use strict';
 
     const Core = {};
