@@ -2,7 +2,7 @@
 
 **FrostCore** is a free, open-source utility library for *JavaScript*.
 
-It is a lightweight (~2kb) and modern library, adding various functionality to your JS toolkit for manipulating arrays, functions, objects & more.
+It is a tiny (~3kb) and modern library, adding various functionality to your JS toolkit for manipulating arrays, functions, objects & more.
 
 
 ## Table of contents
