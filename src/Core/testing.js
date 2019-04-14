@@ -3,7 +3,7 @@
  */
 
 /**
- * Returns true if the value is a Array-like.
+ * Returns true if the value is a array-like.
  * @param {*} value The value to test.
  * @returns {Boolean} TRUE if the value is array-like, otherwise FALSE.
  */
@@ -11,7 +11,7 @@ Core.isArrayLike = value =>
     Array.isArray(value) ||
     (
         !Core.isFunction(value) &&
-        !(value instanceof Window) &&
+        !Core.isWindow(value) &&
         Core.isObject(value) &&
         (
             (
@@ -51,14 +51,14 @@ Core.isFunction = value => typeof value === 'function';
 Core.isNumeric = value => !isNaN(parseFloat(value)) && isFinite(value);
 
 /**
- * Returns true if the value is a plain Object.
+ * Returns true if the value is a plain object.
  * @param {*} value The value to test.
  * @returns {Boolean} TRUE if the value is a plain object, otherwise FALSE.
  */
 Core.isPlainObject = value => Core.isObject(value) && value.constructor === Object;
 
 /**
- * Returns true if the value is an Object.
+ * Returns true if the value is an object.
  * @param {*} value The value to test.
  * @returns {Boolean} TRUE if the value is an object, otherwise FALSE.
  */
@@ -70,3 +70,10 @@ Core.isObject = value => value === Object(value);
  * @returns {Boolean} TRUE is the value is a string, otherwise FALSE.
  */
 Core.isString = value => value === `${value}`;
+
+/**
+ * Returns true if the value is a Window.
+ * @param {*} value The value to test.
+ * @returns {Boolean} TRUE is the value is a Window, otherwise FALSE.
+ */
+Core.isWindow = value => value === window;

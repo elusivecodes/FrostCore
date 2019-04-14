@@ -11,16 +11,16 @@ function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 /**
- * FrostCore v1.0.1
+ * FrostCore v1.0.2
  * https://github.com/elusivecodes/FrostCore
  */
 (function (global, factory) {
   if ((typeof module === "undefined" ? "undefined" : _typeof(module)) === 'object' && _typeof(module.exports) === 'object') {
-    module.exports = factory();
+    module.exports = factory(global);
   } else {
-    global.Core = factory();
+    global.Core = factory(global);
   }
-})(void 0, function () {
+})(void 0, function (window) {
   'use strict';
 
   var Core = {};
@@ -484,8 +484,8 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
       _iteratorError = err;
     } finally {
       try {
-        if (!_iteratorNormalCompletion && _iterator.return != null) {
-          _iterator.return();
+        if (!_iteratorNormalCompletion && _iterator["return"] != null) {
+          _iterator["return"]();
         }
       } finally {
         if (_didIteratorError) {
@@ -525,8 +525,8 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
       _iteratorError2 = err;
     } finally {
       try {
-        if (!_iteratorNormalCompletion2 && _iterator2.return != null) {
-          _iterator2.return();
+        if (!_iteratorNormalCompletion2 && _iterator2["return"] != null) {
+          _iterator2["return"]();
         }
       } finally {
         if (_didIteratorError2) {
@@ -568,10 +568,8 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
 
     while (current = keys.shift()) {
       if (current === '*') {
-        var _arr = Object.keys(pointer);
-
-        for (var _i = 0; _i < _arr.length; _i++) {
-          var k = _arr[_i];
+        for (var _i = 0, _Object$keys = Object.keys(pointer); _i < _Object$keys.length; _i++) {
+          var k = _Object$keys[_i];
           Core.setDot(pointer, [k].concat(keys).join('.'), value, overwrite);
         }
 
@@ -647,14 +645,14 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
    */
 
   /**
-   * Returns true if the value is a Array-like.
+   * Returns true if the value is a array-like.
    * @param {*} value The value to test.
    * @returns {Boolean} TRUE if the value is array-like, otherwise FALSE.
    */
 
 
   Core.isArrayLike = function (value) {
-    return Array.isArray(value) || !Core.isFunction(value) && !(value instanceof Window) && Core.isObject(value) && (value[Symbol.iterator] && Core.isFunction(value[Symbol.iterator]) || 'length' in value && Core.isNumeric(value.length) && (!value.length || value.length - 1 in value));
+    return Array.isArray(value) || !Core.isFunction(value) && !Core.isWindow(value) && Core.isObject(value) && (value[Symbol.iterator] && Core.isFunction(value[Symbol.iterator]) || 'length' in value && Core.isNumeric(value.length) && (!value.length || value.length - 1 in value));
   };
   /**
    * Returns true if the value is a Boolean.
@@ -687,7 +685,7 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
     return !isNaN(parseFloat(value)) && isFinite(value);
   };
   /**
-   * Returns true if the value is a plain Object.
+   * Returns true if the value is a plain object.
    * @param {*} value The value to test.
    * @returns {Boolean} TRUE if the value is a plain object, otherwise FALSE.
    */
@@ -697,7 +695,7 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
     return Core.isObject(value) && value.constructor === Object;
   };
   /**
-   * Returns true if the value is an Object.
+   * Returns true if the value is an object.
    * @param {*} value The value to test.
    * @returns {Boolean} TRUE if the value is an object, otherwise FALSE.
    */
@@ -715,6 +713,16 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
 
   Core.isString = function (value) {
     return value === "".concat(value);
+  };
+  /**
+   * Returns true if the value is a Window.
+   * @param {*} value The value to test.
+   * @returns {Boolean} TRUE is the value is a Window, otherwise FALSE.
+   */
+
+
+  Core.isWindow = function (value) {
+    return value === window;
   };
 
   return Core;

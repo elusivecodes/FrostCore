@@ -1,16 +1,16 @@
 /**
- * FrostCore v1.0.1
+ * FrostCore v1.0.2
  * https://github.com/elusivecodes/FrostCore
  */
 (function(global, factory) {
 
     if (typeof module === 'object' && typeof module.exports === 'object') {
-        module.exports = factory();
+        module.exports = factory(global);
     } else {
-        global.Core = factory();
+        global.Core = factory(global);
     }
 
-})(this, function() {
+})(this, function(window) {
     'use strict';
 
     const Core = {};
@@ -591,7 +591,7 @@
      */
 
     /**
-     * Returns true if the value is a Array-like.
+     * Returns true if the value is a array-like.
      * @param {*} value The value to test.
      * @returns {Boolean} TRUE if the value is array-like, otherwise FALSE.
      */
@@ -599,7 +599,7 @@
         Array.isArray(value) ||
         (
             !Core.isFunction(value) &&
-            !(value instanceof Window) &&
+            !Core.isWindow(value) &&
             Core.isObject(value) &&
             (
                 (
@@ -639,14 +639,14 @@
     Core.isNumeric = value => !isNaN(parseFloat(value)) && isFinite(value);
 
     /**
-     * Returns true if the value is a plain Object.
+     * Returns true if the value is a plain object.
      * @param {*} value The value to test.
      * @returns {Boolean} TRUE if the value is a plain object, otherwise FALSE.
      */
     Core.isPlainObject = value => Core.isObject(value) && value.constructor === Object;
 
     /**
-     * Returns true if the value is an Object.
+     * Returns true if the value is an object.
      * @param {*} value The value to test.
      * @returns {Boolean} TRUE if the value is an object, otherwise FALSE.
      */
@@ -658,6 +658,13 @@
      * @returns {Boolean} TRUE is the value is a string, otherwise FALSE.
      */
     Core.isString = value => value === `${value}`;
+
+    /**
+     * Returns true if the value is a Window.
+     * @param {*} value The value to test.
+     * @returns {Boolean} TRUE is the value is a Window, otherwise FALSE.
+     */
+    Core.isWindow = value => value === window;
 
     return Core;
 

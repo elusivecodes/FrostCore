@@ -1,16 +1,16 @@
 /**
- * FrostCore v1.0.1
+ * FrostCore v1.0.2
  * https://github.com/elusivecodes/FrostCore
  */
 (function(global, factory) {
 
     if (typeof module === 'object' && typeof module.exports === 'object') {
-        module.exports = factory();
+        module.exports = factory(global);
     } else {
-        global.Core = factory();
+        global.Core = factory(global);
     }
 
-})(this, function() {
+})(this, function(window) {
     'use strict';
 
     const Core = {};

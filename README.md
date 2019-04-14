@@ -472,3 +472,13 @@ Returns *true* if the value is a string.
 ```javascript
 const isString = Core.isString(value);
 ```
+
+**Is Window**
+
+Returns *true* if the value is a Window.
+
+- `value` is the value you wish to test.
+
+```javascript
+const isWindow = Core.isWindow(value);
+```
