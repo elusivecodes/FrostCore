@@ -124,28 +124,6 @@
     };
 
     /**
-     * Execute a callback on the next cycle of the event queue.
-     * @param {function} callback Callback function to execute.
-     * @param {...*} [defaultArgs] Default arguments to pass to the function.
-     * @returns {function} The wrapped function.
-     */
-    Core.defer = (callback, ...defaultArgs) =>
-        Core.delay(callback, 0, ...defaultArgs);
-
-    /**
-     * Execute a callback after a wait period.
-     * @param {function} callback Callback function to execute.
-     * @param {number} wait The number of milliseconds to wait until execution.
-     * @param {...*} [defaultArgs] Default arguments to pass to the function.
-     * @returns {function} The wrapped function.
-     */
-    Core.delay = (callback, wait, ...defaultArgs) =>
-        setTimeout(
-            _ => callback(...defaultArgs),
-            wait
-        );
-
-    /**
      * Create a wrapped version of a function that will only ever execute once.
      * @param {function} callback Callback function to execute.
      * @returns {function} The wrapped function.

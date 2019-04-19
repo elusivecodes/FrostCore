@@ -139,39 +139,6 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
     };
   };
   /**
-   * Execute a callback on the next cycle of the event queue.
-   * @param {function} callback Callback function to execute.
-   * @param {...*} [defaultArgs] Default arguments to pass to the function.
-   * @returns {function} The wrapped function.
-   */
-
-
-  Core.defer = function (callback) {
-    for (var _len3 = arguments.length, defaultArgs = new Array(_len3 > 1 ? _len3 - 1 : 0), _key3 = 1; _key3 < _len3; _key3++) {
-      defaultArgs[_key3 - 1] = arguments[_key3];
-    }
-
-    return Core.delay.apply(Core, [callback, 0].concat(defaultArgs));
-  };
-  /**
-   * Execute a callback after a wait period.
-   * @param {function} callback Callback function to execute.
-   * @param {number} wait The number of milliseconds to wait until execution.
-   * @param {...*} [defaultArgs] Default arguments to pass to the function.
-   * @returns {function} The wrapped function.
-   */
-
-
-  Core.delay = function (callback, wait) {
-    for (var _len4 = arguments.length, defaultArgs = new Array(_len4 > 2 ? _len4 - 2 : 0), _key4 = 2; _key4 < _len4; _key4++) {
-      defaultArgs[_key4 - 2] = arguments[_key4];
-    }
-
-    return setTimeout(function (_) {
-      return callback.apply(void 0, defaultArgs);
-    }, wait);
-  };
-  /**
    * Create a wrapped version of a function that will only ever execute once.
    * @param {function} callback Callback function to execute.
    * @returns {function} The wrapped function.
@@ -198,13 +165,13 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
 
 
   Core.partial = function (callback) {
-    for (var _len5 = arguments.length, defaultArgs = new Array(_len5 > 1 ? _len5 - 1 : 0), _key5 = 1; _key5 < _len5; _key5++) {
-      defaultArgs[_key5 - 1] = arguments[_key5];
+    for (var _len3 = arguments.length, defaultArgs = new Array(_len3 > 1 ? _len3 - 1 : 0), _key3 = 1; _key3 < _len3; _key3++) {
+      defaultArgs[_key3 - 1] = arguments[_key3];
     }
 
     return function () {
-      for (var _len6 = arguments.length, args = new Array(_len6), _key6 = 0; _key6 < _len6; _key6++) {
-        args[_key6] = arguments[_key6];
+      for (var _len4 = arguments.length, args = new Array(_len4), _key4 = 0; _key4 < _len4; _key4++) {
+        args[_key4] = arguments[_key4];
       }
 
       return callback.apply(void 0, _toConsumableArray(defaultArgs.slice().map(function (v) {
@@ -227,8 +194,8 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
     var trailing = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : true;
     var ran, running;
     return function () {
-      for (var _len7 = arguments.length, args = new Array(_len7), _key7 = 0; _key7 < _len7; _key7++) {
-        args[_key7] = arguments[_key7];
+      for (var _len5 = arguments.length, args = new Array(_len5), _key5 = 0; _key5 < _len5; _key5++) {
+        args[_key5] = arguments[_key5];
       }
 
       if (running) {
