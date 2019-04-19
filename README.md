@@ -206,46 +206,6 @@ Linear interpolation from one value to another.
 const lerp = Core.lerp(min, max, amount);
 ```
 
-**Map**
-
-Map a value from one range to another.
-
-- `value` is the number you wish to map.
-- `fromMin` is the number to be used as the minimum value of the current range.
-- `fromMax` is the number to be used as the maximum value of the current range.
-- `toMin` is the number to be used as the minimum value of the target range.
-- `toMax` is the number to be used as the maximum value of the target range.
-
-```javascript
-const map = Core.map(value, fromMin, fromMax, toMin, toMax);
-```
-
-**Random**
-
-Return a random floating-point number.
-
-- `a` is the number to be used as the minimum value (inclusive).
-- `b` is the number to be used as the maximum value (exclusive).
-
-If `b` is omitted, this function will return a random number between *0* (inclusive) and `a` (exclusive).
-
-If both arguments are omitted, this function will return a random number between *0* (inclusive) and *1* (exclusive).
-
-```javascript
-const random = Core.random(a, b);
-```
-
-**To Step**
-
-Round a number to a specified step-size.
-
-- `value` is the number you wish to constrain to a specified "step".
-- `step` is the number to be used as the minimum step-size.
-
-```javascript
-const toStep = Core.toStep(value, step);
-```
-
 **Linear Percent**
 
 Get the linear percent of a value in a specified range.
@@ -292,6 +252,46 @@ Get the logarithmic value of a percent in a specified range.
 
 ```javascript
 const logValue = Core.logValue(percent, min, max);
+```
+
+**Map**
+
+Map a value from one range to another.
+
+- `value` is the number you wish to map.
+- `fromMin` is the number to be used as the minimum value of the current range.
+- `fromMax` is the number to be used as the maximum value of the current range.
+- `toMin` is the number to be used as the minimum value of the target range.
+- `toMax` is the number to be used as the maximum value of the target range.
+
+```javascript
+const map = Core.map(value, fromMin, fromMax, toMin, toMax);
+```
+
+**Random**
+
+Return a random floating-point number.
+
+- `a` is the number to be used as the minimum value (inclusive).
+- `b` is the number to be used as the maximum value (exclusive).
+
+If `b` is omitted, this function will return a random number between *0* (inclusive) and `a` (exclusive).
+
+If both arguments are omitted, this function will return a random number between *0* (inclusive) and *1* (exclusive).
+
+```javascript
+const random = Core.random(a, b);
+```
+
+**To Step**
+
+Round a number to a specified step-size.
+
+- `value` is the number you wish to constrain to a specified "step".
+- `step` is the number to be used as the minimum step-size.
+
+```javascript
+const toStep = Core.toStep(value, step);
 ```
 
 
