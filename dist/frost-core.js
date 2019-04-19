@@ -1,5 +1,5 @@
 /**
- * FrostCore v1.0.2
+ * FrostCore v1.0.3
  * https://github.com/elusivecodes/FrostCore
  */
 (function(global, factory) {
@@ -129,7 +129,8 @@
      * @param {...*} [defaultArgs] Default arguments to pass to the function.
      * @returns {function} The wrapped function.
      */
-    Core.defer = (callback, ...defaultArgs) => Core.delay(callback, 0, ...defaultArgs);
+    Core.defer = (callback, ...defaultArgs) =>
+        Core.delay(callback, 0, ...defaultArgs);
 
     /**
      * Execute a callback after a wait period.
@@ -292,42 +293,6 @@
         * amount;
 
     /**
-     * Map a value from one range to another.
-     * @param {number} value The value to map.
-     * @param {number} fromMin The minimum value of the current range.
-     * @param {number} fromMax The maximum value of the current range.
-     * @param {number} toMin The minimum value of the target range.
-     * @param {number} toMax The maximum value of the target range.
-     * @returns {number} The mapped value.
-     */
-    Core.map = (value, fromMin, fromMax, toMin, toMax) =>
-        (value - fromMin)
-        * (toMax - toMin)
-        / (fromMax - fromMin)
-        + toMin;
-
-    /**
-     * Return a random floating-point number.
-     * @param {number} [a=1] The minimum value (inclusive).
-     * @param {number} [b] The maximum value (exclusive).
-     * @returns {number} A random number.
-     */
-    Core.random = (a = 1, b = null) =>
-        b === null ?
-            Math.random() * a :
-            Core.map(Math.random(), 0, 1, a, b);
-
-    /**
-     * Constrain a number to a specified step-size.
-     * @param {number} value The value to constrain.
-     * @param {number} step The minimum step-size.
-     * @returns {number} The constrained value.
-     */
-    Core.toStep = (value, step = 0.01) =>
-        Math.round(value / step)
-        * step;
-
-    /**
      * Get the linear percent of a value in a specified range.
      * @param {number} value The value to process.
      * @param {number} min The minimum of the range.
@@ -420,6 +385,48 @@
             max
         );
     };
+
+    /**
+     * Map a value from one range to another.
+     * @param {number} value The value to map.
+     * @param {number} fromMin The minimum value of the current range.
+     * @param {number} fromMax The maximum value of the current range.
+     * @param {number} toMin The minimum value of the target range.
+     * @param {number} toMax The maximum value of the target range.
+     * @returns {number} The mapped value.
+     */
+    Core.map = (value, fromMin, fromMax, toMin, toMax) =>
+        (value - fromMin)
+        * (toMax - toMin)
+        / (fromMax - fromMin)
+        + toMin;
+
+    /**
+     * Return a random floating-point number.
+     * @param {number} [a=1] The minimum value (inclusive).
+     * @param {number} [b] The maximum value (exclusive).
+     * @returns {number} A random number.
+     */
+    Core.random = (a = 1, b = null) =>
+        b === null ?
+            Math.random() * a :
+            Core.map(
+                Math.random(),
+                0,
+                1,
+                a,
+                b
+            );
+
+    /**
+     * Constrain a number to a specified step-size.
+     * @param {number} value The value to constrain.
+     * @param {number} step The minimum step-size.
+     * @returns {number} The constrained value.
+     */
+    Core.toStep = (value, step = 0.01) =>
+        Math.round(value / step)
+        * step;
 
     /**
      * Object methods
@@ -544,12 +551,13 @@
      * @param {string} string The input string.
      * @returns {string} The camelCased string.
      */
-    Core.camelCase = string => `${string}`
-        .replace(
-            /\-([a-z])/g,
-            match =>
-                match.substring(1).toUpperCase()
-        );
+    Core.camelCase = string =>
+        `${string}`
+            .replace(
+                /\-([a-z])/g,
+                match =>
+                    match.substring(1).toUpperCase()
+            );
 
     /**
      * Return a random string.
@@ -568,19 +576,21 @@
      * @param {string} string The string to escape.
      * @returns {string} The escaped string.
      */
-    Core.regExEscape = string => string.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
+    Core.regExEscape = string =>
+        string.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
 
     /**
      * Convert a string to snake-case.
      * @param {string} string The input string.
      * @returns {string} The snake-cased string.
      */
-    Core.snakeCase = string => `${string}`
-        .replace(
-            /([A-Z])/g,
-            match =>
-                `-${match.toLowerCase()}`
-        );
+    Core.snakeCase = string =>
+        `${string}`
+            .replace(
+                /([A-Z])/g,
+                match =>
+                    `-${match.toLowerCase()}`
+            );
 
     /**
      * Testing methods
@@ -632,14 +642,18 @@
      * @param {*} value The value to test.
      * @returns {Boolean} TRUE if the value is numeric, otherwise FALSE.
      */
-    Core.isNumeric = value => !isNaN(parseFloat(value)) && isFinite(value);
+    Core.isNumeric = value =>
+        !isNaN(parseFloat(value)) &&
+        isFinite(value);
 
     /**
      * Returns true if the value is a plain object.
      * @param {*} value The value to test.
      * @returns {Boolean} TRUE if the value is a plain object, otherwise FALSE.
      */
-    Core.isPlainObject = value => Core.isObject(value) && value.constructor === Object;
+    Core.isPlainObject = value =>
+        Core.isObject(value) &&
+        value.constructor === Object;
 
     /**
      * Returns true if the value is an object.
@@ -660,7 +674,10 @@
      * @param {*} value The value to test.
      * @returns {Boolean} TRUE is the value is a Window, otherwise FALSE.
      */
-    Core.isWindow = value => Core.isObject(value) && Core.isObject(value.document) && value.document.defaultView === value;
+    Core.isWindow = value =>
+        Core.isObject(value) &&
+        Core.isObject(value.document) &&
+        value.document.defaultView === value;
 
     return Core;
 

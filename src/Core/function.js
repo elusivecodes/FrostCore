@@ -79,7 +79,8 @@ Core.debounce = (callback, wait, leading) => {
  * @param {...*} [defaultArgs] Default arguments to pass to the function.
  * @returns {function} The wrapped function.
  */
-Core.defer = (callback, ...defaultArgs) => Core.delay(callback, 0, ...defaultArgs);
+Core.defer = (callback, ...defaultArgs) =>
+    Core.delay(callback, 0, ...defaultArgs);
 
 /**
  * Execute a callback after a wait period.

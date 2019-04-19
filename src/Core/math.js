@@ -61,42 +61,6 @@ Core.lerp = (v1, v2, amount) =>
     * amount;
 
 /**
- * Map a value from one range to another.
- * @param {number} value The value to map.
- * @param {number} fromMin The minimum value of the current range.
- * @param {number} fromMax The maximum value of the current range.
- * @param {number} toMin The minimum value of the target range.
- * @param {number} toMax The maximum value of the target range.
- * @returns {number} The mapped value.
- */
-Core.map = (value, fromMin, fromMax, toMin, toMax) =>
-    (value - fromMin)
-    * (toMax - toMin)
-    / (fromMax - fromMin)
-    + toMin;
-
-/**
- * Return a random floating-point number.
- * @param {number} [a=1] The minimum value (inclusive).
- * @param {number} [b] The maximum value (exclusive).
- * @returns {number} A random number.
- */
-Core.random = (a = 1, b = null) =>
-    b === null ?
-        Math.random() * a :
-        Core.map(Math.random(), 0, 1, a, b);
-
-/**
- * Constrain a number to a specified step-size.
- * @param {number} value The value to constrain.
- * @param {number} step The minimum step-size.
- * @returns {number} The constrained value.
- */
-Core.toStep = (value, step = 0.01) =>
-    Math.round(value / step)
-    * step;
-
-/**
  * Get the linear percent of a value in a specified range.
  * @param {number} value The value to process.
  * @param {number} min The minimum of the range.
@@ -189,3 +153,45 @@ Core.logValue = (percent, min, max) => {
         max
     );
 };
+
+/**
+ * Map a value from one range to another.
+ * @param {number} value The value to map.
+ * @param {number} fromMin The minimum value of the current range.
+ * @param {number} fromMax The maximum value of the current range.
+ * @param {number} toMin The minimum value of the target range.
+ * @param {number} toMax The maximum value of the target range.
+ * @returns {number} The mapped value.
+ */
+Core.map = (value, fromMin, fromMax, toMin, toMax) =>
+    (value - fromMin)
+    * (toMax - toMin)
+    / (fromMax - fromMin)
+    + toMin;
+
+/**
+ * Return a random floating-point number.
+ * @param {number} [a=1] The minimum value (inclusive).
+ * @param {number} [b] The maximum value (exclusive).
+ * @returns {number} A random number.
+ */
+Core.random = (a = 1, b = null) =>
+    b === null ?
+        Math.random() * a :
+        Core.map(
+            Math.random(),
+            0,
+            1,
+            a,
+            b
+        );
+
+/**
+ * Constrain a number to a specified step-size.
+ * @param {number} value The value to constrain.
+ * @param {number} step The minimum step-size.
+ * @returns {number} The constrained value.
+ */
+Core.toStep = (value, step = 0.01) =>
+    Math.round(value / step)
+    * step;

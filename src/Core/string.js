@@ -7,12 +7,13 @@
  * @param {string} string The input string.
  * @returns {string} The camelCased string.
  */
-Core.camelCase = string => `${string}`
-    .replace(
-        /\-([a-z])/g,
-        match =>
-            match.substring(1).toUpperCase()
-    );
+Core.camelCase = string =>
+    `${string}`
+        .replace(
+            /\-([a-z])/g,
+            match =>
+                match.substring(1).toUpperCase()
+        );
 
 /**
  * Return a random string.
@@ -31,16 +32,18 @@ Core.randomString = (length = 16, chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJK
  * @param {string} string The string to escape.
  * @returns {string} The escaped string.
  */
-Core.regExEscape = string => string.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$$&');
+Core.regExEscape = string =>
+    string.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$$&');
 
 /**
  * Convert a string to snake-case.
  * @param {string} string The input string.
  * @returns {string} The snake-cased string.
  */
-Core.snakeCase = string => `${string}`
-    .replace(
-        /([A-Z])/g,
-        match =>
-            `-${match.toLowerCase()}`
-    );
+Core.snakeCase = string =>
+    `${string}`
+        .replace(
+            /([A-Z])/g,
+            match =>
+                `-${match.toLowerCase()}`
+        );

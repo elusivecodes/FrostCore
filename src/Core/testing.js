@@ -48,14 +48,18 @@ Core.isFunction = value => typeof value === 'function';
  * @param {*} value The value to test.
  * @returns {Boolean} TRUE if the value is numeric, otherwise FALSE.
  */
-Core.isNumeric = value => !isNaN(parseFloat(value)) && isFinite(value);
+Core.isNumeric = value =>
+    !isNaN(parseFloat(value)) &&
+    isFinite(value);
 
 /**
  * Returns true if the value is a plain object.
  * @param {*} value The value to test.
  * @returns {Boolean} TRUE if the value is a plain object, otherwise FALSE.
  */
-Core.isPlainObject = value => Core.isObject(value) && value.constructor === Object;
+Core.isPlainObject = value =>
+    Core.isObject(value) &&
+    value.constructor === Object;
 
 /**
  * Returns true if the value is an object.
@@ -76,4 +80,7 @@ Core.isString = value => value === `${value}`;
  * @param {*} value The value to test.
  * @returns {Boolean} TRUE is the value is a Window, otherwise FALSE.
  */
-Core.isWindow = value => Core.isObject(value) && Core.isObject(value.document) && value.document.defaultView === value;
+Core.isWindow = value =>
+    Core.isObject(value) &&
+    Core.isObject(value.document) &&
+    value.document.defaultView === value;

@@ -11,7 +11,7 @@ function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 /**
- * FrostCore v1.0.2
+ * FrostCore v1.0.3
  * https://github.com/elusivecodes/FrostCore
  */
 (function (global, factory) {
@@ -329,45 +329,6 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
     return v1 * (1 - amount) + v2 * amount;
   };
   /**
-   * Map a value from one range to another.
-   * @param {number} value The value to map.
-   * @param {number} fromMin The minimum value of the current range.
-   * @param {number} fromMax The maximum value of the current range.
-   * @param {number} toMin The minimum value of the target range.
-   * @param {number} toMax The maximum value of the target range.
-   * @returns {number} The mapped value.
-   */
-
-
-  Core.map = function (value, fromMin, fromMax, toMin, toMax) {
-    return (value - fromMin) * (toMax - toMin) / (fromMax - fromMin) + toMin;
-  };
-  /**
-   * Return a random floating-point number.
-   * @param {number} [a=1] The minimum value (inclusive).
-   * @param {number} [b] The maximum value (exclusive).
-   * @returns {number} A random number.
-   */
-
-
-  Core.random = function () {
-    var a = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 1;
-    var b = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
-    return b === null ? Math.random() * a : Core.map(Math.random(), 0, 1, a, b);
-  };
-  /**
-   * Constrain a number to a specified step-size.
-   * @param {number} value The value to constrain.
-   * @param {number} step The minimum step-size.
-   * @returns {number} The constrained value.
-   */
-
-
-  Core.toStep = function (value) {
-    var step = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0.01;
-    return Math.round(value / step) * step;
-  };
-  /**
    * Get the linear percent of a value in a specified range.
    * @param {number} value The value to process.
    * @param {number} min The minimum of the range.
@@ -420,6 +381,45 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
   Core.logValue = function (percent, min, max) {
     min = min ? Math.log(min) : 0;
     return Core.clamp(Math.exp(min + (Math.log(max) - min) * percent / 100), min, max);
+  };
+  /**
+   * Map a value from one range to another.
+   * @param {number} value The value to map.
+   * @param {number} fromMin The minimum value of the current range.
+   * @param {number} fromMax The maximum value of the current range.
+   * @param {number} toMin The minimum value of the target range.
+   * @param {number} toMax The maximum value of the target range.
+   * @returns {number} The mapped value.
+   */
+
+
+  Core.map = function (value, fromMin, fromMax, toMin, toMax) {
+    return (value - fromMin) * (toMax - toMin) / (fromMax - fromMin) + toMin;
+  };
+  /**
+   * Return a random floating-point number.
+   * @param {number} [a=1] The minimum value (inclusive).
+   * @param {number} [b] The maximum value (exclusive).
+   * @returns {number} A random number.
+   */
+
+
+  Core.random = function () {
+    var a = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 1;
+    var b = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
+    return b === null ? Math.random() * a : Core.map(Math.random(), 0, 1, a, b);
+  };
+  /**
+   * Constrain a number to a specified step-size.
+   * @param {number} value The value to constrain.
+   * @param {number} step The minimum step-size.
+   * @returns {number} The constrained value.
+   */
+
+
+  Core.toStep = function (value) {
+    var step = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0.01;
+    return Math.round(value / step) * step;
   };
   /**
    * Object methods
