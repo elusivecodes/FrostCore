@@ -74,31 +74,6 @@ Create a wrapped version of a function that executes once per wait period (using
 const debounced = Core.debounce(callback, wait, leading);
 ```
 
-**Defer**
-
-Execute a callback on the next cycle of the event queue.
-
-- `callback` is the function you wish to wrap.
-
-Any additional arguments supplied will be passed on as default arguments to the wrapped function.
-
-```javascript
-const deferred = Core.defer(callback, ...defaultArgs);
-```
-
-**Delay**
-
-Execute a callback after a wait period.
-
-- `callback` is the function you wish to wrap.
-- `wait` is the number of milliseconds to wait before execution.
-
-Any additional arguments supplied will be passed on as default arguments to the wrapped function.
-
-```javascript
-const delayed = Core.delay(callback, wait, ...defaultArgs);
-```
-
 **Once**
 
 Create a wrapped version of a function that will only ever execute once.
