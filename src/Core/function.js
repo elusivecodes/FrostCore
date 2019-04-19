@@ -74,7 +74,7 @@ Core.debounce = (callback, wait, leading) => {
 };
 
 /**
- * Create a wrapped version of a function that executes on the next cycle of the event queue.
+ * Execute a callback on the next cycle of the event queue.
  * @param {function} callback Callback function to execute.
  * @param {...*} [defaultArgs] Default arguments to pass to the function.
  * @returns {function} The wrapped function.
@@ -82,21 +82,17 @@ Core.debounce = (callback, wait, leading) => {
 Core.defer = (callback, ...defaultArgs) => Core.delay(callback, 0, ...defaultArgs);
 
 /**
- * Create a wrapped version of a function that executes after a wait period.
+ * Execute a callback after a wait period.
  * @param {function} callback Callback function to execute.
  * @param {number} wait The number of milliseconds to wait until execution.
  * @param {...*} [defaultArgs] Default arguments to pass to the function.
  * @returns {function} The wrapped function.
  */
 Core.delay = (callback, wait, ...defaultArgs) =>
-    (...args) => {
-        setTimeout(
-            _ => callback(...(
-                defaultArgs.concat(args)
-            )),
-            wait
-        );
-    };
+    setTimeout(
+        _ => callback(...defaultArgs),
+        wait
+    );
 
 /**
  * Create a wrapped version of a function that will only ever execute once.

@@ -139,7 +139,7 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
     };
   };
   /**
-   * Create a wrapped version of a function that executes on the next cycle of the event queue.
+   * Execute a callback on the next cycle of the event queue.
    * @param {function} callback Callback function to execute.
    * @param {...*} [defaultArgs] Default arguments to pass to the function.
    * @returns {function} The wrapped function.
@@ -154,7 +154,7 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
     return Core.delay.apply(Core, [callback, 0].concat(defaultArgs));
   };
   /**
-   * Create a wrapped version of a function that executes after a wait period.
+   * Execute a callback after a wait period.
    * @param {function} callback Callback function to execute.
    * @param {number} wait The number of milliseconds to wait until execution.
    * @param {...*} [defaultArgs] Default arguments to pass to the function.
@@ -167,15 +167,9 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
       defaultArgs[_key4 - 2] = arguments[_key4];
     }
 
-    return function () {
-      for (var _len5 = arguments.length, args = new Array(_len5), _key5 = 0; _key5 < _len5; _key5++) {
-        args[_key5] = arguments[_key5];
-      }
-
-      setTimeout(function (_) {
-        return callback.apply(void 0, _toConsumableArray(defaultArgs.concat(args)));
-      }, wait);
-    };
+    return setTimeout(function (_) {
+      return callback.apply(void 0, defaultArgs);
+    }, wait);
   };
   /**
    * Create a wrapped version of a function that will only ever execute once.
@@ -204,13 +198,13 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
 
 
   Core.partial = function (callback) {
-    for (var _len6 = arguments.length, defaultArgs = new Array(_len6 > 1 ? _len6 - 1 : 0), _key6 = 1; _key6 < _len6; _key6++) {
-      defaultArgs[_key6 - 1] = arguments[_key6];
+    for (var _len5 = arguments.length, defaultArgs = new Array(_len5 > 1 ? _len5 - 1 : 0), _key5 = 1; _key5 < _len5; _key5++) {
+      defaultArgs[_key5 - 1] = arguments[_key5];
     }
 
     return function () {
-      for (var _len7 = arguments.length, args = new Array(_len7), _key7 = 0; _key7 < _len7; _key7++) {
-        args[_key7] = arguments[_key7];
+      for (var _len6 = arguments.length, args = new Array(_len6), _key6 = 0; _key6 < _len6; _key6++) {
+        args[_key6] = arguments[_key6];
       }
 
       return callback.apply(void 0, _toConsumableArray(defaultArgs.slice().map(function (v) {
@@ -233,8 +227,8 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
     var trailing = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : true;
     var ran, running;
     return function () {
-      for (var _len8 = arguments.length, args = new Array(_len8), _key8 = 0; _key8 < _len8; _key8++) {
-        args[_key8] = arguments[_key8];
+      for (var _len7 = arguments.length, args = new Array(_len7), _key7 = 0; _key7 < _len7; _key7++) {
+        args[_key7] = arguments[_key7];
       }
 
       if (running) {
