@@ -529,8 +529,7 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
 
     while (current = keys.shift()) {
       if (current === '*') {
-        for (var _i = 0, _Object$keys = Object.keys(pointer); _i < _Object$keys.length; _i++) {
-          var k = _Object$keys[_i];
+        for (var k in pointer) {
           Core.setDot(pointer, [k].concat(keys).join('.'), value, overwrite);
         }
 

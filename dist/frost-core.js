@@ -497,7 +497,7 @@
         const keys = key.split('.');
         while (current = keys.shift()) {
             if (current === '*') {
-                for (const k of Object.keys(pointer)) {
+                for (const k in pointer) {
                     Core.setDot(
                         pointer,
                         [k].concat(keys).join('.'),
