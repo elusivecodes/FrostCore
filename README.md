@@ -20,10 +20,14 @@ It is a tiny (~3kb) and modern library, adding various functionality to your JS 
 
 **Merge**
 
-Return a new array with the values from one or more arrays or array-like objects.
+Merge the values from one or more arrays or array-like objects onto an array.
+
+- `array` is the array you wish to merge onto.
+
+Any additional arguments supplied will be merged onto the first array.
 
 ```javascript
-const merged = Core.merge(...arrays);
+Core.merge(array, ...arrays);
 ```
 
 **Random Value**
