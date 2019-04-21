@@ -70,7 +70,7 @@ Core.hasDot = (object, key) => {
  * @param {object[]} objects The input objects.
  * @param {string} key The key to retrieve from the objects.
  * @param {*} [defaultValue] The default value if key does not exist.
- * @returns {Array} An array of values retrieved from the objects.
+ * @returns {array} An array of values retrieved from the objects.
  */
 Core.pluckDot = (objects, key, defaultValue) => objects
     .map(pointer => Core.getDot(pointer, key, defaultValue));

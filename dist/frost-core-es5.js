@@ -29,18 +29,39 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
    */
 
   /**
+   * Return a new array with the values from one or more arrays or array-like objects.
+   * @param {...array|...object} arrays The input arrays or array-like objects.
+   * @returns {*} A new array with the combined values.
+   */
+
+  Core.merge = function () {
+    var results = [];
+
+    for (var _len = arguments.length, arrays = new Array(_len), _key = 0; _key < _len; _key++) {
+      arrays[_key] = arguments[_key];
+    }
+
+    for (var _i = 0, _arrays = arrays; _i < _arrays.length; _i++) {
+      var arr = _arrays[_i];
+      Array.prototype.push.apply(results, arr);
+    }
+
+    return results;
+  };
+  /**
    * Return a random value from an array.
-   * @param {Array} array The input array.
+   * @param {array} array The input array.
    * @returns {*} A random value from the array, or null if it is empty.
    */
+
 
   Core.randomValue = function (array) {
     return array.length ? array[Core.random(array.length) | 0] : null;
   };
   /**
    * Remove duplicate elements in an array.
-   * @param {Array} array The input array.
-   * @returns {Array} The filtered array.
+   * @param {array} array The input array.
+   * @returns {array} The filtered array.
    */
 
 
@@ -50,12 +71,24 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
   /**
    * Create an array from any value.
    * @param {*} value The input value.
-   * @returns {Array} The wrapped array.
+   * @returns {array} The wrapped array.
    */
 
 
   Core.wrap = function (value) {
-    return Array.isArray(value) ? value : Core.isArrayLike(value) ? Array.from(value) : [value];
+    if (Array.isArray(value)) {
+      return array.slice();
+    }
+
+    var results = [];
+
+    if (Core.isArrayLike(value)) {
+      Array.prototype.push.apply(results, value);
+    } else {
+      results.push(value);
+    }
+
+    return results;
   };
   /**
    * Function methods
@@ -73,8 +106,8 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
   Core.animation = function (callback, leading) {
     var newArgs, running;
     return function () {
-      for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
-        args[_key] = arguments[_key];
+      for (var _len2 = arguments.length, args = new Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
+        args[_key2] = arguments[_key2];
       }
 
       newArgs = args;
@@ -112,8 +145,8 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
         running,
         runLead = leading;
     return function () {
-      for (var _len2 = arguments.length, args = new Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
-        args[_key2] = arguments[_key2];
+      for (var _len3 = arguments.length, args = new Array(_len3), _key3 = 0; _key3 < _len3; _key3++) {
+        args[_key3] = arguments[_key3];
       }
 
       newArgs = args;
@@ -165,13 +198,13 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
 
 
   Core.partial = function (callback) {
-    for (var _len3 = arguments.length, defaultArgs = new Array(_len3 > 1 ? _len3 - 1 : 0), _key3 = 1; _key3 < _len3; _key3++) {
-      defaultArgs[_key3 - 1] = arguments[_key3];
+    for (var _len4 = arguments.length, defaultArgs = new Array(_len4 > 1 ? _len4 - 1 : 0), _key4 = 1; _key4 < _len4; _key4++) {
+      defaultArgs[_key4 - 1] = arguments[_key4];
     }
 
     return function () {
-      for (var _len4 = arguments.length, args = new Array(_len4), _key4 = 0; _key4 < _len4; _key4++) {
-        args[_key4] = arguments[_key4];
+      for (var _len5 = arguments.length, args = new Array(_len5), _key5 = 0; _key5 < _len5; _key5++) {
+        args[_key5] = arguments[_key5];
       }
 
       return callback.apply(void 0, _toConsumableArray(defaultArgs.slice().map(function (v) {
@@ -194,8 +227,8 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
     var trailing = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : true;
     var ran, running;
     return function () {
-      for (var _len5 = arguments.length, args = new Array(_len5), _key5 = 0; _key5 < _len5; _key5++) {
-        args[_key5] = arguments[_key5];
+      for (var _len6 = arguments.length, args = new Array(_len6), _key6 = 0; _key6 < _len6; _key6++) {
+        args[_key6] = arguments[_key6];
       }
 
       if (running) {
@@ -503,7 +536,7 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
    * @param {object[]} objects The input objects.
    * @param {string} key The key to retrieve from the objects.
    * @param {*} [defaultValue] The default value if key does not exist.
-   * @returns {Array} An array of values retrieved from the objects.
+   * @returns {array} An array of values retrieved from the objects.
    */
 
 

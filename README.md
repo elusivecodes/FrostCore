@@ -18,6 +18,14 @@ It is a tiny (~3kb) and modern library, adding various functionality to your JS 
 
 ## Arrays
 
+**Merge**
+
+Return a new array with the values from one or more arrays or array-like objects.
+
+```javascript
+const merged = Core.merge(...arrays);
+```
+
 **Random Value**
 
 Return a random value from an array.
