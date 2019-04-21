@@ -25,13 +25,13 @@
      * @returns {*} A new array with the combined values.
      */
     Core.merge = (...arrays) => {
-        const results = [];
+        const result = [];
 
         for (const arr of arrays) {
-            Array.prototype.push.apply(results, arr);
+            Array.prototype.push.apply(result, arr);
         }
 
-        return results;
+        return result;
     };
 
     /**
@@ -58,7 +58,7 @@
      */
     Core.wrap = value => {
         if (Array.isArray(value)) {
-            return array.slice();
+            return value.slice();
         }
 
         const results = [];

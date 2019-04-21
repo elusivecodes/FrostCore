@@ -35,7 +35,7 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
    */
 
   Core.merge = function () {
-    var results = [];
+    var result = [];
 
     for (var _len = arguments.length, arrays = new Array(_len), _key = 0; _key < _len; _key++) {
       arrays[_key] = arguments[_key];
@@ -43,10 +43,10 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
 
     for (var _i = 0, _arrays = arrays; _i < _arrays.length; _i++) {
       var arr = _arrays[_i];
-      Array.prototype.push.apply(results, arr);
+      Array.prototype.push.apply(result, arr);
     }
 
-    return results;
+    return result;
   };
   /**
    * Return a random value from an array.
@@ -77,7 +77,7 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
 
   Core.wrap = function (value) {
     if (Array.isArray(value)) {
-      return array.slice();
+      return value.slice();
     }
 
     var results = [];
