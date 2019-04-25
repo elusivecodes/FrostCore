@@ -3,7 +3,14 @@
  */
 
 /**
- * Returns true if the value is a array-like.
+ * Returns true if the value is an array.
+ * @param {*} value The value to test.
+ * @returns {Boolean} TRUE if the value is an array, otherwise FALSE.
+ */
+Core.isArray = Array.isArray;
+
+/**
+ * Returns true if the value is array-like.
  * @param {*} value The value to test.
  * @returns {Boolean} TRUE if the value is array-like, otherwise FALSE.
  */
@@ -37,11 +44,45 @@ Core.isArrayLike = value =>
 Core.isBoolean = value => value === !!value;
 
 /**
+ * Returns true if the value is a Document.
+ * @param {*} value The value to test.
+ * @returns {Boolean} TRUE if the value is a Document, otherwise FALSE.
+ */
+Core.isDocument = node =>
+    Core.isObject(node) &&
+    'nodeType' in node &&
+    node.nodeType === Node.DOCUMENT_NODE;
+
+/**
+ * Returns true if the value is a HTMLElement.
+ * @param {*} value The value to test.
+ * @returns {Boolean} TRUE if the value is a HTMLElement, otherwise FALSE.
+ */
+Core.isElement = node =>
+    Core.isObject(node) &&
+    'nodeType' in node &&
+    node.nodeType === Node.ELEMENT_NODE;
+
+/**
  * Returns true if the value is a function.
  * @param {*} value The value to test.
  * @returns {Boolean} TRUE if the value is a function, otherwise FALSE.
  */
 Core.isFunction = value => typeof value === 'function';
+
+/**
+ * Returns true if the value is a Node.
+ * @param {*} value The value to test.
+ * @returns {Boolean} TRUE if the value is a Node, otherwise FALSE.
+ */
+Core.isNode = node =>
+    Core.isObject(node) &&
+    'nodeType' in node &&
+    (
+        node.nodeType === Node.ELEMENT_NODE ||
+        node.nodeType === Node.TEXT_NODE ||
+        node.nodeType === Node.COMMENT_NODE
+    );
 
 /**
  * Returns true if the value is numeric.

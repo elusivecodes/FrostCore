@@ -11,7 +11,7 @@ function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 /**
- * FrostCore v1.0.4
+ * FrostCore v1.0.5
  * https://github.com/elusivecodes/FrostCore
  */
 (function (global, factory) {
@@ -635,11 +635,18 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
    */
 
   /**
-   * Returns true if the value is a array-like.
+   * Returns true if the value is an array.
+   * @param {*} value The value to test.
+   * @returns {Boolean} TRUE if the value is an array, otherwise FALSE.
+   */
+
+
+  Core.isArray = Array.isArray;
+  /**
+   * Returns true if the value is array-like.
    * @param {*} value The value to test.
    * @returns {Boolean} TRUE if the value is array-like, otherwise FALSE.
    */
-
 
   Core.isArrayLike = function (value) {
     return Array.isArray(value) || !Core.isFunction(value) && !Core.isWindow(value) && Core.isObject(value) && (value[Symbol.iterator] && Core.isFunction(value[Symbol.iterator]) || 'length' in value && Core.isNumeric(value.length) && (!value.length || value.length - 1 in value));
@@ -655,6 +662,26 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
     return value === !!value;
   };
   /**
+   * Returns true if the value is a Document.
+   * @param {*} value The value to test.
+   * @returns {Boolean} TRUE if the value is a Document, otherwise FALSE.
+   */
+
+
+  Core.isDocument = function (node) {
+    return Core.isObject(node) && 'nodeType' in node && node.nodeType === Node.DOCUMENT_NODE;
+  };
+  /**
+   * Returns true if the value is a HTMLElement.
+   * @param {*} value The value to test.
+   * @returns {Boolean} TRUE if the value is a HTMLElement, otherwise FALSE.
+   */
+
+
+  Core.isElement = function (node) {
+    return Core.isObject(node) && 'nodeType' in node && node.nodeType === Node.ELEMENT_NODE;
+  };
+  /**
    * Returns true if the value is a function.
    * @param {*} value The value to test.
    * @returns {Boolean} TRUE if the value is a function, otherwise FALSE.
@@ -663,6 +690,16 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
 
   Core.isFunction = function (value) {
     return typeof value === 'function';
+  };
+  /**
+   * Returns true if the value is a Node.
+   * @param {*} value The value to test.
+   * @returns {Boolean} TRUE if the value is a Node, otherwise FALSE.
+   */
+
+
+  Core.isNode = function (node) {
+    return Core.isObject(node) && 'nodeType' in node && (node.nodeType === Node.ELEMENT_NODE || node.nodeType === Node.TEXT_NODE || node.nodeType === Node.COMMENT_NODE);
   };
   /**
    * Returns true if the value is numeric.

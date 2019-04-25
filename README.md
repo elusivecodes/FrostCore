@@ -390,6 +390,16 @@ const snakeCase = Core.snakeCase(string);
 
 ## Testing
 
+**Is Array**
+
+Returns *true* is the value is an array.
+
+- `value` is the value you wish to test.
+
+```javascript
+const isArray = Core.isArray(value);
+```
+
 **Is Array Like**
 
 Returns *true* is the value is array-like.
@@ -410,6 +420,26 @@ Returns *true* if the value is a boolean.
 const isBoolean = Core.isBoolean(value);
 ```
 
+**Is Document**
+
+Returns *true* is the value is a *Document*.
+
+- `value` is the value you wish to test.
+
+```javascript
+const isDocument = Core.isDocument(value);
+```
+
+**Is Element**
+
+Returns *true* is the value is a *HTMLElement*.
+
+- `value` is the value you wish to test.
+
+```javascript
+const isElement = Core.isElement(value);
+```
+
 **Is Function**
 
 Returns *true* if the value is a function.
@@ -418,6 +448,16 @@ Returns *true* if the value is a function.
 
 ```javascript
 const isFunction = Core.isFunction(value);
+```
+
+**Is Node**
+
+Returns *true* is the value is a *Node*.
+
+- `value` is the value you wish to test.
+
+```javascript
+const isNode = Core.isNode(value);
 ```
 
 **Is Numeric**
@@ -462,7 +502,7 @@ const isString = Core.isString(value);
 
 **Is Window**
 
-Returns *true* if the value is a Window.
+Returns *true* if the value is a *Window*.
 
 - `value` is the value you wish to test.
 
