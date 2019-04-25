@@ -77,7 +77,7 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
 
 
   Core.wrap = function (value) {
-    if (Array.isArray(value)) {
+    if (Core.isArray(value)) {
       return value;
     }
 
@@ -649,7 +649,7 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
    */
 
   Core.isArrayLike = function (value) {
-    return Array.isArray(value) || !Core.isFunction(value) && !Core.isWindow(value) && Core.isObject(value) && (value[Symbol.iterator] && Core.isFunction(value[Symbol.iterator]) || 'length' in value && Core.isNumeric(value.length) && (!value.length || value.length - 1 in value));
+    return Core.isArray(value) || !Core.isFunction(value) && !Core.isWindow(value) && Core.isObject(value) && (Symbol.iterator in value && Core.isFunction(value[Symbol.iterator]) || 'length' in value && Core.isNumeric(value.length) && (!value.length || value.length - 1 in value));
   };
   /**
    * Returns true if the value is a Boolean.

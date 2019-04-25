@@ -39,7 +39,7 @@ Core.unique = array => Core.merge([], new Set(array));
  * @returns {array} The wrapped array.
  */
 Core.wrap = value => {
-    if (Array.isArray(value)) {
+    if (Core.isArray(value)) {
         return value;
     }
 

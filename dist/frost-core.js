@@ -56,7 +56,7 @@
      * @returns {array} The wrapped array.
      */
     Core.wrap = value => {
-        if (Array.isArray(value)) {
+        if (Core.isArray(value)) {
             return value;
         }
 
@@ -606,14 +606,14 @@
      * @returns {Boolean} TRUE if the value is array-like, otherwise FALSE.
      */
     Core.isArrayLike = value =>
-        Array.isArray(value) ||
+        Core.isArray(value) ||
         (
             !Core.isFunction(value) &&
             !Core.isWindow(value) &&
             Core.isObject(value) &&
             (
                 (
-                    value[Symbol.iterator] &&
+                    Symbol.iterator in value &&
                     Core.isFunction(value[Symbol.iterator])
                 ) ||
                 (
