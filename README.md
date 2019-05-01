@@ -6,6 +6,7 @@ It is a tiny (~3kb) and modern library, adding various functionality to your JS 
 
 
 ## Table of contents
+- [Installation](#installation)
 - [Arrays](#arrays)
 - [Functions](#functions)
 - [Math](#math)
@@ -14,6 +15,13 @@ It is a tiny (~3kb) and modern library, adding various functionality to your JS 
 - [Strings](#strings)
 - [Testing](#testing)
 
+
+
+## Installation
+
+```html
+<script type="text/javascript" src="/path/to/frost-core.min.js"></script>
+```
 
 
 ## Arrays
