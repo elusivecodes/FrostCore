@@ -5,7 +5,7 @@
 It is a tiny (~3kb) and modern library, adding various functionality to your JS toolkit for manipulating arrays, functions, objects & more.
 
 
-## Table of contents
+## Table Of Contents
 - [Installation](#installation)
 - [Arrays](#arrays)
 - [Functions](#functions)
