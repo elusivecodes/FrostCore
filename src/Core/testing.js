@@ -19,6 +19,7 @@ Core.isArrayLike = value =>
     (
         !Core.isFunction(value) &&
         !Core.isWindow(value) &&
+        !Core.isElement(value) &&
         Core.isObject(value) &&
         (
             (

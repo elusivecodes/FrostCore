@@ -651,7 +651,7 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
    */
 
   Core.isArrayLike = function (value) {
-    return Core.isArray(value) || !Core.isFunction(value) && !Core.isWindow(value) && Core.isObject(value) && (Symbol.iterator in value && Core.isFunction(value[Symbol.iterator]) || 'length' in value && Core.isNumeric(value.length) && (!value.length || value.length - 1 in value));
+    return Core.isArray(value) || !Core.isFunction(value) && !Core.isWindow(value) && !Core.isElement(value) && Core.isObject(value) && (Symbol.iterator in value && Core.isFunction(value[Symbol.iterator]) || 'length' in value && Core.isNumeric(value.length) && (!value.length || value.length - 1 in value));
   };
   /**
    * Returns true if the value is a Boolean.
