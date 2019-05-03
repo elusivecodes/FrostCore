@@ -498,6 +498,14 @@ Returns *true* if the value is an object.
 const isObject = Core.isObject(value);
 ```
 
+**Is Shadow Root**
+
+Returns *true* if the value is a *ShadowRoot*
+
+```javascript
+const isShadowRoot = Core.isShadowRoot(value);
+```
+
 **Is String**
 
 Returns *true* if the value is a string.
