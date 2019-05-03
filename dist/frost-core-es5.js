@@ -670,8 +670,8 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
    */
 
 
-  Core.isDocument = function (node) {
-    return Core.isObject(node) && 'nodeType' in node && node.nodeType === Node.DOCUMENT_NODE;
+  Core.isDocument = function (value) {
+    return Core.isObject(value) && value.nodeType === Node.DOCUMENT_NODE;
   };
   /**
    * Returns true if the value is a HTMLElement.
@@ -680,8 +680,8 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
    */
 
 
-  Core.isElement = function (node) {
-    return Core.isObject(node) && 'nodeType' in node && node.nodeType === Node.ELEMENT_NODE;
+  Core.isElement = function (value) {
+    return !!value && value.nodeType === Node.ELEMENT_NODE;
   };
   /**
    * Returns true if the value is a function.
@@ -700,8 +700,8 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
    */
 
 
-  Core.isNode = function (node) {
-    return Core.isObject(node) && 'nodeType' in node && (node.nodeType === Node.ELEMENT_NODE || node.nodeType === Node.TEXT_NODE || node.nodeType === Node.COMMENT_NODE);
+  Core.isNode = function (value) {
+    return !!value && (value.nodeType === Node.ELEMENT_NODE || value.nodeType === Node.TEXT_NODE || value.nodeType === Node.COMMENT_NODE);
   };
   /**
    * Returns true if the value is numeric.
@@ -721,7 +721,7 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
 
 
   Core.isPlainObject = function (value) {
-    return Core.isObject(value) && value.constructor === Object;
+    return !!value && value.constructor === Object;
   };
   /**
    * Returns true if the value is an object.
@@ -732,6 +732,16 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
 
   Core.isObject = function (value) {
     return value === Object(value);
+  };
+  /**
+   * Returns true if the value is a ShadowRoot.
+   * @param {*} value The value to test.
+   * @returns {Boolean} TRUE if the value is a Node, otherwise FALSE.
+   */
+
+
+  Core.isShadowRoot = function (value) {
+    return !!value && value.nodeType === Node.DOCUMENT_FRAGMENT_NODE && value.host;
   };
   /**
    * Returns true if the value is a string.
@@ -751,7 +761,7 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
 
 
   Core.isWindow = function (value) {
-    return Core.isObject(value) && Core.isObject(value.document) && value.document.defaultView === value;
+    return !!value && !!value.document && value.document.defaultView === value;
   };
 
   return Core;

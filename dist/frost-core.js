@@ -641,20 +641,18 @@
      * @param {*} value The value to test.
      * @returns {Boolean} TRUE if the value is a Document, otherwise FALSE.
      */
-    Core.isDocument = node =>
-        Core.isObject(node) &&
-        'nodeType' in node &&
-        node.nodeType === Node.DOCUMENT_NODE;
+    Core.isDocument = value =>
+        Core.isObject(value) &&
+        value.nodeType === Node.DOCUMENT_NODE;
 
     /**
      * Returns true if the value is a HTMLElement.
      * @param {*} value The value to test.
      * @returns {Boolean} TRUE if the value is a HTMLElement, otherwise FALSE.
      */
-    Core.isElement = node =>
-        Core.isObject(node) &&
-        'nodeType' in node &&
-        node.nodeType === Node.ELEMENT_NODE;
+    Core.isElement = value =>
+        !!value &&
+        value.nodeType === Node.ELEMENT_NODE;
 
     /**
      * Returns true if the value is a function.
@@ -668,13 +666,12 @@
      * @param {*} value The value to test.
      * @returns {Boolean} TRUE if the value is a Node, otherwise FALSE.
      */
-    Core.isNode = node =>
-        Core.isObject(node) &&
-        'nodeType' in node &&
+    Core.isNode = value =>
+        !!value &&
         (
-            node.nodeType === Node.ELEMENT_NODE ||
-            node.nodeType === Node.TEXT_NODE ||
-            node.nodeType === Node.COMMENT_NODE
+            value.nodeType === Node.ELEMENT_NODE ||
+            value.nodeType === Node.TEXT_NODE ||
+            value.nodeType === Node.COMMENT_NODE
         );
 
     /**
@@ -692,7 +689,7 @@
      * @returns {Boolean} TRUE if the value is a plain object, otherwise FALSE.
      */
     Core.isPlainObject = value =>
-        Core.isObject(value) &&
+        !!value &&
         value.constructor === Object;
 
     /**
@@ -701,6 +698,16 @@
      * @returns {Boolean} TRUE if the value is an object, otherwise FALSE.
      */
     Core.isObject = value => value === Object(value);
+
+    /**
+     * Returns true if the value is a ShadowRoot.
+     * @param {*} value The value to test.
+     * @returns {Boolean} TRUE if the value is a Node, otherwise FALSE.
+     */
+    Core.isShadowRoot = value =>
+        !!value &&
+        value.nodeType === Node.DOCUMENT_FRAGMENT_NODE &&
+        value.host;
 
     /**
      * Returns true if the value is a string.
@@ -715,8 +722,8 @@
      * @returns {Boolean} TRUE is the value is a Window, otherwise FALSE.
      */
     Core.isWindow = value =>
-        Core.isObject(value) &&
-        Core.isObject(value.document) &&
+        !!value &&
+        !!value.document &&
         value.document.defaultView === value;
 
     return Core;
