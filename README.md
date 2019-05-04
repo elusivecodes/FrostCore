@@ -364,6 +364,16 @@ Convert a string to camelCase.
 const camelCase = Core.camelCase(string);
 ```
 
+**Pascal Case**
+
+Convert a string to PascalCase.
+
+- `string` is the string you wish to transform to PascalCase.
+
+```javascript
+const pascalCase = Core.pascalCase(string);
+```
+
 **Random String**
 
 Return a random string.
@@ -393,6 +403,16 @@ Convert a string to snake-case.
 
 ```javascript
 const snakeCase = Core.snakeCase(string);
+```
+
+**Underscore**
+
+Convert a string to underscored.
+
+- `string` is the string you wish to transform to underscored.
+
+```javascript
+const underscored = Core.underscore(string);
 ```
 
 
@@ -448,6 +468,14 @@ Returns *true* is the value is a *HTMLElement*.
 const isElement = Core.isElement(value);
 ```
 
+**Is Fragment**
+
+Returns *true* if the value is a *DocumentFragment*.
+
+```javascript
+const isFragment = Core.isFragment(value);
+```
+
 **Is Function**
 
 Returns *true* if the value is a function.
@@ -498,12 +526,12 @@ Returns *true* if the value is an object.
 const isObject = Core.isObject(value);
 ```
 
-**Is Shadow Root**
+**Is Shadow**
 
 Returns *true* if the value is a *ShadowRoot*.
 
 ```javascript
-const isShadowRoot = Core.isShadowRoot(value);
+const isShadow = Core.isShadow(value);
 ```
 
 **Is String**

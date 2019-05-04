@@ -591,9 +591,21 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
 
 
   Core.camelCase = function (string) {
-    return "".concat(string).replace(/\-([a-z])/g, function (match) {
-      return match.substring(1).toUpperCase();
-    });
+    return Core._splitString(string).map(function (word, index) {
+      return index ? word.charAt(0).toUpperCase() + word.substring(1) : word;
+    }).join('');
+  };
+  /**
+   * Convert a string to PascalCase.
+   * @param {string} string The input string.
+   * @returns {string} The camelCased string.
+   */
+
+
+  Core.pascalCase = function (string) {
+    return Core._splitString(string).map(function (word) {
+      return word.charAt(0).toUpperCase() + word.substring(1);
+    }).join('');
   };
   /**
    * Return a random string.
@@ -628,8 +640,32 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
 
 
   Core.snakeCase = function (string) {
-    return "".concat(string).replace(/([A-Z])/g, function (match) {
-      return "-".concat(match.toLowerCase());
+    return Core._splitString(string).join('-');
+  };
+  /**
+   * Convert a string to underscored.
+   * @param {string} string The input string.
+   * @returns {string} The underscored string.
+   */
+
+
+  Core.underscore = function (string) {
+    return Core._splitString(string).join('_');
+  };
+  /**
+   * Split a string into individual words.
+   * @param {string} string The input string.
+   * @returns {string[]} The split parts of the string.
+   */
+
+
+  Core._splitString = function (string) {
+    return "".concat(string).split(/[^a-zA-Z0-9'"]/).filter(function (word) {
+      return word;
+    }).flatMap(function (word) {
+      return word.split(/(?=[A-Z])/);
+    }).map(function (word) {
+      return word.replace(/[^\w]/, '');
     });
   };
   /**
@@ -682,6 +718,16 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
 
   Core.isElement = function (value) {
     return !!value && value.nodeType === Node.ELEMENT_NODE;
+  };
+  /**
+   * Returns true if the value is a DocumentFragment.
+   * @param {*} value The value to test.
+   * @returns {Boolean} TRUE if the value is a DocumentFragment, otherwise FALSE.
+   */
+
+
+  Core.isShadow = function (value) {
+    return !!value && value.nodeType === Node.DOCUMENT_FRAGMENT_NODE && !value.host;
   };
   /**
    * Returns true if the value is a function.
@@ -740,7 +786,7 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
    */
 
 
-  Core.isShadowRoot = function (value) {
+  Core.isShadow = function (value) {
     return !!value && value.nodeType === Node.DOCUMENT_FRAGMENT_NODE && value.host;
   };
   /**

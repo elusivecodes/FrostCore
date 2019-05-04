@@ -63,6 +63,16 @@ Core.isElement = value =>
     value.nodeType === Node.ELEMENT_NODE;
 
 /**
+ * Returns true if the value is a DocumentFragment.
+ * @param {*} value The value to test.
+ * @returns {Boolean} TRUE if the value is a DocumentFragment, otherwise FALSE.
+ */
+Core.isShadow = value =>
+    !!value &&
+    value.nodeType === Node.DOCUMENT_FRAGMENT_NODE &&
+    !value.host;
+
+/**
  * Returns true if the value is a function.
  * @param {*} value The value to test.
  * @returns {Boolean} TRUE if the value is a function, otherwise FALSE.
@@ -112,7 +122,7 @@ Core.isObject = value => value === Object(value);
  * @param {*} value The value to test.
  * @returns {Boolean} TRUE if the value is a ShadowRoot, otherwise FALSE.
  */
-Core.isShadowRoot = value =>
+Core.isShadow = value =>
     !!value &&
     value.nodeType === Node.DOCUMENT_FRAGMENT_NODE &&
     value.host;

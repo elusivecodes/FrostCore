@@ -550,12 +550,27 @@
      * @returns {string} The camelCased string.
      */
     Core.camelCase = string =>
-        `${string}`
-            .replace(
-                /\-([a-z])/g,
-                match =>
-                    match.substring(1).toUpperCase()
-            );
+        Core._splitString(string)
+            .map(
+                (word, index) =>
+                    index ?
+                        word.charAt(0).toUpperCase() + word.substring(1) :
+                        word
+            )
+            .join('');
+
+    /**
+     * Convert a string to PascalCase.
+     * @param {string} string The input string.
+     * @returns {string} The camelCased string.
+     */
+    Core.pascalCase = string =>
+        Core._splitString(string)
+            .map(
+                word =>
+                    word.charAt(0).toUpperCase() + word.substring(1)
+            )
+            .join('');
 
     /**
      * Return a random string.
@@ -583,12 +598,26 @@
      * @returns {string} The snake-cased string.
      */
     Core.snakeCase = string =>
-        `${string}`
-            .replace(
-                /([A-Z])/g,
-                match =>
-                    `-${match.toLowerCase()}`
-            );
+        Core._splitString(string).join('-');
+
+    /**
+     * Convert a string to underscored.
+     * @param {string} string The input string.
+     * @returns {string} The underscored string.
+     */
+    Core.underscore = string =>
+        Core._splitString(string).join('_');
+
+    /**
+     * Split a string into individual words.
+     * @param {string} string The input string.
+     * @returns {string[]} The split parts of the string.
+     */
+    Core._splitString = string =>
+        `${string}`.split(/[^a-zA-Z0-9'"]/)
+            .filter(word => word)
+            .flatMap(word => word.split(/(?=[A-Z])/))
+            .map(word => word.replace(/[^\w]/, ''));
 
     /**
      * Testing methods
@@ -655,6 +684,16 @@
         value.nodeType === Node.ELEMENT_NODE;
 
     /**
+     * Returns true if the value is a DocumentFragment.
+     * @param {*} value The value to test.
+     * @returns {Boolean} TRUE if the value is a DocumentFragment, otherwise FALSE.
+     */
+    Core.isShadow = value =>
+        !!value &&
+        value.nodeType === Node.DOCUMENT_FRAGMENT_NODE &&
+        !value.host;
+
+    /**
      * Returns true if the value is a function.
      * @param {*} value The value to test.
      * @returns {Boolean} TRUE if the value is a function, otherwise FALSE.
@@ -704,7 +743,7 @@
      * @param {*} value The value to test.
      * @returns {Boolean} TRUE if the value is a ShadowRoot, otherwise FALSE.
      */
-    Core.isShadowRoot = value =>
+    Core.isShadow = value =>
         !!value &&
         value.nodeType === Node.DOCUMENT_FRAGMENT_NODE &&
         value.host;
