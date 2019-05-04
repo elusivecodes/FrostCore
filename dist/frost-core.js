@@ -617,7 +617,7 @@
         `${string}`.split(/[^a-zA-Z0-9'"]/)
             .filter(word => word)
             .flatMap(word => word.split(/(?=[A-Z])/))
-            .map(word => word.replace(/[^\w]/, ''));
+            .map(word => word.replace(/[^\w]/, '').toLowerCase());
 
     /**
      * Testing methods

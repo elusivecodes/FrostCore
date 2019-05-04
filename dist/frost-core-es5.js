@@ -665,7 +665,7 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
     }).flatMap(function (word) {
       return word.split(/(?=[A-Z])/);
     }).map(function (word) {
-      return word.replace(/[^\w]/, '');
+      return word.replace(/[^\w]/, '').toLowerCase();
     });
   };
   /**
