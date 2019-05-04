@@ -500,7 +500,7 @@ const isObject = Core.isObject(value);
 
 **Is Shadow Root**
 
-Returns *true* if the value is a *ShadowRoot*
+Returns *true* if the value is a *ShadowRoot*.
 
 ```javascript
 const isShadowRoot = Core.isShadowRoot(value);
