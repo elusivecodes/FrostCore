@@ -1,6 +1,6 @@
 {
     "name": "frostcore",
-    "version": "1.0.5",
+    "version": "1.0.6",
     "description": "FrostCore is a free, open-source utility library for JavaScript.",
     "main": "build.js",
     "scripts": {

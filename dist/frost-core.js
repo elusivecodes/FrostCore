@@ -1,5 +1,5 @@
 /**
- * FrostCore v1.0.5
+ * FrostCore v1.0.6
  * https://github.com/elusivecodes/FrostCore
  */
 (function(global, factory) {
@@ -702,7 +702,7 @@
     /**
      * Returns true if the value is a ShadowRoot.
      * @param {*} value The value to test.
-     * @returns {Boolean} TRUE if the value is a Node, otherwise FALSE.
+     * @returns {Boolean} TRUE if the value is a ShadowRoot, otherwise FALSE.
      */
     Core.isShadowRoot = value =>
         !!value &&

@@ -110,7 +110,7 @@ Core.isObject = value => value === Object(value);
 /**
  * Returns true if the value is a ShadowRoot.
  * @param {*} value The value to test.
- * @returns {Boolean} TRUE if the value is a Node, otherwise FALSE.
+ * @returns {Boolean} TRUE if the value is a ShadowRoot, otherwise FALSE.
  */
 Core.isShadowRoot = value =>
     !!value &&

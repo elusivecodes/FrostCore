@@ -11,7 +11,7 @@ function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 /**
- * FrostCore v1.0.5
+ * FrostCore v1.0.6
  * https://github.com/elusivecodes/FrostCore
  */
 (function (global, factory) {
@@ -736,7 +736,7 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
   /**
    * Returns true if the value is a ShadowRoot.
    * @param {*} value The value to test.
-   * @returns {Boolean} TRUE if the value is a Node, otherwise FALSE.
+   * @returns {Boolean} TRUE if the value is a ShadowRoot, otherwise FALSE.
    */
 
 
