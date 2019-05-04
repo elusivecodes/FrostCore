@@ -688,7 +688,7 @@
      * @param {*} value The value to test.
      * @returns {Boolean} TRUE if the value is a DocumentFragment, otherwise FALSE.
      */
-    Core.isShadow = value =>
+    Core.isFragment = value =>
         !!value &&
         value.nodeType === Node.DOCUMENT_FRAGMENT_NODE &&
         !value.host;
@@ -746,7 +746,7 @@
     Core.isShadow = value =>
         !!value &&
         value.nodeType === Node.DOCUMENT_FRAGMENT_NODE &&
-        value.host;
+        !!value.host;
 
     /**
      * Returns true if the value is a string.

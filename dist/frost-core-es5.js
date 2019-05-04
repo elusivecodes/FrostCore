@@ -726,7 +726,7 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
    */
 
 
-  Core.isShadow = function (value) {
+  Core.isFragment = function (value) {
     return !!value && value.nodeType === Node.DOCUMENT_FRAGMENT_NODE && !value.host;
   };
   /**
@@ -787,7 +787,7 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
 
 
   Core.isShadow = function (value) {
-    return !!value && value.nodeType === Node.DOCUMENT_FRAGMENT_NODE && value.host;
+    return !!value && value.nodeType === Node.DOCUMENT_FRAGMENT_NODE && !!value.host;
   };
   /**
    * Returns true if the value is a string.
