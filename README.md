@@ -48,6 +48,18 @@ Return a random value from an array.
 const randomValue = Core.randomValue(array);
 ```
 
+**Range**
+
+Return an array containing a range of values.
+
+- `start` is a number indicating the first value of the sequence.
+- `end` is a number indicating where the sequence will end.
+- `step` is a number indicating the increment between values in the sequence, and will default to *1*.
+
+```javascript
+const range = Core.range(start, end, step);
+```
+
 **Unique**
 
 Remove duplicate elements in an array.
