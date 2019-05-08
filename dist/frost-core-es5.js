@@ -660,12 +660,10 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
 
 
   Core._splitString = function (string) {
-    return "".concat(string).split(/[^a-zA-Z0-9'"]/).filter(function (word) {
-      return word;
-    }).flatMap(function (word) {
-      return word.split(/(?=[A-Z])/);
-    }).map(function (word) {
+    return "".concat(string).split(/[^a-zA-Z0-9']|(?=[A-Z])/).map(function (word) {
       return word.replace(/[^\w]/, '').toLowerCase();
+    }).filter(function (word) {
+      return word;
     });
   };
   /**

@@ -614,10 +614,9 @@
      * @returns {string[]} The split parts of the string.
      */
     Core._splitString = string =>
-        `${string}`.split(/[^a-zA-Z0-9'"]/)
-            .filter(word => word)
-            .flatMap(word => word.split(/(?=[A-Z])/))
-            .map(word => word.replace(/[^\w]/, '').toLowerCase());
+        `${string}`.split(/[^a-zA-Z0-9']|(?=[A-Z])/)
+            .map(word => word.replace(/[^\w]/, '').toLowerCase())
+            .filter(word => word);
 
     /**
      * Testing methods
