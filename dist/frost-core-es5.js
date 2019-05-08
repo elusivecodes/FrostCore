@@ -11,7 +11,7 @@ function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 /**
- * FrostCore v1.0.6
+ * FrostCore v1.0.7
  * https://github.com/elusivecodes/FrostCore
  */
 (function (global, factory) {
@@ -60,6 +60,22 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
 
   Core.randomValue = function (array) {
     return array.length ? array[Core.random(array.length) | 0] : null;
+  };
+  /**
+   * Return an array containing a range of values.
+   * @param {number} start The first value of the sequence.
+   * @param {number} end The value to end the sequence on.
+   * @param {number} [step=1] The increment between values in the sequence.
+   * @returns {number[]} The array of values from start to end.
+   */
+
+
+  Core.range = function (start, end) {
+    var step = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 1;
+    var sign = Math.sign(end - start);
+    return new Array(Math.abs(end - start) / step + 1 | 0).fill().map(function (_, i) {
+      return start + Core.toStep(i * step * sign, step);
+    });
   };
   /**
    * Remove duplicate elements in an array.
@@ -418,7 +434,7 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
 
   Core.toStep = function (value) {
     var step = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0.01;
-    return Math.round(value / step) * step;
+    return parseFloat((Math.round(value / step) * step).toFixed("".concat(step).replace('\d*\.?/', '').length));
   };
   /**
    * Object methods

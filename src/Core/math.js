@@ -193,5 +193,11 @@ Core.random = (a = 1, b = null) =>
  * @returns {number} The constrained value.
  */
 Core.toStep = (value, step = 0.01) =>
-    Math.round(value / step)
-    * step;
+    parseFloat(
+        (
+            Math.round(value / step)
+            * step
+        ).toFixed(
+            `${step}`.replace('\d*\.?/', '').length
+        )
+    );

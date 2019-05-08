@@ -1,5 +1,5 @@
 /**
- * FrostCore v1.0.6
+ * FrostCore v1.0.7
  * https://github.com/elusivecodes/FrostCore
  */
 (function(global, factory) {
@@ -43,6 +43,27 @@
         array.length ?
             array[Core.random(array.length) | 0] :
             null;
+
+    /**
+     * Return an array containing a range of values.
+     * @param {number} start The first value of the sequence.
+     * @param {number} end The value to end the sequence on.
+     * @param {number} [step=1] The increment between values in the sequence.
+     * @returns {number[]} The array of values from start to end.
+     */
+    Core.range = (start, end, step = 1) => {
+        const sign = Math.sign(end - start);
+        return new Array(
+            ((Math.abs(end - start) / step) + 1) | 0
+        ).fill()
+            .map(
+                (_, i) =>
+                    start + Core.toStep(
+                        (i * step * sign),
+                        step
+                    )
+            );
+    };
 
     /**
      * Remove duplicate elements in an array.
@@ -423,8 +444,14 @@
      * @returns {number} The constrained value.
      */
     Core.toStep = (value, step = 0.01) =>
-        Math.round(value / step)
-        * step;
+        parseFloat(
+            (
+                Math.round(value / step)
+                * step
+            ).toFixed(
+                `${step}`.replace('\d*\.?/', '').length
+            )
+        );
 
     /**
      * Object methods

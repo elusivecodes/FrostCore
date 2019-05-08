@@ -27,6 +27,27 @@ Core.randomValue = array =>
         null;
 
 /**
+ * Return an array containing a range of values.
+ * @param {number} start The first value of the sequence.
+ * @param {number} end The value to end the sequence on.
+ * @param {number} [step=1] The increment between values in the sequence.
+ * @returns {number[]} The array of values from start to end.
+ */
+Core.range = (start, end, step = 1) => {
+    const sign = Math.sign(end - start);
+    return new Array(
+        ((Math.abs(end - start) / step) + 1) | 0
+    ).fill()
+        .map(
+            (_, i) =>
+                start + Core.toStep(
+                    (i * step * sign),
+                    step
+                )
+        );
+};
+
+/**
  * Remove duplicate elements in an array.
  * @param {array} array The input array.
  * @returns {array} The filtered array.
