@@ -142,7 +142,7 @@ const partial = Core.partial(callback, ...defaultArgs);
 
 Create a wrapped function that will execute each callback in order, passing the result from each function to the next.
 
-Any arguments supplied to will be added to the chain of callbacks.
+Any arguments supplied will be added to the chain of callbacks.
 
 ```javascript
 const piped = Core.pipe(...callbacks);
