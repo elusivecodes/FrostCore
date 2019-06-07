@@ -1,5 +1,5 @@
 /**
- * FrostCore v1.0.7
+ * FrostCore v1.0.8
  * https://github.com/elusivecodes/FrostCore
  */
 (function(global, factory) {
@@ -126,6 +126,22 @@
     };
 
     /**
+     * Create a wrapped version of a function, that will return new functions
+     * until the number of total arguments passed reaches the arguments length
+     * of the original function (at which point the function will execute).
+     * @param {function} callback Callback function to execute.
+     * @returns {function} The wrapped function.
+     */
+    Core.curry = callback => {
+        const curried = (...args) =>
+            args.length >= callback.length ?
+                callback(...args) :
+                (...newArgs) => curried(...args.concat(newArgs));
+
+        return curried;
+    };
+
+    /**
      * Create a wrapped version of a function that executes once per wait period
      * (using the most recent arguments passed to it).
      * @param {function} callback Callback function to execute.
@@ -200,6 +216,20 @@
                     ).concat(args)
                 )
             );
+
+    /**
+     * Create a wrapped function that will execute each callback in order,
+     * passing the result from each function to the next.
+     * @param {...function} callbacks Callback functions to execute.
+     * @returns {function} The wrapped function.
+     */
+    Core.pipe = (...callbacks) =>
+        (...args) =>
+            callbacks.reduce(
+                (acc, callback) =>
+                    [callback(...acc)],
+                args
+            ).shift();
 
     /**
      * Create a wrapped version of a function that executes at most once per wait period.

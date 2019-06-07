@@ -94,6 +94,16 @@ Create a wrapped version of a function that executes at most once per animation 
 const animation = Core.animation(callback, leading);
 ```
 
+**Curry**
+
+Create a wrapped version of a function, that will return new functions until the number of total arguments passed reaches the arguments length of the original function (at which point the function will execute).
+
+- `callback` is the function you wish to wrap.
+
+```javascript
+const curried = Core.curry(callback);
+```
+
 **Debounce**
 
 Create a wrapped version of a function that executes once per wait period (using the most recent arguments passed to it).
@@ -126,6 +136,16 @@ Any additional arguments supplied will be passed on as default arguments to the 
 
 ```javascript
 const partial = Core.partial(callback, ...defaultArgs);
+```
+
+**Pipe**
+
+Create a wrapped function that will execute each callback in order, passing the result from each function to the next.
+
+Any arguments supplied to will be added to the chain of callbacks.
+
+```javascript
+const piped = Core.pipe(...callbacks);
 ```
 
 **Throttle**

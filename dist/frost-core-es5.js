@@ -11,7 +11,7 @@ function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 /**
- * FrostCore v1.0.7
+ * FrostCore v1.0.8
  * https://github.com/elusivecodes/FrostCore
  */
 (function (global, factory) {
@@ -146,6 +146,32 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
     };
   };
   /**
+   * Create a wrapped version of a function, that will return new functions
+   * until the number of total arguments passed reaches the arguments length
+   * of the original function (at which point the function will execute).
+   * @param {function} callback Callback function to execute.
+   * @returns {function} The wrapped function.
+   */
+
+
+  Core.curry = function (callback) {
+    var curried = function curried() {
+      for (var _len3 = arguments.length, args = new Array(_len3), _key3 = 0; _key3 < _len3; _key3++) {
+        args[_key3] = arguments[_key3];
+      }
+
+      return args.length >= callback.length ? callback.apply(void 0, args) : function () {
+        for (var _len4 = arguments.length, newArgs = new Array(_len4), _key4 = 0; _key4 < _len4; _key4++) {
+          newArgs[_key4] = arguments[_key4];
+        }
+
+        return curried.apply(void 0, _toConsumableArray(args.concat(newArgs)));
+      };
+    };
+
+    return curried;
+  };
+  /**
    * Create a wrapped version of a function that executes once per wait period
    * (using the most recent arguments passed to it).
    * @param {function} callback Callback function to execute.
@@ -160,8 +186,8 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
         running,
         runLead = leading;
     return function () {
-      for (var _len3 = arguments.length, args = new Array(_len3), _key3 = 0; _key3 < _len3; _key3++) {
-        args[_key3] = arguments[_key3];
+      for (var _len5 = arguments.length, args = new Array(_len5), _key5 = 0; _key5 < _len5; _key5++) {
+        args[_key5] = arguments[_key5];
       }
 
       newArgs = args;
@@ -213,18 +239,41 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
 
 
   Core.partial = function (callback) {
-    for (var _len4 = arguments.length, defaultArgs = new Array(_len4 > 1 ? _len4 - 1 : 0), _key4 = 1; _key4 < _len4; _key4++) {
-      defaultArgs[_key4 - 1] = arguments[_key4];
+    for (var _len6 = arguments.length, defaultArgs = new Array(_len6 > 1 ? _len6 - 1 : 0), _key6 = 1; _key6 < _len6; _key6++) {
+      defaultArgs[_key6 - 1] = arguments[_key6];
     }
 
     return function () {
-      for (var _len5 = arguments.length, args = new Array(_len5), _key5 = 0; _key5 < _len5; _key5++) {
-        args[_key5] = arguments[_key5];
+      for (var _len7 = arguments.length, args = new Array(_len7), _key7 = 0; _key7 < _len7; _key7++) {
+        args[_key7] = arguments[_key7];
       }
 
       return callback.apply(void 0, _toConsumableArray(defaultArgs.slice().map(function (v) {
         return v === undefined ? args.shift() : v;
       }).concat(args)));
+    };
+  };
+  /**
+   * Create a wrapped function that will execute each callback in order,
+   * passing the result from each function to the next.
+   * @param {...function} callbacks Callback functions to execute.
+   * @returns {function} The wrapped function.
+   */
+
+
+  Core.pipe = function () {
+    for (var _len8 = arguments.length, callbacks = new Array(_len8), _key8 = 0; _key8 < _len8; _key8++) {
+      callbacks[_key8] = arguments[_key8];
+    }
+
+    return function () {
+      for (var _len9 = arguments.length, args = new Array(_len9), _key9 = 0; _key9 < _len9; _key9++) {
+        args[_key9] = arguments[_key9];
+      }
+
+      return callbacks.reduce(function (acc, callback) {
+        return [callback.apply(void 0, _toConsumableArray(acc))];
+      }, args).shift();
     };
   };
   /**
@@ -242,8 +291,8 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
     var trailing = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : true;
     var ran, running;
     return function () {
-      for (var _len6 = arguments.length, args = new Array(_len6), _key6 = 0; _key6 < _len6; _key6++) {
-        args[_key6] = arguments[_key6];
+      for (var _len10 = arguments.length, args = new Array(_len10), _key10 = 0; _key10 < _len10; _key10++) {
+        args[_key10] = arguments[_key10];
       }
 
       if (running) {
