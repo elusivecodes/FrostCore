@@ -1,5 +1,5 @@
 /**
- * FrostCore v1.0.8
+ * FrostCore v1.0.9
  * https://github.com/elusivecodes/FrostCore
  */
 (function(global, factory) {
@@ -70,7 +70,7 @@
      * @param {array} array The input array.
      * @returns {array} The filtered array.
      */
-    Core.unique = array => Core.merge([], new Set(array));
+    Core.unique = array => Array.from(new Set(array));
 
     /**
      * Create an array from any value.

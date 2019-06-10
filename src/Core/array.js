@@ -52,7 +52,7 @@ Core.range = (start, end, step = 1) => {
  * @param {array} array The input array.
  * @returns {array} The filtered array.
  */
-Core.unique = array => Core.merge([], new Set(array));
+Core.unique = array => Array.from(new Set(array));
 
 /**
  * Create an array from any value.
