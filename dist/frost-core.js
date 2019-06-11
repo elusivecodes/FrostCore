@@ -1,5 +1,5 @@
 /**
- * FrostCore v1.0.9
+ * FrostCore v1.0.10
  * https://github.com/elusivecodes/FrostCore
  */
 (function(global, factory) {
@@ -19,6 +19,44 @@
     /**
      * Array methods
      */
+
+    /**
+     * Create a new array containing the values of the first array, that do not exist in any of the additional passed arrays.
+     * @param {array} array The input array.
+     * @param {...array} arrays The arrays to compare against.
+     * @returns {array} The output array.
+     */
+    Core.diff = (array, ...arrays) =>
+        array.filter(
+            value => !arrays
+                .map(Core.unique)
+                .some(other => other.includes(value))
+        );
+
+    /**
+     * Create a new array containing the unique values that exist in all of the passed arrays.
+     * @param {...array} arrays The input arrays.
+     * @returns {array} The output array.
+     */
+    Core.intersects = (...arrays) =>
+        Core.unique(
+            arrays
+                .map(Core.unique)
+                .reduce((acc, array, index) =>
+                    Core.merge(
+                        acc,
+                        array.filter(
+                            value =>
+                                arrays.every(
+                                    (other, otherIndex) =>
+                                        index == otherIndex ||
+                                        other.includes(value)
+                                )
+                        )
+                    ),
+                    []
+                )
+        );
 
     /**
      * Merge the values from one or more arrays or array-like objects onto an array.
@@ -757,6 +795,13 @@
     Core.isFunction = value => typeof value === 'function';
 
     /**
+     * Returns true if the value is NaN.
+     * @param {*} value The value to test.
+     * @returns {Boolean} TRUE if the value is NaN, otherwise FALSE.
+     */
+    Core.isNaN = Number.isNaN;
+
+    /**
      * Returns true if the value is a Node.
      * @param {*} value The value to test.
      * @returns {Boolean} TRUE if the value is a Node, otherwise FALSE.
@@ -768,6 +813,13 @@
             value.nodeType === Node.TEXT_NODE ||
             value.nodeType === Node.COMMENT_NODE
         );
+
+    /**
+     * Returns true if the value is null.
+     * @param {*} value The value to test.
+     * @returns {Boolean} TRUE if the value is null, otherwise FALSE.
+     */
+    Core.isNull = value => value === null;
 
     /**
      * Returns true if the value is numeric.
@@ -810,6 +862,13 @@
      * @returns {Boolean} TRUE is the value is a string, otherwise FALSE.
      */
     Core.isString = value => value === `${value}`;
+
+    /**
+     * Returns true if the value is undefined.
+     * @param {*} value The value to test.
+     * @returns {Boolean} TRUE if the value is undefined, otherwise FALSE.
+     */
+    Core.isUndefined = value => value === undefined;
 
     /**
      * Returns true if the value is a Window.

@@ -26,6 +26,28 @@ It is a tiny (< 2kb gzipped) and modern library, adding various functionality to
 
 ## Arrays
 
+**Difference**
+
+Create a new array containing the values of the first array, that do not exist in any of the additional passed arrays.
+
+- `array` is the array you wish to filter.
+
+Any additional arguments supplied will be used to test for the values of the first array.
+
+```javascript
+const diff = Core.diff(array, ...arrays);
+```
+
+**Intersects**
+
+Create a new array containing the unique values that exist in all of the passed arrays.
+
+All arguments supplied to this method will be tested for intersections.
+
+```javascript
+const intersects = Core.intersects(...arrays);
+```
+
 **Merge**
 
 Merge the values from one or more arrays or array-like objects onto an array.
@@ -518,6 +540,16 @@ Returns *true* if the value is a function.
 const isFunction = Core.isFunction(value);
 ```
 
+**Is NaN**
+
+Returns *true* if the value is *NaN*.
+
+- `value` is the value you wish to test.
+
+```javascript
+const isNaN = Core.isNaN(value);
+```
+
 **Is Node**
 
 Returns *true* is the value is a *Node*.
@@ -526,6 +558,16 @@ Returns *true* is the value is a *Node*.
 
 ```javascript
 const isNode = Core.isNode(value);
+```
+
+**Is Null**
+
+Returns *true* if the value is *null*.
+
+- `value` is the value you wish to test.
+
+```javascript
+const isNull = Core.isNull(value);
 ```
 
 **Is Numeric**
@@ -574,6 +616,16 @@ Returns *true* if the value is a string.
 
 ```javascript
 const isString = Core.isString(value);
+```
+
+**Is Undefined**
+
+Returns *true* if the value is *undefined*.
+
+- `value` is the value you wish to test.
+
+```javascript
+const isUndefined = Core.isUndefined(value);
 ```
 
 **Is Window**

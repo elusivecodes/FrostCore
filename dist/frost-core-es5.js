@@ -11,7 +11,7 @@ function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 /**
- * FrostCore v1.0.9
+ * FrostCore v1.0.10
  * https://github.com/elusivecodes/FrostCore
  */
 (function (global, factory) {
@@ -31,17 +31,56 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
    */
 
   /**
+   * Create a new array containing the values of the first array, that do not exist in any of the additional passed arrays.
+   * @param {array} array The input array.
+   * @param {...array} arrays The arrays to compare against.
+   * @returns {array} The output array.
+   */
+
+  Core.diff = function (array) {
+    for (var _len = arguments.length, arrays = new Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
+      arrays[_key - 1] = arguments[_key];
+    }
+
+    return array.filter(function (value) {
+      return !arrays.map(Core.unique).some(function (other) {
+        return other.includes(value);
+      });
+    });
+  };
+  /**
+   * Create a new array containing the unique values that exist in all of the passed arrays.
+   * @param {...array} arrays The input arrays.
+   * @returns {array} The output array.
+   */
+
+
+  Core.intersects = function () {
+    for (var _len2 = arguments.length, arrays = new Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
+      arrays[_key2] = arguments[_key2];
+    }
+
+    return Core.unique(arrays.map(Core.unique).reduce(function (acc, array, index) {
+      return Core.merge(acc, array.filter(function (value) {
+        return arrays.every(function (other, otherIndex) {
+          return index == otherIndex || other.includes(value);
+        });
+      }));
+    }, []));
+  };
+  /**
    * Merge the values from one or more arrays or array-like objects onto an array.
    * @param {array} array The input array.
    * @param {...array|...object} arrays The arrays or array-like objects to merge.
    * @returns {array} The output array.
    */
 
+
   Core.merge = function () {
     var array = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
 
-    for (var _len = arguments.length, arrays = new Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
-      arrays[_key - 1] = arguments[_key];
+    for (var _len3 = arguments.length, arrays = new Array(_len3 > 1 ? _len3 - 1 : 0), _key3 = 1; _key3 < _len3; _key3++) {
+      arrays[_key3 - 1] = arguments[_key3];
     }
 
     for (var _i = 0, _arrays = arrays; _i < _arrays.length; _i++) {
@@ -121,8 +160,8 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
   Core.animation = function (callback, leading) {
     var newArgs, running;
     return function () {
-      for (var _len2 = arguments.length, args = new Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
-        args[_key2] = arguments[_key2];
+      for (var _len4 = arguments.length, args = new Array(_len4), _key4 = 0; _key4 < _len4; _key4++) {
+        args[_key4] = arguments[_key4];
       }
 
       newArgs = args;
@@ -156,13 +195,13 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
 
   Core.curry = function (callback) {
     var curried = function curried() {
-      for (var _len3 = arguments.length, args = new Array(_len3), _key3 = 0; _key3 < _len3; _key3++) {
-        args[_key3] = arguments[_key3];
+      for (var _len5 = arguments.length, args = new Array(_len5), _key5 = 0; _key5 < _len5; _key5++) {
+        args[_key5] = arguments[_key5];
       }
 
       return args.length >= callback.length ? callback.apply(void 0, args) : function () {
-        for (var _len4 = arguments.length, newArgs = new Array(_len4), _key4 = 0; _key4 < _len4; _key4++) {
-          newArgs[_key4] = arguments[_key4];
+        for (var _len6 = arguments.length, newArgs = new Array(_len6), _key6 = 0; _key6 < _len6; _key6++) {
+          newArgs[_key6] = arguments[_key6];
         }
 
         return curried.apply(void 0, _toConsumableArray(args.concat(newArgs)));
@@ -186,8 +225,8 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
         running,
         runLead = leading;
     return function () {
-      for (var _len5 = arguments.length, args = new Array(_len5), _key5 = 0; _key5 < _len5; _key5++) {
-        args[_key5] = arguments[_key5];
+      for (var _len7 = arguments.length, args = new Array(_len7), _key7 = 0; _key7 < _len7; _key7++) {
+        args[_key7] = arguments[_key7];
       }
 
       newArgs = args;
@@ -239,13 +278,13 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
 
 
   Core.partial = function (callback) {
-    for (var _len6 = arguments.length, defaultArgs = new Array(_len6 > 1 ? _len6 - 1 : 0), _key6 = 1; _key6 < _len6; _key6++) {
-      defaultArgs[_key6 - 1] = arguments[_key6];
+    for (var _len8 = arguments.length, defaultArgs = new Array(_len8 > 1 ? _len8 - 1 : 0), _key8 = 1; _key8 < _len8; _key8++) {
+      defaultArgs[_key8 - 1] = arguments[_key8];
     }
 
     return function () {
-      for (var _len7 = arguments.length, args = new Array(_len7), _key7 = 0; _key7 < _len7; _key7++) {
-        args[_key7] = arguments[_key7];
+      for (var _len9 = arguments.length, args = new Array(_len9), _key9 = 0; _key9 < _len9; _key9++) {
+        args[_key9] = arguments[_key9];
       }
 
       return callback.apply(void 0, _toConsumableArray(defaultArgs.slice().map(function (v) {
@@ -262,13 +301,13 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
 
 
   Core.pipe = function () {
-    for (var _len8 = arguments.length, callbacks = new Array(_len8), _key8 = 0; _key8 < _len8; _key8++) {
-      callbacks[_key8] = arguments[_key8];
+    for (var _len10 = arguments.length, callbacks = new Array(_len10), _key10 = 0; _key10 < _len10; _key10++) {
+      callbacks[_key10] = arguments[_key10];
     }
 
     return function () {
-      for (var _len9 = arguments.length, args = new Array(_len9), _key9 = 0; _key9 < _len9; _key9++) {
-        args[_key9] = arguments[_key9];
+      for (var _len11 = arguments.length, args = new Array(_len11), _key11 = 0; _key11 < _len11; _key11++) {
+        args[_key11] = arguments[_key11];
       }
 
       return callbacks.reduce(function (acc, callback) {
@@ -291,8 +330,8 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
     var trailing = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : true;
     var ran, running;
     return function () {
-      for (var _len10 = arguments.length, args = new Array(_len10), _key10 = 0; _key10 < _len10; _key10++) {
-        args[_key10] = arguments[_key10];
+      for (var _len12 = arguments.length, args = new Array(_len12), _key12 = 0; _key12 < _len12; _key12++) {
+        args[_key12] = arguments[_key12];
       }
 
       if (running) {
@@ -803,14 +842,31 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
     return typeof value === 'function';
   };
   /**
+   * Returns true if the value is NaN.
+   * @param {*} value The value to test.
+   * @returns {Boolean} TRUE if the value is NaN, otherwise FALSE.
+   */
+
+
+  Core.isNaN = Number.isNaN;
+  /**
    * Returns true if the value is a Node.
    * @param {*} value The value to test.
    * @returns {Boolean} TRUE if the value is a Node, otherwise FALSE.
    */
 
-
   Core.isNode = function (value) {
     return !!value && (value.nodeType === Node.ELEMENT_NODE || value.nodeType === Node.TEXT_NODE || value.nodeType === Node.COMMENT_NODE);
+  };
+  /**
+   * Returns true if the value is null.
+   * @param {*} value The value to test.
+   * @returns {Boolean} TRUE if the value is null, otherwise FALSE.
+   */
+
+
+  Core.isNull = function (value) {
+    return value === null;
   };
   /**
    * Returns true if the value is numeric.
@@ -861,6 +917,16 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
 
   Core.isString = function (value) {
     return value === "".concat(value);
+  };
+  /**
+   * Returns true if the value is undefined.
+   * @param {*} value The value to test.
+   * @returns {Boolean} TRUE if the value is undefined, otherwise FALSE.
+   */
+
+
+  Core.isUndefined = function (value) {
+    return value === undefined;
   };
   /**
    * Returns true if the value is a Window.

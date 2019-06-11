@@ -3,6 +3,44 @@
  */
 
 /**
+ * Create a new array containing the values of the first array, that do not exist in any of the additional passed arrays.
+ * @param {array} array The input array.
+ * @param {...array} arrays The arrays to compare against.
+ * @returns {array} The output array.
+ */
+Core.diff = (array, ...arrays) =>
+    array.filter(
+        value => !arrays
+            .map(Core.unique)
+            .some(other => other.includes(value))
+    );
+
+/**
+ * Create a new array containing the unique values that exist in all of the passed arrays.
+ * @param {...array} arrays The input arrays.
+ * @returns {array} The output array.
+ */
+Core.intersects = (...arrays) =>
+    Core.unique(
+        arrays
+            .map(Core.unique)
+            .reduce((acc, array, index) =>
+                Core.merge(
+                    acc,
+                    array.filter(
+                        value =>
+                            arrays.every(
+                                (other, otherIndex) =>
+                                    index == otherIndex ||
+                                    other.includes(value)
+                            )
+                    )
+                ),
+                []
+            )
+    );
+
+/**
  * Merge the values from one or more arrays or array-like objects onto an array.
  * @param {array} array The input array.
  * @param {...array|...object} arrays The arrays or array-like objects to merge.

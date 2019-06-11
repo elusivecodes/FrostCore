@@ -80,6 +80,13 @@ Core.isFragment = value =>
 Core.isFunction = value => typeof value === 'function';
 
 /**
+ * Returns true if the value is NaN.
+ * @param {*} value The value to test.
+ * @returns {Boolean} TRUE if the value is NaN, otherwise FALSE.
+ */
+Core.isNaN = Number.isNaN;
+
+/**
  * Returns true if the value is a Node.
  * @param {*} value The value to test.
  * @returns {Boolean} TRUE if the value is a Node, otherwise FALSE.
@@ -91,6 +98,13 @@ Core.isNode = value =>
         value.nodeType === Node.TEXT_NODE ||
         value.nodeType === Node.COMMENT_NODE
     );
+
+/**
+ * Returns true if the value is null.
+ * @param {*} value The value to test.
+ * @returns {Boolean} TRUE if the value is null, otherwise FALSE.
+ */
+Core.isNull = value => value === null;
 
 /**
  * Returns true if the value is numeric.
@@ -133,6 +147,13 @@ Core.isShadow = value =>
  * @returns {Boolean} TRUE is the value is a string, otherwise FALSE.
  */
 Core.isString = value => value === `${value}`;
+
+/**
+ * Returns true if the value is undefined.
+ * @param {*} value The value to test.
+ * @returns {Boolean} TRUE if the value is undefined, otherwise FALSE.
+ */
+Core.isUndefined = value => value === undefined;
 
 /**
  * Returns true if the value is a Window.
