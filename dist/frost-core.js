@@ -655,6 +655,22 @@
             .join('');
 
     /**
+     * Convert HTML special characters in a string to their corresponding HTML entities.
+     * @param {string} string The input string.
+     * @returns {string} The escaped string.
+     */
+    Core.escape = string =>
+        new Option(string).innerHTML;
+
+    /**
+     * Escape RegExp special characters in a string.
+     * @param {string} string The string to escape.
+     * @returns {string} The escaped string.
+     */
+    Core.escapeRegExp = string =>
+        string.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
+
+    /**
      * Convert a string to PascalCase.
      * @param {string} string The input string.
      * @returns {string} The camelCased string.
@@ -680,14 +696,6 @@
             .join('');
 
     /**
-     * Return an escaped string for use in RegEx.
-     * @param {string} string The string to escape.
-     * @returns {string} The escaped string.
-     */
-    Core.regExEscape = string =>
-        string.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
-
-    /**
      * Convert a string to snake-case.
      * @param {string} string The input string.
      * @returns {string} The snake-cased string.
@@ -702,6 +710,17 @@
      */
     Core.underscore = string =>
         Core._splitString(string).join('_');
+
+    /**
+     * Convert HTML entities in a string to their corresponding characters.
+     * @param {string} string The input string.
+     * @returns {string} The unescaped string.
+     */
+    Core.unescape = string =>
+        new DOMParser()
+            .parseFromString(string, 'text/html')
+            .documentElement
+            .textContent;
 
     /**
      * Split a string into individual words.

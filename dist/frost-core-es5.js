@@ -700,6 +700,26 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
     }).join('');
   };
   /**
+   * Convert HTML special characters in a string to their corresponding HTML entities.
+   * @param {string} string The input string.
+   * @returns {string} The escaped string.
+   */
+
+
+  Core.escape = function (string) {
+    return new Option(string).innerHTML;
+  };
+  /**
+   * Escape RegExp special characters in a string.
+   * @param {string} string The string to escape.
+   * @returns {string} The escaped string.
+   */
+
+
+  Core.escapeRegExp = function (string) {
+    return string.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
+  };
+  /**
    * Convert a string to PascalCase.
    * @param {string} string The input string.
    * @returns {string} The camelCased string.
@@ -727,16 +747,6 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
     }).join('');
   };
   /**
-   * Return an escaped string for use in RegEx.
-   * @param {string} string The string to escape.
-   * @returns {string} The escaped string.
-   */
-
-
-  Core.regExEscape = function (string) {
-    return string.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
-  };
-  /**
    * Convert a string to snake-case.
    * @param {string} string The input string.
    * @returns {string} The snake-cased string.
@@ -755,6 +765,16 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
 
   Core.underscore = function (string) {
     return Core._splitString(string).join('_');
+  };
+  /**
+   * Convert HTML entities in a string to their corresponding characters.
+   * @param {string} string The input string.
+   * @returns {string} The unescaped string.
+   */
+
+
+  Core.unescape = function (string) {
+    return new DOMParser().parseFromString(string, 'text/html').documentElement.textContent;
   };
   /**
    * Split a string into individual words.

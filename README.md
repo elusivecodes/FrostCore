@@ -418,6 +418,26 @@ Convert a string to camelCase.
 const camelCase = Core.camelCase(string);
 ```
 
+**Escape**
+
+Convert HTML special characters in a string to their corresponding HTML entities.
+
+- `string` is the string you wish to escape.
+
+```javascript
+const escape = Core.escape(string);
+```
+
+**Escape RegExp**
+
+Escape a string for use in RegExp.
+
+- `string` is the string you wish to escape.
+
+```javascript
+const escapeRegExp = Core.escapeRegExp(string);
+```
+
 **Pascal Case**
 
 Convert a string to PascalCase.
@@ -439,16 +459,6 @@ Return a random string.
 const randomString = Core.randomString(length, characters);
 ```
 
-**RegEx Escape**
-
-Escape a string for use in RegEx.
-
-- `string` is the string you wish to escape.
-
-```javascript
-const regExEscape = Core.regExEscape(string);
-```
-
 **Snake Case**
 
 Convert a string to snake-case.
@@ -467,6 +477,16 @@ Convert a string to underscored.
 
 ```javascript
 const underscored = Core.underscore(string);
+```
+
+**Unescape**
+
+Convert HTML entities in a string to their corresponding characters.
+
+- `string` is the string you wish to unescape.
+
+```javascript
+const unescape = Core.unescape(string);
 ```
 
 
