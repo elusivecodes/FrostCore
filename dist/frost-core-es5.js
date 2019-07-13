@@ -185,6 +185,25 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
     };
   };
   /**
+   * Create a wrapped function that will execute each callback in reverse order,
+   * passing the result from each function to the previous.
+   * @param {...function} callbacks Callback functions to execute.
+   * @returns {function} The wrapped function.
+   */
+
+
+  Core.compose = function () {
+    for (var _len5 = arguments.length, callbacks = new Array(_len5), _key5 = 0; _key5 < _len5; _key5++) {
+      callbacks[_key5] = arguments[_key5];
+    }
+
+    return function (arg) {
+      return callbacks.reduceRight(function (acc, callback) {
+        return callback(acc);
+      }, arg);
+    };
+  };
+  /**
    * Create a wrapped version of a function, that will return new functions
    * until the number of total arguments passed reaches the arguments length
    * of the original function (at which point the function will execute).
@@ -195,13 +214,13 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
 
   Core.curry = function (callback) {
     var curried = function curried() {
-      for (var _len5 = arguments.length, args = new Array(_len5), _key5 = 0; _key5 < _len5; _key5++) {
-        args[_key5] = arguments[_key5];
+      for (var _len6 = arguments.length, args = new Array(_len6), _key6 = 0; _key6 < _len6; _key6++) {
+        args[_key6] = arguments[_key6];
       }
 
       return args.length >= callback.length ? callback.apply(void 0, args) : function () {
-        for (var _len6 = arguments.length, newArgs = new Array(_len6), _key6 = 0; _key6 < _len6; _key6++) {
-          newArgs[_key6] = arguments[_key6];
+        for (var _len7 = arguments.length, newArgs = new Array(_len7), _key7 = 0; _key7 < _len7; _key7++) {
+          newArgs[_key7] = arguments[_key7];
         }
 
         return curried.apply(void 0, _toConsumableArray(args.concat(newArgs)));
@@ -225,8 +244,8 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
         running,
         runLead = leading;
     return function () {
-      for (var _len7 = arguments.length, args = new Array(_len7), _key7 = 0; _key7 < _len7; _key7++) {
-        args[_key7] = arguments[_key7];
+      for (var _len8 = arguments.length, args = new Array(_len8), _key8 = 0; _key8 < _len8; _key8++) {
+        args[_key8] = arguments[_key8];
       }
 
       newArgs = args;
@@ -278,13 +297,13 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
 
 
   Core.partial = function (callback) {
-    for (var _len8 = arguments.length, defaultArgs = new Array(_len8 > 1 ? _len8 - 1 : 0), _key8 = 1; _key8 < _len8; _key8++) {
-      defaultArgs[_key8 - 1] = arguments[_key8];
+    for (var _len9 = arguments.length, defaultArgs = new Array(_len9 > 1 ? _len9 - 1 : 0), _key9 = 1; _key9 < _len9; _key9++) {
+      defaultArgs[_key9 - 1] = arguments[_key9];
     }
 
     return function () {
-      for (var _len9 = arguments.length, args = new Array(_len9), _key9 = 0; _key9 < _len9; _key9++) {
-        args[_key9] = arguments[_key9];
+      for (var _len10 = arguments.length, args = new Array(_len10), _key10 = 0; _key10 < _len10; _key10++) {
+        args[_key10] = arguments[_key10];
       }
 
       return callback.apply(void 0, _toConsumableArray(defaultArgs.slice().map(function (v) {
@@ -301,18 +320,14 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
 
 
   Core.pipe = function () {
-    for (var _len10 = arguments.length, callbacks = new Array(_len10), _key10 = 0; _key10 < _len10; _key10++) {
-      callbacks[_key10] = arguments[_key10];
+    for (var _len11 = arguments.length, callbacks = new Array(_len11), _key11 = 0; _key11 < _len11; _key11++) {
+      callbacks[_key11] = arguments[_key11];
     }
 
-    return function () {
-      for (var _len11 = arguments.length, args = new Array(_len11), _key11 = 0; _key11 < _len11; _key11++) {
-        args[_key11] = arguments[_key11];
-      }
-
+    return function (arg) {
       return callbacks.reduce(function (acc, callback) {
-        return [callback.apply(void 0, _toConsumableArray(acc))];
-      }, args).shift();
+        return callback(acc);
+      }, arg);
     };
   };
   /**

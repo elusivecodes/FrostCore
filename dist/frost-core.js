@@ -164,6 +164,20 @@
     };
 
     /**
+     * Create a wrapped function that will execute each callback in reverse order,
+     * passing the result from each function to the previous.
+     * @param {...function} callbacks Callback functions to execute.
+     * @returns {function} The wrapped function.
+     */
+    Core.compose = (...callbacks) =>
+        arg =>
+            callbacks.reduceRight(
+                (acc, callback) =>
+                    callback(acc),
+                arg
+            );
+
+    /**
      * Create a wrapped version of a function, that will return new functions
      * until the number of total arguments passed reaches the arguments length
      * of the original function (at which point the function will execute).
@@ -262,12 +276,12 @@
      * @returns {function} The wrapped function.
      */
     Core.pipe = (...callbacks) =>
-        (...args) =>
+        arg =>
             callbacks.reduce(
                 (acc, callback) =>
-                    [callback(...acc)],
-                args
-            ).shift();
+                    callback(acc),
+                arg
+            );
 
     /**
      * Create a wrapped version of a function that executes at most once per wait period.

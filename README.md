@@ -116,6 +116,16 @@ Create a wrapped version of a function that executes at most once per animation 
 const animation = Core.animation(callback, leading);
 ```
 
+**Compose**
+
+Create a wrapped function that will execute each callback in reverse order, passing the result from each function to the previous.
+
+Any arguments supplied will be added to the chain of callbacks.
+
+```javascript
+const composed = Core.compose(...callbacks);
+```
+
 **Curry**
 
 Create a wrapped version of a function, that will return new functions until the number of total arguments passed reaches the arguments length of the original function (at which point the function will execute).
