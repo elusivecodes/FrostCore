@@ -38,14 +38,14 @@ Any additional arguments supplied will be used to test for the values of the fir
 const diff = Core.diff(array, ...arrays);
 ```
 
-**Intersects**
+**Intersect**
 
 Create a new array containing the unique values that exist in all of the passed arrays.
 
 All arguments supplied to this method will be tested for intersections.
 
 ```javascript
-const intersects = Core.intersects(...arrays);
+const intersect = Core.intersect(...arrays);
 ```
 
 **Merge**

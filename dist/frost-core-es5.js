@@ -55,7 +55,7 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
    */
 
 
-  Core.intersects = function () {
+  Core.intersect = function () {
     for (var _len2 = arguments.length, arrays = new Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
       arrays[_key2] = arguments[_key2];
     }

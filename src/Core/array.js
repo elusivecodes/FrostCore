@@ -20,7 +20,7 @@ Core.diff = (array, ...arrays) =>
  * @param {...array} arrays The input arrays.
  * @returns {array} The output array.
  */
-Core.intersects = (...arrays) =>
+Core.intersect = (...arrays) =>
     Core.unique(
         arrays
             .map(Core.unique)
