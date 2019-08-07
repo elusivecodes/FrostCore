@@ -11,7 +11,6 @@ It is a tiny (< 2kb gzipped) and modern library, adding various functionality to
 - [Functions](#functions)
 - [Math](#math)
 - [Objects](#objects)
-- [Parsing](#parsing)
 - [Strings](#strings)
 - [Testing](#testing)
 
