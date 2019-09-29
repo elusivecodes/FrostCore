@@ -66,6 +66,32 @@ Core.hasDot = (object, key) => {
 };
 
 /**
+ * Merge the values from one or more objects onto an object (recursively).
+ * @param {object} object The input object.
+ * @param {...object} objects The objects to merge.
+ * @returns {object} The output objects.
+ */
+Core.mergeDeep = (object, ...objects) =>
+    objects.reduce(
+        (acc, val) => {
+            for (const k in val) {
+                if (
+                    k in acc &&
+                    !Core.isArray(acc[k]) &&
+                    !Core.isArray(val[k]) &&
+                    Core.isObject(acc[k]) &&
+                    Core.isObject(val[k])
+                ) {
+                    Core.mergeDeep(acc[k], val[k]);
+                } else {
+                    acc[k] = val[k];
+                }
+            }
+        },
+        object
+    );
+
+/**
  * Retrieve values of a specified key from an array of objects using dot notation.
  * @param {object[]} objects The input objects.
  * @param {string} key The key to retrieve from the objects.

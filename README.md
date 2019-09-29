@@ -389,6 +389,18 @@ Returns *true* if a specified key exists in an object using dot notation.
 const hasKey = Core.hasDot(object, key);
 ```
 
+**Merge Deep**
+
+Merge the values from one or more objects onto an object (recursively).
+
+- `object` is the object you are merging to.
+
+Any additional arguments supplied will be merged onto the first object.
+
+```javascript
+Core.mergeDeep(object, ...objects);
+```
+
 **Pluck Dot**
 
 Retrieve values of a specified key from an array of objects using dot notation.

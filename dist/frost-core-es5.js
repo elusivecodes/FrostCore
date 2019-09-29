@@ -650,6 +650,29 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
     return true;
   };
   /**
+   * Merge the values from one or more objects onto an object (recursively).
+   * @param {object} object The input object.
+   * @param {...object} objects The objects to merge.
+   * @returns {object} The output objects.
+   */
+
+
+  Core.mergeDeep = function (object) {
+    for (var _len13 = arguments.length, objects = new Array(_len13 > 1 ? _len13 - 1 : 0), _key13 = 1; _key13 < _len13; _key13++) {
+      objects[_key13 - 1] = arguments[_key13];
+    }
+
+    return objects.reduce(function (acc, val) {
+      for (var k in val) {
+        if (k in acc && !Core.isArray(acc[k]) && !Core.isArray(val[k]) && Core.isObject(acc[k]) && Core.isObject(val[k])) {
+          Core.mergeDeep(acc[k], val[k]);
+        } else {
+          acc[k] = val[k];
+        }
+      }
+    }, object);
+  };
+  /**
    * Retrieve values of a specified key from an array of objects using dot notation.
    * @param {object[]} objects The input objects.
    * @param {string} key The key to retrieve from the objects.
