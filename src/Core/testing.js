@@ -17,10 +17,10 @@ Core.isArray = Array.isArray;
 Core.isArrayLike = value =>
     Core.isArray(value) ||
     (
+        Core.isObject(value) &&
         !Core.isFunction(value) &&
         !Core.isWindow(value) &&
         !Core.isElement(value) &&
-        Core.isObject(value) &&
         (
             (
                 Symbol.iterator in value &&
@@ -50,7 +50,7 @@ Core.isBoolean = value => value === !!value;
  * @returns {Boolean} TRUE if the value is a Document, otherwise FALSE.
  */
 Core.isDocument = value =>
-    Core.isObject(value) &&
+    !!value &&
     value.nodeType === Node.DOCUMENT_NODE;
 
 /**
@@ -129,7 +129,9 @@ Core.isPlainObject = value =>
  * @param {*} value The value to test.
  * @returns {Boolean} TRUE if the value is an object, otherwise FALSE.
  */
-Core.isObject = value => value === Object(value);
+Core.isObject = value =>
+    !!value &&
+    value === Object(value);
 
 /**
  * Returns true if the value is a ShadowRoot.

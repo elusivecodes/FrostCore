@@ -176,7 +176,7 @@ Core.map = (value, fromMin, fromMax, toMin, toMax) =>
  * @returns {number} A random number.
  */
 Core.random = (a = 1, b = null) =>
-    b === null ?
+    Core.isNull(b) ?
         Math.random() * a :
         Core.map(
             Math.random(),

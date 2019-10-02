@@ -262,7 +262,7 @@
                 ...(defaultArgs
                     .slice()
                     .map(v =>
-                        v === undefined ?
+                        Core.isUndefined(v) ?
                             args.shift() :
                             v
                     ).concat(args)
@@ -509,7 +509,7 @@
      * @returns {number} A random number.
      */
     Core.random = (a = 1, b = null) =>
-        b === null ?
+        Core.isNull(b) ?
             Math.random() * a :
             Core.map(
                 Math.random(),
@@ -614,8 +614,6 @@
                 for (const k in val) {
                     if (
                         k in acc &&
-                        !Core.isArray(acc[k]) &&
-                        !Core.isArray(val[k]) &&
                         Core.isObject(acc[k]) &&
                         Core.isObject(val[k])
                     ) {
@@ -791,10 +789,10 @@
     Core.isArrayLike = value =>
         Core.isArray(value) ||
         (
+            Core.isObject(value) &&
             !Core.isFunction(value) &&
             !Core.isWindow(value) &&
             !Core.isElement(value) &&
-            Core.isObject(value) &&
             (
                 (
                     Symbol.iterator in value &&
@@ -824,7 +822,7 @@
      * @returns {Boolean} TRUE if the value is a Document, otherwise FALSE.
      */
     Core.isDocument = value =>
-        Core.isObject(value) &&
+        !!value &&
         value.nodeType === Node.DOCUMENT_NODE;
 
     /**
@@ -903,7 +901,9 @@
      * @param {*} value The value to test.
      * @returns {Boolean} TRUE if the value is an object, otherwise FALSE.
      */
-    Core.isObject = value => value === Object(value);
+    Core.isObject = value =>
+        !!value &&
+        value === Object(value);
 
     /**
      * Returns true if the value is a ShadowRoot.

@@ -77,8 +77,6 @@ Core.mergeDeep = (object, ...objects) =>
             for (const k in val) {
                 if (
                     k in acc &&
-                    !Core.isArray(acc[k]) &&
-                    !Core.isArray(val[k]) &&
                     Core.isObject(acc[k]) &&
                     Core.isObject(val[k])
                 ) {

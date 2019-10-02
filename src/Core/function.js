@@ -133,7 +133,7 @@ Core.partial = (callback, ...defaultArgs) =>
             ...(defaultArgs
                 .slice()
                 .map(v =>
-                    v === undefined ?
+                    Core.isUndefined(v) ?
                         args.shift() :
                         v
                 ).concat(args)

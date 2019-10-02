@@ -307,7 +307,7 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
       }
 
       return callback.apply(void 0, _toConsumableArray(defaultArgs.slice().map(function (v) {
-        return v === undefined ? args.shift() : v;
+        return Core.isUndefined(v) ? args.shift() : v;
       }).concat(args)));
     };
   };
@@ -525,7 +525,7 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
   Core.random = function () {
     var a = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 1;
     var b = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
-    return b === null ? Math.random() * a : Core.map(Math.random(), 0, 1, a, b);
+    return Core.isNull(b) ? Math.random() * a : Core.map(Math.random(), 0, 1, a, b);
   };
   /**
    * Constrain a number to a specified step-size.
@@ -664,7 +664,7 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
 
     return objects.reduce(function (acc, val) {
       for (var k in val) {
-        if (k in acc && !Core.isArray(acc[k]) && !Core.isArray(val[k]) && Core.isObject(acc[k]) && Core.isObject(val[k])) {
+        if (k in acc && Core.isObject(acc[k]) && Core.isObject(val[k])) {
           Core.mergeDeep(acc[k], val[k]);
         } else {
           acc[k] = val[k];
@@ -847,7 +847,7 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
    */
 
   Core.isArrayLike = function (value) {
-    return Core.isArray(value) || !Core.isFunction(value) && !Core.isWindow(value) && !Core.isElement(value) && Core.isObject(value) && (Symbol.iterator in value && Core.isFunction(value[Symbol.iterator]) || 'length' in value && Core.isNumeric(value.length) && (!value.length || value.length - 1 in value));
+    return Core.isArray(value) || Core.isObject(value) && !Core.isFunction(value) && !Core.isWindow(value) && !Core.isElement(value) && (Symbol.iterator in value && Core.isFunction(value[Symbol.iterator]) || 'length' in value && Core.isNumeric(value.length) && (!value.length || value.length - 1 in value));
   };
   /**
    * Returns true if the value is a Boolean.
@@ -867,7 +867,7 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
 
 
   Core.isDocument = function (value) {
-    return Core.isObject(value) && value.nodeType === Node.DOCUMENT_NODE;
+    return !!value && value.nodeType === Node.DOCUMENT_NODE;
   };
   /**
    * Returns true if the value is a HTMLElement.
@@ -954,7 +954,7 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
 
 
   Core.isObject = function (value) {
-    return value === Object(value);
+    return !!value && value === Object(value);
   };
   /**
    * Returns true if the value is a ShadowRoot.
