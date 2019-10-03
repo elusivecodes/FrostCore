@@ -8,7 +8,7 @@
  * @param {...object} objects The objects to merge.
  * @returns {object} The output objects.
  */
-Core.extend = (object, ...objects) => {
+Core.extend = (object, ...objects) =>
     objects.reduce(
         (acc, val) => {
             for (const k in val) {
@@ -22,11 +22,10 @@ Core.extend = (object, ...objects) => {
                     acc[k] = val[k];
                 }
             }
+            return acc;
         },
         object
     );
-    return object;
-};
 
 /**
  * Remove a specified key from an object using dot notation.

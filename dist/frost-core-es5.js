@@ -561,7 +561,7 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
       objects[_key13 - 1] = arguments[_key13];
     }
 
-    objects.reduce(function (acc, val) {
+    return objects.reduce(function (acc, val) {
       for (var k in val) {
         if (k in acc && Core.isObject(acc[k]) && Core.isObject(val[k])) {
           Core.extend(acc[k], val[k]);
@@ -569,8 +569,9 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
           acc[k] = val[k];
         }
       }
+
+      return acc;
     }, object);
-    return object;
   };
   /**
    * Remove a specified key from an object using dot notation.
