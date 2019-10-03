@@ -98,7 +98,7 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
 
 
   Core.randomValue = function (array) {
-    return array.length ? array[Core.random(array.length) | 0] : null;
+    return array.length ? array[Core.randomInt(array.length)] : null;
   };
   /**
    * Return an array containing a range of values.
@@ -134,15 +134,7 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
 
 
   Core.wrap = function (value) {
-    if (Core.isArray(value)) {
-      return value;
-    }
-
-    if (Core.isArrayLike(value)) {
-      return Core.merge([], value);
-    }
-
-    return [value];
+    return Core.isUndefined(value) ? [] : Core.isArray(value) ? value : Core.isArrayLike(value) ? Core.merge([], value) : [value];
   };
   /**
    * Function methods
@@ -528,6 +520,19 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
     return Core.isNull(b) ? Math.random() * a : Core.map(Math.random(), 0, 1, a, b);
   };
   /**
+   * Return a random number.
+   * @param {number} [a=1] The minimum value (inclusive).
+   * @param {number} [b] The maximum value (exclusive).
+   * @returns {number} A random number.
+   */
+
+
+  Core.randomInt = function () {
+    var a = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 1;
+    var b = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
+    return Core.random(a, b) | 0;
+  };
+  /**
    * Constrain a number to a specified step-size.
    * @param {number} value The value to constrain.
    * @param {number} step The minimum step-size.
@@ -543,6 +548,30 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
    * Object methods
    */
 
+  /**
+   * Merge the values from one or more objects onto an object (recursively).
+   * @param {object} object The input object.
+   * @param {...object} objects The objects to merge.
+   * @returns {object} The output objects.
+   */
+
+
+  Core.extend = function (object) {
+    for (var _len13 = arguments.length, objects = new Array(_len13 > 1 ? _len13 - 1 : 0), _key13 = 1; _key13 < _len13; _key13++) {
+      objects[_key13 - 1] = arguments[_key13];
+    }
+
+    objects.reduce(function (acc, val) {
+      for (var k in val) {
+        if (k in acc && Core.isObject(acc[k]) && Core.isObject(val[k])) {
+          Core.extend(acc[k], val[k]);
+        } else {
+          acc[k] = val[k];
+        }
+      }
+    }, object);
+    return object;
+  };
   /**
    * Remove a specified key from an object using dot notation.
    * @param {object} object The input object.
@@ -648,29 +677,6 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
     }
 
     return true;
-  };
-  /**
-   * Merge the values from one or more objects onto an object (recursively).
-   * @param {object} object The input object.
-   * @param {...object} objects The objects to merge.
-   * @returns {object} The output objects.
-   */
-
-
-  Core.mergeDeep = function (object) {
-    for (var _len13 = arguments.length, objects = new Array(_len13 > 1 ? _len13 - 1 : 0), _key13 = 1; _key13 < _len13; _key13++) {
-      objects[_key13 - 1] = arguments[_key13];
-    }
-
-    return objects.reduce(function (acc, val) {
-      for (var k in val) {
-        if (k in acc && Core.isObject(acc[k]) && Core.isObject(val[k])) {
-          Core.mergeDeep(acc[k], val[k]);
-        } else {
-          acc[k] = val[k];
-        }
-      }
-    }, object);
   };
   /**
    * Retrieve values of a specified key from an array of objects using dot notation.

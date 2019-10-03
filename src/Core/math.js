@@ -187,6 +187,15 @@ Core.random = (a = 1, b = null) =>
         );
 
 /**
+ * Return a random number.
+ * @param {number} [a=1] The minimum value (inclusive).
+ * @param {number} [b] The maximum value (exclusive).
+ * @returns {number} A random number.
+ */
+Core.randomInt = (a = 1, b = null) =>
+    Core.random(a, b) | 0;
+
+/**
  * Constrain a number to a specified step-size.
  * @param {number} value The value to constrain.
  * @param {number} step The minimum step-size.

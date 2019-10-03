@@ -79,7 +79,7 @@
      */
     Core.randomValue = array =>
         array.length ?
-            array[Core.random(array.length) | 0] :
+            array[Core.randomInt(array.length)] :
             null;
 
     /**
@@ -115,17 +115,18 @@
      * @param {*} value The input value.
      * @returns {array} The wrapped array.
      */
-    Core.wrap = value => {
-        if (Core.isArray(value)) {
-            return value;
-        }
-
-        if (Core.isArrayLike(value)) {
-            return Core.merge([], value);
-        }
-
-        return [value];
-    };
+    Core.wrap = value =>
+        Core.isUndefined(value) ?
+            [] :
+            (
+                Core.isArray(value) ?
+                    value :
+                    (
+                        Core.isArrayLike(value) ?
+                            Core.merge([], value) :
+                            [value]
+                    )
+            );
 
     /**
      * Function methods
@@ -520,6 +521,15 @@
             );
 
     /**
+     * Return a random number.
+     * @param {number} [a=1] The minimum value (inclusive).
+     * @param {number} [b] The maximum value (exclusive).
+     * @returns {number} A random number.
+     */
+    Core.randomInt = (a = 1, b = null) =>
+        Core.random(a, b) | 0;
+
+    /**
      * Constrain a number to a specified step-size.
      * @param {number} value The value to constrain.
      * @param {number} step The minimum step-size.
@@ -538,6 +548,32 @@
     /**
      * Object methods
      */
+
+    /**
+     * Merge the values from one or more objects onto an object (recursively).
+     * @param {object} object The input object.
+     * @param {...object} objects The objects to merge.
+     * @returns {object} The output objects.
+     */
+    Core.extend = (object, ...objects) => {
+        objects.reduce(
+            (acc, val) => {
+                for (const k in val) {
+                    if (
+                        k in acc &&
+                        Core.isObject(acc[k]) &&
+                        Core.isObject(val[k])
+                    ) {
+                        Core.extend(acc[k], val[k]);
+                    } else {
+                        acc[k] = val[k];
+                    }
+                }
+            },
+            object
+        );
+        return object;
+    };
 
     /**
      * Remove a specified key from an object using dot notation.
@@ -601,30 +637,6 @@
 
         return true;
     };
-
-    /**
-     * Merge the values from one or more objects onto an object (recursively).
-     * @param {object} object The input object.
-     * @param {...object} objects The objects to merge.
-     * @returns {object} The output objects.
-     */
-    Core.mergeDeep = (object, ...objects) =>
-        objects.reduce(
-            (acc, val) => {
-                for (const k in val) {
-                    if (
-                        k in acc &&
-                        Core.isObject(acc[k]) &&
-                        Core.isObject(val[k])
-                    ) {
-                        Core.mergeDeep(acc[k], val[k]);
-                    } else {
-                        acc[k] = val[k];
-                    }
-                }
-            },
-            object
-        );
 
     /**
      * Retrieve values of a specified key from an array of objects using dot notation.

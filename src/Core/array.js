@@ -61,7 +61,7 @@ Core.merge = (array = [], ...arrays) => {
  */
 Core.randomValue = array =>
     array.length ?
-        array[Core.random(array.length) | 0] :
+        array[Core.randomInt(array.length)] :
         null;
 
 /**
@@ -97,14 +97,15 @@ Core.unique = array => Array.from(new Set(array));
  * @param {*} value The input value.
  * @returns {array} The wrapped array.
  */
-Core.wrap = value => {
-    if (Core.isArray(value)) {
-        return value;
-    }
-
-    if (Core.isArrayLike(value)) {
-        return Core.merge([], value);
-    }
-
-    return [value];
-};
+Core.wrap = value =>
+    Core.isUndefined(value) ?
+        [] :
+        (
+            Core.isArray(value) ?
+                value :
+                (
+                    Core.isArrayLike(value) ?
+                        Core.merge([], value) :
+                        [value]
+                )
+        );

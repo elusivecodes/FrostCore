@@ -3,6 +3,32 @@
  */
 
 /**
+ * Merge the values from one or more objects onto an object (recursively).
+ * @param {object} object The input object.
+ * @param {...object} objects The objects to merge.
+ * @returns {object} The output objects.
+ */
+Core.extend = (object, ...objects) => {
+    objects.reduce(
+        (acc, val) => {
+            for (const k in val) {
+                if (
+                    k in acc &&
+                    Core.isObject(acc[k]) &&
+                    Core.isObject(val[k])
+                ) {
+                    Core.extend(acc[k], val[k]);
+                } else {
+                    acc[k] = val[k];
+                }
+            }
+        },
+        object
+    );
+    return object;
+};
+
+/**
  * Remove a specified key from an object using dot notation.
  * @param {object} object The input object.
  * @param {string} key The key to remove from the object.
@@ -64,30 +90,6 @@ Core.hasDot = (object, key) => {
 
     return true;
 };
-
-/**
- * Merge the values from one or more objects onto an object (recursively).
- * @param {object} object The input object.
- * @param {...object} objects The objects to merge.
- * @returns {object} The output objects.
- */
-Core.mergeDeep = (object, ...objects) =>
-    objects.reduce(
-        (acc, val) => {
-            for (const k in val) {
-                if (
-                    k in acc &&
-                    Core.isObject(acc[k]) &&
-                    Core.isObject(val[k])
-                ) {
-                    Core.mergeDeep(acc[k], val[k]);
-                } else {
-                    acc[k] = val[k];
-                }
-            }
-        },
-        object
-    );
 
 /**
  * Retrieve values of a specified key from an array of objects using dot notation.
