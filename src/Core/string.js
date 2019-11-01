@@ -11,9 +11,10 @@ Core.camelCase = string =>
     Core._splitString(string)
         .map(
             (word, index) =>
-                index ?
-                    word.charAt(0).toUpperCase() + word.substring(1) :
-                    word
+                (index ?
+                    word.charAt(0).toUpperCase() :
+                    word.charAt(0).toLowerCase()
+                ) + word.substring(1)
         )
         .join('');
 
@@ -23,7 +24,10 @@ Core.camelCase = string =>
  * @returns {string} The escaped string.
  */
 Core.escape = string =>
-    new Option(string).innerHTML;
+    string.replace(
+        Core._escapeRegExp,
+        match => Core._escapeChars[match]
+    );
 
 /**
  * Escape RegExp special characters in a string.
@@ -64,7 +68,9 @@ Core.randomString = (length = 16, chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJK
  * @returns {string} The snake-cased string.
  */
 Core.snakeCase = string =>
-    Core._splitString(string).join('-');
+    Core._splitString(string)
+        .join('-')
+        .toLowerCase();
 
 /**
  * Convert a string to underscored.
@@ -72,7 +78,9 @@ Core.snakeCase = string =>
  * @returns {string} The underscored string.
  */
 Core.underscore = string =>
-    Core._splitString(string).join('_');
+    Core._splitString(string)
+        .join('_')
+        .toLowerCase();
 
 /**
  * Convert HTML entities in a string to their corresponding characters.
@@ -80,10 +88,10 @@ Core.underscore = string =>
  * @returns {string} The unescaped string.
  */
 Core.unescape = string =>
-    new DOMParser()
-        .parseFromString(string, 'text/html')
-        .documentElement
-        .textContent;
+    string.replace(
+        Core._unescapeRegExp,
+        (_, code) => Core._unescapeChars[code]
+    );
 
 /**
  * Split a string into individual words.
@@ -91,6 +99,15 @@ Core.unescape = string =>
  * @returns {string[]} The split parts of the string.
  */
 Core._splitString = string =>
-    `${string}`.split(/[^a-zA-Z0-9']|(?=[A-Z])/)
-        .map(word => word.replace(/[^\w]/, '').toLowerCase())
-        .filter(word => word);
+    `${string}`
+        .split(/[^a-zA-Z0-9']|(?=[A-Z])/)
+        .reduce(
+            (acc, word) => {
+                word => word.replace(/[^\w]/, '').toLowerCase();
+                if (word) {
+                    acc.push(word)
+                }
+                return acc;
+            },
+            []
+        );

@@ -26,12 +26,13 @@
      * @param {...array} arrays The arrays to compare against.
      * @returns {array} The output array.
      */
-    Core.diff = (array, ...arrays) =>
-        array.filter(
+    Core.diff = (array, ...arrays) => {
+        arrays = arrays.map(Core.unique);
+        return array.filter(
             value => !arrays
-                .map(Core.unique)
                 .some(other => other.includes(value))
-        );
+        )
+    };
 
     /**
      * Create a new array containing the unique values that exist in all of the passed arrays.
@@ -41,19 +42,21 @@
     Core.intersect = (...arrays) =>
         Core.unique(
             arrays
-                .map(Core.unique)
-                .reduce((acc, array, index) =>
-                    Core.merge(
-                        acc,
-                        array.filter(
-                            value =>
-                                arrays.every(
-                                    (other, otherIndex) =>
-                                        index == otherIndex ||
-                                        other.includes(value)
-                                )
+                .reduce(
+                    (acc, array, index) => {
+                        array = Core.unique(array);
+                        return Core.merge(
+                            acc,
+                            array.filter(
+                                value =>
+                                    arrays.every(
+                                        (other, otherIndex) =>
+                                            index == otherIndex ||
+                                            other.includes(value)
+                                    )
+                            )
                         )
-                    ),
+                    },
                     []
                 )
         );
@@ -64,13 +67,14 @@
      * @param {...array|...object} arrays The arrays or array-like objects to merge.
      * @returns {array} The output array.
      */
-    Core.merge = (array = [], ...arrays) => {
-        for (const arr of arrays) {
-            Array.prototype.push.apply(array, arr);
-        }
-
-        return array;
-    };
+    Core.merge = (array = [], ...arrays) =>
+        arrays.reduce(
+            (acc, other) => {
+                Array.prototype.push.apply(acc, other);
+                return array;
+            },
+            array
+        );
 
     /**
      * Return a random value from an array.
@@ -92,8 +96,12 @@
     Core.range = (start, end, step = 1) => {
         const sign = Math.sign(end - start);
         return new Array(
-            ((Math.abs(end - start) / step) + 1) | 0
-        ).fill()
+            (
+                (Math.abs(end - start) / step)
+                + 1
+            ) | 0
+        )
+            .fill()
             .map(
                 (_, i) =>
                     start + Core.toStep(
@@ -108,7 +116,10 @@
      * @param {array} array The input array.
      * @returns {array} The filtered array.
      */
-    Core.unique = array => Array.from(new Set(array));
+    Core.unique = array =>
+        Array.from(
+            new Set(array)
+        );
 
     /**
      * Create an array from any value.
@@ -325,7 +336,7 @@
      * @param {number} amount The amount of times to execute the callback.
      */
     Core.times = (callback, amount) => {
-        for (let i = 0; i < amount; i++) {
+        while (amount--) {
             if (callback() === false) {
                 break;
             }
@@ -357,7 +368,8 @@
      * @param {number} value The value to clamp.
      * @returns {number} The clamped value.
      */
-    Core.clampPercent = value => Core.clamp(value, 0, 100);
+    Core.clampPercent = value =>
+        Core.clamp(value, 0, 100);
 
     /**
      * Get the distance between two vectors.
@@ -580,18 +592,16 @@
      * @param {string} key The key to remove from the object.
      */
     Core.forgetDot = (object, key) => {
-        let pointer = object;
-
         const keys = key.split('.');
         while (key = keys.shift()) {
-            if (!Core.isObject(pointer) || !(key in pointer)) {
+            if (!Core.isObject(object) || !(key in object)) {
                 break;
             }
 
             if (keys.length) {
-                pointer = pointer[key];
+                object = object[key];
             } else {
-                delete pointer[key];
+                delete object[key];
             }
         }
     };
@@ -604,17 +614,15 @@
      * @returns {*} The value retrieved from the object.
      */
     Core.getDot = (object, key, defaultValue) => {
-        let pointer = object;
-
         for (key of key.split('.')) {
-            if (!Core.isObject(pointer) || !(key in pointer)) {
+            if (!Core.isObject(object) || !(key in object)) {
                 return defaultValue;
             }
 
-            pointer = pointer[key];
+            object = object[key];
         }
 
-        return pointer;
+        return object;
     };
 
     /**
@@ -624,14 +632,12 @@
      * @returns {Boolean} TRUE if the key exists, otherwise FALSE.
      */
     Core.hasDot = (object, key) => {
-        let pointer = object;
-
         for (key of key.split('.')) {
-            if (!Core.isObject(pointer) || !(key in pointer)) {
+            if (!Core.isObject(object) || !(key in object)) {
                 return false;
             }
 
-            pointer = pointer[key];
+            object = object[key];
         }
 
         return true;
@@ -644,8 +650,11 @@
      * @param {*} [defaultValue] The default value if key does not exist.
      * @returns {array} An array of values retrieved from the objects.
      */
-    Core.pluckDot = (objects, key, defaultValue) => objects
-        .map(pointer => Core.getDot(pointer, key, defaultValue));
+    Core.pluckDot = (objects, key, defaultValue) =>
+        objects
+            .map(pointer =>
+                Core.getDot(pointer, key, defaultValue)
+            );
 
     /**
      * Set a specified value of a key for an object using dot notation.
@@ -655,15 +664,13 @@
      * @param {Boolean} [overwrite=true] Whether to overwrite, if the key already exists.
      */
     Core.setDot = (object, key, value, overwrite = true) => {
-        let pointer = object,
-            current;
-
+        let current;
         const keys = key.split('.');
         while (current = keys.shift()) {
             if (current === '*') {
-                for (const k in pointer) {
+                for (const k in object) {
                     Core.setDot(
-                        pointer,
+                        object,
                         [k].concat(keys).join('.'),
                         value,
                         overwrite
@@ -673,13 +680,13 @@
             }
 
             if (keys.length) {
-                if (!Core.isObject(pointer[current]) || !(current in pointer)) {
-                    pointer[current] = {};
+                if (!Core.isObject(object[current]) || !(current in object)) {
+                    object[current] = {};
                 }
 
-                pointer = pointer[current];
-            } else if (overwrite || !(current in pointer)) {
-                pointer[current] = value;
+                object = object[current];
+            } else if (overwrite || !(current in object)) {
+                object[current] = value;
             }
         }
     };
@@ -697,9 +704,10 @@
         Core._splitString(string)
             .map(
                 (word, index) =>
-                    index ?
-                        word.charAt(0).toUpperCase() + word.substring(1) :
-                        word
+                    (index ?
+                        word.charAt(0).toUpperCase() :
+                        word.charAt(0).toLowerCase()
+                    ) + word.substring(1)
             )
             .join('');
 
@@ -709,7 +717,10 @@
      * @returns {string} The escaped string.
      */
     Core.escape = string =>
-        new Option(string).innerHTML;
+        string.replace(
+            Core._escapeRegExp,
+            match => Core._escapeChars[match]
+        );
 
     /**
      * Escape RegExp special characters in a string.
@@ -750,7 +761,9 @@
      * @returns {string} The snake-cased string.
      */
     Core.snakeCase = string =>
-        Core._splitString(string).join('-');
+        Core._splitString(string)
+            .join('-')
+            .toLowerCase();
 
     /**
      * Convert a string to underscored.
@@ -758,7 +771,9 @@
      * @returns {string} The underscored string.
      */
     Core.underscore = string =>
-        Core._splitString(string).join('_');
+        Core._splitString(string)
+            .join('_')
+            .toLowerCase();
 
     /**
      * Convert HTML entities in a string to their corresponding characters.
@@ -766,10 +781,10 @@
      * @returns {string} The unescaped string.
      */
     Core.unescape = string =>
-        new DOMParser()
-            .parseFromString(string, 'text/html')
-            .documentElement
-            .textContent;
+        string.replace(
+            Core._unescapeRegExp,
+            (_, code) => Core._unescapeChars[code]
+        );
 
     /**
      * Split a string into individual words.
@@ -777,9 +792,18 @@
      * @returns {string[]} The split parts of the string.
      */
     Core._splitString = string =>
-        `${string}`.split(/[^a-zA-Z0-9']|(?=[A-Z])/)
-            .map(word => word.replace(/[^\w]/, '').toLowerCase())
-            .filter(word => word);
+        `${string}`
+            .split(/[^a-zA-Z0-9']|(?=[A-Z])/)
+            .reduce(
+                (acc, word) => {
+                    word => word.replace(/[^\w]/, '').toLowerCase();
+                    if (word) {
+                        acc.push(word)
+                    }
+                    return acc;
+                },
+                []
+            );
 
     /**
      * Testing methods
@@ -834,7 +858,7 @@
      */
     Core.isDocument = value =>
         !!value &&
-        value.nodeType === Node.DOCUMENT_NODE;
+        value.nodeType === Core.DOCUMENT_NODE;
 
     /**
      * Returns true if the value is a HTMLElement.
@@ -843,7 +867,7 @@
      */
     Core.isElement = value =>
         !!value &&
-        value.nodeType === Node.ELEMENT_NODE;
+        value.nodeType === Core.ELEMENT_NODE;
 
     /**
      * Returns true if the value is a DocumentFragment.
@@ -852,7 +876,7 @@
      */
     Core.isFragment = value =>
         !!value &&
-        value.nodeType === Node.DOCUMENT_FRAGMENT_NODE &&
+        value.nodeType === Core.DOCUMENT_FRAGMENT_NODE &&
         !value.host;
 
     /**
@@ -877,9 +901,9 @@
     Core.isNode = value =>
         !!value &&
         (
-            value.nodeType === Node.ELEMENT_NODE ||
-            value.nodeType === Node.TEXT_NODE ||
-            value.nodeType === Node.COMMENT_NODE
+            value.nodeType === Core.ELEMENT_NODE ||
+            value.nodeType === Core.TEXT_NODE ||
+            value.nodeType === Core.COMMENT_NODE
         );
 
     /**
@@ -923,7 +947,7 @@
      */
     Core.isShadow = value =>
         !!value &&
-        value.nodeType === Node.DOCUMENT_FRAGMENT_NODE &&
+        value.nodeType === Core.DOCUMENT_FRAGMENT_NODE &&
         !!value.host;
 
     /**
@@ -949,6 +973,38 @@
         !!value &&
         !!value.document &&
         value.document.defaultView === value;
+
+    /**
+     * Core Properties
+     */
+
+    // Node type constants
+    Core.ELEMENT_NODE = 1;
+    Core.TEXT_NOTE = 3;
+    Core.COMMENT_NODE = 8;
+    Core.DOCUMENT_NODE = 9;
+    Core.DOCUMENT_FRAGMENT_NODE = 11;
+
+    // HTML escape regex
+    Core._escapeRegExp = /[&<>"']/g;
+    Core._unescapeRegExp = /\&(amp|lt|gt|quos|apos);/g;
+
+    // HTML escape characters
+    Core._escapeChars = {
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        '"': '&quot;',
+        '\'': '&apos;'
+    };
+
+    Core._unescapeChars = {
+        'amp': '&',
+        'lt': '<',
+        'gt': '>',
+        'quot': '"',
+        'apos': '\''
+    };
 
     return Core;
 

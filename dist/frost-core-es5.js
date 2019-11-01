@@ -42,8 +42,9 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
       arrays[_key - 1] = arguments[_key];
     }
 
+    arrays = arrays.map(Core.unique);
     return array.filter(function (value) {
-      return !arrays.map(Core.unique).some(function (other) {
+      return !arrays.some(function (other) {
         return other.includes(value);
       });
     });
@@ -60,7 +61,8 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
       arrays[_key2] = arguments[_key2];
     }
 
-    return Core.unique(arrays.map(Core.unique).reduce(function (acc, array, index) {
+    return Core.unique(arrays.reduce(function (acc, array, index) {
+      array = Core.unique(array);
       return Core.merge(acc, array.filter(function (value) {
         return arrays.every(function (other, otherIndex) {
           return index == otherIndex || other.includes(value);
@@ -83,12 +85,10 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
       arrays[_key3 - 1] = arguments[_key3];
     }
 
-    for (var _i = 0, _arrays = arrays; _i < _arrays.length; _i++) {
-      var arr = _arrays[_i];
-      Array.prototype.push.apply(array, arr);
-    }
-
-    return array;
+    return arrays.reduce(function (acc, other) {
+      Array.prototype.push.apply(acc, other);
+      return array;
+    }, array);
   };
   /**
    * Return a random value from an array.
@@ -368,7 +368,7 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
 
 
   Core.times = function (callback, amount) {
-    for (var i = 0; i < amount; i++) {
+    while (amount--) {
       if (callback() === false) {
         break;
       }
@@ -581,18 +581,17 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
 
 
   Core.forgetDot = function (object, key) {
-    var pointer = object;
     var keys = key.split('.');
 
     while (key = keys.shift()) {
-      if (!Core.isObject(pointer) || !(key in pointer)) {
+      if (!Core.isObject(object) || !(key in object)) {
         break;
       }
 
       if (keys.length) {
-        pointer = pointer[key];
+        object = object[key];
       } else {
-        delete pointer[key];
+        delete object[key];
       }
     }
   };
@@ -606,7 +605,6 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
 
 
   Core.getDot = function (object, key, defaultValue) {
-    var pointer = object;
     var _iteratorNormalCompletion = true;
     var _didIteratorError = false;
     var _iteratorError = undefined;
@@ -615,11 +613,11 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
       for (var _iterator = key.split('.')[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
         key = _step.value;
 
-        if (!Core.isObject(pointer) || !(key in pointer)) {
+        if (!Core.isObject(object) || !(key in object)) {
           return defaultValue;
         }
 
-        pointer = pointer[key];
+        object = object[key];
       }
     } catch (err) {
       _didIteratorError = true;
@@ -636,7 +634,7 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
       }
     }
 
-    return pointer;
+    return object;
   };
   /**
    * Returns true if a specified key exists in an object using dot notation.
@@ -647,7 +645,6 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
 
 
   Core.hasDot = function (object, key) {
-    var pointer = object;
     var _iteratorNormalCompletion2 = true;
     var _didIteratorError2 = false;
     var _iteratorError2 = undefined;
@@ -656,11 +653,11 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
       for (var _iterator2 = key.split('.')[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
         key = _step2.value;
 
-        if (!Core.isObject(pointer) || !(key in pointer)) {
+        if (!Core.isObject(object) || !(key in object)) {
           return false;
         }
 
-        pointer = pointer[key];
+        object = object[key];
       }
     } catch (err) {
       _didIteratorError2 = true;
@@ -704,27 +701,26 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
 
   Core.setDot = function (object, key, value) {
     var overwrite = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : true;
-    var pointer = object,
-        current;
+    var current;
     var keys = key.split('.');
 
     while (current = keys.shift()) {
       if (current === '*') {
-        for (var k in pointer) {
-          Core.setDot(pointer, [k].concat(keys).join('.'), value, overwrite);
+        for (var k in object) {
+          Core.setDot(object, [k].concat(keys).join('.'), value, overwrite);
         }
 
         return;
       }
 
       if (keys.length) {
-        if (!Core.isObject(pointer[current]) || !(current in pointer)) {
-          pointer[current] = {};
+        if (!Core.isObject(object[current]) || !(current in object)) {
+          object[current] = {};
         }
 
-        pointer = pointer[current];
-      } else if (overwrite || !(current in pointer)) {
-        pointer[current] = value;
+        object = object[current];
+      } else if (overwrite || !(current in object)) {
+        object[current] = value;
       }
     }
   };
@@ -741,7 +737,7 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
 
   Core.camelCase = function (string) {
     return Core._splitString(string).map(function (word, index) {
-      return index ? word.charAt(0).toUpperCase() + word.substring(1) : word;
+      return (index ? word.charAt(0).toUpperCase() : word.charAt(0).toLowerCase()) + word.substring(1);
     }).join('');
   };
   /**
@@ -752,7 +748,9 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
 
 
   Core.escape = function (string) {
-    return new Option(string).innerHTML;
+    return string.replace(Core._escapeRegExp, function (match) {
+      return Core._escapeChars[match];
+    });
   };
   /**
    * Escape RegExp special characters in a string.
@@ -799,7 +797,7 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
 
 
   Core.snakeCase = function (string) {
-    return Core._splitString(string).join('-');
+    return Core._splitString(string).join('-').toLowerCase();
   };
   /**
    * Convert a string to underscored.
@@ -809,7 +807,7 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
 
 
   Core.underscore = function (string) {
-    return Core._splitString(string).join('_');
+    return Core._splitString(string).join('_').toLowerCase();
   };
   /**
    * Convert HTML entities in a string to their corresponding characters.
@@ -819,7 +817,9 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
 
 
   Core.unescape = function (string) {
-    return new DOMParser().parseFromString(string, 'text/html').documentElement.textContent;
+    return string.replace(Core._unescapeRegExp, function (_, code) {
+      return Core._unescapeChars[code];
+    });
   };
   /**
    * Split a string into individual words.
@@ -829,11 +829,17 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
 
 
   Core._splitString = function (string) {
-    return "".concat(string).split(/[^a-zA-Z0-9']|(?=[A-Z])/).map(function (word) {
-      return word.replace(/[^\w]/, '').toLowerCase();
-    }).filter(function (word) {
-      return word;
-    });
+    return "".concat(string).split(/[^a-zA-Z0-9']|(?=[A-Z])/).reduce(function (acc, word) {
+      (function (word) {
+        return word.replace(/[^\w]/, '').toLowerCase();
+      });
+
+      if (word) {
+        acc.push(word);
+      }
+
+      return acc;
+    }, []);
   };
   /**
    * Testing methods
@@ -874,7 +880,7 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
 
 
   Core.isDocument = function (value) {
-    return !!value && value.nodeType === Node.DOCUMENT_NODE;
+    return !!value && value.nodeType === Core.DOCUMENT_NODE;
   };
   /**
    * Returns true if the value is a HTMLElement.
@@ -884,7 +890,7 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
 
 
   Core.isElement = function (value) {
-    return !!value && value.nodeType === Node.ELEMENT_NODE;
+    return !!value && value.nodeType === Core.ELEMENT_NODE;
   };
   /**
    * Returns true if the value is a DocumentFragment.
@@ -894,7 +900,7 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
 
 
   Core.isFragment = function (value) {
-    return !!value && value.nodeType === Node.DOCUMENT_FRAGMENT_NODE && !value.host;
+    return !!value && value.nodeType === Core.DOCUMENT_FRAGMENT_NODE && !value.host;
   };
   /**
    * Returns true if the value is a function.
@@ -921,7 +927,7 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
    */
 
   Core.isNode = function (value) {
-    return !!value && (value.nodeType === Node.ELEMENT_NODE || value.nodeType === Node.TEXT_NODE || value.nodeType === Node.COMMENT_NODE);
+    return !!value && (value.nodeType === Core.ELEMENT_NODE || value.nodeType === Core.TEXT_NODE || value.nodeType === Core.COMMENT_NODE);
   };
   /**
    * Returns true if the value is null.
@@ -971,7 +977,7 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
 
 
   Core.isShadow = function (value) {
-    return !!value && value.nodeType === Node.DOCUMENT_FRAGMENT_NODE && !!value.host;
+    return !!value && value.nodeType === Core.DOCUMENT_FRAGMENT_NODE && !!value.host;
   };
   /**
    * Returns true if the value is a string.
@@ -1003,6 +1009,34 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
   Core.isWindow = function (value) {
     return !!value && !!value.document && value.document.defaultView === value;
   };
+  /**
+   * Core Properties
+   */
+  // Node type constants
 
+
+  Core.ELEMENT_NODE = 1;
+  Core.TEXT_NOTE = 3;
+  Core.COMMENT_NODE = 8;
+  Core.DOCUMENT_NODE = 9;
+  Core.DOCUMENT_FRAGMENT_NODE = 11; // HTML escape regex
+
+  Core._escapeRegExp = /[&<>"']/g;
+  Core._unescapeRegExp = /\&(amp|lt|gt|quos|apos);/g; // HTML escape characters
+
+  Core._escapeChars = {
+    '&': '&amp;',
+    '<': '&lt;',
+    '>': '&gt;',
+    '"': '&quot;',
+    '\'': '&apos;'
+  };
+  Core._unescapeChars = {
+    'amp': '&',
+    'lt': '<',
+    'gt': '>',
+    'quot': '"',
+    'apos': '\''
+  };
   return Core;
 });

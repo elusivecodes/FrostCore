@@ -8,12 +8,13 @@
  * @param {...array} arrays The arrays to compare against.
  * @returns {array} The output array.
  */
-Core.diff = (array, ...arrays) =>
-    array.filter(
+Core.diff = (array, ...arrays) => {
+    arrays = arrays.map(Core.unique);
+    return array.filter(
         value => !arrays
-            .map(Core.unique)
             .some(other => other.includes(value))
-    );
+    )
+};
 
 /**
  * Create a new array containing the unique values that exist in all of the passed arrays.
@@ -23,19 +24,21 @@ Core.diff = (array, ...arrays) =>
 Core.intersect = (...arrays) =>
     Core.unique(
         arrays
-            .map(Core.unique)
-            .reduce((acc, array, index) =>
-                Core.merge(
-                    acc,
-                    array.filter(
-                        value =>
-                            arrays.every(
-                                (other, otherIndex) =>
-                                    index == otherIndex ||
-                                    other.includes(value)
-                            )
+            .reduce(
+                (acc, array, index) => {
+                    array = Core.unique(array);
+                    return Core.merge(
+                        acc,
+                        array.filter(
+                            value =>
+                                arrays.every(
+                                    (other, otherIndex) =>
+                                        index == otherIndex ||
+                                        other.includes(value)
+                                )
+                        )
                     )
-                ),
+                },
                 []
             )
     );
@@ -46,13 +49,14 @@ Core.intersect = (...arrays) =>
  * @param {...array|...object} arrays The arrays or array-like objects to merge.
  * @returns {array} The output array.
  */
-Core.merge = (array = [], ...arrays) => {
-    for (const arr of arrays) {
-        Array.prototype.push.apply(array, arr);
-    }
-
-    return array;
-};
+Core.merge = (array = [], ...arrays) =>
+    arrays.reduce(
+        (acc, other) => {
+            Array.prototype.push.apply(acc, other);
+            return array;
+        },
+        array
+    );
 
 /**
  * Return a random value from an array.
@@ -74,8 +78,12 @@ Core.randomValue = array =>
 Core.range = (start, end, step = 1) => {
     const sign = Math.sign(end - start);
     return new Array(
-        ((Math.abs(end - start) / step) + 1) | 0
-    ).fill()
+        (
+            (Math.abs(end - start) / step)
+            + 1
+        ) | 0
+    )
+        .fill()
         .map(
             (_, i) =>
                 start + Core.toStep(
@@ -90,7 +98,10 @@ Core.range = (start, end, step = 1) => {
  * @param {array} array The input array.
  * @returns {array} The filtered array.
  */
-Core.unique = array => Array.from(new Set(array));
+Core.unique = array =>
+    Array.from(
+        new Set(array)
+    );
 
 /**
  * Create an array from any value.

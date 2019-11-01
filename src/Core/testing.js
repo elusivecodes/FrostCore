@@ -51,7 +51,7 @@ Core.isBoolean = value => value === !!value;
  */
 Core.isDocument = value =>
     !!value &&
-    value.nodeType === Node.DOCUMENT_NODE;
+    value.nodeType === Core.DOCUMENT_NODE;
 
 /**
  * Returns true if the value is a HTMLElement.
@@ -60,7 +60,7 @@ Core.isDocument = value =>
  */
 Core.isElement = value =>
     !!value &&
-    value.nodeType === Node.ELEMENT_NODE;
+    value.nodeType === Core.ELEMENT_NODE;
 
 /**
  * Returns true if the value is a DocumentFragment.
@@ -69,7 +69,7 @@ Core.isElement = value =>
  */
 Core.isFragment = value =>
     !!value &&
-    value.nodeType === Node.DOCUMENT_FRAGMENT_NODE &&
+    value.nodeType === Core.DOCUMENT_FRAGMENT_NODE &&
     !value.host;
 
 /**
@@ -94,9 +94,9 @@ Core.isNaN = Number.isNaN;
 Core.isNode = value =>
     !!value &&
     (
-        value.nodeType === Node.ELEMENT_NODE ||
-        value.nodeType === Node.TEXT_NODE ||
-        value.nodeType === Node.COMMENT_NODE
+        value.nodeType === Core.ELEMENT_NODE ||
+        value.nodeType === Core.TEXT_NODE ||
+        value.nodeType === Core.COMMENT_NODE
     );
 
 /**
@@ -140,7 +140,7 @@ Core.isObject = value =>
  */
 Core.isShadow = value =>
     !!value &&
-    value.nodeType === Node.DOCUMENT_FRAGMENT_NODE &&
+    value.nodeType === Core.DOCUMENT_FRAGMENT_NODE &&
     !!value.host;
 
 /**

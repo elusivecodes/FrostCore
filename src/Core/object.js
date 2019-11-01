@@ -33,18 +33,16 @@ Core.extend = (object, ...objects) =>
  * @param {string} key The key to remove from the object.
  */
 Core.forgetDot = (object, key) => {
-    let pointer = object;
-
     const keys = key.split('.');
     while (key = keys.shift()) {
-        if (!Core.isObject(pointer) || !(key in pointer)) {
+        if (!Core.isObject(object) || !(key in object)) {
             break;
         }
 
         if (keys.length) {
-            pointer = pointer[key];
+            object = object[key];
         } else {
-            delete pointer[key];
+            delete object[key];
         }
     }
 };
@@ -57,17 +55,15 @@ Core.forgetDot = (object, key) => {
  * @returns {*} The value retrieved from the object.
  */
 Core.getDot = (object, key, defaultValue) => {
-    let pointer = object;
-
     for (key of key.split('.')) {
-        if (!Core.isObject(pointer) || !(key in pointer)) {
+        if (!Core.isObject(object) || !(key in object)) {
             return defaultValue;
         }
 
-        pointer = pointer[key];
+        object = object[key];
     }
 
-    return pointer;
+    return object;
 };
 
 /**
@@ -77,14 +73,12 @@ Core.getDot = (object, key, defaultValue) => {
  * @returns {Boolean} TRUE if the key exists, otherwise FALSE.
  */
 Core.hasDot = (object, key) => {
-    let pointer = object;
-
     for (key of key.split('.')) {
-        if (!Core.isObject(pointer) || !(key in pointer)) {
+        if (!Core.isObject(object) || !(key in object)) {
             return false;
         }
 
-        pointer = pointer[key];
+        object = object[key];
     }
 
     return true;
@@ -97,8 +91,11 @@ Core.hasDot = (object, key) => {
  * @param {*} [defaultValue] The default value if key does not exist.
  * @returns {array} An array of values retrieved from the objects.
  */
-Core.pluckDot = (objects, key, defaultValue) => objects
-    .map(pointer => Core.getDot(pointer, key, defaultValue));
+Core.pluckDot = (objects, key, defaultValue) =>
+    objects
+        .map(pointer =>
+            Core.getDot(pointer, key, defaultValue)
+        );
 
 /**
  * Set a specified value of a key for an object using dot notation.
@@ -108,15 +105,13 @@ Core.pluckDot = (objects, key, defaultValue) => objects
  * @param {Boolean} [overwrite=true] Whether to overwrite, if the key already exists.
  */
 Core.setDot = (object, key, value, overwrite = true) => {
-    let pointer = object,
-        current;
-
+    let current;
     const keys = key.split('.');
     while (current = keys.shift()) {
         if (current === '*') {
-            for (const k in pointer) {
+            for (const k in object) {
                 Core.setDot(
-                    pointer,
+                    object,
                     [k].concat(keys).join('.'),
                     value,
                     overwrite
@@ -126,13 +121,13 @@ Core.setDot = (object, key, value, overwrite = true) => {
         }
 
         if (keys.length) {
-            if (!Core.isObject(pointer[current]) || !(current in pointer)) {
-                pointer[current] = {};
+            if (!Core.isObject(object[current]) || !(current in object)) {
+                object[current] = {};
             }
 
-            pointer = pointer[current];
-        } else if (overwrite || !(current in pointer)) {
-            pointer[current] = value;
+            object = object[current];
+        } else if (overwrite || !(current in object)) {
+            object[current] = value;
         }
     }
 };

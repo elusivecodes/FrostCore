@@ -23,7 +23,8 @@ Core.clamp = (value, min = 0, max = 1) =>
  * @param {number} value The value to clamp.
  * @returns {number} The clamped value.
  */
-Core.clampPercent = value => Core.clamp(value, 0, 100);
+Core.clampPercent = value =>
+    Core.clamp(value, 0, 100);
 
 /**
  * Get the distance between two vectors.

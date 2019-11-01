@@ -195,7 +195,7 @@ Core.throttle = (callback, wait, leading = true, trailing = true) => {
  * @param {number} amount The amount of times to execute the callback.
  */
 Core.times = (callback, amount) => {
-    for (let i = 0; i < amount; i++) {
+    while (amount--) {
         if (callback() === false) {
             break;
         }
