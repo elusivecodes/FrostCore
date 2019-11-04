@@ -423,9 +423,7 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
    */
 
 
-  Core.len = function (x, y) {
-    return Math.hypot(x, y);
-  };
+  Core.len = Math.hypot;
   /**
    * Linear interpolation from one value to another.
    * @param {number} v1 The starting value.
@@ -433,7 +431,6 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
    * @param {number} amount The amount to interpolate.
    * @returns {number} The interpolated value.
    */
-
 
   Core.lerp = function (v1, v2, amount) {
     return v1 * (1 - amount) + v2 * amount;
@@ -605,33 +602,14 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
 
 
   Core.getDot = function (object, key, defaultValue) {
-    var _iteratorNormalCompletion = true;
-    var _didIteratorError = false;
-    var _iteratorError = undefined;
+    var keys = key.split('.');
 
-    try {
-      for (var _iterator = key.split('.')[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-        key = _step.value;
-
-        if (!Core.isObject(object) || !(key in object)) {
-          return defaultValue;
-        }
-
-        object = object[key];
+    while (key = keys.shift()) {
+      if (!Core.isObject(object) || !(key in object)) {
+        return defaultValue;
       }
-    } catch (err) {
-      _didIteratorError = true;
-      _iteratorError = err;
-    } finally {
-      try {
-        if (!_iteratorNormalCompletion && _iterator["return"] != null) {
-          _iterator["return"]();
-        }
-      } finally {
-        if (_didIteratorError) {
-          throw _iteratorError;
-        }
-      }
+
+      object = object[key];
     }
 
     return object;
@@ -645,33 +623,14 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
 
 
   Core.hasDot = function (object, key) {
-    var _iteratorNormalCompletion2 = true;
-    var _didIteratorError2 = false;
-    var _iteratorError2 = undefined;
+    var keys = key.split('.');
 
-    try {
-      for (var _iterator2 = key.split('.')[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
-        key = _step2.value;
-
-        if (!Core.isObject(object) || !(key in object)) {
-          return false;
-        }
-
-        object = object[key];
+    while (key = keys.shift()) {
+      if (!Core.isObject(object) || !(key in object)) {
+        return false;
       }
-    } catch (err) {
-      _didIteratorError2 = true;
-      _iteratorError2 = err;
-    } finally {
-      try {
-        if (!_iteratorNormalCompletion2 && _iterator2["return"] != null) {
-          _iterator2["return"]();
-        }
-      } finally {
-        if (_didIteratorError2) {
-          throw _iteratorError2;
-        }
-      }
+
+      object = object[key];
     }
 
     return true;
@@ -701,11 +660,10 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
 
   Core.setDot = function (object, key, value) {
     var overwrite = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : true;
-    var current;
     var keys = key.split('.');
 
-    while (current = keys.shift()) {
-      if (current === '*') {
+    while (key = keys.shift()) {
+      if (key === '*') {
         for (var k in object) {
           Core.setDot(object, [k].concat(keys).join('.'), value, overwrite);
         }
@@ -714,13 +672,13 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
       }
 
       if (keys.length) {
-        if (!Core.isObject(object[current]) || !(current in object)) {
-          object[current] = {};
+        if (!Core.isObject(object[key]) || !(key in object)) {
+          object[key] = {};
         }
 
-        object = object[current];
-      } else if (overwrite || !(current in object)) {
-        object[current] = value;
+        object = object[key];
+      } else if (overwrite || !(key in object)) {
+        object[key] = value;
       }
     }
   };
@@ -737,7 +695,7 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
 
   Core.camelCase = function (string) {
     return Core._splitString(string).map(function (word, index) {
-      return (index ? word.charAt(0).toUpperCase() : word.charAt(0).toLowerCase()) + word.substring(1);
+      return index ? word.charAt(0).toUpperCase() + word.substring(1) : word;
     }).join('');
   };
   /**
@@ -830,9 +788,7 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
 
   Core._splitString = function (string) {
     return "".concat(string).split(/[^a-zA-Z0-9']|(?=[A-Z])/).reduce(function (acc, word) {
-      (function (word) {
-        return word.replace(/[^\w]/, '').toLowerCase();
-      });
+      word = word.replace(/[^\w]/, '').toLowerCase();
 
       if (word) {
         acc.push(word);

@@ -35,7 +35,10 @@ Core.extend = (object, ...objects) =>
 Core.forgetDot = (object, key) => {
     const keys = key.split('.');
     while (key = keys.shift()) {
-        if (!Core.isObject(object) || !(key in object)) {
+        if (
+            !Core.isObject(object) ||
+            !(key in object)
+        ) {
             break;
         }
 
@@ -55,8 +58,12 @@ Core.forgetDot = (object, key) => {
  * @returns {*} The value retrieved from the object.
  */
 Core.getDot = (object, key, defaultValue) => {
-    for (key of key.split('.')) {
-        if (!Core.isObject(object) || !(key in object)) {
+    const keys = key.split('.');
+    while (key = keys.shift()) {
+        if (
+            !Core.isObject(object) ||
+            !(key in object)
+        ) {
             return defaultValue;
         }
 
@@ -73,8 +80,12 @@ Core.getDot = (object, key, defaultValue) => {
  * @returns {Boolean} TRUE if the key exists, otherwise FALSE.
  */
 Core.hasDot = (object, key) => {
-    for (key of key.split('.')) {
-        if (!Core.isObject(object) || !(key in object)) {
+    const keys = key.split('.');
+    while (key = keys.shift()) {
+        if (
+            !Core.isObject(object) ||
+            !(key in object)
+        ) {
             return false;
         }
 
@@ -105,10 +116,9 @@ Core.pluckDot = (objects, key, defaultValue) =>
  * @param {Boolean} [overwrite=true] Whether to overwrite, if the key already exists.
  */
 Core.setDot = (object, key, value, overwrite = true) => {
-    let current;
     const keys = key.split('.');
-    while (current = keys.shift()) {
-        if (current === '*') {
+    while (key = keys.shift()) {
+        if (key === '*') {
             for (const k in object) {
                 Core.setDot(
                     object,
@@ -121,13 +131,19 @@ Core.setDot = (object, key, value, overwrite = true) => {
         }
 
         if (keys.length) {
-            if (!Core.isObject(object[current]) || !(current in object)) {
-                object[current] = {};
+            if (
+                !Core.isObject(object[key]) ||
+                !(key in object)
+            ) {
+                object[key] = {};
             }
 
-            object = object[current];
-        } else if (overwrite || !(current in object)) {
-            object[current] = value;
+            object = object[key];
+        } else if (
+            overwrite ||
+            !(key in object)
+        ) {
+            object[key] = value;
         }
     }
 };

@@ -11,10 +11,12 @@ Core.camelCase = string =>
     Core._splitString(string)
         .map(
             (word, index) =>
-                (index ?
-                    word.charAt(0).toUpperCase() :
-                    word.charAt(0).toLowerCase()
-                ) + word.substring(1)
+                index ?
+                    (
+                        word.charAt(0).toUpperCase() +
+                        word.substring(1)
+                    ) :
+                    word
         )
         .join('');
 
@@ -26,7 +28,8 @@ Core.camelCase = string =>
 Core.escape = string =>
     string.replace(
         Core._escapeRegExp,
-        match => Core._escapeChars[match]
+        match =>
+            Core._escapeChars[match]
     );
 
 /**
@@ -46,7 +49,8 @@ Core.pascalCase = string =>
     Core._splitString(string)
         .map(
             word =>
-                word.charAt(0).toUpperCase() + word.substring(1)
+                word.charAt(0).toUpperCase() +
+                word.substring(1)
         )
         .join('');
 
@@ -59,7 +63,10 @@ Core.pascalCase = string =>
 Core.randomString = (length = 16, chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWYXZ0123456789') =>
     new Array(length)
         .fill()
-        .map(_ => chars[Core.random(chars.length) | 0])
+        .map(
+            _ =>
+                chars[Core.random(chars.length) | 0]
+        )
         .join('');
 
 /**
@@ -90,7 +97,8 @@ Core.underscore = string =>
 Core.unescape = string =>
     string.replace(
         Core._unescapeRegExp,
-        (_, code) => Core._unescapeChars[code]
+        (_, code) =>
+            Core._unescapeChars[code]
     );
 
 /**
@@ -103,7 +111,7 @@ Core._splitString = string =>
         .split(/[^a-zA-Z0-9']|(?=[A-Z])/)
         .reduce(
             (acc, word) => {
-                word => word.replace(/[^\w]/, '').toLowerCase();
+                word = word.replace(/[^\w]/, '').toLowerCase();
                 if (word) {
                     acc.push(word)
                 }

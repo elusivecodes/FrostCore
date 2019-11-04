@@ -46,7 +46,7 @@ Core.dist = (x1, y1, x2, y2) =>
  * @param {number} y The Y co-ordinate.
  * @returns {number} The length of the vector.
  */
-Core.len = (x, y) => Math.hypot(x, y);
+Core.len = Math.hypot;
 
 /**
  * Linear interpolation from one value to another.

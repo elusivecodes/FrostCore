@@ -42,7 +42,8 @@ Core.isArrayLike = value =>
  * @param {*} value The value to test.
  * @returns {Boolean} TRUE if the value is boolean, otherwise FALSE.
  */
-Core.isBoolean = value => value === !!value;
+Core.isBoolean = value =>
+    value === !!value;
 
 /**
  * Returns true if the value is a Document.
@@ -77,7 +78,8 @@ Core.isFragment = value =>
  * @param {*} value The value to test.
  * @returns {Boolean} TRUE if the value is a function, otherwise FALSE.
  */
-Core.isFunction = value => typeof value === 'function';
+Core.isFunction = value =>
+    typeof value === 'function';
 
 /**
  * Returns true if the value is NaN.
@@ -104,7 +106,8 @@ Core.isNode = value =>
  * @param {*} value The value to test.
  * @returns {Boolean} TRUE if the value is null, otherwise FALSE.
  */
-Core.isNull = value => value === null;
+Core.isNull = value =>
+    value === null;
 
 /**
  * Returns true if the value is numeric.
@@ -148,14 +151,16 @@ Core.isShadow = value =>
  * @param {*} value The value to test.
  * @returns {Boolean} TRUE is the value is a string, otherwise FALSE.
  */
-Core.isString = value => value === `${value}`;
+Core.isString = value =>
+    value === `${value}`;
 
 /**
  * Returns true if the value is undefined.
  * @param {*} value The value to test.
  * @returns {Boolean} TRUE if the value is undefined, otherwise FALSE.
  */
-Core.isUndefined = value => value === undefined;
+Core.isUndefined = value =>
+    value === undefined;
 
 /**
  * Returns true if the value is a Window.

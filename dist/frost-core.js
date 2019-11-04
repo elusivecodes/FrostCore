@@ -97,7 +97,10 @@
         const sign = Math.sign(end - start);
         return new Array(
             (
-                (Math.abs(end - start) / step)
+                (
+                    Math.abs(end - start)
+                    / step
+                )
                 + 1
             ) | 0
         )
@@ -200,7 +203,10 @@
         const curried = (...args) =>
             args.length >= callback.length ?
                 callback(...args) :
-                (...newArgs) => curried(...args.concat(newArgs));
+                (...newArgs) =>
+                    curried(
+                        ...args.concat(newArgs)
+                    );
 
         return curried;
     };
@@ -391,7 +397,7 @@
      * @param {number} y The Y co-ordinate.
      * @returns {number} The length of the vector.
      */
-    Core.len = (x, y) => Math.hypot(x, y);
+    Core.len = Math.hypot;
 
     /**
      * Linear interpolation from one value to another.
@@ -594,7 +600,10 @@
     Core.forgetDot = (object, key) => {
         const keys = key.split('.');
         while (key = keys.shift()) {
-            if (!Core.isObject(object) || !(key in object)) {
+            if (
+                !Core.isObject(object) ||
+                !(key in object)
+            ) {
                 break;
             }
 
@@ -614,8 +623,12 @@
      * @returns {*} The value retrieved from the object.
      */
     Core.getDot = (object, key, defaultValue) => {
-        for (key of key.split('.')) {
-            if (!Core.isObject(object) || !(key in object)) {
+        const keys = key.split('.');
+        while (key = keys.shift()) {
+            if (
+                !Core.isObject(object) ||
+                !(key in object)
+            ) {
                 return defaultValue;
             }
 
@@ -632,8 +645,12 @@
      * @returns {Boolean} TRUE if the key exists, otherwise FALSE.
      */
     Core.hasDot = (object, key) => {
-        for (key of key.split('.')) {
-            if (!Core.isObject(object) || !(key in object)) {
+        const keys = key.split('.');
+        while (key = keys.shift()) {
+            if (
+                !Core.isObject(object) ||
+                !(key in object)
+            ) {
                 return false;
             }
 
@@ -664,10 +681,9 @@
      * @param {Boolean} [overwrite=true] Whether to overwrite, if the key already exists.
      */
     Core.setDot = (object, key, value, overwrite = true) => {
-        let current;
         const keys = key.split('.');
-        while (current = keys.shift()) {
-            if (current === '*') {
+        while (key = keys.shift()) {
+            if (key === '*') {
                 for (const k in object) {
                     Core.setDot(
                         object,
@@ -680,13 +696,19 @@
             }
 
             if (keys.length) {
-                if (!Core.isObject(object[current]) || !(current in object)) {
-                    object[current] = {};
+                if (
+                    !Core.isObject(object[key]) ||
+                    !(key in object)
+                ) {
+                    object[key] = {};
                 }
 
-                object = object[current];
-            } else if (overwrite || !(current in object)) {
-                object[current] = value;
+                object = object[key];
+            } else if (
+                overwrite ||
+                !(key in object)
+            ) {
+                object[key] = value;
             }
         }
     };
@@ -704,10 +726,12 @@
         Core._splitString(string)
             .map(
                 (word, index) =>
-                    (index ?
-                        word.charAt(0).toUpperCase() :
-                        word.charAt(0).toLowerCase()
-                    ) + word.substring(1)
+                    index ?
+                        (
+                            word.charAt(0).toUpperCase() +
+                            word.substring(1)
+                        ) :
+                        word
             )
             .join('');
 
@@ -719,7 +743,8 @@
     Core.escape = string =>
         string.replace(
             Core._escapeRegExp,
-            match => Core._escapeChars[match]
+            match =>
+                Core._escapeChars[match]
         );
 
     /**
@@ -739,7 +764,8 @@
         Core._splitString(string)
             .map(
                 word =>
-                    word.charAt(0).toUpperCase() + word.substring(1)
+                    word.charAt(0).toUpperCase() +
+                    word.substring(1)
             )
             .join('');
 
@@ -752,7 +778,10 @@
     Core.randomString = (length = 16, chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWYXZ0123456789') =>
         new Array(length)
             .fill()
-            .map(_ => chars[Core.random(chars.length) | 0])
+            .map(
+                _ =>
+                    chars[Core.random(chars.length) | 0]
+            )
             .join('');
 
     /**
@@ -783,7 +812,8 @@
     Core.unescape = string =>
         string.replace(
             Core._unescapeRegExp,
-            (_, code) => Core._unescapeChars[code]
+            (_, code) =>
+                Core._unescapeChars[code]
         );
 
     /**
@@ -796,7 +826,7 @@
             .split(/[^a-zA-Z0-9']|(?=[A-Z])/)
             .reduce(
                 (acc, word) => {
-                    word => word.replace(/[^\w]/, '').toLowerCase();
+                    word = word.replace(/[^\w]/, '').toLowerCase();
                     if (word) {
                         acc.push(word)
                     }
@@ -849,7 +879,8 @@
      * @param {*} value The value to test.
      * @returns {Boolean} TRUE if the value is boolean, otherwise FALSE.
      */
-    Core.isBoolean = value => value === !!value;
+    Core.isBoolean = value =>
+        value === !!value;
 
     /**
      * Returns true if the value is a Document.
@@ -884,7 +915,8 @@
      * @param {*} value The value to test.
      * @returns {Boolean} TRUE if the value is a function, otherwise FALSE.
      */
-    Core.isFunction = value => typeof value === 'function';
+    Core.isFunction = value =>
+        typeof value === 'function';
 
     /**
      * Returns true if the value is NaN.
@@ -911,7 +943,8 @@
      * @param {*} value The value to test.
      * @returns {Boolean} TRUE if the value is null, otherwise FALSE.
      */
-    Core.isNull = value => value === null;
+    Core.isNull = value =>
+        value === null;
 
     /**
      * Returns true if the value is numeric.
@@ -955,14 +988,16 @@
      * @param {*} value The value to test.
      * @returns {Boolean} TRUE is the value is a string, otherwise FALSE.
      */
-    Core.isString = value => value === `${value}`;
+    Core.isString = value =>
+        value === `${value}`;
 
     /**
      * Returns true if the value is undefined.
      * @param {*} value The value to test.
      * @returns {Boolean} TRUE if the value is undefined, otherwise FALSE.
      */
-    Core.isUndefined = value => value === undefined;
+    Core.isUndefined = value =>
+        value === undefined;
 
     /**
      * Returns true if the value is a Window.

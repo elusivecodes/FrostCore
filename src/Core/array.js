@@ -79,7 +79,10 @@ Core.range = (start, end, step = 1) => {
     const sign = Math.sign(end - start);
     return new Array(
         (
-            (Math.abs(end - start) / step)
+            (
+                Math.abs(end - start)
+                / step
+            )
             + 1
         ) | 0
     )

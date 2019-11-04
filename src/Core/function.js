@@ -59,7 +59,10 @@ Core.curry = callback => {
     const curried = (...args) =>
         args.length >= callback.length ?
             callback(...args) :
-            (...newArgs) => curried(...args.concat(newArgs));
+            (...newArgs) =>
+                curried(
+                    ...args.concat(newArgs)
+                );
 
     return curried;
 };
