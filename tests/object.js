@@ -1,4 +1,4 @@
-const assert = require('assert');
+const assert = require('assert').strict;
 const Core = require('../dist/frost-core.min');
 
 describe('Object Tests', function() {
