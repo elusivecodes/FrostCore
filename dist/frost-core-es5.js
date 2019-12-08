@@ -18,11 +18,11 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
   'use strict';
 
   if ((typeof module === "undefined" ? "undefined" : _typeof(module)) === 'object' && _typeof(module.exports) === 'object') {
-    module.exports = factory();
+    module.exports = factory(global);
   } else {
-    global.Core = factory();
+    global.Core = factory(global);
   }
-})(void 0, function () {
+})(void 0, function (window) {
   'use strict';
 
   var Core = {};
@@ -162,18 +162,19 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
         return;
       }
 
+      if (leading) {
+        callback.apply(void 0, _toConsumableArray(newArgs));
+      }
+
       running = true;
-      window.requestAnimationFrame(function (_) {
+
+      Core._requestAnimationFrame(function (_) {
         running = false;
 
         if (!leading) {
           callback.apply(void 0, _toConsumableArray(newArgs));
         }
       });
-
-      if (leading) {
-        callback.apply(void 0, _toConsumableArray(newArgs));
-      }
     };
   };
   /**
@@ -227,39 +228,40 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
    * @param {function} callback Callback function to execute.
    * @param {number} wait The number of milliseconds to wait until next execution.
    * @param {Boolean} [leading] Whether to execute on the leading edge of the wait period.
+   * @param {Boolean} [trailing=true] Whether to execute on the trailing edge of the wait period.
    * @returns {function} The wrapped function.
    */
 
 
   Core.debounce = function (callback, wait, leading) {
-    var newArgs,
-        running,
-        runLead = leading;
+    var trailing = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : true;
+    var lastRan, newArgs, running;
     return function () {
+      var now = Date.now();
+      var delta = lastRan ? lastRan - now : null;
+
       for (var _len8 = arguments.length, args = new Array(_len8), _key8 = 0; _key8 < _len8; _key8++) {
         args[_key8] = arguments[_key8];
       }
 
-      newArgs = args;
-
-      if (running) {
-        runLead = false;
+      if (leading && (delta === null || delta >= wait)) {
+        lastRan = now;
+        callback.apply(void 0, args);
         return;
       }
 
-      if (runLead) {
-        callback.apply(void 0, _toConsumableArray(newArgs));
+      newArgs = args;
+
+      if (running || !trailing) {
+        return;
       }
 
       running = true;
       setTimeout(function (_) {
-        if (!runLead) {
-          callback.apply(void 0, _toConsumableArray(newArgs));
-        }
-
         running = false;
-        runLead = leading;
-      }, wait);
+        lastRan = Date.now();
+        callback.apply(void 0, _toConsumableArray(newArgs));
+      }, delta);
     };
   };
   /**
@@ -324,6 +326,7 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
   };
   /**
    * Create a wrapped version of a function that executes at most once per wait period.
+   * (using the most recent arguments passed to it).
    * @param {function} callback Callback function to execute.
    * @param {number} wait The number of milliseconds to wait until next execution.
    * @param {Boolean} [leading=true] Whether to execute on the leading edge of the wait period.
@@ -335,30 +338,7 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
   Core.throttle = function (callback, wait) {
     var leading = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : true;
     var trailing = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : true;
-    var ran, running;
-    return function () {
-      for (var _len12 = arguments.length, args = new Array(_len12), _key12 = 0; _key12 < _len12; _key12++) {
-        args[_key12] = arguments[_key12];
-      }
-
-      if (running) {
-        return;
-      }
-
-      if (leading && (!ran || !trailing)) {
-        ran = true;
-        callback.apply(void 0, args);
-      }
-
-      running = true;
-      setTimeout(function (_) {
-        if (trailing) {
-          callback.apply(void 0, args);
-        }
-
-        running = false;
-      }, wait);
-    };
+    return Core.debounce(callback, wait, leading, trailing);
   };
   /**
    * Execute a function a specified number of times.
@@ -375,6 +355,15 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
     }
   };
   /**
+   * Execute a callback on the next animation frame
+   * @param {function} callback Callback function to execute.
+   */
+
+
+  Core._requestAnimationFrame = 'requestAnimationFrame' in window ? window.requestAnimationFrame : function (callback) {
+    return setTimeout(callback, 1000 / 60);
+  };
+  /**
    * Math methods
    */
 
@@ -385,7 +374,6 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
    * @param {number} [max=1] The maximum value of the clamped range.
    * @returns {number} The clamped value.
    */
-
 
   Core.clamp = function (value) {
     var min = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0;
@@ -457,7 +445,7 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
 
 
   Core.linearValue = function (percent, min, max) {
-    return Core.clamp(min + percent / 100 * (max - min), min, max);
+    return min === max ? min : Core.clamp(min + percent / 100 * (max - min), Math.min(min, max), Math.max(min, max));
   };
   /**
    * Get the logarithmic percent of a value in a specified range.
@@ -554,8 +542,8 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
 
 
   Core.extend = function (object) {
-    for (var _len13 = arguments.length, objects = new Array(_len13 > 1 ? _len13 - 1 : 0), _key13 = 1; _key13 < _len13; _key13++) {
-      objects[_key13 - 1] = arguments[_key13];
+    for (var _len12 = arguments.length, objects = new Array(_len12 > 1 ? _len12 - 1 : 0), _key12 = 1; _key12 < _len12; _key12++) {
+      objects[_key12 - 1] = arguments[_key12];
     }
 
     return objects.reduce(function (acc, val) {
@@ -972,13 +960,13 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
 
 
   Core.ELEMENT_NODE = 1;
-  Core.TEXT_NOTE = 3;
+  Core.TEXT_NODE = 3;
   Core.COMMENT_NODE = 8;
   Core.DOCUMENT_NODE = 9;
   Core.DOCUMENT_FRAGMENT_NODE = 11; // HTML escape regex
 
   Core._escapeRegExp = /[&<>"']/g;
-  Core._unescapeRegExp = /\&(amp|lt|gt|quos|apos);/g; // HTML escape characters
+  Core._unescapeRegExp = /\&(amp|lt|gt|quot|apos);/g; // HTML escape characters
 
   Core._escapeChars = {
     '&': '&amp;',

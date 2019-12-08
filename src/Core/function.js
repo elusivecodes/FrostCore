@@ -20,17 +20,17 @@ Core.animation = (callback, leading) => {
             return;
         }
 
+        if (leading) {
+            callback(...newArgs);
+        }
+
         running = true;
-        window.requestAnimationFrame(_ => {
+        Core._requestAnimationFrame(_ => {
             running = false;
             if (!leading) {
                 callback(...newArgs);
             }
         });
-
-        if (leading) {
-            callback(...newArgs);
-        }
     };
 };
 
@@ -73,35 +73,39 @@ Core.curry = callback => {
  * @param {function} callback Callback function to execute.
  * @param {number} wait The number of milliseconds to wait until next execution.
  * @param {Boolean} [leading] Whether to execute on the leading edge of the wait period.
+ * @param {Boolean} [trailing=true] Whether to execute on the trailing edge of the wait period.
  * @returns {function} The wrapped function.
  */
-Core.debounce = (callback, wait, leading) => {
-    let newArgs,
-        running,
-        runLead = leading;
+Core.debounce = (callback, wait, leading, trailing = true) => {
+    let lastRan,
+        newArgs,
+        running;
 
     return (...args) => {
-        newArgs = args;
+        const now = Date.now();
+        const delta = lastRan ?
+            lastRan - now :
+            null;
 
-        if (running) {
-            runLead = false;
+        if (leading && (delta === null || delta >= wait)) {
+            lastRan = now;
+            callback(...args);
             return;
         }
 
-        if (runLead) {
-            callback(...newArgs);
+        newArgs = args;
+        if (running || !trailing) {
+            return;
         }
 
         running = true;
         setTimeout(
             _ => {
-                if (!runLead) {
-                    callback(...newArgs);
-                }
                 running = false;
-                runLead = leading;
+                lastRan = Date.now();
+                callback(...newArgs);
             },
-            wait
+            delta
         );
     };
 };
@@ -159,38 +163,15 @@ Core.pipe = (...callbacks) =>
 
 /**
  * Create a wrapped version of a function that executes at most once per wait period.
+ * (using the most recent arguments passed to it).
  * @param {function} callback Callback function to execute.
  * @param {number} wait The number of milliseconds to wait until next execution.
  * @param {Boolean} [leading=true] Whether to execute on the leading edge of the wait period.
  * @param {Boolean} [trailing=true] Whether to execute on the trailing edge of the wait period.
  * @returns {function} The wrapped function.
  */
-Core.throttle = (callback, wait, leading = true, trailing = true) => {
-    let ran,
-        running;
-
-    return (...args) => {
-        if (running) {
-            return;
-        }
-
-        if (leading && (!ran || !trailing)) {
-            ran = true;
-            callback(...args);
-        }
-
-        running = true;
-        setTimeout(
-            _ => {
-                if (trailing) {
-                    callback(...args);
-                }
-                running = false;
-            },
-            wait
-        );
-    };
-};
+Core.throttle = (callback, wait, leading = true, trailing = true) =>
+    Core.debounce(callback, wait, leading, trailing);
 
 /**
  * Execute a function a specified number of times.
@@ -204,3 +185,11 @@ Core.times = (callback, amount) => {
         }
     }
 };
+
+/**
+ * Execute a callback on the next animation frame
+ * @param {function} callback Callback function to execute.
+ */
+Core._requestAnimationFrame = 'requestAnimationFrame' in window ?
+    window.requestAnimationFrame :
+    callback => setTimeout(callback, 1000 / 60);

@@ -6,12 +6,12 @@
     'use strict';
 
     if (typeof module === 'object' && typeof module.exports === 'object') {
-        module.exports = factory();
+        module.exports = factory(global);
     } else {
-        global.Core = factory();
+        global.Core = factory(global);
     }
 
-})(this, function() {
+})(this, function(window) {
     'use strict';
 
     const Core = {};
@@ -164,17 +164,17 @@
                 return;
             }
 
+            if (leading) {
+                callback(...newArgs);
+            }
+
             running = true;
-            window.requestAnimationFrame(_ => {
+            Core._requestAnimationFrame(_ => {
                 running = false;
                 if (!leading) {
                     callback(...newArgs);
                 }
             });
-
-            if (leading) {
-                callback(...newArgs);
-            }
         };
     };
 
@@ -217,35 +217,39 @@
      * @param {function} callback Callback function to execute.
      * @param {number} wait The number of milliseconds to wait until next execution.
      * @param {Boolean} [leading] Whether to execute on the leading edge of the wait period.
+     * @param {Boolean} [trailing=true] Whether to execute on the trailing edge of the wait period.
      * @returns {function} The wrapped function.
      */
-    Core.debounce = (callback, wait, leading) => {
-        let newArgs,
-            running,
-            runLead = leading;
+    Core.debounce = (callback, wait, leading, trailing = true) => {
+        let lastRan,
+            newArgs,
+            running;
 
         return (...args) => {
-            newArgs = args;
+            const now = Date.now();
+            const delta = lastRan ?
+                lastRan - now :
+                null;
 
-            if (running) {
-                runLead = false;
+            if (leading && (delta === null || delta >= wait)) {
+                lastRan = now;
+                callback(...args);
                 return;
             }
 
-            if (runLead) {
-                callback(...newArgs);
+            newArgs = args;
+            if (running || !trailing) {
+                return;
             }
 
             running = true;
             setTimeout(
                 _ => {
-                    if (!runLead) {
-                        callback(...newArgs);
-                    }
                     running = false;
-                    runLead = leading;
+                    lastRan = Date.now();
+                    callback(...newArgs);
                 },
-                wait
+                delta
             );
         };
     };
@@ -303,38 +307,15 @@
 
     /**
      * Create a wrapped version of a function that executes at most once per wait period.
+     * (using the most recent arguments passed to it).
      * @param {function} callback Callback function to execute.
      * @param {number} wait The number of milliseconds to wait until next execution.
      * @param {Boolean} [leading=true] Whether to execute on the leading edge of the wait period.
      * @param {Boolean} [trailing=true] Whether to execute on the trailing edge of the wait period.
      * @returns {function} The wrapped function.
      */
-    Core.throttle = (callback, wait, leading = true, trailing = true) => {
-        let ran,
-            running;
-
-        return (...args) => {
-            if (running) {
-                return;
-            }
-
-            if (leading && (!ran || !trailing)) {
-                ran = true;
-                callback(...args);
-            }
-
-            running = true;
-            setTimeout(
-                _ => {
-                    if (trailing) {
-                        callback(...args);
-                    }
-                    running = false;
-                },
-                wait
-            );
-        };
-    };
+    Core.throttle = (callback, wait, leading = true, trailing = true) =>
+        Core.debounce(callback, wait, leading, trailing);
 
     /**
      * Execute a function a specified number of times.
@@ -348,6 +329,14 @@
             }
         }
     };
+
+    /**
+     * Execute a callback on the next animation frame
+     * @param {function} callback Callback function to execute.
+     */
+    Core._requestAnimationFrame = 'requestAnimationFrame' in window ?
+        window.requestAnimationFrame :
+        callback => setTimeout(callback, 1000 / 60);
 
     /**
      * Math methods
@@ -436,16 +425,18 @@
      * @returns {number} The linear value.
      */
     Core.linearValue = (percent, min, max) =>
-        Core.clamp(
-            min
-            + (
-                percent
-                / 100
-                * (max - min)
-            ),
-            min,
-            max
-        );
+        min === max ?
+            min :
+            Core.clamp(
+                min
+                + (
+                    percent
+                    / 100
+                    * (max - min)
+                ),
+                Math.min(min, max),
+                Math.max(min, max)
+            );
 
     /**
      * Get the logarithmic percent of a value in a specified range.
@@ -1015,14 +1006,14 @@
 
     // Node type constants
     Core.ELEMENT_NODE = 1;
-    Core.TEXT_NOTE = 3;
+    Core.TEXT_NODE = 3;
     Core.COMMENT_NODE = 8;
     Core.DOCUMENT_NODE = 9;
     Core.DOCUMENT_FRAGMENT_NODE = 11;
 
     // HTML escape regex
     Core._escapeRegExp = /[&<>"']/g;
-    Core._unescapeRegExp = /\&(amp|lt|gt|quos|apos);/g;
+    Core._unescapeRegExp = /\&(amp|lt|gt|quot|apos);/g;
 
     // HTML escape characters
     Core._escapeChars = {

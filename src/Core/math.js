@@ -85,16 +85,18 @@ Core.linearPercent = (value, min, max) =>
  * @returns {number} The linear value.
  */
 Core.linearValue = (percent, min, max) =>
-    Core.clamp(
-        min
-        + (
-            percent
-            / 100
-            * (max - min)
-        ),
-        min,
-        max
-    );
+    min === max ?
+        min :
+        Core.clamp(
+            min
+            + (
+                percent
+                / 100
+                * (max - min)
+            ),
+            Math.min(min, max),
+            Math.max(min, max)
+        );
 
 /**
  * Get the logarithmic percent of a value in a specified range.

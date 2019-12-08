@@ -142,9 +142,10 @@ Create a wrapped version of a function that executes once per wait period (using
 - `callback` is the function you wish to wrap.
 - `wait` is the number of milliseconds to wait between executions.
 - `leading` is a boolean indicating whether you wish the function to execute on the leading edge of the wait period, and will default to *false*.
+- `trailing` is a boolean indicating whether you wish the function to execute on the trailing edge of the wait period, and will default to *true*.
 
 ```javascript
-const debounced = Core.debounce(callback, wait, leading);
+const debounced = Core.debounce(callback, wait, leading, trailing);
 ```
 
 **Once**

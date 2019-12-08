@@ -6,12 +6,12 @@
     'use strict';
 
     if (typeof module === 'object' && typeof module.exports === 'object') {
-        module.exports = factory();
+        module.exports = factory(global);
     } else {
-        global.Core = factory();
+        global.Core = factory(global);
     }
 
-})(this, function() {
+})(this, function(window) {
     'use strict';
 
     const Core = {};
