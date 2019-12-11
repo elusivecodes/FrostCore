@@ -194,7 +194,7 @@ const piped = Core.pipe(...callbacks);
 
 **Throttle**
 
-Create a wrapped version of a function that executes at most once per wait period.
+Create a wrapped version of a function that executes at most once per wait period (using the most recent arguments passed to it).
 
 - `callback` is the function you wish to wrap.
 - `wait` is the number of milliseconds to wait between executions.
