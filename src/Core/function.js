@@ -10,10 +10,11 @@
  * @returns {function} The wrapped function.
  */
 Core.animation = (callback, leading) => {
-    let newArgs,
+    let animationReference,
+        newArgs,
         running;
 
-    return (...args) => {
+    const animation = (...args) => {
         newArgs = args;
 
         if (running) {
@@ -25,13 +26,32 @@ Core.animation = (callback, leading) => {
         }
 
         running = true;
-        Core._requestAnimationFrame(_ => {
-            running = false;
+        animationReference = Core._requestAnimationFrame(_ => {
             if (!leading) {
                 callback(...newArgs);
             }
+
+            running = false;
+            animationReference = null;
         });
     };
+
+    animation.cancel = _ => {
+        if (!animationReference) {
+            return;
+        }
+
+        if ('requestAnimationFrame' in window) {
+            window.cancelAnimationFrame(animationReference);
+        } else {
+            clearTimeout(animationReference);
+        }
+
+        running = false;
+        animationReference = null;
+    };
+
+    return animation;
 };
 
 /**
@@ -77,11 +97,12 @@ Core.curry = callback => {
  * @returns {function} The wrapped function.
  */
 Core.debounce = (callback, wait, leading, trailing = true) => {
-    let lastRan,
+    let debounceReference,
+        lastRan,
         newArgs,
         running;
 
-    return (...args) => {
+    const debounced = (...args) => {
         const now = Date.now();
         const delta = lastRan ?
             lastRan - now :
@@ -99,15 +120,30 @@ Core.debounce = (callback, wait, leading, trailing = true) => {
         }
 
         running = true;
-        setTimeout(
+        debounceReference = setTimeout(
             _ => {
-                running = false;
                 lastRan = Date.now();
                 callback(...newArgs);
+
+                running = false;
+                debounceReference = null;
             },
             delta
         );
     };
+
+    debounced.cancel = _ => {
+        if (!debounceReference) {
+            return;
+        }
+
+        clearTimeout(debounceReference);
+
+        running = false;
+        debounceReference = null;
+    };
+
+    return debounced;
 };
 
 /**

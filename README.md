@@ -115,6 +115,12 @@ Create a wrapped version of a function that executes at most once per animation 
 const animation = Core.animation(callback, leading);
 ```
 
+The returned animation function has a cancel method which will cancel the callback.
+
+```javascript
+animation.cancel();
+```
+
 **Compose**
 
 Create a wrapped function that will execute each callback in reverse order, passing the result from each function to the previous.
@@ -146,6 +152,12 @@ Create a wrapped version of a function that executes once per wait period (using
 
 ```javascript
 const debounced = Core.debounce(callback, wait, leading, trailing);
+```
+
+The returned debounced function has a cancel method which will cancel the (trailing) callback.
+
+```javascript
+debounced.cancel();
 ```
 
 **Once**
@@ -191,6 +203,12 @@ Create a wrapped version of a function that executes at most once per wait perio
 
 ```javascript
 const throttled = Core.throttle(callback, wait, leading, trailing);
+```
+
+The returned throttled function has a cancel method which will cancel the (trailing) callback.
+
+```javascript
+throttled.cancel();
 ```
 
 **Times**

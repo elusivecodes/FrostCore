@@ -150,8 +150,9 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
 
 
   Core.animation = function (callback, leading) {
-    var newArgs, running;
-    return function () {
+    var animationReference, newArgs, running;
+
+    var animation = function animation() {
       for (var _len4 = arguments.length, args = new Array(_len4), _key4 = 0; _key4 < _len4; _key4++) {
         args[_key4] = arguments[_key4];
       }
@@ -167,15 +168,32 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
       }
 
       running = true;
-
-      Core._requestAnimationFrame(function (_) {
-        running = false;
-
+      animationReference = Core._requestAnimationFrame(function (_) {
         if (!leading) {
           callback.apply(void 0, _toConsumableArray(newArgs));
         }
+
+        running = false;
+        animationReference = null;
       });
     };
+
+    animation.cancel = function (_) {
+      if (!animationReference) {
+        return;
+      }
+
+      if ('requestAnimationFrame' in window) {
+        window.cancelAnimationFrame(animationReference);
+      } else {
+        clearTimeout(animationReference);
+      }
+
+      running = false;
+      animationReference = null;
+    };
+
+    return animation;
   };
   /**
    * Create a wrapped function that will execute each callback in reverse order,
@@ -235,8 +253,9 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
 
   Core.debounce = function (callback, wait, leading) {
     var trailing = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : true;
-    var lastRan, newArgs, running;
-    return function () {
+    var debounceReference, lastRan, newArgs, running;
+
+    var debounced = function debounced() {
       var now = Date.now();
       var delta = lastRan ? lastRan - now : null;
 
@@ -257,12 +276,25 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
       }
 
       running = true;
-      setTimeout(function (_) {
-        running = false;
+      debounceReference = setTimeout(function (_) {
         lastRan = Date.now();
         callback.apply(void 0, _toConsumableArray(newArgs));
+        running = false;
+        debounceReference = null;
       }, delta);
     };
+
+    debounced.cancel = function (_) {
+      if (!debounceReference) {
+        return;
+      }
+
+      clearTimeout(debounceReference);
+      running = false;
+      debounceReference = null;
+    };
+
+    return debounced;
   };
   /**
    * Create a wrapped version of a function that will only ever execute once.

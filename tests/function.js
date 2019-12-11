@@ -13,7 +13,7 @@ describe('Function Tests', function() {
             setTimeout(_ => {
                 assert.equal(callCount, 1);
                 done();
-            }, 20);
+            }, 32);
         });
 
         it('only executes once per animation frame', function(done) {
@@ -26,7 +26,7 @@ describe('Function Tests', function() {
             setTimeout(_ => {
                 assert.equal(callCount, 1);
                 done();
-            }, 20);
+            }, 32);
         });
 
         it('executes for each animation frame', function(done) {
@@ -34,12 +34,12 @@ describe('Function Tests', function() {
             const animation = Core.animation(_ => callCount++);
 
             animation();
-            setTimeout(animation, 20);
+            setTimeout(animation, 32);
 
             setTimeout(_ => {
                 assert.equal(callCount, 2);
                 done();
-            }, 40);
+            }, 64);
         });
 
         it('works without leading argument', function(done) {
@@ -57,7 +57,7 @@ describe('Function Tests', function() {
             setTimeout(_ => {
                 assert.equal(callCount, 1);
                 done();
-            }, 20);
+            }, 32);
         });
 
         it('works with leading argument', function(done) {
@@ -75,7 +75,7 @@ describe('Function Tests', function() {
             setTimeout(_ => {
                 assert.equal(callCount, 1);
                 done();
-            }, 20);
+            }, 32);
         });
 
         it('uses the most recent arguments', function(done) {
@@ -94,7 +94,20 @@ describe('Function Tests', function() {
             setTimeout(_ => {
                 assert.equal(callCount, 1);
                 done();
-            }, 20);
+            }, 32);
+        });
+
+        it('allows callback to be cancelled', function(done) {
+            let callCount = 0;
+            const animation = Core.animation(_ => callCount++);
+
+            animation();
+            animation.cancel();
+
+            setTimeout(_ => {
+                assert.equal(callCount, 0);
+                done();
+            }, 32);
         });
     });
 
@@ -240,6 +253,19 @@ describe('Function Tests', function() {
 
             setTimeout(_ => {
                 assert.equal(callCount, 1);
+                done();
+            }, 64);
+        });
+
+        it('allows callback to be cancelled', function(done) {
+            let callCount = 0;
+            const debounced = Core.debounce(_ => callCount++, 32);
+
+            debounced();
+            debounced.cancel();
+
+            setTimeout(_ => {
+                assert.equal(callCount, 0);
                 done();
             }, 64);
         });
@@ -401,6 +427,20 @@ describe('Function Tests', function() {
 
             throttled();
             throttled(true);
+
+            setTimeout(_ => {
+                assert.equal(callCount, 1);
+                done();
+            }, 64);
+        });
+
+        it('allows callback to be cancelled', function(done) {
+            let callCount = 0;
+            const throttled = Core.throttle(_ => callCount++, 32);
+
+            throttled();
+            throttled();
+            throttled.cancel();
 
             setTimeout(_ => {
                 assert.equal(callCount, 1);
