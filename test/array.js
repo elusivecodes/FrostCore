@@ -1,5 +1,7 @@
 const assert = require('assert').strict;
 const Core = require('../dist/frost-core.min');
+const MockArrayLike = require('./Mock/MockArrayLike');
+const { mockArray, mockNumber, mockPlainObject, mockString } = require('./Mock/vars');
 
 describe('Array Tests', function() {
 
@@ -98,10 +100,24 @@ describe('Array Tests', function() {
             );
         });
 
+        it('works with decrementing decimals', function() {
+            assert.deepEqual(
+                Core.range(0, -1, .1),
+                [0, -.1, -.2, -.3, -.4, -.5, -.6, -.7, -.8, -.9, -1]
+            );
+        });
+
         it('works with an offset', function() {
             assert.deepEqual(
                 Core.range(10, 20),
                 [10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]
+            );
+        });
+
+        it('works with a negative offset', function() {
+            assert.deepEqual(
+                Core.range(-10, -20),
+                [-10, -11, -12, -13, -14, -15, -16, -17, -18, -19, -20]
             );
         });
     });
@@ -116,7 +132,7 @@ describe('Array Tests', function() {
             );
         });
 
-        it('does not overwrite mixed types', function() {
+        it('only removes "strict" duplicates', function() {
             assert.deepEqual(
                 Core.unique(
                     [1, 2, '2', 3, 4, 5]
@@ -129,94 +145,63 @@ describe('Array Tests', function() {
     describe('#wrap', function() {
         it('returns an array from an array', function() {
             assert.deepEqual(
-                Core.wrap(
-                    [1, 2, 3]
-                ),
-                [1, 2, 3]
+                Core.wrap(mockArray),
+                mockArray
             );
         });
 
         it('returns an array from an array-like', function() {
             assert.deepEqual(
-                Core.wrap(
-                    {
-                        [0]: 1,
-                        [1]: 2,
-                        [2]: 3,
-                        length: 3
-                    }
-                ),
+                Core.wrap(new MockArrayLike()),
                 [1, 2, 3]
             );
         });
 
         it('returns an array from false', function() {
             assert.deepEqual(
-                Core.wrap(
-                    false
-                ),
+                Core.wrap(false),
                 [false]
             );
         });
 
         it('returns an array from null', function() {
             assert.deepEqual(
-                Core.wrap(
-                    null
-                ),
+                Core.wrap(null),
                 [null]
             );
         });
 
         it('returns an array from a number', function() {
             assert.deepEqual(
-                Core.wrap(
-                    123
-                ),
-                [123]
+                Core.wrap(mockNumber),
+                [mockNumber]
             );
         });
 
         it('returns an array from an object', function() {
             assert.deepEqual(
-                Core.wrap(
-                    {
-                        a: 1,
-                        b: 2
-                    }
-                ),
-                [
-                    {
-                        a: 1,
-                        b: 2
-                    }
-                ]
+                Core.wrap(mockPlainObject),
+                [mockPlainObject]
             );
         });
 
         it('returns an array from a string', function() {
             assert.deepEqual(
-                Core.wrap(
-                    'test'
-                ),
-                ['test']
+                Core.wrap(mockString),
+                [mockString]
             );
         });
 
         it('returns an array from true', function() {
             assert.deepEqual(
-                Core.wrap(
-                    true
-                ),
+                Core.wrap(true),
                 [true]
             );
         });
 
         it('returns an empty array from undefined', function() {
             assert.deepEqual(
-                Core.wrap(
-                    undefined
-                ),
+                Core.wrap(undefined),
                 []
             );
         });
