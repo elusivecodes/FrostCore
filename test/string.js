@@ -11,21 +11,21 @@ describe('String Tests', function() {
             );
         });
 
-        it('works from pascal case', function() {
-            assert.equal(
-                Core.camelCase('ThisIsASampleString'),
-                'thisIsASampleString'
-            );
-        });
-
-        it('works from snake case', function() {
+        it('works from kebab-case', function() {
             assert.equal(
                 Core.camelCase('this-is-a-sample-string'),
                 'thisIsASampleString'
             );
         });
 
-        it('works from underscore', function() {
+        it('works from PascalCase', function() {
+            assert.equal(
+                Core.camelCase('ThisIsASampleString'),
+                'thisIsASampleString'
+            );
+        });
+
+        it('works from snake_case', function() {
             assert.equal(
                 Core.camelCase('this_is_a_sample_string'),
                 'thisIsASampleString'
@@ -36,6 +36,29 @@ describe('String Tests', function() {
             assert.equal(
                 Core.camelCase('This is a sample string!@#$%^&*()_+`-=[]{}|\\;,.<>/?'),
                 'thisIsASampleString'
+            );
+        });
+    });
+
+    describe('#capitalize', function() {
+        it('returns a capitalized string', function() {
+            assert.equal(
+                Core.capitalize('This is a sample string'),
+                'This is a sample string'
+            );
+        });
+
+        it('works from lower case', function() {
+            assert.equal(
+                Core.capitalize('this is a sample string'),
+                'This is a sample string'
+            );
+        });
+
+        it('works from upper case', function() {
+            assert.equal(
+                Core.capitalize('THIS IS A SAMPLE STRING'),
+                'This is a sample string'
             );
         });
     });
@@ -205,6 +228,87 @@ describe('String Tests', function() {
         });
     });
 
+    describe('humanize', function() {
+        it('returns a humanized string', function() {
+            assert.equal(
+                Core.humanize('This is a sample string'),
+                'This is a sample string'
+            );
+        });
+
+        it('works from camelCase', function() {
+            assert.equal(
+                Core.humanize('thisIsASampleString'),
+                'This is a sample string'
+            );
+        });
+
+        it('works from kebab-case', function() {
+            assert.equal(
+                Core.humanize('this-is-a-sample-string'),
+                'This is a sample string'
+            );
+        });
+
+        it('works from PascalCase', function() {
+            assert.equal(
+                Core.humanize('ThisIsASampleString'),
+                'This is a sample string'
+            );
+        });
+
+        it('works from snake_case', function() {
+            assert.equal(
+                Core.humanize('this_is_a_sample_string'),
+                'This is a sample string'
+            );
+        });
+
+        it('strips invalid characters', function() {
+            assert.equal(
+                Core.humanize('This is a sample string!@#$%^&*()_+`-=[]{}|\\;,.<>/?'),
+                'This is a sample string'
+            );
+        });
+    });
+
+    describe('#kebabCase', function() {
+        it('returns a kebab-case string', function() {
+            assert.equal(
+                Core.kebabCase('This is a sample string'),
+                'this-is-a-sample-string'
+            );
+        });
+
+        it('works from camelCase', function() {
+            assert.equal(
+                Core.kebabCase('thisIsASampleString'),
+                'this-is-a-sample-string'
+            );
+        });
+
+        it('works from PascalCase', function() {
+            assert.equal(
+                'this-is-a-sample-string',
+                Core.kebabCase('ThisIsASampleString')
+            );
+        });
+
+        it('works from snake_case', function() {
+            assert.equal(
+                Core.kebabCase('this_is_a_sample_string'),
+                'this-is-a-sample-string'
+            );
+        });
+
+        it('strips invalid characters', function() {
+            assert.equal(
+                Core.kebabCase('This is a sample string!@#$%^&*()_+`-=[]{}|\\;,.<>/?'),
+                'this-is-a-sample-string'
+            );
+        });
+    });
+
     describe('#pascalCase', function() {
         it('returns a pascalized string', function() {
             assert.equal(
@@ -213,21 +317,21 @@ describe('String Tests', function() {
             );
         });
 
-        it('works from camel case', function() {
+        it('works from camelCase', function() {
             assert.equal(
                 Core.pascalCase('thisIsASampleString'),
                 'ThisIsASampleString'
             );
         });
 
-        it('works from snake case', function() {
+        it('works from kebab-case', function() {
             assert.equal(
                 Core.pascalCase('this-is-a-sample-string'),
                 'ThisIsASampleString'
             );
         });
 
-        it('works from underscore', function() {
+        it('works from snake_case', function() {
             assert.equal(
                 Core.pascalCase('this_is_a_sample_string'),
                 'ThisIsASampleString'
@@ -284,74 +388,37 @@ describe('String Tests', function() {
     });
 
     describe('#snakeCase', function() {
-        it('returns a snake case string', function() {
+        it('returns an snake_cased string', function() {
             assert.equal(
                 Core.snakeCase('This is a sample string'),
-                'this-is-a-sample-string'
+                'this_is_a_sample_string'
             );
         });
 
-        it('works from camel case', function() {
+        it('works from camelCase', function() {
             assert.equal(
                 Core.snakeCase('thisIsASampleString'),
-                'this-is-a-sample-string'
+                'this_is_a_sample_string'
             );
         });
 
-        it('works from pascal case', function() {
+        it('works from PascalCase', function() {
             assert.equal(
-                'this-is-a-sample-string',
-                Core.snakeCase('ThisIsASampleString')
+                Core.snakeCase('ThisIsASampleString'),
+                'this_is_a_sample_string'
             );
         });
 
-        it('works from underscore', function() {
+        it('works from snake_case', function() {
             assert.equal(
-                Core.snakeCase('this_is_a_sample_string'),
-                'this-is-a-sample-string'
+                Core.snakeCase('this-is-a-sample-string'),
+                'this_is_a_sample_string'
             );
         });
 
         it('strips invalid characters', function() {
             assert.equal(
                 Core.snakeCase('This is a sample string!@#$%^&*()_+`-=[]{}|\\;,.<>/?'),
-                'this-is-a-sample-string'
-            );
-        });
-    });
-
-    describe('#underscore', function() {
-        it('returns an underscored string', function() {
-            assert.equal(
-                Core.underscore('This is a sample string'),
-                'this_is_a_sample_string'
-            );
-        });
-
-        it('works from camel case', function() {
-            assert.equal(
-                Core.underscore('thisIsASampleString'),
-                'this_is_a_sample_string'
-            );
-        });
-
-        it('works from pascal case', function() {
-            assert.equal(
-                Core.underscore('ThisIsASampleString'),
-                'this_is_a_sample_string'
-            );
-        });
-
-        it('works from snake case', function() {
-            assert.equal(
-                Core.underscore('this-is-a-sample-string'),
-                'this_is_a_sample_string'
-            );
-        });
-
-        it('strips invalid characters', function() {
-            assert.equal(
-                Core.underscore('This is a sample string!@#$%^&*()_+`-=[]{}|\\;,.<>/?'),
                 'this_is_a_sample_string'
             );
         });

@@ -458,6 +458,16 @@ Convert a string to camelCase.
 const camelCase = Core.camelCase(string);
 ```
 
+**Capitalize**
+
+Convert the first character of string to upper case and the remaining to lower case.
+
+- `string` is the string you wish to capitalize.
+
+```javascript
+const capitalized = Core.capitalize(string);
+```
+
 **Escape**
 
 Convert HTML special characters in a string to their corresponding HTML entities.
@@ -476,6 +486,26 @@ Escape a string for use in RegExp.
 
 ```javascript
 const escapeRegExp = Core.escapeRegExp(string);
+```
+
+**Humanize**
+
+Convert a string to a humanized form.
+
+- `string` is the string you wish to humanize.
+
+```javascript
+const humanized = Core.humanize(string);
+```
+
+**Kebab Case**
+
+Convert a string to kebab-case.
+
+- `string` is the string you wish to transform to kebab-case.
+
+```javascript
+const kebabCase = Core.kebabCase(string);
 ```
 
 **Pascal Case**
@@ -501,22 +531,12 @@ const randomString = Core.randomString(length, characters);
 
 **Snake Case**
 
-Convert a string to snake-case.
+Convert a string to snake_case.
 
-- `string` is the string you wish to transform to snake-case.
+- `string` is the string you wish to transform to snake_case.
 
 ```javascript
 const snakeCase = Core.snakeCase(string);
-```
-
-**Underscore**
-
-Convert a string to underscored.
-
-- `string` is the string you wish to transform to underscored.
-
-```javascript
-const underscored = Core.underscore(string);
 ```
 
 **Unescape**

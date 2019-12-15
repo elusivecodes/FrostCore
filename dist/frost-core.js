@@ -375,6 +375,25 @@
         callback => setTimeout(callback, 1000 / 60);
 
     /**
+     * Split a string into individual words.
+     * @param {string} string The input string.
+     * @returns {string[]} The split parts of the string.
+     */
+    Core._splitString = string =>
+        `${string}`
+            .split(/[^a-zA-Z0-9']|(?=[A-Z])/)
+            .reduce(
+                (acc, word) => {
+                    word = word.replace(/[^\w]/, '').toLowerCase();
+                    if (word) {
+                        acc.push(word)
+                    }
+                    return acc;
+                },
+                []
+            );
+
+    /**
      * Math methods
      */
 
@@ -754,13 +773,19 @@
             .map(
                 (word, index) =>
                     index ?
-                        (
-                            word.charAt(0).toUpperCase() +
-                            word.substring(1)
-                        ) :
+                        Core.capitalize(word) :
                         word
             )
             .join('');
+
+    /**
+     * Convert the first character of string to upper case and the remaining to lower case.
+     * @param {string} string The input string.
+     * @returns {string} The capitalized string.
+     */
+    Core.capitalize = string =>
+        string.charAt(0).toUpperCase() +
+        string.substring(1).toLowerCase();
 
     /**
      * Convert HTML special characters in a string to their corresponding HTML entities.
@@ -776,11 +801,32 @@
 
     /**
      * Escape RegExp special characters in a string.
-     * @param {string} string The string to escape.
+     * @param {string} string The input string.
      * @returns {string} The escaped string.
      */
     Core.escapeRegExp = string =>
         string.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
+
+    /**
+     * Convert a string to a humanized form.
+     * @param {string} string The input string.
+     * @returns {string} The humanized string.
+     */
+    Core.humanize = string =>
+        Core.capitalize(
+            Core._splitString(string)
+                .join(' ')
+        );
+
+    /**
+     * Convert a string to kebab-case.
+     * @param {string} string The input string.
+     * @returns {string} The kebab-cased string.
+     */
+    Core.kebabCase = string =>
+        Core._splitString(string)
+            .join('-')
+            .toLowerCase();
 
     /**
      * Convert a string to PascalCase.
@@ -812,21 +858,11 @@
             .join('');
 
     /**
-     * Convert a string to snake-case.
+     * Convert a string to snake_case.
      * @param {string} string The input string.
-     * @returns {string} The snake-cased string.
+     * @returns {string} The snake_cased string.
      */
     Core.snakeCase = string =>
-        Core._splitString(string)
-            .join('-')
-            .toLowerCase();
-
-    /**
-     * Convert a string to underscored.
-     * @param {string} string The input string.
-     * @returns {string} The underscored string.
-     */
-    Core.underscore = string =>
         Core._splitString(string)
             .join('_')
             .toLowerCase();
@@ -842,25 +878,6 @@
             (_, code) =>
                 Core._unescapeChars[code]
         );
-
-    /**
-     * Split a string into individual words.
-     * @param {string} string The input string.
-     * @returns {string[]} The split parts of the string.
-     */
-    Core._splitString = string =>
-        `${string}`
-            .split(/[^a-zA-Z0-9']|(?=[A-Z])/)
-            .reduce(
-                (acc, word) => {
-                    word = word.replace(/[^\w]/, '').toLowerCase();
-                    if (word) {
-                        acc.push(word)
-                    }
-                    return acc;
-                },
-                []
-            );
 
     /**
      * Testing methods

@@ -221,11 +221,3 @@ Core.times = (callback, amount) => {
         }
     }
 };
-
-/**
- * Execute a callback on the next animation frame
- * @param {function} callback Callback function to execute.
- */
-Core._requestAnimationFrame = 'requestAnimationFrame' in window ?
-    window.requestAnimationFrame :
-    callback => setTimeout(callback, 1000 / 60);
