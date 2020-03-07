@@ -454,6 +454,18 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
     return Core.len(x1 - x2, y1 - y2);
   };
   /**
+   * Inverse linear interpolation from one value to another.
+   * @param {number} v1 The starting value.
+   * @param {number} v2 The ending value.
+   * @param {number} value The value to inverse interpolate.
+   * @returns {number} The interpolated amount.
+   */
+
+
+  Core.inverseLerp = function (v1, v2, value) {
+    return (value - v1) / (v2 - v1);
+  };
+  /**
    * Get the length of an X,Y vector.
    * @param {number} x The X co-ordinate.
    * @param {number} y The Y co-ordinate.
@@ -472,60 +484,6 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
 
   Core.lerp = function (v1, v2, amount) {
     return v1 * (1 - amount) + v2 * amount;
-  };
-  /**
-   * Get the linear percent of a value in a specified range.
-   * @param {number} value The value to process.
-   * @param {number} min The minimum of the range.
-   * @param {number} max The maximum of the range.
-   * @returns {number} The linear percent.
-   */
-
-
-  Core.linearPercent = function (value, min, max) {
-    return min === max ? 0 : Core.clampPercent(100 * (value - min) / (max - min));
-  };
-  /**
-   * Get the linear value of a percent in a specified range.
-   * @param {number} percent The percent to process.
-   * @param {number} min The minimum of the range.
-   * @param {number} max The maximum of the range.
-   * @returns {number} The linear value.
-   */
-
-
-  Core.linearValue = function (percent, min, max) {
-    return min === max ? min : Core.clamp(min + percent / 100 * (max - min), Math.min(min, max), Math.max(min, max));
-  };
-  /**
-   * Get the logarithmic percent of a value in a specified range.
-   * @param {number} value The value to process.
-   * @param {number} min The minimum of the range.
-   * @param {number} max The maximum of the range.
-   * @returns {number} The logarithmic percent.
-   */
-
-
-  Core.logPercent = function (value, min, max) {
-    if (min === max) {
-      return 0;
-    }
-
-    min = min ? Math.log(min) : 0;
-    return Core.clampPercent(100 * ((value ? Math.log(value) : 0) - min) / (Math.log(max) - min));
-  };
-  /**
-   * Get the logarithmic value of a percent in a specified range.
-   * @param {number} percent The percent to process.
-   * @param {number} min The minimum of the range.
-   * @param {number} max The maximum of the range.
-   * @returns {number} The logarithmic value;
-   */
-
-
-  Core.logValue = function (percent, min, max) {
-    min = min ? Math.log(min) : 0;
-    return Core.clamp(Math.exp(min + (Math.log(max) - min) * percent / 100), min, max);
   };
   /**
    * Map a value from one range to another.

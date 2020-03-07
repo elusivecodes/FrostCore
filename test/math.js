@@ -84,6 +84,29 @@ describe('Math Tests', function() {
         });
     });
 
+    describe('#inverseLerp', function() {
+        it('returns the inverse interpolated value', function() {
+            assert.equal(
+                Core.inverseLerp(50, 100, 75),
+                .5
+            );
+        });
+
+        it('works from negative numbers', function() {
+            assert.equal(
+                Core.inverseLerp(-100, 100, 50),
+                .75
+            );
+        });
+
+        it('works to negative numbers', function() {
+            assert.equal(
+                Core.inverseLerp(100, -100, -50),
+                .75
+            );
+        });
+    });
+
     describe('#lerp', function() {
         it('returns the interpolated value', function() {
             assert.equal(
@@ -103,70 +126,6 @@ describe('Math Tests', function() {
             assert.equal(
                 Core.lerp(100, -100, .75),
                 -50
-            );
-        });
-    });
-
-    describe('#linearPercent', function() {
-        it('returns the percent value', function() {
-            assert.equal(
-                Core.linearPercent(75, 50, 100),
-                50
-            );
-        });
-
-        it('works from negative numbers', function() {
-            assert.equal(
-                Core.linearPercent(50, -100, 100),
-                75
-            );
-        });
-
-        it('works to negative numbers', function() {
-            assert.equal(
-                Core.linearPercent(50, 100, -100),
-                25
-            );
-        });
-    });
-
-    describe('#linearValue', function() {
-        it('returns the value', function() {
-            assert.equal(
-                Core.linearValue(50, 50, 100),
-                75
-            );
-        });
-
-        it('works from negative numbers', function() {
-            assert.equal(
-                Core.linearValue(75, -100, 100),
-                50
-            );
-        });
-
-        it('works to negative numbers', function() {
-            assert.equal(
-                Core.linearValue(25, 100, -100),
-                50
-            );
-        });
-    });
-
-    describe('#logPercent', function() {
-        it('returns the percent value', function() {
-            assert.equal(
-                Core.logPercent(75, 50, 100),
-                58.49625007211554
-            );
-        });
-    });
-
-    describe('#logValue', function() {
-        it('returns the value', function() {
-            assert.equal(
-                Core.logValue(50, 50, 100),
-                70.71067811865478
             );
         });
     });

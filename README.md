@@ -260,6 +260,18 @@ Get the distance between two vectors.
 const dist = Core.dist(x1, y1, x2, y2);
 ```
 
+**Inverse Linear Interpolation**
+
+Inverse linear interpolation from one value to another.
+
+- `min` is the number to be used as the minimum of the "lerped" amount.
+- `max` is the number to be used as the maximum of the "lerped" amount.
+- `value` is the value to inverse interpolate.
+
+```javascript
+const lerp = Core.inverseLerp(min, max, amount);
+```
+
 **Length**
 
 Get the length of an X,Y vector.
@@ -277,58 +289,10 @@ Linear interpolation from one value to another.
 
 - `min` is the number to be used as the minimum of the "lerped" amount.
 - `max` is the number to be used as the maximum of the "lerped" amount.
-- `amount` is the amount to "lerp" (between *0* and *1*).
+- `amount` is the amount to interpolate (between *0* and *1*).
 
 ```javascript
 const lerp = Core.lerp(min, max, amount);
-```
-
-**Linear Percent**
-
-Get the linear percent of a value in a specified range.
-
-- `value` is the number you wish to calculate the linear percent of.
-- `min` is the number to be used as the minimum value of the range.
-- `max` is the number to be used as the maximum value of the range.
-
-```javascript
-const linearPercent = Core.linearPercent(value, min, max);
-```
-
-**Linear Value**
-
-Get the linear value of a percent in a specified range.
-
-- `percent` is the number you wish to calculate the linear value of.
-- `min` is the number to be used as the minimum value of the range.
-- `max` is the number to be used as the maximum value of the range.
-
-```javascript
-const linearValue = Core.linearValue(percent, min, max);
-```
-
-**Logarithmic Percent**
-
-Get the logarithmic percent of a value in a specified range.
-
-- `value` is the number you wish to calculate the logarithmic percent of.
-- `min` is the number to be used as the minimum value of the range.
-- `max` is the number to be used as the maximum value of the range.
-
-```javascript
-const logPrecent = Core.logPercent(value, min, max);
-```
-
-**Logarithmic Value**
-
-Get the logarithmic value of a percent in a specified range.
-
-- `percent` is the number you wish to calculate the logarithmic value of.
-- `min` is the number to be used as the minimum value of the range.
-- `max` is the number to be used as the maximum value of the range.
-
-```javascript
-const logValue = Core.logValue(percent, min, max);
 ```
 
 **Map**
