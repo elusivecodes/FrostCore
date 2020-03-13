@@ -2,7 +2,7 @@
 
 **FrostCore** is a free, open-source utility library for *JavaScript*.
 
-It is a tiny (< 2kb gzipped) and modern library, adding various functionality to your JS toolkit for manipulating arrays, functions, objects & more.
+It is a tiny (~2kb gzipped) and modern library, adding various functionality to your JS toolkit for manipulating arrays, functions, objects & more.
 
 
 ## Table Of Contents
@@ -162,7 +162,7 @@ debounced.cancel();
 
 **Once**
 
-Create a wrapped version of a function that will only ever execute once.
+Create a wrapped version of a function that will only ever execute once. Subsequent calls to the wrapped function will return the result of the initial call.
 
 - `callback` is the function you wish to wrap.
 

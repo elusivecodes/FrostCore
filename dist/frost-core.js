@@ -292,19 +292,23 @@
 
     /**
      * Create a wrapped version of a function that will only ever execute once.
+     * Subsequent calls to the wrapped function will return the result of the initial call.
      * @param {function} callback Callback function to execute.
      * @returns {function} The wrapped function.
      */
     Core.once = callback => {
-        let ran;
+        let ran,
+            result;
 
         return (...args) => {
             if (ran) {
-                return;
+                return result;
             }
 
             ran = true;
-            return callback(...args);
+            result = callback(...args);
+            return result;
+
         };
     };
 

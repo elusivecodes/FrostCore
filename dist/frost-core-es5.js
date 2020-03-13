@@ -298,20 +298,22 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
   };
   /**
    * Create a wrapped version of a function that will only ever execute once.
+   * Subsequent calls to the wrapped function will return the result of the initial call.
    * @param {function} callback Callback function to execute.
    * @returns {function} The wrapped function.
    */
 
 
   Core.once = function (callback) {
-    var ran;
+    var ran, result;
     return function () {
       if (ran) {
-        return;
+        return result;
       }
 
       ran = true;
-      return callback.apply(void 0, arguments);
+      result = callback.apply(void 0, arguments);
+      return result;
     };
   };
   /**

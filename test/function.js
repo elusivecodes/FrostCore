@@ -284,6 +284,21 @@ describe('Function Tests', function() {
 
             assert.equal(result, 1);
         });
+
+        it('returns the result of the first execution on subsequent calls', function() {
+            const rand = Core.once(Math.random);
+            const results = new Set;
+
+            for (let i = 0; i < 100; i++) {
+                const value = rand();
+                results.add(value);
+            }
+
+            assert.equal(
+                results.size,
+                1
+            );
+        });
     });
 
     describe('#partial', function() {
