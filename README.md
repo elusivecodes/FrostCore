@@ -269,7 +269,7 @@ Inverse linear interpolation from one value to another.
 - `value` is the value to inverse interpolate.
 
 ```javascript
-const lerp = Core.inverseLerp(min, max, amount);
+const lerp = Core.inverseLerp(min, max, value);
 ```
 
 **Length**
