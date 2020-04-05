@@ -394,7 +394,9 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
    */
 
 
-  Core._requestAnimationFrame = 'requestAnimationFrame' in window ? window.requestAnimationFrame : function (callback) {
+  Core._requestAnimationFrame = 'requestAnimationFrame' in window ? function () {
+    return window.requestAnimationFrame.apply(window, arguments);
+  } : function (callback) {
     return setTimeout(callback, 1000 / 60);
   };
   /**

@@ -375,7 +375,7 @@
      * @param {function} callback Callback function to execute.
      */
     Core._requestAnimationFrame = 'requestAnimationFrame' in window ?
-        window.requestAnimationFrame :
+        (...args) => window.requestAnimationFrame(...args) :
         callback => setTimeout(callback, 1000 / 60);
 
     /**
