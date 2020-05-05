@@ -48,6 +48,32 @@ describe('Object Tests', function() {
                 { a: 1, b: 3, c: 4 }
             );
         });
+
+        it('does not copy objects by reference', function() {
+            const b = { c: 1 };
+            const result = Core.extend(
+                { a: 1 },
+                { b }
+            );
+            b.d = 1;
+            assert.deepEqual(
+                result,
+                { a: 1, b: { c: 1 } }
+            );
+        });
+
+        it('does not copy arrays by reference', function() {
+            const b = [1, 2, 3];
+            const result = Core.extend(
+                { a: 1 },
+                { b }
+            );
+            b.push(4);
+            assert.deepEqual(
+                result,
+                { a: 1, b: [1, 2, 3] }
+            );
+        });
     });
 
     describe('#forgetDot', function() {

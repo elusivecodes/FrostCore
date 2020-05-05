@@ -12,12 +12,20 @@ Core.extend = (object, ...objects) =>
     objects.reduce(
         (acc, val) => {
             for (const k in val) {
-                if (
-                    k in acc &&
-                    Core.isObject(acc[k]) &&
-                    Core.isObject(val[k])
-                ) {
-                    Core.extend(acc[k], val[k]);
+                if (Core.isArray(val[k])) {
+                    acc[k] = Core.extend(
+                        Core.isArray(acc[k]) ?
+                            acc[k] :
+                            [],
+                        val[k]
+                    );
+                } else if (Core.isPlainObject(val[k])) {
+                    acc[k] = Core.extend(
+                        Core.isPlainObject(acc[k]) ?
+                            acc[k] :
+                            {},
+                        val[k]
+                    );
                 } else {
                     acc[k] = val[k];
                 }
