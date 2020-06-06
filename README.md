@@ -24,7 +24,7 @@ It is a tiny (~2kb gzipped) and modern library, adding various functionality to 
 <script type="text/javascript" src="/path/to/frost-core.min.js"></script>
 ```
 
-**NPM***
+**NPM**
 
 ```
 npm install frostcore
