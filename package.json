@@ -2,13 +2,36 @@
     "name": "frostcore",
     "version": "1.0.0",
     "description": "FrostCore is a free, open-source utility library for JavaScript.",
-    "main": "build.js",
+    "keywords": [
+        "utility",
+        "array",
+        "function",
+        "math",
+        "object",
+        "string",
+        "testing"
+    ],
+    "homepage": "https://github.com/elusivecodes/FrostCore",
+    "bugs": {
+        "url": "https://github.com/elusivecodes/FrostCore/issues"
+    },
+    "main": "./dist/frost-core.js",
+    "files": [
+        "/dist/frost-core.js",
+        "/LICENSE",
+        "/README.md"
+    ],
     "scripts": {
-        "start": "node build.js",
+        "build": "node build.js",
         "test": "./node_modules/mocha/bin/mocha"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/elusivecodes/FrostCore.git"
     },
     "author": "Elusive",
     "license": "MIT",
+    "private": false,
     "devDependencies": {
         "@babel/core": "^7.9.6",
         "@babel/preset-env": "^7.9.6",
