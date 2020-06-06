@@ -18,8 +18,22 @@ It is a tiny (~2kb gzipped) and modern library, adding various functionality to 
 
 ## Installation
 
+**Browser**
+
 ```html
 <script type="text/javascript" src="/path/to/frost-core.min.js"></script>
+```
+
+**NPM***
+
+```
+npm install frostcore
+```
+
+In Node.js:
+
+```javascript
+const Core = require('frostcore');
 ```
 
 
