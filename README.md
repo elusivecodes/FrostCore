@@ -18,16 +18,16 @@ It is a tiny (~2kb gzipped) and modern library, adding various functionality to 
 
 ## Installation
 
-**Browser**
+**In Browser**
 
 ```html
 <script type="text/javascript" src="/path/to/frost-core.min.js"></script>
 ```
 
-**NPM**
+**Using NPM**
 
 ```
-npm install frostcore
+npm i frostcore
 ```
 
 In Node.js:
