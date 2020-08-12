@@ -11,7 +11,7 @@
         global.Core = factory(global);
     }
 
-})(this, function(window) {
+})(this || window, function(window) {
     'use strict';
 
     const Core = {};

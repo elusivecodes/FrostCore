@@ -26,7 +26,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
   } else {
     global.Core = factory(global);
   }
-})(void 0, function (window) {
+})(void 0 || window, function (window) {
   'use strict';
 
   var Core = {};
