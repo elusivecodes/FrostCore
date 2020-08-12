@@ -44,7 +44,7 @@ Core.escape = string =>
  * @returns {string} The escaped string.
  */
 Core.escapeRegExp = string =>
-    string.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$$&');
+    string.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
 
 /**
  * Convert a string to a humanized form.

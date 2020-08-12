@@ -174,6 +174,16 @@ The returned debounced function has a cancel method which will cancel the (trail
 debounced.cancel();
 ```
 
+**Evaluate**
+
+Evaluate a value from a function or value.
+
+- `value` is the value to evaluate.
+
+```javascript
+const result = Core.evaluate(value);
+```
+
 **Once**
 
 Create a wrapped version of a function that will only ever execute once. Subsequent calls to the wrapped function will return the result of the initial call.

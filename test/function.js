@@ -271,6 +271,24 @@ describe('Function Tests', function() {
         });
     });
 
+    describe('#evaluate', function() {
+        it('returns the result of a function', function() {
+            const value = Core.random();
+            const result = Core.evaluate(
+                _ => value
+            );
+
+            assert.equal(result, value);
+        });
+
+        it('returns the value of a non-function', function() {
+            const value = Core.random();
+            const result = Core.evaluate(value);
+
+            assert.equal(result, value);
+        });
+    });
+
     describe('#once', function() {
         it('returns a function that only executes once', function() {
             let result = 0;

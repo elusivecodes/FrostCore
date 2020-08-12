@@ -147,6 +147,16 @@ Core.debounce = (callback, wait, leading, trailing = true) => {
 };
 
 /**
+ * Evaluate a value from a function or value.
+ * @param {*} value The value to evaluate.
+ * @returns {*} The evaluated value.
+ */
+Core.evaluate = value =>
+    Core.isFunction(value) ?
+        value() :
+        value;
+
+/**
  * Create a wrapped version of a function that will only ever execute once.
  * Subsequent calls to the wrapped function will return the result of the initial call.
  * @param {function} callback Callback function to execute.
