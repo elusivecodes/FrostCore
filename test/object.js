@@ -1,7 +1,7 @@
 const assert = require('assert').strict;
 const Core = require('../dist/frost-core.min');
 
-describe('Object Tests', function() {
+describe('Object', function() {
 
     describe('#extend', function() {
         it('extends the first object', function() {

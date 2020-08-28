@@ -11,7 +11,7 @@ const MockTextNode = require('./Mock/MockTextNode');
 const MockWindow = require('./Mock/MockWindow');
 const { mockArray, mockFunction, mockNumber, mockNumericString, mockPlainObject, mockString } = require('./Mock/vars');
 
-describe('Testing (DOM) Tests', function() {
+describe('Testing (DOM)', function() {
 
     describe('#isDocument', function() {
         it('works with array', function() {

@@ -1,7 +1,7 @@
 const assert = require('assert').strict;
 const Core = require('../dist/frost-core.min');
 
-describe('Function Tests', function() {
+describe('Function', function() {
 
     describe('#animation', function() {
         it('returns an animation function', function(done) {

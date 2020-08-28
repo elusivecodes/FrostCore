@@ -3,7 +3,7 @@ const Core = require('../dist/frost-core.min');
 const MockArrayLike = require('./Mock/MockArrayLike');
 const { mockArray, mockNumber, mockPlainObject, mockString } = require('./Mock/vars');
 
-describe('Array Tests', function() {
+describe('Array', function() {
 
     describe('#diff', function() {
         it('returns the elements that exist only in the first array', function() {

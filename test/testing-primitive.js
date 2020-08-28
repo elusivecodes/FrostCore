@@ -4,7 +4,7 @@ const MockArrayLike = require('./Mock/MockArrayLike');
 const MockObject = require('./Mock/MockObject');
 const { mockArray, mockFunction, mockNumber, mockNumericString, mockPlainObject, mockString } = require('./Mock/vars');
 
-describe('Testing (Primitive) Tests', function() {
+describe('Testing (Primitive)', function() {
 
     describe('#isArray', function() {
         it('works with array', function() {

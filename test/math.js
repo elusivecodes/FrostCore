@@ -1,7 +1,7 @@
 const assert = require('assert').strict;
 const Core = require('../dist/frost-core.min');
 
-describe('Math Tests', function() {
+describe('Math', function() {
 
     describe('#clamp', function() {
         it('returns a value in range', function() {

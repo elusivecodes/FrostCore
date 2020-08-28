@@ -1,7 +1,7 @@
 const assert = require('assert').strict;
 const Core = require('../dist/frost-core.min');
 
-describe('String Tests', function() {
+describe('String', function() {
 
     describe('#camelCase', function() {
         it('returns a camelized string', function() {
