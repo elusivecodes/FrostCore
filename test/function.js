@@ -164,13 +164,31 @@ describe('Function', function() {
 
         it('executes for each wait period', function(done) {
             let callCount = 0;
-            const debounced = Core.debounce(_ => callCount++, 32);
+            const debounced = Core.debounce(_ => callCount++, 16);
 
             debounced();
-            setTimeout(debounced, 32);
+            setTimeout(debounced, 16);
 
             setTimeout(_ => {
                 assert.equal(callCount, 2);
+                done();
+            }, 64);
+        });
+
+        it('only executes after wait period', function(done) {
+            let callCount = 0;
+            const debounced = Core.debounce(_ => callCount++, 16);
+
+            debounced();
+            setTimeout(debounced, 8);
+            setTimeout(debounced, 16);
+
+            setTimeout(_ => {
+                assert.equal(callCount, 0);
+            }, 32);
+
+            setTimeout(_ => {
+                assert.equal(callCount, 1);
                 done();
             }, 64);
         });

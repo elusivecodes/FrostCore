@@ -160,7 +160,7 @@ const curried = Core.curry(callback);
 Create a wrapped version of a function that executes once per wait period (using the most recent arguments passed to it).
 
 - `callback` is the function you wish to wrap.
-- `wait` is the number of milliseconds to wait between executions.
+- `wait` is the number of milliseconds to wait between executions, and will default to *0*.
 - `leading` is a boolean indicating whether you wish the function to execute on the leading edge of the wait period, and will default to *false*.
 - `trailing` is a boolean indicating whether you wish the function to execute on the trailing edge of the wait period, and will default to *true*.
 
@@ -221,7 +221,7 @@ const piped = Core.pipe(...callbacks);
 Create a wrapped version of a function that executes at most once per wait period (using the most recent arguments passed to it).
 
 - `callback` is the function you wish to wrap.
-- `wait` is the number of milliseconds to wait between executions.
+- `wait` is the number of milliseconds to wait between executions, and will default to *0*.
 - `leading` is a boolean indicating whether you wish the function to execute on the leading edge of the wait period, and will default to *true*.
 - `trailing` is a boolean indicating whether you wish the function to execute on the trailing edge of the wait period, and will default to *true*.
 
