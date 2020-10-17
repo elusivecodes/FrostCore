@@ -1,5 +1,5 @@
 /**
- * FrostCore v1.0.8
+ * FrostCore v1.0.9
  * https://github.com/elusivecodes/FrostCore
  */
 (function(global, factory) {
