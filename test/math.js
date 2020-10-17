@@ -1,46 +1,46 @@
-const assert = require('assert').strict;
+const assert = require('assert');
 const Core = require('../dist/frost-core.min');
 
 describe('Math', function() {
 
     describe('#clamp', function() {
         it('returns a value in range', function() {
-            assert.equal(
+            assert.strictEqual(
                 Core.clamp(0, -50, 50),
                 0
             );
         });
 
         it('works with default arguments', function() {
-            assert.equal(
+            assert.strictEqual(
                 Core.clamp(0.5),
                 0.5
             );
         });
 
         it('clamps to lower bounds', function() {
-            assert.equal(
+            assert.strictEqual(
                 Core.clamp(-100, -50, 50),
                 -50
             );
         });
 
         it('clamps to lower bounds with default arguments', function() {
-            assert.equal(
+            assert.strictEqual(
                 Core.clamp(-1),
                 0
             );
         });
 
         it('clamps to upper bounds', function() {
-            assert.equal(
+            assert.strictEqual(
                 Core.clamp(100, -50, 50),
                 50
             );
         });
 
         it('clamps to upper bounds with default arguments', function() {
-            assert.equal(
+            assert.strictEqual(
                 Core.clamp(2),
                 1
             );
@@ -49,21 +49,21 @@ describe('Math', function() {
 
     describe('#clampPercent', function() {
         it('returns a value in range', function() {
-            assert.equal(
+            assert.strictEqual(
                 Core.clampPercent(50),
                 50
             );
         });
 
         it('clamps to lower bounds', function() {
-            assert.equal(
+            assert.strictEqual(
                 Core.clampPercent(-50),
                 0
             );
         });
 
         it('clamps to upper bounds', function() {
-            assert.equal(
+            assert.strictEqual(
                 Core.clampPercent(150),
                 100
             );
@@ -77,7 +77,7 @@ describe('Math', function() {
             const x2 = Math.random();
             const y2 = Math.random();
 
-            assert.equal(
+            assert.strictEqual(
                 Core.dist(x1, y1, x2, y2),
                 Math.hypot(x2 - x1, y2 - y1)
             );
@@ -86,21 +86,21 @@ describe('Math', function() {
 
     describe('#inverseLerp', function() {
         it('returns the inverse interpolated value', function() {
-            assert.equal(
+            assert.strictEqual(
                 Core.inverseLerp(50, 100, 75),
                 .5
             );
         });
 
         it('works from negative numbers', function() {
-            assert.equal(
+            assert.strictEqual(
                 Core.inverseLerp(-100, 100, 50),
                 .75
             );
         });
 
         it('works to negative numbers', function() {
-            assert.equal(
+            assert.strictEqual(
                 Core.inverseLerp(100, -100, -50),
                 .75
             );
@@ -109,21 +109,21 @@ describe('Math', function() {
 
     describe('#lerp', function() {
         it('returns the interpolated value', function() {
-            assert.equal(
+            assert.strictEqual(
                 Core.lerp(50, 100, .5),
                 75
             );
         });
 
         it('works from negative numbers', function() {
-            assert.equal(
+            assert.strictEqual(
                 Core.lerp(-100, 100, .75),
                 50
             );
         });
 
         it('works to negative numbers', function() {
-            assert.equal(
+            assert.strictEqual(
                 Core.lerp(100, -100, .75),
                 -50
             );
@@ -132,35 +132,35 @@ describe('Math', function() {
 
     describe('#map', function() {
         it('returns the mapped value', function() {
-            assert.equal(
+            assert.strictEqual(
                 Core.map(25, 10, 50, 25, 150),
                 71.875
             );
         });
 
         it('works from negative start', function() {
-            assert.equal(
+            assert.strictEqual(
                 Core.map(5, -10, 50, 25, 150),
                 56.25
             );
         });
 
         it('works from negative end', function() {
-            assert.equal(
+            assert.strictEqual(
                 Core.map(-5, 10, -50, 25, 150),
                 56.25
             );
         });
 
         it('works to negative start', function() {
-            assert.equal(
+            assert.strictEqual(
                 Core.map(25, 10, 50, -25, 50),
                 3.125
             );
         });
 
         it('works to negative end', function() {
-            assert.equal(
+            assert.strictEqual(
                 Core.map(25, 10, 50, 25, -50),
                 -3.125
             );
@@ -234,7 +234,7 @@ describe('Math', function() {
             for (i = 0; i < 1000; i++) {
                 const value = Core.randomInt(10, 50);
                 assert.ok(value >= 10 && value <= 50);
-                assert.equal(value, Math.round(value));
+                assert.strictEqual(value, Math.round(value));
                 found2.add(value);
             }
 
@@ -248,7 +248,7 @@ describe('Math', function() {
             for (i = 0; i < 1000; i++) {
                 const value = Core.randomInt(10);
                 assert.ok(value >= 0 && value <= 10);
-                assert.equal(value, Math.round(value));
+                assert.strictEqual(value, Math.round(value));
                 found.add(value);
             }
 
@@ -262,7 +262,7 @@ describe('Math', function() {
             for (i = 0; i < 1000; i++) {
                 const value = Core.randomInt(-50, -10);
                 assert.ok(value >= -50 && value <= -10);
-                assert.equal(value, Math.round(value));
+                assert.strictEqual(value, Math.round(value));
                 found.add(value);
             }
 
@@ -272,21 +272,21 @@ describe('Math', function() {
 
     describe('#toStep', function() {
         it('works with a decimal', function() {
-            assert.equal(
+            assert.strictEqual(
                 Core.toStep(0.123456, .1),
                 0.1
             );
         });
 
         it('works with a fraction', function() {
-            assert.equal(
+            assert.strictEqual(
                 Core.toStep(1.23456, 1 / 4),
                 1.25
             );
         });
 
         it('works with a whole number', function() {
-            assert.equal(
+            assert.strictEqual(
                 Core.toStep(123.456, 33),
                 132
             );

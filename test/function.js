@@ -1,4 +1,4 @@
-const assert = require('assert').strict;
+const assert = require('assert');
 const Core = require('../dist/frost-core.min');
 
 describe('Function', function() {
@@ -11,7 +11,7 @@ describe('Function', function() {
             animation();
 
             setTimeout(_ => {
-                assert.equal(callCount, 1);
+                assert.strictEqual(callCount, 1);
                 done();
             }, 32);
         });
@@ -24,7 +24,7 @@ describe('Function', function() {
             animation();
 
             setTimeout(_ => {
-                assert.equal(callCount, 1);
+                assert.strictEqual(callCount, 1);
                 done();
             }, 32);
         });
@@ -37,7 +37,7 @@ describe('Function', function() {
             setTimeout(animation, 32);
 
             setTimeout(_ => {
-                assert.equal(callCount, 2);
+                assert.strictEqual(callCount, 2);
                 done();
             }, 64);
         });
@@ -55,7 +55,7 @@ describe('Function', function() {
             finished = true;
 
             setTimeout(_ => {
-                assert.equal(callCount, 1);
+                assert.strictEqual(callCount, 1);
                 done();
             }, 32);
         });
@@ -73,7 +73,7 @@ describe('Function', function() {
             finished = true;
 
             setTimeout(_ => {
-                assert.equal(callCount, 1);
+                assert.strictEqual(callCount, 1);
                 done();
             }, 32);
         });
@@ -92,7 +92,7 @@ describe('Function', function() {
             animation(true);
 
             setTimeout(_ => {
-                assert.equal(callCount, 1);
+                assert.strictEqual(callCount, 1);
                 done();
             }, 32);
         });
@@ -105,7 +105,7 @@ describe('Function', function() {
             animation.cancel();
 
             setTimeout(_ => {
-                assert.equal(callCount, 0);
+                assert.strictEqual(callCount, 0);
                 done();
             }, 32);
         });
@@ -113,7 +113,7 @@ describe('Function', function() {
 
     describe('#compose', function() {
         it('returns a composed function', function() {
-            assert.equal(
+            assert.strictEqual(
                 Core.compose(
                     x => x / 2,
                     x => x + 2,
@@ -126,7 +126,7 @@ describe('Function', function() {
 
     describe('#curry', function() {
         it('returns a curried function', function() {
-            assert.equal(
+            assert.strictEqual(
                 Core.curry(
                     (a, b) =>
                         a * b
@@ -144,7 +144,7 @@ describe('Function', function() {
             debounced();
 
             setTimeout(_ => {
-                assert.equal(callCount, 1);
+                assert.strictEqual(callCount, 1);
                 done();
             }, 64);
         });
@@ -157,7 +157,7 @@ describe('Function', function() {
             debounced();
 
             setTimeout(_ => {
-                assert.equal(callCount, 1);
+                assert.strictEqual(callCount, 1);
                 done();
             }, 64);
         });
@@ -170,7 +170,7 @@ describe('Function', function() {
             setTimeout(debounced, 16);
 
             setTimeout(_ => {
-                assert.equal(callCount, 2);
+                assert.strictEqual(callCount, 2);
                 done();
             }, 64);
         });
@@ -184,11 +184,11 @@ describe('Function', function() {
             setTimeout(debounced, 16);
 
             setTimeout(_ => {
-                assert.equal(callCount, 0);
+                assert.strictEqual(callCount, 0);
             }, 32);
 
             setTimeout(_ => {
-                assert.equal(callCount, 1);
+                assert.strictEqual(callCount, 1);
                 done();
             }, 64);
         });
@@ -207,7 +207,7 @@ describe('Function', function() {
             finished = true;
 
             setTimeout(_ => {
-                assert.equal(callCount, 1);
+                assert.strictEqual(callCount, 1);
                 done();
             }, 64);
         });
@@ -227,7 +227,7 @@ describe('Function', function() {
             setTimeout(debounced, 32);
 
             setTimeout(_ => {
-                assert.equal(callCount, 1);
+                assert.strictEqual(callCount, 1);
                 done();
             }, 64);
         });
@@ -240,7 +240,7 @@ describe('Function', function() {
             debounced();
 
             setTimeout(_ => {
-                assert.equal(callCount, 2);
+                assert.strictEqual(callCount, 2);
                 done();
             }, 64);
         });
@@ -253,7 +253,7 @@ describe('Function', function() {
             debounced();
 
             setTimeout(_ => {
-                assert.equal(callCount, 0);
+                assert.strictEqual(callCount, 0);
                 done();
             }, 64);
         });
@@ -270,7 +270,7 @@ describe('Function', function() {
             debounced(true);
 
             setTimeout(_ => {
-                assert.equal(callCount, 1);
+                assert.strictEqual(callCount, 1);
                 done();
             }, 64);
         });
@@ -283,7 +283,7 @@ describe('Function', function() {
             debounced.cancel();
 
             setTimeout(_ => {
-                assert.equal(callCount, 0);
+                assert.strictEqual(callCount, 0);
                 done();
             }, 64);
         });
@@ -296,14 +296,14 @@ describe('Function', function() {
                 _ => value
             );
 
-            assert.equal(result, value);
+            assert.strictEqual(result, value);
         });
 
         it('returns the value of a non-function', function() {
             const value = Core.random();
             const result = Core.evaluate(value);
 
-            assert.equal(result, value);
+            assert.strictEqual(result, value);
         });
     });
 
@@ -318,7 +318,7 @@ describe('Function', function() {
                 addOneOnce();
             }
 
-            assert.equal(result, 1);
+            assert.strictEqual(result, 1);
         });
 
         it('returns the result of the first execution on subsequent calls', function() {
@@ -330,7 +330,7 @@ describe('Function', function() {
                 results.add(value);
             }
 
-            assert.equal(
+            assert.strictEqual(
                 results.size,
                 1
             );
@@ -339,7 +339,7 @@ describe('Function', function() {
 
     describe('#partial', function() {
         it('returns a function with partial arguments', function() {
-            assert.equal(
+            assert.strictEqual(
                 Core.partial(
                     (a, b) =>
                         a * b,
@@ -352,7 +352,7 @@ describe('Function', function() {
 
     describe('#pipe', function() {
         it('returns a piped function', function() {
-            assert.equal(
+            assert.strictEqual(
                 Core.pipe(
                     x => x / 2,
                     x => x + 2,
@@ -371,7 +371,7 @@ describe('Function', function() {
             throttled();
 
             setTimeout(_ => {
-                assert.equal(callCount, 1);
+                assert.strictEqual(callCount, 1);
                 done();
             }, 64);
         });
@@ -385,7 +385,7 @@ describe('Function', function() {
             throttled();
 
             setTimeout(_ => {
-                assert.equal(callCount, 2);
+                assert.strictEqual(callCount, 2);
                 done();
             }, 64);
         });
@@ -398,7 +398,7 @@ describe('Function', function() {
             setTimeout(throttled, 32);
 
             setTimeout(_ => {
-                assert.equal(callCount, 2);
+                assert.strictEqual(callCount, 2);
                 done();
             }, 64);
         });
@@ -417,7 +417,7 @@ describe('Function', function() {
             finished = true;
 
             setTimeout(_ => {
-                assert.equal(callCount, 1);
+                assert.strictEqual(callCount, 1);
                 done();
             }, 64);
         });
@@ -437,7 +437,7 @@ describe('Function', function() {
             setTimeout(throttled, 32);
 
             setTimeout(_ => {
-                assert.equal(callCount, 1);
+                assert.strictEqual(callCount, 1);
                 done();
             }, 64);
         });
@@ -450,7 +450,7 @@ describe('Function', function() {
             throttled();
 
             setTimeout(_ => {
-                assert.equal(callCount, 2);
+                assert.strictEqual(callCount, 2);
                 done();
             }, 64);
         });
@@ -463,7 +463,7 @@ describe('Function', function() {
             throttled();
 
             setTimeout(_ => {
-                assert.equal(callCount, 0);
+                assert.strictEqual(callCount, 0);
                 done();
             }, 64);
         });
@@ -480,7 +480,7 @@ describe('Function', function() {
             throttled(true);
 
             setTimeout(_ => {
-                assert.equal(callCount, 1);
+                assert.strictEqual(callCount, 1);
                 done();
             }, 64);
         });
@@ -494,7 +494,7 @@ describe('Function', function() {
             throttled.cancel();
 
             setTimeout(_ => {
-                assert.equal(callCount, 1);
+                assert.strictEqual(callCount, 1);
                 done();
             }, 64);
         });
@@ -509,7 +509,7 @@ describe('Function', function() {
                 500
             );
 
-            assert.equal(
+            assert.strictEqual(
                 result,
                 500
             );

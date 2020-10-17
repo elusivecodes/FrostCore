@@ -1,39 +1,39 @@
-const assert = require('assert').strict;
+const assert = require('assert');
 const Core = require('../dist/frost-core.min');
 
 describe('String', function() {
 
     describe('#camelCase', function() {
         it('returns a camelized string', function() {
-            assert.equal(
+            assert.strictEqual(
                 Core.camelCase('This is a sample string'),
                 'thisIsASampleString'
             );
         });
 
         it('works from kebab-case', function() {
-            assert.equal(
+            assert.strictEqual(
                 Core.camelCase('this-is-a-sample-string'),
                 'thisIsASampleString'
             );
         });
 
         it('works from PascalCase', function() {
-            assert.equal(
+            assert.strictEqual(
                 Core.camelCase('ThisIsASampleString'),
                 'thisIsASampleString'
             );
         });
 
         it('works from snake_case', function() {
-            assert.equal(
+            assert.strictEqual(
                 Core.camelCase('this_is_a_sample_string'),
                 'thisIsASampleString'
             );
         });
 
         it('strips invalid characters', function() {
-            assert.equal(
+            assert.strictEqual(
                 Core.camelCase('This is a sample string!@#$%^&*()_+`-=[]{}|\\;,.<>/?'),
                 'thisIsASampleString'
             );
@@ -42,21 +42,21 @@ describe('String', function() {
 
     describe('#capitalize', function() {
         it('returns a capitalized string', function() {
-            assert.equal(
+            assert.strictEqual(
                 Core.capitalize('This is a sample string'),
                 'This is a sample string'
             );
         });
 
         it('works from lower case', function() {
-            assert.equal(
+            assert.strictEqual(
                 Core.capitalize('this is a sample string'),
                 'This is a sample string'
             );
         });
 
         it('works from upper case', function() {
-            assert.equal(
+            assert.strictEqual(
                 Core.capitalize('THIS IS A SAMPLE STRING'),
                 'This is a sample string'
             );
@@ -65,42 +65,42 @@ describe('String', function() {
 
     describe('#escape', function() {
         it('returns an escaped string', function() {
-            assert.equal(
+            assert.strictEqual(
                 Core.escape('This is a sample string'),
                 'This is a sample string'
             );
         });
 
         it('escapes ampersand', function() {
-            assert.equal(
+            assert.strictEqual(
                 Core.escape('&'),
                 '&amp;'
             );
         });
 
         it('escapes apostrophe', function() {
-            assert.equal(
+            assert.strictEqual(
                 Core.escape(`'`),
                 '&apos;'
             );
         });
 
         it('escapes greater than', function() {
-            assert.equal(
+            assert.strictEqual(
                 Core.escape('>'),
                 '&gt;'
             );
         });
 
         it('escapes less than', function() {
-            assert.equal(
+            assert.strictEqual(
                 Core.escape('<'),
                 '&lt;'
             );
         });
 
         it('escapes quotation mark', function() {
-            assert.equal(
+            assert.strictEqual(
                 Core.escape('"'),
                 '&quot;'
             );
@@ -109,119 +109,119 @@ describe('String', function() {
 
     describe('#escapeRegExp', function() {
         it('returns an escaped string', function() {
-            assert.equal(
+            assert.strictEqual(
                 Core.escapeRegExp('This is a sample string'),
                 'This is a sample string'
             );
         });
 
         it('escapes asterisk', function() {
-            assert.equal(
+            assert.strictEqual(
                 Core.escapeRegExp('*'),
                 '\\*'
             );
         });
 
         it('escapes backlash', function() {
-            assert.equal(
+            assert.strictEqual(
                 Core.escapeRegExp('\\'),
                 '\\\\'
             );
         });
 
         it('escapes caret', function() {
-            assert.equal(
+            assert.strictEqual(
                 Core.escapeRegExp('^'),
                 '\\^'
             );
         });
 
         it('escapes close curly brace', function() {
-            assert.equal(
+            assert.strictEqual(
                 Core.escapeRegExp('}'),
                 '\\}'
             );
         });
 
         it('escapes close parentheses', function() {
-            assert.equal(
+            assert.strictEqual(
                 Core.escapeRegExp(')'),
                 '\\)'
             );
         });
 
         it('escapes close square bracket', function() {
-            assert.equal(
+            assert.strictEqual(
                 Core.escapeRegExp(']'),
                 '\\]'
             );
         });
 
         it('escapes dollar sign', function() {
-            assert.equal(
+            assert.strictEqual(
                 Core.escapeRegExp('$'),
                 '\\$'
             );
         });
 
         it('escapes dot', function() {
-            assert.equal(
+            assert.strictEqual(
                 Core.escapeRegExp('.'),
                 '\\.'
             );
         });
 
         it('escapes forward slash', function() {
-            assert.equal(
+            assert.strictEqual(
                 Core.escapeRegExp('/'),
                 '\\/'
             );
         });
 
         it('escapes minus', function() {
-            assert.equal(
+            assert.strictEqual(
                 Core.escapeRegExp('-'),
                 '\\-'
             );
         });
 
         it('escapes open curly brace', function() {
-            assert.equal(
+            assert.strictEqual(
                 Core.escapeRegExp('{'),
                 '\\{'
             );
         });
 
         it('escapes open parentheses', function() {
-            assert.equal(
+            assert.strictEqual(
                 Core.escapeRegExp('('),
                 '\\('
             );
         });
 
         it('escapes open square bracket', function() {
-            assert.equal(
+            assert.strictEqual(
                 Core.escapeRegExp('['),
                 '\\['
             );
         });
 
         it('escapes plus', function() {
-            assert.equal(
+            assert.strictEqual(
                 Core.escapeRegExp('+'),
                 '\\+'
             );
         });
 
         it('escapes pipe', function() {
-            assert.equal(
+            assert.strictEqual(
                 Core.escapeRegExp('|'),
                 '\\|'
             );
         });
 
         it('escapes question mark', function() {
-            assert.equal(
+            assert.strictEqual(
                 Core.escapeRegExp('?'),
                 '\\?'
             );
@@ -230,42 +230,42 @@ describe('String', function() {
 
     describe('humanize', function() {
         it('returns a humanized string', function() {
-            assert.equal(
+            assert.strictEqual(
                 Core.humanize('This is a sample string'),
                 'This is a sample string'
             );
         });
 
         it('works from camelCase', function() {
-            assert.equal(
+            assert.strictEqual(
                 Core.humanize('thisIsASampleString'),
                 'This is a sample string'
             );
         });
 
         it('works from kebab-case', function() {
-            assert.equal(
+            assert.strictEqual(
                 Core.humanize('this-is-a-sample-string'),
                 'This is a sample string'
             );
         });
 
         it('works from PascalCase', function() {
-            assert.equal(
+            assert.strictEqual(
                 Core.humanize('ThisIsASampleString'),
                 'This is a sample string'
             );
         });
 
         it('works from snake_case', function() {
-            assert.equal(
+            assert.strictEqual(
                 Core.humanize('this_is_a_sample_string'),
                 'This is a sample string'
             );
         });
 
         it('strips invalid characters', function() {
-            assert.equal(
+            assert.strictEqual(
                 Core.humanize('This is a sample string!@#$%^&*()_+`-=[]{}|\\;,.<>/?'),
                 'This is a sample string'
             );
@@ -274,35 +274,35 @@ describe('String', function() {
 
     describe('#kebabCase', function() {
         it('returns a kebab-case string', function() {
-            assert.equal(
+            assert.strictEqual(
                 Core.kebabCase('This is a sample string'),
                 'this-is-a-sample-string'
             );
         });
 
         it('works from camelCase', function() {
-            assert.equal(
+            assert.strictEqual(
                 Core.kebabCase('thisIsASampleString'),
                 'this-is-a-sample-string'
             );
         });
 
         it('works from PascalCase', function() {
-            assert.equal(
+            assert.strictEqual(
                 'this-is-a-sample-string',
                 Core.kebabCase('ThisIsASampleString')
             );
         });
 
         it('works from snake_case', function() {
-            assert.equal(
+            assert.strictEqual(
                 Core.kebabCase('this_is_a_sample_string'),
                 'this-is-a-sample-string'
             );
         });
 
         it('strips invalid characters', function() {
-            assert.equal(
+            assert.strictEqual(
                 Core.kebabCase('This is a sample string!@#$%^&*()_+`-=[]{}|\\;,.<>/?'),
                 'this-is-a-sample-string'
             );
@@ -311,35 +311,35 @@ describe('String', function() {
 
     describe('#pascalCase', function() {
         it('returns a pascalized string', function() {
-            assert.equal(
+            assert.strictEqual(
                 Core.pascalCase('This is a sample string'),
                 'ThisIsASampleString'
             );
         });
 
         it('works from camelCase', function() {
-            assert.equal(
+            assert.strictEqual(
                 Core.pascalCase('thisIsASampleString'),
                 'ThisIsASampleString'
             );
         });
 
         it('works from kebab-case', function() {
-            assert.equal(
+            assert.strictEqual(
                 Core.pascalCase('this-is-a-sample-string'),
                 'ThisIsASampleString'
             );
         });
 
         it('works from snake_case', function() {
-            assert.equal(
+            assert.strictEqual(
                 Core.pascalCase('this_is_a_sample_string'),
                 'ThisIsASampleString'
             );
         });
 
         it('strips invalid characters', function() {
-            assert.equal(
+            assert.strictEqual(
                 Core.pascalCase('This is a sample string!@#$%^&*()_+`-=[]{}|\\;,.<>/?'),
                 'ThisIsASampleString'
             );
@@ -389,35 +389,35 @@ describe('String', function() {
 
     describe('#snakeCase', function() {
         it('returns an snake_cased string', function() {
-            assert.equal(
+            assert.strictEqual(
                 Core.snakeCase('This is a sample string'),
                 'this_is_a_sample_string'
             );
         });
 
         it('works from camelCase', function() {
-            assert.equal(
+            assert.strictEqual(
                 Core.snakeCase('thisIsASampleString'),
                 'this_is_a_sample_string'
             );
         });
 
         it('works from PascalCase', function() {
-            assert.equal(
+            assert.strictEqual(
                 Core.snakeCase('ThisIsASampleString'),
                 'this_is_a_sample_string'
             );
         });
 
         it('works from snake_case', function() {
-            assert.equal(
+            assert.strictEqual(
                 Core.snakeCase('this-is-a-sample-string'),
                 'this_is_a_sample_string'
             );
         });
 
         it('strips invalid characters', function() {
-            assert.equal(
+            assert.strictEqual(
                 Core.snakeCase('This is a sample string!@#$%^&*()_+`-=[]{}|\\;,.<>/?'),
                 'this_is_a_sample_string'
             );
@@ -426,42 +426,42 @@ describe('String', function() {
 
     describe('#unescape', function() {
         it('returns an unescaped string', function() {
-            assert.equal(
+            assert.strictEqual(
                 Core.unescape('This is a sample string'),
                 'This is a sample string'
             );
         });
 
         it('unescapes ampersand', function() {
-            assert.equal(
+            assert.strictEqual(
                 Core.unescape('&amp;'),
                 '&'
             );
         });
 
         it('unescapes apostrophe', function() {
-            assert.equal(
+            assert.strictEqual(
                 Core.unescape('&apos;'),
                 `'`
             );
         });
 
         it('unescapes greater than', function() {
-            assert.equal(
+            assert.strictEqual(
                 Core.unescape('&gt;'),
                 '>'
             );
         });
 
         it('unescapes less than', function() {
-            assert.equal(
+            assert.strictEqual(
                 Core.unescape('&lt;'),
                 '<'
             );
         });
 
         it('unescapes quotation mark', function() {
-            assert.equal(
+            assert.strictEqual(
                 Core.unescape('&quot;'),
                 '"'
             );

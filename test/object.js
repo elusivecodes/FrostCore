@@ -1,4 +1,4 @@
-const assert = require('assert').strict;
+const assert = require('assert');
 const Core = require('../dist/frost-core.min');
 
 describe('Object', function() {
@@ -8,18 +8,18 @@ describe('Object', function() {
             const obj = {};
             Core.extend(obj, { a: 1 });
 
-            assert.deepEqual(obj, { a: 1 });
+            assert.deepStrictEqual(obj, { a: 1 });
         });
 
         it('returns the extended object', function() {
-            assert.deepEqual(
+            assert.deepStrictEqual(
                 Core.extend({}, { a: 1 }),
                 { a: 1 }
             );
         });
 
         it('works with deep objects', function() {
-            assert.deepEqual(
+            assert.deepStrictEqual(
                 Core.extend(
                     { a: 1 },
                     { b: { c: 1 } }
@@ -29,7 +29,7 @@ describe('Object', function() {
         });
 
         it('works with multiple arguments', function() {
-            assert.deepEqual(
+            assert.deepStrictEqual(
                 Core.extend(
                     { a: 1 },
                     { b: 2 },
@@ -40,7 +40,7 @@ describe('Object', function() {
         });
 
         it('works with overwriting properties', function() {
-            assert.deepEqual(
+            assert.deepStrictEqual(
                 Core.extend(
                     { a: 1, b: 2 },
                     { b: 3, c: 4 }
@@ -56,7 +56,7 @@ describe('Object', function() {
                 { b }
             );
             b.d = 1;
-            assert.deepEqual(
+            assert.deepStrictEqual(
                 result,
                 { a: 1, b: { c: 1 } }
             );
@@ -69,7 +69,7 @@ describe('Object', function() {
                 { b }
             );
             b.push(4);
-            assert.deepEqual(
+            assert.deepStrictEqual(
                 result,
                 { a: 1, b: [1, 2, 3] }
             );
@@ -81,11 +81,11 @@ describe('Object', function() {
             const obj = { a: 1, b: 2 };
             Core.forgetDot(obj, 'a');
 
-            assert.deepEqual(obj, { b: 2 });
+            assert.deepStrictEqual(obj, { b: 2 });
         });
 
         it('has no return value', function() {
-            assert.equal(
+            assert.strictEqual(
                 Core.forgetDot({ a: 1 }, 'a'),
                 undefined
             );
@@ -95,7 +95,7 @@ describe('Object', function() {
             const obj = { a: { b: 1, c: 2 }, d: 3 };
             Core.forgetDot(obj, 'a.b');
 
-            assert.deepEqual(
+            assert.deepStrictEqual(
                 obj,
                 { a: { c: 2 }, d: 3 }
             );
@@ -105,7 +105,7 @@ describe('Object', function() {
             const obj = { a: 1, b: 2 };
             Core.forgetDot(obj, 'c');
 
-            assert.deepEqual(
+            assert.deepStrictEqual(
                 obj,
                 { a: 1, b: 2 }
             );
@@ -114,7 +114,7 @@ describe('Object', function() {
 
     describe('#getDot', function() {
         it('returns the value', function() {
-            assert.equal(
+            assert.strictEqual(
                 Core.getDot(
                     { a: 1, b: 2 },
                     'b'
@@ -124,7 +124,7 @@ describe('Object', function() {
         });
 
         it('works with deep objects', function() {
-            assert.equal(
+            assert.strictEqual(
                 Core.getDot(
                     { a: { b: 1, c: 2 }, d: 3 },
                     'a.c'
@@ -134,7 +134,7 @@ describe('Object', function() {
         });
 
         it('works with properties that do not exist', function() {
-            assert.equal(
+            assert.strictEqual(
                 Core.getDot(
                     { a: 1, b: 2 },
                     'c'
@@ -146,7 +146,7 @@ describe('Object', function() {
 
     describe('#hasDot', function() {
         it('returns true if the property exists', function() {
-            assert.equal(
+            assert.strictEqual(
                 Core.hasDot(
                     { a: 1, b: 2 },
                     'b'
@@ -156,7 +156,7 @@ describe('Object', function() {
         });
 
         it('works with deep objects', function() {
-            assert.equal(
+            assert.strictEqual(
                 Core.hasDot(
                     { a: { b: 1, c: 2 }, d: 3 },
                     'a.b'
@@ -166,7 +166,7 @@ describe('Object', function() {
         });
 
         it('works with properties that do not exist', function() {
-            assert.equal(
+            assert.strictEqual(
                 Core.hasDot(
                     { a: 1, b: 2 },
                     'c'
@@ -176,7 +176,7 @@ describe('Object', function() {
         });
 
         it('works with deep objects, when the property does not exist', function() {
-            assert.equal(
+            assert.strictEqual(
                 Core.hasDot(
                     { a: { b: 1, c: 2 }, d: 3 },
                     'a.e'
@@ -188,7 +188,7 @@ describe('Object', function() {
 
     describe('#pluckDot', function() {
         it('returns the values', function() {
-            assert.deepEqual(
+            assert.deepStrictEqual(
                 Core.pluckDot(
                     [
                         { a: 1, b: 2 },
@@ -202,7 +202,7 @@ describe('Object', function() {
         });
 
         it('works with deep objects', function() {
-            assert.deepEqual(
+            assert.deepStrictEqual(
                 Core.pluckDot(
                     [
                         { a: 1, b: { c: 2, d: 3 } },
@@ -216,7 +216,7 @@ describe('Object', function() {
         });
 
         it('works with properties that do not exist', function() {
-            assert.deepEqual(
+            assert.deepStrictEqual(
                 Core.pluckDot(
                     [
                         { b: 1 },
@@ -235,7 +235,7 @@ describe('Object', function() {
             const obj = { a: 1 };
             Core.setDot(obj, 'b', 2);
 
-            assert.deepEqual(
+            assert.deepStrictEqual(
                 obj,
                 { a: 1, b: 2 }
             );
@@ -245,7 +245,7 @@ describe('Object', function() {
             const obj = { a: 1 };
             Core.setDot(obj, 'b.c', 2);
 
-            assert.deepEqual(
+            assert.deepStrictEqual(
                 obj,
                 { a: 1, b: { c: 2 } }
             );
@@ -255,7 +255,7 @@ describe('Object', function() {
             const obj = { a: 1, b: { c: 2 } };
             Core.setDot(obj, 'b.c', 3);
 
-            assert.deepEqual(
+            assert.deepStrictEqual(
                 obj,
                 { a: 1, b: { c: 3 } }
             );
@@ -265,7 +265,7 @@ describe('Object', function() {
             const obj = { a: 1, b: { c: 2, d: 3, e: 4 } };
             Core.setDot(obj, 'b.*', 3);
 
-            assert.deepEqual(
+            assert.deepStrictEqual(
                 obj,
                 { a: 1, b: { c: 3, d: 3, e: 3 } }
             );
