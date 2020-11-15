@@ -1,6 +1,6 @@
 {
     "name": "frostcore",
-    "version": "1.0.9",
+    "version": "1.0.10",
     "description": "FrostCore is a free, open-source utility library for JavaScript.",
     "keywords": [
         "utility",
@@ -24,7 +24,7 @@
     ],
     "scripts": {
         "build": "node build.js",
-        "test": "./node_modules/mocha/bin/mocha"
+        "test": "mocha"
     },
     "repository": {
         "type": "git",
