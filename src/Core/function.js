@@ -104,7 +104,7 @@ Core.debounce = (callback, wait = 0, leading = false, trailing = true) => {
     const debounced = (...args) => {
         const now = Date.now();
         const delta = lastRan ?
-            lastRan - now :
+            now - lastRan :
             null;
 
         if (leading && (delta === null || delta >= wait)) {
@@ -229,7 +229,7 @@ Core.throttle = (callback, wait = 0, leading = true, trailing = true) => {
     const throttled = (...args) => {
         const now = Date.now();
         const delta = lastRan ?
-            lastRan - now :
+            now - lastRan :
             null;
 
         if (leading && (delta === null || delta >= wait)) {
@@ -254,7 +254,7 @@ Core.throttle = (callback, wait = 0, leading = true, trailing = true) => {
             },
             delta === null ?
                 wait :
-                delta
+                wait - delta
         );
     };
 

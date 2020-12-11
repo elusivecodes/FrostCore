@@ -1,5 +1,5 @@
 /**
- * FrostCore v1.0.10
+ * FrostCore v1.0.11
  * https://github.com/elusivecodes/FrostCore
  */
 (function(global, factory) {
@@ -248,7 +248,7 @@
         const debounced = (...args) => {
             const now = Date.now();
             const delta = lastRan ?
-                lastRan - now :
+                now - lastRan :
                 null;
 
             if (leading && (delta === null || delta >= wait)) {
@@ -373,7 +373,7 @@
         const throttled = (...args) => {
             const now = Date.now();
             const delta = lastRan ?
-                lastRan - now :
+                now - lastRan :
                 null;
 
             if (leading && (delta === null || delta >= wait)) {
@@ -398,7 +398,7 @@
                 },
                 delta === null ?
                     wait :
-                    delta
+                    wait - delta
             );
         };
 
