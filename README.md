@@ -648,16 +648,6 @@ Returns *true* if the value is numeric.
 const isNumeric = Core.isNumeric(value);
 ```
 
-**Is Plain Object**
-
-Returns *true* if the value is a plain object.
-
-- `value` is the value you wish to test.
-
-```javascript
-const isPlainObject = Core.isPlainObject(value);
-```
-
 **Is Object**
 
 Returns *true* if the value is an object.
@@ -668,12 +658,30 @@ Returns *true* if the value is an object.
 const isObject = Core.isObject(value);
 ```
 
+**Is Plain Object**
+
+Returns *true* if the value is a plain object.
+
+- `value` is the value you wish to test.
+
+```javascript
+const isPlainObject = Core.isPlainObject(value);
+```
+
 **Is Shadow**
 
 Returns *true* if the value is a *ShadowRoot*.
 
 ```javascript
 const isShadow = Core.isShadow(value);
+```
+
+**Is Text**
+
+Returns *true* if the value is a text *Node*.
+
+```javascript
+const isText = Core.isText(value);
 ```
 
 **Is String**
