@@ -119,15 +119,6 @@ Core.isNumeric = value =>
     isFinite(value);
 
 /**
- * Returns true if the value is a plain object.
- * @param {*} value The value to test.
- * @returns {Boolean} TRUE if the value is a plain object, otherwise FALSE.
- */
-Core.isPlainObject = value =>
-    !!value &&
-    value.constructor === Object;
-
-/**
  * Returns true if the value is an object.
  * @param {*} value The value to test.
  * @returns {Boolean} TRUE if the value is an object, otherwise FALSE.
@@ -135,6 +126,15 @@ Core.isPlainObject = value =>
 Core.isObject = value =>
     !!value &&
     value === Object(value);
+
+/**
+ * Returns true if the value is a plain object.
+ * @param {*} value The value to test.
+ * @returns {Boolean} TRUE if the value is a plain object, otherwise FALSE.
+ */
+Core.isPlainObject = value =>
+    !!value &&
+    value.constructor === Object;
 
 /**
  * Returns true if the value is a ShadowRoot.
@@ -153,6 +153,15 @@ Core.isShadow = value =>
  */
 Core.isString = value =>
     value === `${value}`;
+
+/**
+ * Returns true if the value is a text Node.
+ * @param {*} value The value to test.
+ * @returns {Boolean} TRUE if the value is a text Node, otherwise FALSE.
+ */
+Core.isText = value =>
+    !!value &&
+    value.nodeType === Core.TEXT_NODE;
 
 /**
  * Returns true if the value is undefined.

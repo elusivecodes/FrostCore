@@ -723,6 +723,148 @@ describe('Testing (DOM)', function() {
         });
     });
 
+    describe('#isText', function() {
+        it('works with array', function() {
+            assert.strictEqual(
+                Core.isText(mockArray),
+                false
+            );
+        });
+
+        it('works with array-like', function() {
+            assert.strictEqual(
+                Core.isText(new MockArrayLike),
+                false
+            );
+        });
+
+        it('works with boolean true', function() {
+            assert.strictEqual(
+                Core.isText(true),
+                false
+            );
+        });
+
+        it('works with boolean false', function() {
+            assert.strictEqual(
+                Core.isText(false),
+                false
+            );
+        });
+
+        it('works with comment node', function() {
+            assert.strictEqual(
+                Core.isText(new MockCommentNode),
+                false
+            );
+        });
+
+        it('works with document', function() {
+            assert.strictEqual(
+                Core.isText(new MockDocument),
+                false
+            );
+        });
+
+        it('works with element', function() {
+            assert.strictEqual(
+                Core.isText(new MockElement),
+                false
+            );
+        });
+
+        it('works with fragment', function() {
+            assert.strictEqual(
+                Core.isText(new MockFragment),
+                false
+            );
+        });
+
+        it('works with function', function() {
+            assert.strictEqual(
+                Core.isText(mockFunction),
+                false
+            );
+        });
+
+        it('works with NaN', function() {
+            assert.strictEqual(
+                Core.isText(NaN),
+                false
+            );
+        });
+
+        it('works with null', function() {
+            assert.strictEqual(
+                Core.isText(null),
+                false
+            );
+        });
+
+        it('works with number', function() {
+            assert.strictEqual(
+                Core.isText(mockNumber),
+                false
+            );
+        });
+
+        it('works with numeric string', function() {
+            assert.strictEqual(
+                Core.isText(mockNumericString),
+                false
+            );
+        });
+
+        it('works with object', function() {
+            assert.strictEqual(
+                Core.isText(new MockObject),
+                false
+            );
+        });
+
+        it('works with plain object', function() {
+            assert.strictEqual(
+                Core.isText(mockPlainObject),
+                false
+            );
+        });
+
+        it('works with shadow', function() {
+            assert.strictEqual(
+                Core.isText(new MockShadow),
+                false
+            );
+        });
+
+        it('works with string', function() {
+            assert.strictEqual(
+                Core.isText(mockString),
+                false
+            );
+        });
+
+        it('works with text node', function() {
+            assert.strictEqual(
+                Core.isText(new MockTextNode),
+                true
+            );
+        });
+
+        it('works with undefined', function() {
+            assert.strictEqual(
+                Core.isText(undefined),
+                false
+            );
+        });
+
+        it('works with window', function() {
+            assert.strictEqual(
+                Core.isText(new MockWindow),
+                false
+            );
+        });
+    });
+
     describe('#isWindow', function() {
         it('works with array', function() {
             assert.strictEqual(
