@@ -45,17 +45,12 @@ const code = wrapper.replace(
 );
 
 // minify
-const minified = terser.minify(code, {
+terser.minify(code, {
     ecma: 8,
     compress: {
         ecma: 8
     }
-});
-
-// write files
-if (minified.error) {
-    console.error(minified.error);
-} else {
+}).then(minified => {
     fs.writeFileSync(
         path.join(distFolder, name + '.js'),
         code
@@ -65,4 +60,6 @@ if (minified.error) {
         path.join(distFolder, name + '.min.js'),
         minified.code
     );
-}
+}).catch(error => {
+    console.error(error);
+});
