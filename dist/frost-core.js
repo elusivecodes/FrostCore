@@ -1,4 +1,4 @@
-var Core = (function (exports) {
+var _ = (function (exports) {
     'use strict';
 
     /**
