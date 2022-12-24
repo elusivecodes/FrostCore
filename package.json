@@ -1,5 +1,5 @@
 {
-    "name": "@frost/core",
+    "name": "@fr0st/core",
     "version": "2.0.0",
     "description": "FrostCore is a free, open-source utility library for JavaScript.",
     "keywords": [
@@ -25,7 +25,7 @@
     ],
     "scripts": {
         "build": "npm run js-compile && npm run js-minify",
-        "js-compile": "rollup src/index.js --file dist/frost-core.js --format iife --sourcemap --name Core",
+        "js-compile": "rollup src/index.js --file dist/frost-core.js --format iife --sourcemap --name _",
         "js-lint": "eslint --ext .js .",
         "js-minify": "terser --compress passes=2 --mangle --source-map \"content=dist/frost-core.js.map\" --output dist/frost-core.min.js dist/frost-core.js",
         "test": "mocha"

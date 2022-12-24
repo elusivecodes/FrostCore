@@ -2,7 +2,7 @@
 
 **FrostCore** is a free, open-source utility library for *JavaScript*.
 
-It is a tiny (~2kb gzipped) and modern library, adding various functionality to your JS toolkit for manipulating arrays, functions, objects & more.
+It is a tiny (~2kb gzipped) and modern library, providing various methods for manipulating arrays, functions, objects & more.
 
 
 ## Table Of Contents
@@ -27,13 +27,13 @@ It is a tiny (~2kb gzipped) and modern library, adding various functionality to 
 **Using NPM**
 
 ```
-npm i @frost/core
+npm i @fr0st/core
 ```
 
 In Node.js:
 
 ```javascript
-import * as Core from '@frost/core';
+import * as _ from '@fr0st/core';
 ```
 
 
@@ -48,7 +48,7 @@ Create a new array containing the values of the first array, that do not exist i
 Any additional arguments supplied will be used to test for the values of the first array.
 
 ```javascript
-const diff = Core.diff(array, ...arrays);
+const diff = _.diff(array, ...arrays);
 ```
 
 **Intersect**
@@ -58,7 +58,7 @@ Create a new array containing the unique values that exist in all of the passed 
 All arguments supplied to this method will be tested for intersections.
 
 ```javascript
-const intersect = Core.intersect(...arrays);
+const intersect = _.intersect(...arrays);
 ```
 
 **Merge**
@@ -70,7 +70,7 @@ Merge the values from one or more arrays or array-like objects onto an array.
 Any additional arguments supplied will be merged onto the first array.
 
 ```javascript
-Core.merge(array, ...arrays);
+_.merge(array, ...arrays);
 ```
 
 **Random Value**
@@ -80,7 +80,7 @@ Return a random value from an array.
 - `array` is the array you wish to retrieve a value from.
 
 ```javascript
-const randomValue = Core.randomValue(array);
+const randomValue = _.randomValue(array);
 ```
 
 **Range**
@@ -92,7 +92,7 @@ Return an array containing a range of values.
 - `step` is a number indicating the increment between values in the sequence, and will default to *1*.
 
 ```javascript
-const range = Core.range(start, end, step);
+const range = _.range(start, end, step);
 ```
 
 **Unique**
@@ -102,7 +102,7 @@ Remove duplicate elements in an array.
 - `array` is the array you wish to remove duplicates from.
 
 ```javascript
-const unique = Core.unique(array);
+const unique = _.unique(array);
 ```
 
 **Wrap**
@@ -112,7 +112,7 @@ Create an array from any value.
 - `value` is the value you wish to create an array from.
 
 ```javascript
-const array = Core.wrap(value);
+const array = _.wrap(value);
 ```
 
 
@@ -126,7 +126,7 @@ Create a wrapped version of a function that executes at most once per animation 
 - `leading` is a boolean indicating whether you wish the function to execute on the leading edge of the animation frame, and will default to *false*.
 
 ```javascript
-const animation = Core.animation(callback, leading);
+const animation = _.animation(callback, leading);
 ```
 
 The returned animation function has a cancel method which will cancel the callback.
@@ -142,7 +142,7 @@ Create a wrapped function that will execute each callback in reverse order, pass
 Any arguments supplied will be added to the chain of callbacks.
 
 ```javascript
-const composed = Core.compose(...callbacks);
+const composed = _.compose(...callbacks);
 ```
 
 **Curry**
@@ -152,7 +152,7 @@ Create a wrapped version of a function, that will return new functions until the
 - `callback` is the function you wish to wrap.
 
 ```javascript
-const curried = Core.curry(callback);
+const curried = _.curry(callback);
 ```
 
 **Debounce**
@@ -165,7 +165,7 @@ Create a wrapped version of a function that executes once per wait period (using
 - `trailing` is a boolean indicating whether you wish the function to execute on the trailing edge of the wait period, and will default to *true*.
 
 ```javascript
-const debounced = Core.debounce(callback, wait, leading, trailing);
+const debounced = _.debounce(callback, wait, leading, trailing);
 ```
 
 The returned debounced function has a cancel method which will cancel the (trailing) callback.
@@ -181,7 +181,7 @@ Evaluate a value from a function or value.
 - `value` is the value to evaluate.
 
 ```javascript
-const result = Core.evaluate(value);
+const result = _.evaluate(value);
 ```
 
 **Once**
@@ -191,7 +191,7 @@ Create a wrapped version of a function that will only ever execute once. Subsequ
 - `callback` is the function you wish to wrap.
 
 ```javascript
-const once = Core.once(callback);
+const once = _.once(callback);
 ```
 
 **Partial**
@@ -203,7 +203,7 @@ Create a wrapped version of a function with predefined arguments.
 Any additional arguments supplied will be passed on as default arguments to the wrapped function. Specify *undefined* for a default argument to allow that argument to be sent to the wrapped function.
 
 ```javascript
-const partial = Core.partial(callback, ...defaultArgs);
+const partial = _.partial(callback, ...defaultArgs);
 ```
 
 **Pipe**
@@ -213,7 +213,7 @@ Create a wrapped function that will execute each callback in order, passing the 
 Any arguments supplied will be added to the chain of callbacks.
 
 ```javascript
-const piped = Core.pipe(...callbacks);
+const piped = _.pipe(...callbacks);
 ```
 
 **Throttle**
@@ -226,7 +226,7 @@ Create a wrapped version of a function that executes at most once per wait perio
 - `trailing` is a boolean indicating whether you wish the function to execute on the trailing edge of the wait period, and will default to *true*.
 
 ```javascript
-const throttled = Core.throttle(callback, wait, leading, trailing);
+const throttled = _.throttle(callback, wait, leading, trailing);
 ```
 
 The returned throttled function has a cancel method which will cancel the (trailing) callback.
@@ -243,7 +243,7 @@ Execute a function a specified number of times.
 - `amount` is the number of times you wish the function to execute.
 
 ```javascript
-Core.times(callback, amount);
+_.times(callback, amount);
 ```
 
 
@@ -258,7 +258,7 @@ Clamp a value between a min and max.
 - `max` is the number which will be the maximum of the clamped value, and will default to *1*.
 
 ```javascript
-const clamp = Core.clamp(value, min, max);
+const clamp = _.clamp(value, min, max);
 ```
 
 **Clamp Percent**
@@ -268,7 +268,7 @@ Clamp a value between *0* and *100*.
 - `value` is the number you wish to clamp.
 
 ```javascript
-const clampPercent = Core.clampPercent(value);
+const clampPercent = _.clampPercent(value);
 ```
 
 **Distance**
@@ -281,7 +281,7 @@ Get the distance between two vectors.
 - `y2` is the number to be used as the second Y co-ordinate.
 
 ```javascript
-const dist = Core.dist(x1, y1, x2, y2);
+const dist = _.dist(x1, y1, x2, y2);
 ```
 
 **Inverse Linear Interpolation**
@@ -293,7 +293,7 @@ Inverse linear interpolation from one value to another.
 - `value` is the value to inverse interpolate.
 
 ```javascript
-const lerp = Core.inverseLerp(min, max, value);
+const lerp = _.inverseLerp(min, max, value);
 ```
 
 **Length**
@@ -304,7 +304,7 @@ Get the length of an X,Y vector.
 - `y` is the number to be used as the Y co-ordinate.
 
 ```javascript
-const len = Core.len(x, y);
+const len = _.len(x, y);
 ```
 
 **Linear Interpolation**
@@ -316,7 +316,7 @@ Linear interpolation from one value to another.
 - `amount` is the amount to interpolate (between *0* and *1*).
 
 ```javascript
-const lerp = Core.lerp(min, max, amount);
+const lerp = _.lerp(min, max, amount);
 ```
 
 **Map**
@@ -330,7 +330,7 @@ Map a value from one range to another.
 - `toMax` is the number to be used as the maximum value of the target range.
 
 ```javascript
-const map = Core.map(value, fromMin, fromMax, toMin, toMax);
+const map = _.map(value, fromMin, fromMax, toMin, toMax);
 ```
 
 **Random**
@@ -345,7 +345,7 @@ If `b` is omitted, this function will return a random number between *0* (inclus
 If both arguments are omitted, this function will return a random number between *0* (inclusive) and *1* (exclusive).
 
 ```javascript
-const random = Core.random(a, b);
+const random = _.random(a, b);
 ```
 
 **To Step**
@@ -356,7 +356,7 @@ Round a number to a specified step-size.
 - `step` is the number to be used as the minimum step-size.
 
 ```javascript
-const toStep = Core.toStep(value, step);
+const toStep = _.toStep(value, step);
 ```
 
 
@@ -371,7 +371,7 @@ Merge the values from one or more objects onto an object (recursively).
 Any additional arguments supplied will be merged onto the first object.
 
 ```javascript
-Core.extend(object, ...objects);
+_.extend(object, ...objects);
 ```
 
 **Forget Dot**
@@ -382,7 +382,7 @@ Remove a specified key from an object using dot notation.
 - `key` is a string using dot notation, indicating the key to remove.
 
 ```javascript
-Core.forgetDot(object, key);
+_.forgetDot(object, key);
 ```
 
 **Get Dot**
@@ -394,7 +394,7 @@ Retrieve the value of a specified key from an object using dot notation.
 - `defaultValue` is the default value to return if the key does not exist, and will default to *undefined*.
 
 ```javascript
-const value = Core.getDot(object, key);
+const value = _.getDot(object, key);
 ```
 
 **Has Dot**
@@ -405,7 +405,7 @@ Returns *true* if a specified key exists in an object using dot notation.
 - `key` is a string using dot notation, indicating the key to test for.
 
 ```javascript
-const hasKey = Core.hasDot(object, key);
+const hasKey = _.hasDot(object, key);
 ```
 
 **Pluck Dot**
@@ -417,7 +417,7 @@ Retrieve values of a specified key from an array of objects using dot notation.
 - `defaultValue` is the default value to return if the key does not exist, and will default to *undefined*.
 
 ```javascript
-const values = Core.pluckDot(objects, key, defaultValue);
+const values = _.pluckDot(objects, key, defaultValue);
 ```
 
 **Set Dot**
@@ -430,7 +430,7 @@ Set a specified value of a key for an object using dot notation.
 - `overwrite` is a boolean indicating whether you wish to overwrite an existing key, and will default to *true*.
 
 ```javascript
-Core.setDot(object, key, value, overwrite);
+_.setDot(object, key, value, overwrite);
 ```
 
 
@@ -443,7 +443,7 @@ Convert a string to camelCase.
 - `string` is the string you wish to transform to camelCase.
 
 ```javascript
-const camelCase = Core.camelCase(string);
+const camelCase = _.camelCase(string);
 ```
 
 **Capitalize**
@@ -453,7 +453,7 @@ Convert the first character of string to upper case and the remaining to lower c
 - `string` is the string you wish to capitalize.
 
 ```javascript
-const capitalized = Core.capitalize(string);
+const capitalized = _.capitalize(string);
 ```
 
 **Escape**
@@ -463,7 +463,7 @@ Convert HTML special characters in a string to their corresponding HTML entities
 - `string` is the string you wish to escape.
 
 ```javascript
-const escape = Core.escape(string);
+const escape = _.escape(string);
 ```
 
 **Escape RegExp**
@@ -473,7 +473,7 @@ Escape a string for use in RegExp.
 - `string` is the string you wish to escape.
 
 ```javascript
-const escapeRegExp = Core.escapeRegExp(string);
+const escapeRegExp = _.escapeRegExp(string);
 ```
 
 **Humanize**
@@ -483,7 +483,7 @@ Convert a string to a humanized form.
 - `string` is the string you wish to humanize.
 
 ```javascript
-const humanized = Core.humanize(string);
+const humanized = _.humanize(string);
 ```
 
 **Kebab Case**
@@ -493,7 +493,7 @@ Convert a string to kebab-case.
 - `string` is the string you wish to transform to kebab-case.
 
 ```javascript
-const kebabCase = Core.kebabCase(string);
+const kebabCase = _.kebabCase(string);
 ```
 
 **Pascal Case**
@@ -503,7 +503,7 @@ Convert a string to PascalCase.
 - `string` is the string you wish to transform to PascalCase.
 
 ```javascript
-const pascalCase = Core.pascalCase(string);
+const pascalCase = _.pascalCase(string);
 ```
 
 **Random String**
@@ -514,7 +514,7 @@ Return a random string.
 - `characters` is a sequence of characters to generate the string from, and will default to *'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWYXZ0123456789'*.
 
 ```javascript
-const randomString = Core.randomString(length, characters);
+const randomString = _.randomString(length, characters);
 ```
 
 **Snake Case**
@@ -524,7 +524,7 @@ Convert a string to snake_case.
 - `string` is the string you wish to transform to snake_case.
 
 ```javascript
-const snakeCase = Core.snakeCase(string);
+const snakeCase = _.snakeCase(string);
 ```
 
 **Unescape**
@@ -534,7 +534,7 @@ Convert HTML entities in a string to their corresponding characters.
 - `string` is the string you wish to unescape.
 
 ```javascript
-const unescape = Core.unescape(string);
+const unescape = _.unescape(string);
 ```
 
 
@@ -547,7 +547,7 @@ Returns *true* is the value is an array.
 - `value` is the value you wish to test.
 
 ```javascript
-const isArray = Core.isArray(value);
+const isArray = _.isArray(value);
 ```
 
 **Is Array Like**
@@ -557,7 +557,7 @@ Returns *true* is the value is array-like.
 - `value` is the value you wish to test.
 
 ```javascript
-const isArrayLike = Core.isArrayLike(value);
+const isArrayLike = _.isArrayLike(value);
 ```
 
 **Is Boolean**
@@ -567,7 +567,7 @@ Returns *true* if the value is a boolean.
 - `value` is the value you wish to test.
 
 ```javascript
-const isBoolean = Core.isBoolean(value);
+const isBoolean = _.isBoolean(value);
 ```
 
 **Is Document**
@@ -577,7 +577,7 @@ Returns *true* is the value is a *Document*.
 - `value` is the value you wish to test.
 
 ```javascript
-const isDocument = Core.isDocument(value);
+const isDocument = _.isDocument(value);
 ```
 
 **Is Element**
@@ -587,7 +587,7 @@ Returns *true* is the value is a *HTMLElement*.
 - `value` is the value you wish to test.
 
 ```javascript
-const isElement = Core.isElement(value);
+const isElement = _.isElement(value);
 ```
 
 **Is Fragment**
@@ -595,7 +595,7 @@ const isElement = Core.isElement(value);
 Returns *true* if the value is a *DocumentFragment*.
 
 ```javascript
-const isFragment = Core.isFragment(value);
+const isFragment = _.isFragment(value);
 ```
 
 **Is Function**
@@ -605,7 +605,7 @@ Returns *true* if the value is a function.
 - `value` is the value you wish to test.
 
 ```javascript
-const isFunction = Core.isFunction(value);
+const isFunction = _.isFunction(value);
 ```
 
 **Is NaN**
@@ -615,7 +615,7 @@ Returns *true* if the value is *NaN*.
 - `value` is the value you wish to test.
 
 ```javascript
-const isNaN = Core.isNaN(value);
+const isNaN = _.isNaN(value);
 ```
 
 **Is Node**
@@ -625,7 +625,7 @@ Returns *true* is the value is a *Node*.
 - `value` is the value you wish to test.
 
 ```javascript
-const isNode = Core.isNode(value);
+const isNode = _.isNode(value);
 ```
 
 **Is Null**
@@ -635,7 +635,7 @@ Returns *true* if the value is *null*.
 - `value` is the value you wish to test.
 
 ```javascript
-const isNull = Core.isNull(value);
+const isNull = _.isNull(value);
 ```
 
 **Is Numeric**
@@ -645,7 +645,7 @@ Returns *true* if the value is numeric.
 - `value` is the value you wish to test.
 
 ```javascript
-const isNumeric = Core.isNumeric(value);
+const isNumeric = _.isNumeric(value);
 ```
 
 **Is Object**
@@ -655,7 +655,7 @@ Returns *true* if the value is an object.
 - `value` is the value you wish to test.
 
 ```javascript
-const isObject = Core.isObject(value);
+const isObject = _.isObject(value);
 ```
 
 **Is Plain Object**
@@ -665,7 +665,7 @@ Returns *true* if the value is a plain object.
 - `value` is the value you wish to test.
 
 ```javascript
-const isPlainObject = Core.isPlainObject(value);
+const isPlainObject = _.isPlainObject(value);
 ```
 
 **Is Shadow**
@@ -673,7 +673,7 @@ const isPlainObject = Core.isPlainObject(value);
 Returns *true* if the value is a *ShadowRoot*.
 
 ```javascript
-const isShadow = Core.isShadow(value);
+const isShadow = _.isShadow(value);
 ```
 
 **Is Text**
@@ -681,7 +681,7 @@ const isShadow = Core.isShadow(value);
 Returns *true* if the value is a text *Node*.
 
 ```javascript
-const isText = Core.isText(value);
+const isText = _.isText(value);
 ```
 
 **Is String**
@@ -691,7 +691,7 @@ Returns *true* if the value is a string.
 - `value` is the value you wish to test.
 
 ```javascript
-const isString = Core.isString(value);
+const isString = _.isString(value);
 ```
 
 **Is Undefined**
@@ -701,7 +701,7 @@ Returns *true* if the value is *undefined*.
 - `value` is the value you wish to test.
 
 ```javascript
-const isUndefined = Core.isUndefined(value);
+const isUndefined = _.isUndefined(value);
 ```
 
 **Is Window**
@@ -711,5 +711,5 @@ Returns *true* if the value is a *Window*.
 - `value` is the value you wish to test.
 
 ```javascript
-const isWindow = Core.isWindow(value);
+const isWindow = _.isWindow(value);
 ```
