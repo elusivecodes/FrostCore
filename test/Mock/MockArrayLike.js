@@ -2,11 +2,9 @@
  * MockArrayLike class
  * @class
  */
-class MockArrayLike {
-
+export default class MockArrayLike {
     /**
      * New MockArrayLike constructor.
-     * @returns {MockArrayLike} The new MockArrayLike object.
      */
     constructor() {
         this[0] = 1;
@@ -14,7 +12,4 @@ class MockArrayLike {
         this[2] = 3;
         this.length = 3;
     }
-
 }
-
-module.exports = MockArrayLike;
