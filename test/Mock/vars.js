@@ -1,8 +1,6 @@
-module.exports = {
-    mockArray: [1, 2, 3],
-    mockFunction: x => x,
-    mockNumber: 123,
-    mockNumericString: '123',
-    mockPlainObject: { a: 1 },
-    mockString: 'This is a string'
-};
+export const mockArray = [1, 2, 3];
+export const mockFunction = (x) => x;
+export const mockNumber = 123;
+export const mockNumericString = '123';
+export const mockPlainObject = { a: 1 };
+export const mockString = 'This is a string';

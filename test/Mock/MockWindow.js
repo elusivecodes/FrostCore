@@ -1,19 +1,14 @@
-const MockDocument = require('./MockDocument');
+import MockDocument from './MockDocument.js';
 
 /**
  * MockWindow class
  * @class
  */
-class MockWindow {
-
+export default class MockWindow {
     /**
      * New MockWindow constructor.
-     * @returns {MockWindow} The new MockWindow object.
      */
     constructor() {
         this.document = new MockDocument(this);
     }
-
 }
-
-module.exports = MockWindow;

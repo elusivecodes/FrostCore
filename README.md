@@ -27,13 +27,13 @@ It is a tiny (~2kb gzipped) and modern library, adding various functionality to 
 **Using NPM**
 
 ```
-npm i frostcore
+npm i @frost/core
 ```
 
 In Node.js:
 
 ```javascript
-const Core = require('frostcore');
+import * as Core from '@frost/core';
 ```
 
 
