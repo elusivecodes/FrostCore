@@ -1,5 +1,8 @@
-var _ = (function (exports) {
-    'use strict';
+(function (global, factory) {
+    typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports) :
+    typeof define === 'function' && define.amd ? define(['exports'], factory) :
+    (global = typeof globalThis !== 'undefined' ? globalThis : global || self, factory(global._ = {}));
+})(this, (function (exports) { 'use strict';
 
     /**
      * Testing methods
@@ -1123,7 +1126,5 @@ var _ = (function (exports) {
     exports.unique = unique;
     exports.wrap = wrap;
 
-    return exports;
-
-})({});
+}));
 //# sourceMappingURL=frost-core.js.map
