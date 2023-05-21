@@ -123,9 +123,10 @@ export const pluckDot = (objects, key, defaultValue) =>
  * @param {object} object The input object.
  * @param {string} key The key to set in the object.
  * @param {*} value The value to set.
- * @param {Boolean} [overwrite=true] Whether to overwrite, if the key already exists.
+ * @param {object} [options] The options for setting the value.
+ * @param {Boolean} [options.overwrite=true] Whether to overwrite, if the key already exists.
  */
-export const setDot = (object, key, value, overwrite = true) => {
+export const setDot = (object, key, value, { overwrite = true } = {}) => {
     const keys = key.split('.');
     while ((key = keys.shift())) {
         if (key === '*') {

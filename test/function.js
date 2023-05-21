@@ -66,7 +66,7 @@ describe('Function', function() {
                 if (!finished) {
                     callCount++;
                 }
-            }, true);
+            }, { leading: true });
 
             callback();
             finished = true;
@@ -199,7 +199,7 @@ describe('Function', function() {
                 if (!finished) {
                     callCount++;
                 }
-            }, 32, true, false);
+            }, 32, { leading: true, trailing: false });
 
             debounced();
             setTimeout(debounced, 32);
@@ -233,7 +233,7 @@ describe('Function', function() {
 
         it('works with leading and trailing', function(done) {
             let callCount = 0;
-            const debounced = debounce((_) => callCount++, 32, true);
+            const debounced = debounce((_) => callCount++, 32, { leading: true });
 
             debounced();
             debounced();
@@ -246,7 +246,7 @@ describe('Function', function() {
 
         it('works without leading or trailing', function(done) {
             let callCount = 0;
-            const debounced = debounce((_) => callCount++, 32, false, false);
+            const debounced = debounce((_) => callCount++, 32, { trailing: false });
 
             debounced();
             debounced();
@@ -409,7 +409,7 @@ describe('Function', function() {
                 if (!finished) {
                     callCount++;
                 }
-            }, 32, true, false);
+            }, 32, { trailing: false });
 
             throttled();
             setTimeout(throttled, 32);
@@ -430,7 +430,7 @@ describe('Function', function() {
                 }
 
                 finished = true;
-            }, 32);
+            }, 32, { leading: false });
 
             throttled();
             setTimeout(throttled, 32);
@@ -443,7 +443,7 @@ describe('Function', function() {
 
         it('works with leading and trailing', function(done) {
             let callCount = 0;
-            const throttled = throttle((_) => callCount++, 32, true);
+            const throttled = throttle((_) => callCount++, 32);
 
             throttled();
             throttled();
@@ -456,7 +456,7 @@ describe('Function', function() {
 
         it('works without leading or trailing', function(done) {
             let callCount = 0;
-            const throttled = throttle((_) => callCount++, 32, false, false);
+            const throttled = throttle((_) => callCount++, 32, { leading: false, trailing: false });
 
             throttled();
             throttled();

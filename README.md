@@ -123,10 +123,11 @@ const array = _.wrap(value);
 Create a wrapped version of a function that executes at most once per animation frame (using the most recent arguments passed to it).
 
 - `callback` is the function you wish to wrap.
-- `leading` is a boolean indicating whether you wish the function to execute on the leading edge of the animation frame, and will default to *false*.
+- `options` is an object containing options for executing the function.
+    - `leading` is a boolean indicating whether you wish the function to execute on the leading edge of the animation frame, and will default to *false*.
 
 ```javascript
-const animation = _.animation(callback, leading);
+const animation = _.animation(callback, options);
 ```
 
 The returned animation function has a cancel method which will cancel the callback.
@@ -161,11 +162,12 @@ Create a wrapped version of a function that executes once per wait period (using
 
 - `callback` is the function you wish to wrap.
 - `wait` is the number of milliseconds to wait between executions, and will default to *0*.
-- `leading` is a boolean indicating whether you wish the function to execute on the leading edge of the wait period, and will default to *false*.
-- `trailing` is a boolean indicating whether you wish the function to execute on the trailing edge of the wait period, and will default to *true*.
+- `options` is an object containing options for executing the function.
+    - `leading` is a boolean indicating whether you wish the function to execute on the leading edge of the wait period, and will default to *false*.
+    - `trailing` is a boolean indicating whether you wish the function to execute on the trailing edge of the wait period, and will default to *true*.
 
 ```javascript
-const debounced = _.debounce(callback, wait, leading, trailing);
+const debounced = _.debounce(callback, wait, options);
 ```
 
 The returned debounced function has a cancel method which will cancel the (trailing) callback.
@@ -222,11 +224,12 @@ Create a wrapped version of a function that executes at most once per wait perio
 
 - `callback` is the function you wish to wrap.
 - `wait` is the number of milliseconds to wait between executions, and will default to *0*.
-- `leading` is a boolean indicating whether you wish the function to execute on the leading edge of the wait period, and will default to *true*.
-- `trailing` is a boolean indicating whether you wish the function to execute on the trailing edge of the wait period, and will default to *true*.
+- `options` is an object containing options for executing the function.
+    - `leading` is a boolean indicating whether you wish the function to execute on the leading edge of the wait period, and will default to *true*.
+    - `trailing` is a boolean indicating whether you wish the function to execute on the trailing edge of the wait period, and will default to *true*.
 
 ```javascript
-const throttled = _.throttle(callback, wait, leading, trailing);
+const throttled = _.throttle(callback, wait, options);
 ```
 
 The returned throttled function has a cancel method which will cancel the (trailing) callback.
@@ -394,7 +397,7 @@ Retrieve the value of a specified key from an object using dot notation.
 - `defaultValue` is the default value to return if the key does not exist, and will default to *undefined*.
 
 ```javascript
-const value = _.getDot(object, key);
+const value = _.getDot(object, key, defaultValue);
 ```
 
 **Has Dot**
@@ -427,10 +430,11 @@ Set a specified value of a key for an object using dot notation.
 - `object` is the object you wish to set a value for.
 - `key` is a string using dot notation, indicating the key to set the value.
 - `value` is the value you wish to set the key to.
-- `overwrite` is a boolean indicating whether you wish to overwrite an existing key, and will default to *true*.
+- `options` is an object containing options for setting the value.
+    - `overwrite` is a boolean indicating whether you wish to overwrite an existing key, and will default to *true*.
 
 ```javascript
-_.setDot(object, key, value, overwrite);
+_.setDot(object, key, value, options);
 ```
 
 

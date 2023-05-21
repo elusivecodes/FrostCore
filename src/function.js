@@ -19,10 +19,11 @@ const _requestAnimationFrame = isBrowser ?
  * Create a wrapped version of a function that executes at most once per animation frame
  * (using the most recent arguments passed to it).
  * @param {function} callback Callback function to execute.
- * @param {Boolean} [leading] Whether to execute on the leading edge of the animation frame.
+ * @param {object} [options] The options for executing the function.
+ * @param {Boolean} [options.leading=false] Whether to execute on the leading edge of the animation frame.
  * @return {function} The wrapped function.
  */
-export const animation = (callback, leading) => {
+export const animation = (callback, { leading = false } = {}) => {
     let animationReference;
     let newArgs;
     let running;
@@ -105,11 +106,12 @@ export const curry = (callback) => {
  * (using the most recent arguments passed to it).
  * @param {function} callback Callback function to execute.
  * @param {number} [wait=0] The number of milliseconds to wait until next execution.
- * @param {Boolean} [leading=false] Whether to execute on the leading edge of the wait period.
- * @param {Boolean} [trailing=true] Whether to execute on the trailing edge of the wait period.
+ * @param {object} [options] The options for executing the function.
+ * @param {Boolean} [options.leading=false] Whether to execute on the leading edge of the wait period.
+ * @param {Boolean} [options.trailing=true] Whether to execute on the trailing edge of the wait period.
  * @return {function} The wrapped function.
  */
-export const debounce = (callback, wait = 0, leading = false, trailing = true) => {
+export const debounce = (callback, wait = 0, { leading = false, trailing = true } = {}) => {
     let debounceReference;
     let lastRan;
     let newArgs;
@@ -228,11 +230,12 @@ export const pipe = (...callbacks) =>
  * (using the most recent arguments passed to it).
  * @param {function} callback Callback function to execute.
  * @param {number} [wait=0] The number of milliseconds to wait until next execution.
- * @param {Boolean} [leading=true] Whether to execute on the leading edge of the wait period.
- * @param {Boolean} [trailing=true] Whether to execute on the trailing edge of the wait period.
+ * @param {object} [options] The options for executing the function.
+ * @param {Boolean} [options.leading=true] Whether to execute on the leading edge of the wait period.
+ * @param {Boolean} [options.trailing=true] Whether to execute on the trailing edge of the wait period.
  * @return {function} The wrapped function.
  */
-export const throttle = (callback, wait = 0, leading = true, trailing = true) => {
+export const throttle = (callback, wait = 0, { leading = true, trailing = true } = {}) => {
     let throttleReference;
     let lastRan;
     let newArgs;
