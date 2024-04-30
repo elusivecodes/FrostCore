@@ -377,6 +377,16 @@ Any additional arguments supplied will be merged onto the first object.
 _.extend(object, ...objects);
 ```
 
+**Flatten**
+
+Flatten an object using dot notation.
+
+- `object` is the object you are flattening.
+
+```javascript
+const flattened = _.flatten(object);
+```
+
 **Forget Dot**
 
 Remove a specified key from an object using dot notation.

@@ -38,6 +38,24 @@ export const extend = (object, ...objects) =>
     );
 
 /**
+ * Flatten an object using dot notation.
+ * @param {object} object input The object.
+ * @param {string} [prefix] The key prefix.
+ * @return {object} The new object.
+ */
+export const flatten = (object, prefix = '') =>
+    Object.keys(object).reduce((acc, key) => {
+        const prefixedKey = `${prefix}${key}`;
+        if (isPlainObject(object[key])) {
+            Object.assign(acc, flatten(object[key], `${prefixedKey}.`));
+        } else {
+            acc[prefixedKey] = object[key];
+        }
+
+        return acc;
+    }, {});
+
+/**
  * Remove a specified key from an object using dot notation.
  * @param {object} object The input object.
  * @param {string} key The key to remove from the object.

@@ -1,7 +1,7 @@
 import { diff, intersect, merge, randomValue, range, unique, wrap } from './array.js';
 import { animation, compose, curry, debounce, evaluate, once, partial, pipe, throttle, times } from './function.js';
 import { clamp, clampPercent, dist, inverseLerp, len, lerp, map, random, randomInt, toStep } from './math.js';
-import { extend, forgetDot, getDot, hasDot, pluckDot, setDot } from './object.js';
+import { extend, flatten, forgetDot, getDot, hasDot, pluckDot, setDot } from './object.js';
 import { camelCase, capitalize, escape, escapeRegExp, humanize, kebabCase, pascalCase, randomString, snakeCase, unescape } from './string.js';
 import { isArray, isArrayLike, isBoolean, isDocument, isElement, isFragment, isFunction, isNaN, isNode, isNull, isNumeric, isObject, isPlainObject, isShadow, isString, isText, isUndefined, isWindow } from './testing.js';
 
@@ -20,6 +20,7 @@ export {
     escapeRegExp,
     evaluate,
     extend,
+    flatten,
     forgetDot,
     getDot,
     hasDot,

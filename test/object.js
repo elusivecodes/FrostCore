@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import { extend, forgetDot, getDot, hasDot, pluckDot, setDot } from './../src/index.js';
+import { extend, flatten, forgetDot, getDot, hasDot, pluckDot, setDot } from './../src/index.js';
 
 describe('Object', function() {
     describe('#extend', function() {
@@ -72,6 +72,33 @@ describe('Object', function() {
                 result,
                 { a: 1, b: [1, 2, 3] },
             );
+        });
+    });
+
+    describe('#flatten', function() {
+        it('flattens the object', function() {
+            const obj = { a: 1, b: 2 };
+
+            assert.deepStrictEqual(flatten(obj), obj);
+        });
+
+        it('works with deep objects', function() {
+            const obj = { a: { b: 1, c: 2 }, d: 3 };
+
+            assert.deepStrictEqual(flatten(obj), {
+                'a.b': 1,
+                'a.c': 2,
+                'd': 3,
+            });
+        });
+
+        it('creates a new object', function() {
+            const obj = { a: 1, b: 2 };
+            const flattened = flatten(obj);
+
+            obj.a = 3;
+
+            assert.deepStrictEqual(flattened, { a: 1, b: 2 });
         });
     });
 
