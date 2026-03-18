@@ -232,7 +232,7 @@ describe('Math', function() {
             let i;
             for (i = 0; i < 1000; i++) {
                 const value = randomInt(10, 50);
-                assert.ok(value >= 10 && value <= 50);
+                assert.ok(value >= 10 && value < 50);
                 assert.strictEqual(value, Math.round(value));
                 found2.add(value);
             }
@@ -246,7 +246,7 @@ describe('Math', function() {
             let i;
             for (i = 0; i < 1000; i++) {
                 const value = randomInt(10);
-                assert.ok(value >= 0 && value <= 10);
+                assert.ok(value >= 0 && value < 10);
                 assert.strictEqual(value, Math.round(value));
                 found.add(value);
             }
@@ -260,12 +260,23 @@ describe('Math', function() {
             let i;
             for (i = 0; i < 1000; i++) {
                 const value = randomInt(-50, -10);
-                assert.ok(value >= -50 && value <= -10);
+                assert.ok(value >= -50 && value < -10);
                 assert.strictEqual(value, Math.round(value));
                 found.add(value);
             }
 
             assert.ok(found.size > 1);
+        });
+
+        it('works with numbers larger than 32-bit', function() {
+            const max = 2 ** 32;
+
+            let i;
+            for (i = 0; i < 1000; i++) {
+                const value = randomInt(0, max);
+                assert.ok(value >= 0 && value < max);
+                assert.strictEqual(value, Math.round(value));
+            }
         });
     });
 
@@ -288,6 +299,20 @@ describe('Math', function() {
             assert.strictEqual(
                 toStep(123.456, 33),
                 132,
+            );
+        });
+
+        it('works with a negative step size', function() {
+            assert.strictEqual(
+                toStep(0.123456, -0.1),
+                0.1,
+            );
+        });
+
+        it('returns the input value for a step of zero', function() {
+            assert.strictEqual(
+                toStep(123.456, 0),
+                123.456,
             );
         });
     });

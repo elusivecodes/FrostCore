@@ -6,10 +6,11 @@ import { isArray, isArrayLike, isUndefined } from './testing.js';
  */
 
 /**
- * Create a new array containing the values of the first array, that do not exist in any of the additional passed arrays.
- * @param {array} array The input array.
- * @param {...array} arrays The arrays to compare against.
- * @return {array} The output array.
+ * Creates a new array containing values from the first array that do not exist in any of the additional arrays.
+ * @template T
+ * @param {T[]} array The input array.
+ * @param {...T[]} arrays The arrays to compare against.
+ * @returns {T[]} The filtered array.
  */
 export const diff = (array, ...arrays) => {
     arrays = arrays.map(unique);
@@ -20,9 +21,10 @@ export const diff = (array, ...arrays) => {
 };
 
 /**
- * Create a new array containing the unique values that exist in all of the passed arrays.
- * @param {...array} arrays The input arrays.
- * @return {array} The output array.
+ * Creates a new array containing the unique values that exist in all of the provided arrays.
+ * @template T
+ * @param {...T[]} arrays The input arrays.
+ * @returns {T[]} The intersected array.
  */
 export const intersect = (...arrays) =>
     unique(
@@ -47,10 +49,11 @@ export const intersect = (...arrays) =>
     );
 
 /**
- * Merge the values from one or more arrays or array-like objects onto an array.
- * @param {array} array The input array.
- * @param {...array|object} arrays The arrays or array-like objects to merge.
- * @return {array} The output array.
+ * Merges values from one or more arrays or array-like objects into an array.
+ * @template T
+ * @param {T[]} [array=[]] The array to merge into.
+ * @param {...ArrayLike<T>} arrays The arrays or array-like objects to merge.
+ * @returns {T[]} The merged array.
  */
 export const merge = (array = [], ...arrays) =>
     arrays.reduce(
@@ -62,9 +65,10 @@ export const merge = (array = [], ...arrays) =>
     );
 
 /**
- * Return a random value from an array.
- * @param {array} array The input array.
- * @return {*} A random value from the array, or null if it is empty.
+ * Selects a random value from an array.
+ * @template T
+ * @param {T[]} array The input array.
+ * @returns {T|null} A random value from the array, or null if the array is empty.
  */
 export const randomValue = (array) =>
     array.length ?
@@ -72,22 +76,27 @@ export const randomValue = (array) =>
         null;
 
 /**
- * Return an array containing a range of values.
+ * Creates an array containing a range of values.
  * @param {number} start The first value of the sequence.
- * @param {number} end The value to end the sequence on.
- * @param {number} [step=1] The increment between values in the sequence.
- * @return {number[]} The array of values from start to end.
+ * @param {number} end The target value for the sequence. It is included only when the step lands on it exactly.
+ * @param {number} [step=1] The increment between values in the sequence. Negative values are treated as positive, and `0` returns an empty array.
+ * @returns {number[]} The array of values from start toward end.
  */
 export const range = (start, end, step = 1) => {
+    if (step === 0) {
+        return [];
+    }
+
     const sign = Math.sign(end - start);
+    step = Math.abs(step);
     return new Array(
-        (
+        Math.floor(
             (
                 Math.abs(end - start) /
                 step
             ) +
-            1
-        ) | 0,
+            1,
+        ),
     )
         .fill()
         .map(
@@ -100,9 +109,10 @@ export const range = (start, end, step = 1) => {
 };
 
 /**
- * Remove duplicate elements in an array.
- * @param {array} array The input array.
- * @return {array} The filtered array.
+ * Removes duplicate elements from an array.
+ * @template T
+ * @param {T[]} array The input array.
+ * @returns {T[]} The de-duplicated array.
  */
 export const unique = (array) =>
     Array.from(
@@ -110,9 +120,10 @@ export const unique = (array) =>
     );
 
 /**
- * Create an array from any value.
- * @param {*} value The input value.
- * @return {array} The wrapped array.
+ * Creates an array from a value.
+ * @template T
+ * @param {T|T[]|ArrayLike<T>|undefined} value The input value.
+ * @returns {T[]} The wrapped array.
  */
 export const wrap = (value) =>
     isUndefined(value) ?

@@ -1,6 +1,6 @@
 {
     "name": "@fr0st/core",
-    "version": "2.1.8",
+    "version": "3.0.0",
     "description": "FrostCore is a free, open-source utility library for JavaScript.",
     "keywords": [
         "utility",
@@ -33,16 +33,19 @@
     },
     "repository": {
         "type": "git",
-        "url": "https://github.com/elusivecodes/FrostCore.git"
+        "url": "git+https://github.com/elusivecodes/FrostCore.git"
     },
     "author": "Elusive <elusivecodes@gmail.com>",
     "license": "MIT",
     "private": false,
+    "publishConfig": {
+        "access": "public"
+    },
     "devDependencies": {
-        "@fr0st/eslint-config": "^1.0.3",
-        "eslint": "^9.26.0",
-        "mocha": "^11.2.2",
-        "rollup": "^4.40.2",
-        "terser": "^5.39.0"
+        "@fr0st/eslint-config": "^2.0.1",
+        "eslint": "^10.0.3",
+        "mocha": "^11.7.5",
+        "rollup": "^4.59.0",
+        "terser": "^5.46.1"
     }
 }

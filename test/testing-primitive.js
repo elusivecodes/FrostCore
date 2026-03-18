@@ -648,6 +648,13 @@ describe('Testing (Primitive)', function() {
             );
         });
 
+        it('works with symbol', function() {
+            assert.strictEqual(
+                isString(Symbol('test')),
+                false,
+            );
+        });
+
         it('works with undefined', function() {
             assert.strictEqual(
                 isString(undefined),

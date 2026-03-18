@@ -10,6 +10,13 @@ describe('Object', function() {
             assert.deepStrictEqual(obj, { a: 1 });
         });
 
+        it('ignores null and undefined sources', function() {
+            assert.deepStrictEqual(
+                extend({}, null, undefined, { a: 1 }),
+                { a: 1 },
+            );
+        });
+
         it('returns the extended object', function() {
             assert.deepStrictEqual(
                 extend({}, { a: 1 }),
@@ -71,6 +78,19 @@ describe('Object', function() {
             assert.deepStrictEqual(
                 result,
                 { a: 1, b: [1, 2, 3] },
+            );
+        });
+
+        it('does not copy inherited properties', function() {
+            function TestObject() {
+                this.a = 1;
+            }
+
+            TestObject.prototype.b = 2;
+
+            assert.deepStrictEqual(
+                extend({}, new TestObject),
+                { a: 1 },
             );
         });
     });
@@ -294,6 +314,16 @@ describe('Object', function() {
             assert.deepStrictEqual(
                 obj,
                 { a: 1, b: { c: 3, d: 3, e: 3 } },
+            );
+        });
+
+        it('respects overwrite option with wildcard properties', function() {
+            const obj = { a: 1, b: { c: 2, d: 3, e: 4 } };
+            setDot(obj, 'b.*', 3, { overwrite: false });
+
+            assert.deepStrictEqual(
+                obj,
+                { a: 1, b: { c: 2, d: 3, e: 4 } },
             );
         });
     });

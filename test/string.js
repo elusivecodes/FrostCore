@@ -37,6 +37,13 @@ describe('String', function() {
                 'thisIsASampleString',
             );
         });
+
+        it('strips multiple apostrophes', function() {
+            assert.strictEqual(
+                camelCase(`rock'n'roll`),
+                'rocknroll',
+            );
+        });
     });
 
     describe('#capitalize', function() {

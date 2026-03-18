@@ -5,15 +5,23 @@ import { isArray, isObject, isPlainObject } from './testing.js';
  */
 
 /**
- * Merge the values from one or more objects onto an object (recursively).
+ * Merges values from one or more objects into an object (recursively).
  * @param {object} object The input object.
  * @param {...object} objects The objects to merge.
- * @return {object} The output objects.
+ * @returns {object} The extended object.
  */
 export const extend = (object, ...objects) =>
     objects.reduce(
         (acc, val) => {
+            if (val == null) {
+                return acc;
+            }
+
             for (const k in val) {
+                if (!{}.hasOwnProperty.call(val, k)) {
+                    continue;
+                }
+
                 if (isArray(val[k])) {
                     acc[k] = extend(
                         isArray(acc[k]) ?
@@ -38,10 +46,10 @@ export const extend = (object, ...objects) =>
     );
 
 /**
- * Flatten an object using dot notation.
- * @param {object} object input The object.
+ * Flattens an object using dot notation.
+ * @param {object} object The input object.
  * @param {string} [prefix] The key prefix.
- * @return {object} The new object.
+ * @returns {object} The flattened object.
  */
 export const flatten = (object, prefix = '') =>
     Object.keys(object).reduce((acc, key) => {
@@ -56,9 +64,10 @@ export const flatten = (object, prefix = '') =>
     }, {});
 
 /**
- * Remove a specified key from an object using dot notation.
+ * Removes a specified key from an object using dot notation.
  * @param {object} object The input object.
  * @param {string} key The key to remove from the object.
+ * @returns {void} Nothing.
  */
 export const forgetDot = (object, key) => {
     const keys = key.split('.');
@@ -79,11 +88,11 @@ export const forgetDot = (object, key) => {
 };
 
 /**
- * Retrieve the value of a specified key from an object using dot notation.
+ * Retrieves the value of a specified key from an object using dot notation.
  * @param {object} object The input object.
  * @param {string} key The key to retrieve from the object.
  * @param {*} [defaultValue] The default value if key does not exist.
- * @return {*} The value retrieved from the object.
+ * @returns {*} The value retrieved from the object.
  */
 export const getDot = (object, key, defaultValue) => {
     const keys = key.split('.');
@@ -102,10 +111,10 @@ export const getDot = (object, key, defaultValue) => {
 };
 
 /**
- * Returns true if a specified key exists in an object using dot notation.
+ * Checks whether a specified key exists in an object using dot notation.
  * @param {object} object The input object.
  * @param {string} key The key to test for in the object.
- * @return {Boolean} TRUE if the key exists, otherwise FALSE.
+ * @returns {boolean} Whether the key exists.
  */
 export const hasDot = (object, key) => {
     const keys = key.split('.');
@@ -124,11 +133,11 @@ export const hasDot = (object, key) => {
 };
 
 /**
- * Retrieve values of a specified key from an array of objects using dot notation.
+ * Retrieves values of a specified key from an array of objects using dot notation.
  * @param {object[]} objects The input objects.
  * @param {string} key The key to retrieve from the objects.
  * @param {*} [defaultValue] The default value if key does not exist.
- * @return {array} An array of values retrieved from the objects.
+ * @returns {Array<*>} An array of values retrieved from the objects.
  */
 export const pluckDot = (objects, key, defaultValue) =>
     objects
@@ -137,12 +146,13 @@ export const pluckDot = (objects, key, defaultValue) =>
         );
 
 /**
- * Set a specified value of a key for an object using dot notation.
+ * Sets a specified value of a key for an object using dot notation.
  * @param {object} object The input object.
  * @param {string} key The key to set in the object.
  * @param {*} value The value to set.
- * @param {object} [options] The options for setting the value.
- * @param {Boolean} [options.overwrite=true] Whether to overwrite, if the key already exists.
+ * @param {{overwrite?: boolean}} [options] Options for setting the value.
+ * @param {boolean} [options.overwrite=true] Whether to overwrite the value if the key already exists.
+ * @returns {void} Nothing.
  */
 export const setDot = (object, key, value, { overwrite = true } = {}) => {
     const keys = key.split('.');
@@ -157,7 +167,7 @@ export const setDot = (object, key, value, { overwrite = true } = {}) => {
                     object,
                     [k].concat(keys).join('.'),
                     value,
-                    overwrite,
+                    { overwrite },
                 );
             }
             return;

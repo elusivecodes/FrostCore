@@ -119,6 +119,20 @@ describe('Array', function() {
                 [-10, -11, -12, -13, -14, -15, -16, -17, -18, -19, -20],
             );
         });
+
+        it('returns an empty array for a step of zero', function() {
+            assert.deepStrictEqual(
+                range(0, 10, 0),
+                [],
+            );
+        });
+
+        it('works with a negative step size', function() {
+            assert.deepStrictEqual(
+                range(0, 5, -1),
+                [0, 1, 2, 3, 4, 5],
+            );
+        });
     });
 
     describe('#unique', function() {

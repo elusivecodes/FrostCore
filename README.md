@@ -1,729 +1,283 @@
 # FrostCore
 
-**FrostCore** is a free, open-source utility library for *JavaScript*.
+[![CI](https://github.com/elusivecodes/FrostCore/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/elusivecodes/FrostCore/actions/workflows/ci.yml)
+[![npm version](https://img.shields.io/npm/v/%40fr0st%2Fcore?style=flat-square)](https://www.npmjs.com/package/@fr0st/core)
+[![npm downloads](https://img.shields.io/npm/dm/%40fr0st%2Fcore?style=flat-square)](https://www.npmjs.com/package/@fr0st/core)
+[![license](https://img.shields.io/github/license/elusivecodes/FrostCore?style=flat-square)](./LICENSE)
 
-It is a tiny (~2kb gzipped) and modern library, providing various methods for manipulating arrays, functions, objects & more.
+Small, focused JavaScript utilities for arrays, functions, math, objects, strings, and type checks.
 
+FrostCore is an ESM-first utility library with zero runtime dependencies. It works in Node and bundlers, and it also ships a browser-friendly UMD bundle that exposes `globalThis._`.
 
-## Table Of Contents
-- [Installation](#installation)
-- [Arrays](#arrays)
-- [Functions](#functions)
-- [Math](#math)
-- [Objects](#objects)
-- [Strings](#strings)
-- [Testing](#testing)
+## Highlights
 
-
+- Named exports for tree-shaking
+- Browser UMD bundle in `dist/`
+- No runtime dependencies
+- JSDoc-powered IntelliSense
+- Utility coverage across arrays, objects, strings, math, functions, and type checks
 
 ## Installation
 
-**In Browser**
+### Node / bundlers
 
-```html
-<script type="text/javascript" src="/path/to/frost-core.min.js"></script>
-```
-
-**Using NPM**
-
-```
+```bash
 npm i @fr0st/core
 ```
 
-In Node.js:
+FrostCore is ESM-only. Use `import` syntax in Node and bundlers.
 
-```javascript
+### Browser (UMD)
+
+Load the bundle from your own copy:
+
+```html
+<script src="/path/to/dist/frost-core.min.js"></script>
+<script>
+    const { clamp, randomInt } = globalThis._;
+    console.log(clamp(randomInt(10), 0, 9));
+</script>
+```
+
+Or load it from a CDN:
+
+```html
+<script src="https://cdn.jsdelivr.net/npm/@fr0st/core@latest/dist/frost-core.min.js"></script>
+<script>
+    const { clamp, randomInt } = globalThis._;
+    console.log(clamp(randomInt(10), 0, 9));
+</script>
+```
+
+## Quick Start
+
+```js
+import {
+    clamp,
+    debounce,
+    humanize,
+    range,
+    setDot,
+} from '@fr0st/core';
+
+const state = { user: { profile: { name: 'Ada' } } };
+
+setDot(state, 'user.profile.name', 'Ada Lovelace');
+
+const values = range(0, 10, 2);
+const label = humanize('favoriteColor');
+
+const save = debounce(() => {
+    console.log('saving', state, values, label);
+}, 250);
+
+console.log(clamp(14, 0, 10)); // 10
+save();
+```
+
+## Usage
+
+Recommended:
+
+```js
+import { debounce, throttle } from '@fr0st/core';
+```
+
+Namespace import:
+
+```js
 import * as _ from '@fr0st/core';
-```
-
-
-## Arrays
-
-**Difference**
-
-Create a new array containing the values of the first array, that do not exist in any of the additional passed arrays.
-
-- `array` is the array you wish to filter.
-
-Any additional arguments supplied will be used to test for the values of the first array.
-
-```javascript
-const diff = _.diff(array, ...arrays);
-```
-
-**Intersect**
-
-Create a new array containing the unique values that exist in all of the passed arrays.
-
-All arguments supplied to this method will be tested for intersections.
-
-```javascript
-const intersect = _.intersect(...arrays);
-```
-
-**Merge**
-
-Merge the values from one or more arrays or array-like objects onto an array.
-
-- `array` is the array you wish to merge onto.
-
-Any additional arguments supplied will be merged onto the first array.
-
-```javascript
-_.merge(array, ...arrays);
-```
-
-**Random Value**
-
-Return a random value from an array.
-
-- `array` is the array you wish to retrieve a value from.
-
-```javascript
-const randomValue = _.randomValue(array);
-```
-
-**Range**
-
-Return an array containing a range of values.
-
-- `start` is a number indicating the first value of the sequence.
-- `end` is a number indicating where the sequence will end.
-- `step` is a number indicating the increment between values in the sequence, and will default to *1*.
-
-```javascript
-const range = _.range(start, end, step);
-```
-
-**Unique**
-
-Remove duplicate elements in an array.
-
-- `array` is the array you wish to remove duplicates from.
-
-```javascript
-const unique = _.unique(array);
-```
-
-**Wrap**
-
-Create an array from any value.
-
-- `value` is the value you wish to create an array from.
-
-```javascript
-const array = _.wrap(value);
-```
-
-
-## Functions
-
-**Animation**
-
-Create a wrapped version of a function that executes at most once per animation frame (using the most recent arguments passed to it).
-
-- `callback` is the function you wish to wrap.
-- `options` is an object containing options for executing the function.
-    - `leading` is a boolean indicating whether you wish the function to execute on the leading edge of the animation frame, and will default to *false*.
-
-```javascript
-const animation = _.animation(callback, options);
-```
-
-The returned animation function has a cancel method which will cancel the callback.
-
-```javascript
-animation.cancel();
-```
-
-**Compose**
-
-Create a wrapped function that will execute each callback in reverse order, passing the result from each function to the previous.
-
-Any arguments supplied will be added to the chain of callbacks.
-
-```javascript
-const composed = _.compose(...callbacks);
-```
-
-**Curry**
-
-Create a wrapped version of a function, that will return new functions until the number of total arguments passed reaches the arguments length of the original function (at which point the function will execute).
-
-- `callback` is the function you wish to wrap.
-
-```javascript
-const curried = _.curry(callback);
-```
-
-**Debounce**
-
-Create a wrapped version of a function that executes once per wait period (using the most recent arguments passed to it).
-
-- `callback` is the function you wish to wrap.
-- `wait` is the number of milliseconds to wait between executions, and will default to *0*.
-- `options` is an object containing options for executing the function.
-    - `leading` is a boolean indicating whether you wish the function to execute on the leading edge of the wait period, and will default to *false*.
-    - `trailing` is a boolean indicating whether you wish the function to execute on the trailing edge of the wait period, and will default to *true*.
-
-```javascript
-const debounced = _.debounce(callback, wait, options);
-```
-
-The returned debounced function has a cancel method which will cancel the (trailing) callback.
-
-```javascript
-debounced.cancel();
-```
-
-**Evaluate**
-
-Evaluate a value from a function or value.
-
-- `value` is the value to evaluate.
-
-```javascript
-const result = _.evaluate(value);
-```
-
-**Once**
-
-Create a wrapped version of a function that will only ever execute once. Subsequent calls to the wrapped function will return the result of the initial call.
-
-- `callback` is the function you wish to wrap.
-
-```javascript
-const once = _.once(callback);
-```
-
-**Partial**
-
-Create a wrapped version of a function with predefined arguments.
-
-- `callback` is the function you wish to wrap.
-
-Any additional arguments supplied will be passed on as default arguments to the wrapped function. Specify *undefined* for a default argument to allow that argument to be sent to the wrapped function.
-
-```javascript
-const partial = _.partial(callback, ...defaultArgs);
-```
-
-**Pipe**
-
-Create a wrapped function that will execute each callback in order, passing the result from each function to the next.
-
-Any arguments supplied will be added to the chain of callbacks.
-
-```javascript
-const piped = _.pipe(...callbacks);
-```
-
-**Throttle**
-
-Create a wrapped version of a function that executes at most once per wait period (using the most recent arguments passed to it).
-
-- `callback` is the function you wish to wrap.
-- `wait` is the number of milliseconds to wait between executions, and will default to *0*.
-- `options` is an object containing options for executing the function.
-    - `leading` is a boolean indicating whether you wish the function to execute on the leading edge of the wait period, and will default to *true*.
-    - `trailing` is a boolean indicating whether you wish the function to execute on the trailing edge of the wait period, and will default to *true*.
-
-```javascript
-const throttled = _.throttle(callback, wait, options);
-```
-
-The returned throttled function has a cancel method which will cancel the (trailing) callback.
-
-```javascript
-throttled.cancel();
-```
-
-**Times**
-
-Execute a function a specified number of times.
-
-- `callback` is the function you wish to execute.
-- `amount` is the number of times you wish the function to execute.
-
-```javascript
-_.times(callback, amount);
-```
-
-
-## Math
-
-**Clamp**
-
-Clamp a value between a min and max.
-
-- `value` is the number you wish to clamp.
-- `min` is the number which will be the minimum of the clamped value, and will default to *0*.
-- `max` is the number which will be the maximum of the clamped value, and will default to *1*.
-
-```javascript
-const clamp = _.clamp(value, min, max);
-```
-
-**Clamp Percent**
-
-Clamp a value between *0* and *100*.
-
-- `value` is the number you wish to clamp.
-
-```javascript
-const clampPercent = _.clampPercent(value);
-```
-
-**Distance**
-
-Get the distance between two vectors.
-
-- `x1` is the number to be used as the first X co-ordinate.
-- `y1` is the number to be used as the first Y co-ordinate.
-- `x2` is the number to be used as the second X co-ordinate.
-- `y2` is the number to be used as the second Y co-ordinate.
-
-```javascript
-const dist = _.dist(x1, y1, x2, y2);
-```
-
-**Inverse Linear Interpolation**
-
-Inverse linear interpolation from one value to another.
-
-- `min` is the number to be used as the minimum of the "lerped" amount.
-- `max` is the number to be used as the maximum of the "lerped" amount.
-- `value` is the value to inverse interpolate.
-
-```javascript
-const lerp = _.inverseLerp(min, max, value);
-```
-
-**Length**
-
-Get the length of an X,Y vector.
-
-- `x` is the number to be used as the X co-ordinate.
-- `y` is the number to be used as the Y co-ordinate.
-
-```javascript
-const len = _.len(x, y);
-```
-
-**Linear Interpolation**
-
-Linear interpolation from one value to another.
-
-- `min` is the number to be used as the minimum of the "lerped" amount.
-- `max` is the number to be used as the maximum of the "lerped" amount.
-- `amount` is the amount to interpolate (between *0* and *1*).
-
-```javascript
-const lerp = _.lerp(min, max, amount);
-```
-
-**Map**
-
-Map a value from one range to another.
-
-- `value` is the number you wish to map.
-- `fromMin` is the number to be used as the minimum value of the current range.
-- `fromMax` is the number to be used as the maximum value of the current range.
-- `toMin` is the number to be used as the minimum value of the target range.
-- `toMax` is the number to be used as the maximum value of the target range.
-
-```javascript
-const map = _.map(value, fromMin, fromMax, toMin, toMax);
-```
-
-**Random**
-
-Return a random floating-point number.
-
-- `a` is the number to be used as the minimum value (inclusive).
-- `b` is the number to be used as the maximum value (exclusive).
-
-If `b` is omitted, this function will return a random number between *0* (inclusive) and `a` (exclusive).
-
-If both arguments are omitted, this function will return a random number between *0* (inclusive) and *1* (exclusive).
-
-```javascript
-const random = _.random(a, b);
-```
-
-**To Step**
-
-Round a number to a specified step-size.
-
-- `value` is the number you wish to constrain to a specified "step".
-- `step` is the number to be used as the minimum step-size.
-
-```javascript
-const toStep = _.toStep(value, step);
-```
-
 
-## Objects
-
-**Extend**
-
-Merge the values from one or more objects onto an object (recursively).
-
-- `object` is the object you are merging to.
-
-Any additional arguments supplied will be merged onto the first object.
-
-```javascript
-_.extend(object, ...objects);
-```
-
-**Flatten**
-
-Flatten an object using dot notation.
-
-- `object` is the object you are flattening.
-
-```javascript
-const flattened = _.flatten(object);
-```
-
-**Forget Dot**
-
-Remove a specified key from an object using dot notation.
-
-- `object` is the object you wish to remove a key from.
-- `key` is a string using dot notation, indicating the key to remove.
-
-```javascript
-_.forgetDot(object, key);
-```
-
-**Get Dot**
-
-Retrieve the value of a specified key from an object using dot notation.
-
-- `object` is the object you wish to retrieve a value from.
-- `key` is a string using dot notation, indicating the key to retrieve.
-- `defaultValue` is the default value to return if the key does not exist, and will default to *undefined*.
-
-```javascript
-const value = _.getDot(object, key, defaultValue);
-```
-
-**Has Dot**
-
-Returns *true* if a specified key exists in an object using dot notation.
-
-- `object` is the object you wish to test for a key.
-- `key` is a string using dot notation, indicating the key to test for.
-
-```javascript
-const hasKey = _.hasDot(object, key);
-```
-
-**Pluck Dot**
-
-Retrieve values of a specified key from an array of objects using dot notation.
-
-- `objects` is the array of objects you wish to retrieve values from.
-- `key` is a string using dot notation, indicating the key to retrieve.
-- `defaultValue` is the default value to return if the key does not exist, and will default to *undefined*.
-
-```javascript
-const values = _.pluckDot(objects, key, defaultValue);
-```
-
-**Set Dot**
-
-Set a specified value of a key for an object using dot notation.
-
-- `object` is the object you wish to set a value for.
-- `key` is a string using dot notation, indicating the key to set the value.
-- `value` is the value you wish to set the key to.
-- `options` is an object containing options for setting the value.
-    - `overwrite` is a boolean indicating whether you wish to overwrite an existing key, and will default to *true*.
-
-```javascript
-_.setDot(object, key, value, options);
-```
-
-
-## Strings
-
-**Camel Case**
-
-Convert a string to camelCase.
-
-- `string` is the string you wish to transform to camelCase.
-
-```javascript
-const camelCase = _.camelCase(string);
-```
-
-**Capitalize**
-
-Convert the first character of string to upper case and the remaining to lower case.
-
-- `string` is the string you wish to capitalize.
-
-```javascript
-const capitalized = _.capitalize(string);
-```
-
-**Escape**
-
-Convert HTML special characters in a string to their corresponding HTML entities.
-
-- `string` is the string you wish to escape.
-
-```javascript
-const escape = _.escape(string);
-```
-
-**Escape RegExp**
-
-Escape a string for use in RegExp.
-
-- `string` is the string you wish to escape.
-
-```javascript
-const escapeRegExp = _.escapeRegExp(string);
-```
-
-**Humanize**
-
-Convert a string to a humanized form.
-
-- `string` is the string you wish to humanize.
-
-```javascript
-const humanized = _.humanize(string);
-```
-
-**Kebab Case**
-
-Convert a string to kebab-case.
-
-- `string` is the string you wish to transform to kebab-case.
-
-```javascript
-const kebabCase = _.kebabCase(string);
-```
-
-**Pascal Case**
-
-Convert a string to PascalCase.
-
-- `string` is the string you wish to transform to PascalCase.
-
-```javascript
-const pascalCase = _.pascalCase(string);
-```
-
-**Random String**
-
-Return a random string.
-
-- `length` is the length of the random string, and will default to *16*.
-- `characters` is a sequence of characters to generate the string from, and will default to *'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWYXZ0123456789'*.
-
-```javascript
-const randomString = _.randomString(length, characters);
-```
-
-**Snake Case**
-
-Convert a string to snake_case.
-
-- `string` is the string you wish to transform to snake_case.
-
-```javascript
-const snakeCase = _.snakeCase(string);
-```
-
-**Unescape**
-
-Convert HTML entities in a string to their corresponding characters.
-
-- `string` is the string you wish to unescape.
-
-```javascript
-const unescape = _.unescape(string);
-```
-
-
-## Testing
-
-**Is Array**
-
-Returns *true* is the value is an array.
-
-- `value` is the value you wish to test.
-
-```javascript
-const isArray = _.isArray(value);
-```
-
-**Is Array Like**
-
-Returns *true* is the value is array-like.
-
-- `value` is the value you wish to test.
-
-```javascript
-const isArrayLike = _.isArrayLike(value);
-```
-
-**Is Boolean**
-
-Returns *true* if the value is a boolean.
-
-- `value` is the value you wish to test.
-
-```javascript
-const isBoolean = _.isBoolean(value);
-```
-
-**Is Document**
-
-Returns *true* is the value is a *Document*.
-
-- `value` is the value you wish to test.
-
-```javascript
-const isDocument = _.isDocument(value);
-```
-
-**Is Element**
-
-Returns *true* is the value is a *HTMLElement*.
-
-- `value` is the value you wish to test.
-
-```javascript
-const isElement = _.isElement(value);
+_.range(0, 3); // [0, 1, 2, 3]
 ```
 
-**Is Fragment**
+TypeScript note: FrostCore is written in JavaScript and uses JSDoc types, which most editors surface as IntelliSense.
 
-Returns *true* if the value is a *DocumentFragment*.
+## API
 
-```javascript
-const isFragment = _.isFragment(value);
-```
-
-**Is Function**
-
-Returns *true* if the value is a function.
-
-- `value` is the value you wish to test.
-
-```javascript
-const isFunction = _.isFunction(value);
-```
-
-**Is NaN**
-
-Returns *true* if the value is *NaN*.
-
-- `value` is the value you wish to test.
-
-```javascript
-const isNaN = _.isNaN(value);
-```
-
-**Is Node**
-
-Returns *true* is the value is a *Node*.
-
-- `value` is the value you wish to test.
-
-```javascript
-const isNode = _.isNode(value);
-```
-
-**Is Null**
-
-Returns *true* if the value is *null*.
-
-- `value` is the value you wish to test.
+All utilities are exported from `@fr0st/core` as named ESM exports.
 
-```javascript
-const isNull = _.isNull(value);
-```
-
-**Is Numeric**
-
-Returns *true* if the value is numeric.
-
-- `value` is the value you wish to test.
-
-```javascript
-const isNumeric = _.isNumeric(value);
-```
-
-**Is Object**
-
-Returns *true* if the value is an object.
-
-- `value` is the value you wish to test.
-
-```javascript
-const isObject = _.isObject(value);
-```
-
-**Is Plain Object**
+### Arrays
 
-Returns *true* if the value is a plain object.
-
-- `value` is the value you wish to test.
-
-```javascript
-const isPlainObject = _.isPlainObject(value);
-```
+- `diff(array, ...arrays)`: values that exist only in the first array
+- `intersect(...arrays)`: unique values shared by all arrays
+- `merge(array, ...arrays)`: appends arrays or array-like values into the first array
+- `randomValue(array)`: random element from an array, or `null` for an empty array
+- `range(start, end, step = 1)`: numeric sequence from `start` toward `end`
+- `unique(array)`: remove duplicate values
+- `wrap(value)`: normalize a value into an array
 
-**Is Shadow**
+```js
+import { diff, merge, range, unique, wrap } from '@fr0st/core';
 
-Returns *true* if the value is a *ShadowRoot*.
+diff([1, 2, 3], [2]); // [1, 3]
+range(0, 5); // [0, 1, 2, 3, 4, 5]
+unique([1, 1, 2]); // [1, 2]
+wrap(undefined); // []
 
-```javascript
-const isShadow = _.isShadow(value);
+const out = [1];
+merge(out, [2, 3]);
+// out === [1, 2, 3]
 ```
 
-**Is Text**
+### Functions
 
-Returns *true* if the value is a text *Node*.
+- `animation(callback, options)`: run at most once per animation frame
+- `compose(...callbacks)`: right-to-left function composition
+- `curry(callback)`: curry a function until its arity is satisfied
+- `debounce(callback, wait, options)`: delay execution until calls settle
+- `evaluate(value)`: call a function or return a non-function as-is
+- `once(callback)`: run a function once and cache the result
+- `partial(callback, ...defaultArgs)`: partially apply arguments
+- `pipe(...callbacks)`: left-to-right function composition
+- `throttle(callback, wait, options)`: run at most once per wait period
+- `times(callback, amount)`: execute a callback repeatedly
 
-```javascript
-const isText = _.isText(value);
-```
+```js
+import { compose, debounce, once, partial, pipe, throttle } from '@fr0st/core';
 
-**Is String**
+const add1 = (n) => n + 1;
+const double = (n) => n * 2;
 
-Returns *true* if the value is a string.
+compose(add1, double)(3); // 7
+pipe(add1, double)(3); // 8
 
-- `value` is the value you wish to test.
+const init = once(() => Math.random());
+init() === init(); // true
 
-```javascript
-const isString = _.isString(value);
-```
+partial((a, b) => [a, b], undefined, 2)(1); // [1, 2]
 
-**Is Undefined**
+const debounced = debounce((value) => console.log(value), 100);
+const throttled = throttle(() => console.log('tick'), 100);
 
-Returns *true* if the value is *undefined*.
+debounced('last');
+throttled();
+```
+
+### Math
 
-- `value` is the value you wish to test.
+- `clamp(value, min, max)`: clamp a number between bounds
+- `clampPercent(value)`: clamp a number between `0` and `100`
+- `dist(x1, y1, x2, y2)`: distance between two points
+- `inverseLerp(v1, v2, value)`: interpolation amount between two values
+- `len(x, y)`: vector length
+- `lerp(v1, v2, amount)`: linear interpolation
+- `map(value, fromMin, fromMax, toMin, toMax)`: remap a value from one range to another
+- `random(a, b)`: random floating-point value
+- `randomInt(a, b)`: random integer
+- `toStep(value, step)`: round a number to a step size
 
-```javascript
-const isUndefined = _.isUndefined(value);
+```js
+import { clamp, dist, lerp, map, random, randomInt, toStep } from '@fr0st/core';
+
+clamp(10, 0, 1); // 1
+dist(0, 0, 3, 4); // 5
+lerp(0, 10, 0.25); // 2.5
+map(0.5, 0, 1, 0, 10); // 5
+random(10); // 0 <= n < 10
+randomInt(10, 50); // 10 <= n < 50
+toStep(0.123, 0.05); // 0.1
 ```
 
-**Is Window**
+### Objects
 
-Returns *true* if the value is a *Window*.
-
-- `value` is the value you wish to test.
-
-```javascript
-const isWindow = _.isWindow(value);
-```
+- `extend(object, ...objects)`: deep-merge values into the first object
+- `flatten(object)`: flatten plain-object paths into dot notation
+- `forgetDot(object, key)`: delete a path from an object
+- `getDot(object, key, defaultValue)`: read a path from an object
+- `hasDot(object, key)`: test whether a path exists
+- `pluckDot(objects, key, defaultValue)`: read the same path from many objects
+- `setDot(object, key, value, options)`: assign a path in an object
+
+```js
+import { extend, flatten, getDot, pluckDot, setDot } from '@fr0st/core';
+
+const obj = extend({ a: 1 }, { b: { c: 2 } });
+
+getDot(obj, 'b.c'); // 2
+flatten({ a: { b: 1 } }); // { 'a.b': 1 }
+pluckDot([{ a: { b: 1 } }, { a: { b: 2 } }], 'a.b'); // [1, 2]
+
+setDot(obj, 'b.c', 3);
+```
+
+### Strings
+
+- `camelCase(string)`: convert text to `camelCase`
+- `capitalize(string)`: upper-case the first character and lower-case the rest
+- `escape(string)`: escape HTML entities
+- `escapeRegExp(string)`: escape RegExp control characters
+- `humanize(string)`: convert identifiers into readable words
+- `kebabCase(string)`: convert text to `kebab-case`
+- `pascalCase(string)`: convert text to `PascalCase`
+- `randomString(length, chars)`: create a random string
+- `snakeCase(string)`: convert text to `snake_case`
+- `unescape(string)`: unescape HTML entities
+
+```js
+import { camelCase, escape, humanize, kebabCase, randomString, snakeCase } from '@fr0st/core';
+
+camelCase('hello world'); // 'helloWorld'
+humanize('helloWorld'); // 'Hello world'
+kebabCase('helloWorld'); // 'hello-world'
+snakeCase('helloWorld'); // 'hello_world'
+escape('<div class="x">'); // '&lt;div class=&quot;x&quot;&gt;'
+randomString(8); // e.g. 'aZ02kLmP'
+```
+
+### Testing
+
+- `isArray(value)`
+- `isArrayLike(value)`
+- `isBoolean(value)`
+- `isDocument(value)`
+- `isElement(value)`
+- `isFragment(value)`
+- `isFunction(value)`
+- `isNaN(value)`
+- `isNode(value)`
+- `isNull(value)`
+- `isNumeric(value)`
+- `isObject(value)`
+- `isPlainObject(value)`
+- `isShadow(value)`
+- `isString(value)`
+- `isText(value)`
+- `isUndefined(value)`
+- `isWindow(value)`
+
+```js
+import {
+    isArray,
+    isArrayLike,
+    isFunction,
+    isNumeric,
+    isPlainObject,
+} from '@fr0st/core';
+
+isArray([]); // true
+isArrayLike({ 0: 'a', length: 1 }); // true
+isFunction(() => {}); // true
+isNumeric('123.45'); // true
+isPlainObject({}); // true
+```
+
+## Behavior Notes
+
+- `merge()` and `extend()` mutate and return the first argument.
+- `debounce()`, `throttle()`, and `animation()` return wrapped functions with `cancel()`.
+- `range()` uses the absolute value of `step`, returns `[]` for `step === 0`, and includes `end` when the step lands on it exactly.
+- `setDot()` supports `*` wildcard segments and an `{ overwrite }` option.
+- `random()` and `randomInt()` use an exclusive upper bound.
+
+## Development
+
+```bash
+npm test
+npm run js-lint
+npm run build
+```
+
+## License
+
+FrostCore is released under the [MIT License](./LICENSE).

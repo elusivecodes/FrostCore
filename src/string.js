@@ -1,4 +1,4 @@
-import { random } from './math.js';
+import { randomInt } from './math.js';
 
 // HTML escape characters
 const escapeChars = {
@@ -22,16 +22,16 @@ const unescapeChars = {
  */
 
 /**
- * Split a string into individual words.
+ * Splits a string into individual words.
  * @param {string} string The input string.
- * @return {string[]} The split parts of the string.
+ * @returns {string[]} The split parts of the string.
  */
 const _splitString = (string) =>
     `${string}`
         .split(/[^a-zA-Z0-9']|(?=[A-Z])/)
         .reduce(
             (acc, word) => {
-                word = word.replace(/[^\w]/, '').toLowerCase();
+                word = word.replace(/[^\w]/g, '').toLowerCase();
                 if (word) {
                     acc.push(word);
                 }
@@ -41,9 +41,9 @@ const _splitString = (string) =>
         );
 
 /**
- * Convert a string to camelCase.
+ * Converts a string to camelCase.
  * @param {string} string The input string.
- * @return {string} The camelCased string.
+ * @returns {string} The camelCased string.
  */
 export const camelCase = (string) =>
     _splitString(string)
@@ -56,18 +56,18 @@ export const camelCase = (string) =>
         .join('');
 
 /**
- * Convert the first character of string to upper case and the remaining to lower case.
+ * Converts the first character of a string to upper case and the remaining to lower case.
  * @param {string} string The input string.
- * @return {string} The capitalized string.
+ * @returns {string} The capitalized string.
  */
 export const capitalize = (string) =>
     string.charAt(0).toUpperCase() +
     string.substring(1).toLowerCase();
 
 /**
- * Convert HTML special characters in a string to their corresponding HTML entities.
+ * Escapes HTML special characters in a string using HTML entities.
  * @param {string} string The input string.
- * @return {string} The escaped string.
+ * @returns {string} The escaped string.
  */
 export const escape = (string) =>
     string.replace(
@@ -77,17 +77,17 @@ export const escape = (string) =>
     );
 
 /**
- * Escape RegExp special characters in a string.
+ * Escapes RegExp special characters in a string.
  * @param {string} string The input string.
- * @return {string} The escaped string.
+ * @returns {string} The escaped string.
  */
 export const escapeRegExp = (string) =>
     string.replace(/[-/\\^$*+?.()|[\]{}]/g, '\\$&');
 
 /**
- * Convert a string to a humanized form.
+ * Converts a string to a humanized form.
  * @param {string} string The input string.
- * @return {string} The humanized string.
+ * @returns {string} The humanized string.
  */
 export const humanize = (string) =>
     capitalize(
@@ -96,9 +96,9 @@ export const humanize = (string) =>
     );
 
 /**
- * Convert a string to kebab-case.
+ * Converts a string to kebab-case.
  * @param {string} string The input string.
- * @return {string} The kebab-cased string.
+ * @returns {string} The kebab-cased string.
  */
 export const kebabCase = (string) =>
     _splitString(string)
@@ -106,9 +106,9 @@ export const kebabCase = (string) =>
         .toLowerCase();
 
 /**
- * Convert a string to PascalCase.
+ * Converts a string to PascalCase.
  * @param {string} string The input string.
- * @return {string} The camelCased string.
+ * @returns {string} The PascalCased string.
  */
 export const pascalCase = (string) =>
     _splitString(string)
@@ -120,24 +120,24 @@ export const pascalCase = (string) =>
         .join('');
 
 /**
- * Return a random string.
+ * Creates a random string.
  * @param {number} [length=16] The length of the output string.
- * @param {string} [chars=abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWYXZ0123456789] The characters to generate the string from.
- * @return {string} The random string.
+ * @param {string} [chars=abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789] The characters to generate the string from.
+ * @returns {string} The random string.
  */
-export const randomString = (length = 16, chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWYXZ0123456789') =>
+export const randomString = (length = 16, chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789') =>
     new Array(length)
         .fill()
         .map(
             (_) =>
-                chars[random(chars.length) | 0],
+                chars[randomInt(chars.length)],
         )
         .join('');
 
 /**
- * Convert a string to snake_case.
+ * Converts a string to snake_case.
  * @param {string} string The input string.
- * @return {string} The snake_cased string.
+ * @returns {string} The snake_cased string.
  */
 export const snakeCase = (string) =>
     _splitString(string)
@@ -145,9 +145,9 @@ export const snakeCase = (string) =>
         .toLowerCase();
 
 /**
- * Convert HTML entities in a string to their corresponding characters.
+ * Unescapes HTML entities in a string into their corresponding characters.
  * @param {string} string The input string.
- * @return {string} The unescaped string.
+ * @returns {string} The unescaped string.
  */
 export const unescape = (string) =>
     string.replace(

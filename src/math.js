@@ -5,11 +5,11 @@ import { isNull } from './testing.js';
  */
 
 /**
- * Clamp a value between a min and max.
+ * Clamps a value between a minimum and a maximum.
  * @param {number} value The value to clamp.
  * @param {number} [min=0] The minimum value of the clamped range.
  * @param {number} [max=1] The maximum value of the clamped range.
- * @return {number} The clamped value.
+ * @returns {number} The clamped value.
  */
 export const clamp = (value, min = 0, max = 1) =>
     Math.max(
@@ -21,20 +21,20 @@ export const clamp = (value, min = 0, max = 1) =>
     );
 
 /**
- * Clamp a value between 0 and 100.
+ * Clamps a value between 0 and 100.
  * @param {number} value The value to clamp.
- * @return {number} The clamped value.
+ * @returns {number} The clamped value.
  */
 export const clampPercent = (value) =>
     clamp(value, 0, 100);
 
 /**
- * Get the distance between two vectors.
+ * Calculates the distance between two vectors.
  * @param {number} x1 The first vector X co-ordinate.
  * @param {number} y1 The first vector Y co-ordinate.
  * @param {number} x2 The second vector X co-ordinate.
  * @param {number} y2 The second vector Y co-ordinate.
- * @return {number} The distance between the vectors.
+ * @returns {number} The distance between the vectors.
  */
 export const dist = (x1, y1, x2, y2) =>
     len(
@@ -43,17 +43,17 @@ export const dist = (x1, y1, x2, y2) =>
     );
 
 /**
- * Inverse linear interpolation from one value to another.
+ * Calculates the inverse linear interpolation amount from one value to another.
  * @param {number} v1 The starting value.
  * @param {number} v2 The ending value.
  * @param {number} value The value to inverse interpolate.
- * @return {number} The interpolated amount.
+ * @returns {number} The interpolated amount.
  */
 export const inverseLerp = (v1, v2, value) =>
     (value - v1) / (v2 - v1);
 
 /**
- * Get the length of an X,Y vector.
+ * Calculates the length of an X,Y vector.
  * @param {number} x The X co-ordinate.
  * @param {number} y The Y co-ordinate.
  * @returns {number} The length of the vector.
@@ -61,11 +61,11 @@ export const inverseLerp = (v1, v2, value) =>
 export const len = Math.hypot;
 
 /**
- * Linear interpolation from one value to another.
+ * Calculates a linear interpolation from one value to another.
  * @param {number} v1 The starting value.
  * @param {number} v2 The ending value.
  * @param {number} amount The amount to interpolate.
- * @return {number} The interpolated value.
+ * @returns {number} The interpolated value.
  */
 export const lerp = (v1, v2, amount) =>
     v1 *
@@ -74,13 +74,13 @@ export const lerp = (v1, v2, amount) =>
     amount;
 
 /**
- * Map a value from one range to another.
+ * Maps a value from one range to another.
  * @param {number} value The value to map.
  * @param {number} fromMin The minimum value of the current range.
  * @param {number} fromMax The maximum value of the current range.
  * @param {number} toMin The minimum value of the target range.
  * @param {number} toMax The maximum value of the target range.
- * @return {number} The mapped value.
+ * @returns {number} The mapped value.
  */
 export const map = (value, fromMin, fromMax, toMin, toMax) =>
     (value - fromMin) *
@@ -89,10 +89,10 @@ export const map = (value, fromMin, fromMax, toMin, toMax) =>
     toMin;
 
 /**
- * Return a random floating-point number.
- * @param {number} [a=1] The minimum value (inclusive).
+ * Returns a random floating-point number.
+ * @param {number} [a=1] The upper bound (exclusive) when `b` is omitted; otherwise the minimum bound (inclusive).
  * @param {number} [b] The maximum value (exclusive).
- * @return {number} A random number.
+ * @returns {number} A random number.
  */
 export const random = (a = 1, b = null) =>
     isNull(b) ?
@@ -106,22 +106,39 @@ export const random = (a = 1, b = null) =>
         );
 
 /**
- * Return a random number.
- * @param {number} [a=1] The minimum value (inclusive).
+ * Returns a random integer.
+ * @param {number} [a=1] The upper bound (exclusive) when `b` is omitted; otherwise the minimum bound (inclusive).
  * @param {number} [b] The maximum value (exclusive).
- * @return {number} A random number.
+ * @returns {number} A random integer.
  */
 export const randomInt = (a = 1, b = null) =>
-    random(a, b) | 0;
+    Math.floor(
+        random(
+            Math.min(
+                a,
+                isNull(b) ? 0 : b,
+            ),
+            Math.max(
+                a,
+                isNull(b) ? 0 : b,
+            ),
+        ),
+    );
 
 /**
- * Constrain a number to a specified step-size.
+ * Constrains a number to a specified step size.
  * @param {number} value The value to constrain.
- * @param {number} step The minimum step-size.
- * @return {number} The constrained value.
+ * @param {number} step The step size.
+ * @returns {number} The constrained value.
  */
-export const toStep = (value, step = 0.01) =>
-    parseFloat(
+export const toStep = (value, step = 0.01) => {
+    if (step === 0) {
+        return value;
+    }
+
+    step = Math.abs(step);
+
+    return parseFloat(
         (
             Math.round(value / step) *
             step
@@ -129,3 +146,4 @@ export const toStep = (value, step = 0.01) =>
             `${step}`.replace(/\d*\.?/, '').length,
         ),
     );
+};

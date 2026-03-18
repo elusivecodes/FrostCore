@@ -9,16 +9,16 @@ const DOCUMENT_NODE = 9;
 const DOCUMENT_FRAGMENT_NODE = 11;
 
 /**
- * Returns true if the value is an array.
+ * Checks whether a value is an array.
  * @param {*} value The value to test.
- * @returns {Boolean} TRUE if the value is an array, otherwise FALSE.
+ * @returns {boolean} Whether the value is an array.
  */
 export const isArray = Array.isArray;
 
 /**
- * Returns true if the value is array-like.
+ * Checks whether a value is array-like.
  * @param {*} value The value to test.
- * @return {Boolean} TRUE if the value is array-like, otherwise FALSE.
+ * @returns {boolean} Whether the value is array-like.
  */
 export const isArrayLike = (value) =>
     isArray(value) ||
@@ -44,35 +44,35 @@ export const isArrayLike = (value) =>
     );
 
 /**
- * Returns true if the value is a Boolean.
+ * Checks whether a value is a boolean.
  * @param {*} value The value to test.
- * @return {Boolean} TRUE if the value is boolean, otherwise FALSE.
+ * @returns {boolean} Whether the value is a boolean.
  */
 export const isBoolean = (value) =>
     value === !!value;
 
 /**
- * Returns true if the value is a Document.
+ * Checks whether a value is a Document.
  * @param {*} value The value to test.
- * @return {Boolean} TRUE if the value is a Document, otherwise FALSE.
+ * @returns {boolean} Whether the value is a Document.
  */
 export const isDocument = (value) =>
     !!value &&
     value.nodeType === DOCUMENT_NODE;
 
 /**
- * Returns true if the value is a HTMLElement.
+ * Checks whether a value is an Element.
  * @param {*} value The value to test.
- * @return {Boolean} TRUE if the value is a HTMLElement, otherwise FALSE.
+ * @returns {boolean} Whether the value is an Element.
  */
 export const isElement = (value) =>
     !!value &&
     value.nodeType === ELEMENT_NODE;
 
 /**
- * Returns true if the value is a DocumentFragment.
+ * Checks whether a value is a DocumentFragment (and not a ShadowRoot).
  * @param {*} value The value to test.
- * @return {Boolean} TRUE if the value is a DocumentFragment, otherwise FALSE.
+ * @returns {boolean} Whether the value is a DocumentFragment.
  */
 export const isFragment = (value) =>
     !!value &&
@@ -80,24 +80,24 @@ export const isFragment = (value) =>
     !value.host;
 
 /**
- * Returns true if the value is a function.
+ * Checks whether a value is a function.
  * @param {*} value The value to test.
- * @return {Boolean} TRUE if the value is a function, otherwise FALSE.
+ * @returns {boolean} Whether the value is a function.
  */
 export const isFunction = (value) =>
     typeof value === 'function';
 
 /**
- * Returns true if the value is NaN.
+ * Checks whether a value is NaN.
  * @param {*} value The value to test.
- * @returns {Boolean} TRUE if the value is NaN, otherwise FALSE.
+ * @returns {boolean} Whether the value is NaN.
  */
 export const isNaN = Number.isNaN;
 
 /**
- * Returns true if the value is a Node.
+ * Checks whether a value is an Element, Text node, or Comment node.
  * @param {*} value The value to test.
- * @return {Boolean} TRUE if the value is a Node, otherwise FALSE.
+ * @returns {boolean} Whether the value is an Element, Text node, or Comment node.
  */
 export const isNode = (value) =>
     !!value &&
@@ -108,44 +108,52 @@ export const isNode = (value) =>
     );
 
 /**
- * Returns true if the value is null.
+ * Checks whether a value is null.
  * @param {*} value The value to test.
- * @return {Boolean} TRUE if the value is null, otherwise FALSE.
+ * @returns {boolean} Whether the value is null.
  */
 export const isNull = (value) =>
     value === null;
 
 /**
- * Returns true if the value is numeric.
+ * Checks whether a value is numeric.
  * @param {*} value The value to test.
- * @return {Boolean} TRUE if the value is numeric, otherwise FALSE.
+ * @returns {boolean} Whether the value is numeric.
  */
 export const isNumeric = (value) =>
-    !isNaN(parseFloat(value)) &&
-    isFinite(value);
+    (() => {
+        try {
+            return (
+                !isNaN(parseFloat(value)) &&
+                isFinite(value)
+            );
+        } catch {
+            return false;
+        }
+    })();
 
 /**
- * Returns true if the value is an object.
+ * Checks whether a value is an object-like reference, including arrays and functions.
  * @param {*} value The value to test.
- * @return {Boolean} TRUE if the value is an object, otherwise FALSE.
+ * @returns {boolean} Whether the value is an object-like reference.
  */
 export const isObject = (value) =>
     !!value &&
     value === Object(value);
 
 /**
- * Returns true if the value is a plain object.
+ * Checks whether a value is a plain object.
  * @param {*} value The value to test.
- * @return {Boolean} TRUE if the value is a plain object, otherwise FALSE.
+ * @returns {boolean} Whether the value is a plain object.
  */
 export const isPlainObject = (value) =>
     !!value &&
     value.constructor === Object;
 
 /**
- * Returns true if the value is a ShadowRoot.
+ * Checks whether a value is a ShadowRoot.
  * @param {*} value The value to test.
- * @return {Boolean} TRUE if the value is a ShadowRoot, otherwise FALSE.
+ * @returns {boolean} Whether the value is a ShadowRoot.
  */
 export const isShadow = (value) =>
     !!value &&
@@ -153,34 +161,34 @@ export const isShadow = (value) =>
     !!value.host;
 
 /**
- * Returns true if the value is a string.
+ * Checks whether a value is a string.
  * @param {*} value The value to test.
- * @return {Boolean} TRUE is the value is a string, otherwise FALSE.
+ * @returns {boolean} Whether the value is a string.
  */
 export const isString = (value) =>
-    value === `${value}`;
+    typeof value === 'string';
 
 /**
- * Returns true if the value is a text Node.
+ * Checks whether a value is a text Node.
  * @param {*} value The value to test.
- * @return {Boolean} TRUE if the value is a text Node, otherwise FALSE.
+ * @returns {boolean} Whether the value is a text Node.
  */
 export const isText = (value) =>
     !!value &&
     value.nodeType === TEXT_NODE;
 
 /**
- * Returns true if the value is undefined.
+ * Checks whether a value is undefined.
  * @param {*} value The value to test.
- * @return {Boolean} TRUE if the value is undefined, otherwise FALSE.
+ * @returns {boolean} Whether the value is undefined.
  */
 export const isUndefined = (value) =>
     value === undefined;
 
 /**
- * Returns true if the value is a Window.
+ * Checks whether a value is a Window.
  * @param {*} value The value to test.
- * @return {Boolean} TRUE is the value is a Window, otherwise FALSE.
+ * @returns {boolean} Whether the value is a Window.
  */
 export const isWindow = (value) =>
     !!value &&

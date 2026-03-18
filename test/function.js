@@ -233,7 +233,7 @@ describe('Function', function() {
 
         it('works with leading and trailing', function(done) {
             let callCount = 0;
-            const debounced = debounce((_) => callCount++, 32, { leading: true });
+            const debounced = debounce((_) => callCount++, 32, { leading: true, trailing: true });
 
             debounced();
             debounced();
@@ -242,6 +242,28 @@ describe('Function', function() {
                 assert.strictEqual(callCount, 2);
                 done();
             }, 64);
+        });
+
+        it('does not execute a stale trailing call after a new leading execution', function(done) {
+            const calls = [];
+            const debounced = debounce((value) => calls.push(value), 200, { leading: true, trailing: true });
+
+            debounced(1);
+            setTimeout((_) => debounced(2), 150);
+
+            setTimeout((_) => debounced(3), 210);
+
+            setTimeout((_) => {
+                const index3 = calls.indexOf(3);
+                assert.notStrictEqual(index3, -1);
+
+                assert.strictEqual(
+                    calls.slice(index3 + 1).includes(2),
+                    false,
+                );
+
+                done();
+            }, 450);
         });
 
         it('works without leading or trailing', function(done) {
@@ -333,6 +355,36 @@ describe('Function', function() {
                 results.size,
                 1,
             );
+        });
+
+        it('retries after an error until the first successful execution', function() {
+            let callCount = 0;
+            const callback = once((value) => {
+                callCount++;
+
+                if (callCount === 1) {
+                    throw new Error('fail');
+                }
+
+                return value;
+            });
+
+            assert.throws(
+                () => callback(1),
+                /fail/u,
+            );
+
+            assert.strictEqual(
+                callback(2),
+                2,
+            );
+
+            assert.strictEqual(
+                callback(3),
+                2,
+            );
+
+            assert.strictEqual(callCount, 2);
         });
     });
 
@@ -511,6 +563,20 @@ describe('Function', function() {
             assert.strictEqual(
                 result,
                 500,
+            );
+        });
+
+        it('does not run for a negative amount', function() {
+            let result = 0;
+
+            times(
+                (_) => result++,
+                -500,
+            );
+
+            assert.strictEqual(
+                result,
+                0,
             );
         });
     });

@@ -183,6 +183,13 @@ describe('Testing (Custom)', function() {
             );
         });
 
+        it('works with symbol', function() {
+            assert.strictEqual(
+                isNumeric(Symbol('test')),
+                false,
+            );
+        });
+
         it('works with undefined', function() {
             assert.strictEqual(
                 isNumeric(undefined),
