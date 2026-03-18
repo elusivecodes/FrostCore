@@ -6,9 +6,7 @@
 [![minzipped size](https://img.shields.io/bundlejs/size/%40fr0st/core?format=minzip&style=flat-square)](https://bundlejs.com/?q=@fr0st/core)
 [![license](https://img.shields.io/github/license/elusivecodes/FrostCore?style=flat-square)](./LICENSE)
 
-Small, focused JavaScript utilities for arrays, functions, math, objects, strings, and type checks.
-
-FrostCore is an ESM-first utility library with zero runtime dependencies. It works in Node and bundlers, and it also ships a browser-friendly UMD bundle that exposes `globalThis._`.
+Small, focused ESM utilities for arrays, functions, math, objects, strings, and type checks. FrostCore has zero runtime dependencies, works in Node and bundlers, and also ships a browser-friendly UMD bundle that exposes `globalThis._`.
 
 ## Highlights
 
@@ -16,7 +14,6 @@ FrostCore is an ESM-first utility library with zero runtime dependencies. It wor
 - Browser UMD bundle in `dist/`
 - No runtime dependencies
 - JSDoc-powered IntelliSense
-- Utility coverage across arrays, objects, strings, math, functions, and type checks
 
 ## Installation
 
@@ -30,19 +27,11 @@ FrostCore is ESM-only. Use `import` syntax in Node and bundlers.
 
 ### Browser (UMD)
 
-Load the bundle from your own copy:
+Load the bundle from your own copy or a CDN:
 
 ```html
 <script src="/path/to/dist/frost-core.min.js"></script>
-<script>
-    const { clamp, randomInt } = globalThis._;
-    console.log(clamp(randomInt(10), 0, 9));
-</script>
-```
-
-Or load it from a CDN:
-
-```html
+<!-- or -->
 <script src="https://cdn.jsdelivr.net/npm/@fr0st/core@latest/dist/frost-core.min.js"></script>
 <script>
     const { clamp, randomInt } = globalThis._;
@@ -74,22 +63,6 @@ const save = debounce(() => {
 
 console.log(clamp(14, 0, 10)); // 10
 save();
-```
-
-## Usage
-
-Recommended:
-
-```js
-import { debounce, throttle } from '@fr0st/core';
-```
-
-Namespace import:
-
-```js
-import * as _ from '@fr0st/core';
-
-_.range(0, 3); // [0, 1, 2, 3]
 ```
 
 TypeScript note: FrostCore is written in JavaScript and uses JSDoc types, which most editors surface as IntelliSense.

@@ -1,6 +1,6 @@
 {
     "name": "@fr0st/core",
-    "version": "3.0.0",
+    "version": "3.0.1",
     "description": "FrostCore is a free, open-source utility library for JavaScript.",
     "keywords": [
         "utility",
@@ -42,7 +42,7 @@
         "access": "public"
     },
     "devDependencies": {
-        "@fr0st/eslint-config": "^2.0.1",
+        "@fr0st/eslint-config": "^2.0.2",
         "eslint": "^10.0.3",
         "mocha": "^11.7.5",
         "rollup": "^4.59.0",
