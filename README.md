@@ -3,6 +3,7 @@
 [![CI](https://github.com/elusivecodes/FrostCore/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/elusivecodes/FrostCore/actions/workflows/ci.yml)
 [![npm version](https://img.shields.io/npm/v/%40fr0st%2Fcore?style=flat-square)](https://www.npmjs.com/package/@fr0st/core)
 [![npm downloads](https://img.shields.io/npm/dm/%40fr0st%2Fcore?style=flat-square)](https://www.npmjs.com/package/@fr0st/core)
+[![minzipped size](https://img.shields.io/bundlejs/size/%40fr0st/core?format=minzip&style=flat-square)](https://bundlejs.com/?q=@fr0st/core)
 [![license](https://img.shields.io/github/license/elusivecodes/FrostCore?style=flat-square)](./LICENSE)
 
 Small, focused JavaScript utilities for arrays, functions, math, objects, strings, and type checks.
