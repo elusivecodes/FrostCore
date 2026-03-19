@@ -1,5 +1,6 @@
 import assert from 'node:assert/strict';
-import { camelCase, capitalize, escape, escapeRegExp, humanize, kebabCase, pascalCase, randomString, snakeCase, unescape } from './../src/index.js';
+import { describe, it } from 'mocha';
+import { camelCase, capitalize, escape, escapeRegExp, humanize, kebabCase, pascalCase, randomString, snakeCase, unescape } from '../../src/index.js';
 
 describe('String', function() {
     describe('#camelCase', function() {
@@ -234,7 +235,7 @@ describe('String', function() {
         });
     });
 
-    describe('humanize', function() {
+    describe('#humanize', function() {
         it('returns a humanized string', function() {
             assert.strictEqual(
                 humanize('This is a sample string'),

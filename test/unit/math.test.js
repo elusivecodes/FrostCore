@@ -1,5 +1,6 @@
 import assert from 'node:assert/strict';
-import { clamp, clampPercent, dist, inverseLerp, lerp, map, random, randomInt, toStep } from './../src/index.js';
+import { describe, it } from 'mocha';
+import { clamp, clampPercent, dist, inverseLerp, lerp, map, random, randomInt, toStep } from '../../src/index.js';
 
 describe('Math', function() {
     describe('#clamp', function() {

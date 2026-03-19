@@ -1,5 +1,6 @@
 import assert from 'node:assert/strict';
-import { extend, flatten, forgetDot, getDot, hasDot, pluckDot, setDot } from './../src/index.js';
+import { describe, it } from 'mocha';
+import { extend, flatten, forgetDot, getDot, hasDot, pluckDot, setDot } from '../../src/index.js';
 
 describe('Object', function() {
     describe('#extend', function() {

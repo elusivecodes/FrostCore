@@ -1,15 +1,16 @@
 import assert from 'node:assert/strict';
-import { isDocument, isElement, isFragment, isNode, isShadow, isText, isWindow } from './../src/index.js';
-import MockArrayLike from './Mock/MockArrayLike.js';
-import MockCommentNode from './Mock/MockCommentNode.js';
-import MockDocument from './Mock/MockDocument.js';
-import MockElement from './Mock/MockElement.js';
-import MockFragment from './Mock/MockFragment.js';
-import MockObject from './Mock/MockObject.js';
-import MockShadow from './Mock/MockShadow.js';
-import MockTextNode from './Mock/MockTextNode.js';
-import MockWindow from './Mock/MockWindow.js';
-import { mockArray, mockFunction, mockNumber, mockNumericString, mockPlainObject, mockString } from './Mock/vars.js';
+import { describe, it } from 'mocha';
+import { isDocument, isElement, isFragment, isNode, isShadow, isText, isWindow } from '../../../src/index.js';
+import { mockArray, mockFunction, mockNumber, mockNumericString, mockPlainObject, mockString } from '../../support/fixtures.js';
+import MockArrayLike from '../../support/mocks/mock-array-like.js';
+import MockCommentNode from '../../support/mocks/mock-comment-node.js';
+import MockDocument from '../../support/mocks/mock-document.js';
+import MockElement from '../../support/mocks/mock-element.js';
+import MockFragment from '../../support/mocks/mock-fragment.js';
+import MockObject from '../../support/mocks/mock-object.js';
+import MockShadow from '../../support/mocks/mock-shadow.js';
+import MockTextNode from '../../support/mocks/mock-text-node.js';
+import MockWindow from '../../support/mocks/mock-window.js';
 
 describe('Testing (DOM)', function() {
     describe('#isDocument', function() {

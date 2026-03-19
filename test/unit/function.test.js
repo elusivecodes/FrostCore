@@ -1,5 +1,6 @@
 import assert from 'node:assert/strict';
-import { animation, compose, curry, debounce, evaluate, once, partial, pipe, random, throttle, times } from './../src/index.js';
+import { describe, it } from 'mocha';
+import { animation, compose, curry, debounce, evaluate, once, partial, pipe, random, throttle, times } from '../../src/index.js';
 
 describe('Function', function() {
     describe('#animation', function() {

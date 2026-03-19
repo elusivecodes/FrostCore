@@ -1,4 +1,4 @@
-import MockElement from './MockElement.js';
+import MockElement from './mock-element.js';
 
 /**
  * MockShadow class

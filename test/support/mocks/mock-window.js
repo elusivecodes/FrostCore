@@ -1,4 +1,4 @@
-import MockDocument from './MockDocument.js';
+import MockDocument from './mock-document.js';
 
 /**
  * MockWindow class

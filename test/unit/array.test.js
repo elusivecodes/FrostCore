@@ -1,7 +1,8 @@
 import assert from 'node:assert/strict';
-import { diff, intersect, merge, randomValue, range, unique, wrap } from './../src/index.js';
-import MockArrayLike from './Mock/MockArrayLike.js';
-import { mockArray, mockNumber, mockPlainObject, mockString } from './Mock/vars.js';
+import { describe, it } from 'mocha';
+import { diff, intersect, merge, randomValue, range, unique, wrap } from '../../src/index.js';
+import { mockArray, mockNumber, mockPlainObject, mockString } from '../support/fixtures.js';
+import MockArrayLike from '../support/mocks/mock-array-like.js';
 
 describe('Array', function() {
     describe('#diff', function() {

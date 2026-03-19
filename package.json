@@ -1,14 +1,20 @@
 {
     "name": "@fr0st/core",
-    "version": "3.0.1",
-    "description": "FrostCore is a free, open-source utility library for JavaScript.",
+    "version": "3.0.2",
+    "description": "Small, focused utility library for arrays, functions, math, objects, strings, and type checks.",
     "keywords": [
+        "utilities",
         "utility",
+        "esm",
+        "tree-shaking",
+        "zero-dependency",
         "array",
         "function",
         "math",
         "object",
         "string",
+        "dom",
+        "type-check",
         "testing"
     ],
     "homepage": "https://github.com/elusivecodes/FrostCore",
@@ -16,8 +22,20 @@
         "url": "https://github.com/elusivecodes/FrostCore/issues",
         "email": "elusivecodes@gmail.com"
     },
-    "main": "src/index.js",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/elusivecodes/FrostCore.git"
+    },
+    "license": "MIT",
+    "author": "Elusive <elusivecodes@gmail.com>",
+    "sideEffects": false,
     "type": "module",
+    "exports": {
+        ".": "./src/index.js"
+    },
+    "main": "src/index.js",
+    "jsdelivr": "dist/frost-core.min.js",
+    "unpkg": "dist/frost-core.min.js",
     "files": [
         "dist",
         "LICENSE",
@@ -29,23 +47,19 @@
         "js-compile": "rollup --config",
         "js-lint": "eslint",
         "js-minify": "terser --compress passes=2 --mangle --source-map \"content=dist/frost-core.js.map\" --output dist/frost-core.min.js dist/frost-core.js",
-        "test": "mocha"
-    },
-    "repository": {
-        "type": "git",
-        "url": "git+https://github.com/elusivecodes/FrostCore.git"
-    },
-    "author": "Elusive <elusivecodes@gmail.com>",
-    "license": "MIT",
-    "private": false,
-    "publishConfig": {
-        "access": "public"
+        "test": "mocha \"test/**/*.test.js\""
     },
     "devDependencies": {
-        "@fr0st/eslint-config": "^2.0.2",
+        "@fr0st/eslint-config": "^2.0.4",
         "eslint": "^10.0.3",
         "mocha": "^11.7.5",
         "rollup": "^4.59.0",
         "terser": "^5.46.1"
+    },
+    "engines": {
+        "node": ">=20"
+    },
+    "publishConfig": {
+        "access": "public"
     }
 }

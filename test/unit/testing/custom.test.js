@@ -1,8 +1,9 @@
 import assert from 'node:assert/strict';
-import { isArrayLike, isNumeric, isPlainObject } from './../src/index.js';
-import MockArrayLike from './Mock/MockArrayLike.js';
-import MockObject from './Mock/MockObject.js';
-import { mockArray, mockFunction, mockNumber, mockNumericString, mockPlainObject, mockString } from './Mock/vars.js';
+import { describe, it } from 'mocha';
+import { isArrayLike, isNumeric, isPlainObject } from '../../../src/index.js';
+import { mockArray, mockFunction, mockNumber, mockNumericString, mockPlainObject, mockString } from '../../support/fixtures.js';
+import MockArrayLike from '../../support/mocks/mock-array-like.js';
+import MockObject from '../../support/mocks/mock-object.js';
 
 describe('Testing (Custom)', function() {
     describe('#isArrayLike', function() {

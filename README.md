@@ -6,7 +6,7 @@
 [![minzipped size](https://img.shields.io/bundlejs/size/%40fr0st/core?format=minzip&style=flat-square)](https://bundlejs.com/?q=@fr0st/core)
 [![license](https://img.shields.io/github/license/elusivecodes/FrostCore?style=flat-square)](./LICENSE)
 
-Small, focused ESM utilities for arrays, functions, math, objects, strings, and type checks. FrostCore has zero runtime dependencies, works in Node and bundlers, and also ships a browser-friendly UMD bundle that exposes `globalThis._`.
+Small, focused utilities for arrays, functions, math, objects, strings, and type checks. FrostCore has zero runtime dependencies, works in Node and bundlers, and also ships a browser-friendly UMD bundle that exposes `globalThis._`.
 
 ## Highlights
 
