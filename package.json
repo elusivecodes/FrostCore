@@ -1,6 +1,6 @@
 {
     "name": "@fr0st/core",
-    "version": "3.0.3",
+    "version": "3.0.4",
     "description": "Small, focused utility library for arrays, functions, math, objects, strings, and type checks.",
     "keywords": [
         "utilities",
@@ -50,10 +50,10 @@
         "test": "mocha \"test/**/*.test.js\""
     },
     "devDependencies": {
-        "@fr0st/eslint-config": "^2.0.6",
+        "@fr0st/eslint-config": "^3.0.0",
         "eslint": "^10.1.0",
         "mocha": "^11.7.5",
-        "rollup": "^4.59.1",
+        "rollup": "^4.60.0",
         "terser": "^5.46.1"
     },
     "engines": {
